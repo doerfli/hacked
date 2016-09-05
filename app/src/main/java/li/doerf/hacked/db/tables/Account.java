@@ -9,9 +9,6 @@ import java.util.Map;
 import li.doerf.hacked.db.annotations.Column;
 import li.doerf.hacked.db.annotations.Table;
 
-/**
- * Created by pamapa on 04.01.16.
- */
 @Table(name = "accounts")
 public class Account extends TableBase {
     @Column(name = "_id", type = "INTEGER", isPrimaryKey = true, isAutoincrement = true)

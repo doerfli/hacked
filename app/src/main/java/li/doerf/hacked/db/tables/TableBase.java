@@ -13,9 +13,6 @@ import li.doerf.hacked.db.annotations.Column;
 import li.doerf.hacked.db.annotations.Table;
 
 
-/**
- * Created by moo on 29/01/15.
- */
 abstract class TableBase  {
     private String tableName;
     private Map<String,Field> columnNamesAndFields;

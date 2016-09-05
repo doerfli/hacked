@@ -23,7 +23,6 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class HaveIBeenPwnedCheckService extends IntentService {
     private final String LOGTAG = getClass().getSimpleName();
-    private int myNotificationId;
 
     public HaveIBeenPwnedCheckService() {
         super("HaveIBeenPwnedCheckService");
