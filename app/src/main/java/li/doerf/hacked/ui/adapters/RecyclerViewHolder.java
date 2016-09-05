@@ -1,4 +1,4 @@
-package li.doerf.hacked.db.ui.adapters;
+package li.doerf.hacked.ui.adapters;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.View;

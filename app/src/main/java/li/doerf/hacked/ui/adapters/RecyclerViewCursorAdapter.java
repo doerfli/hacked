@@ -1,4 +1,4 @@
-package li.doerf.hacked.db.ui.adapters;
+package li.doerf.hacked.ui.adapters;
 
 import android.content.Context;
 import android.database.Cursor;

@@ -1,4 +1,4 @@
-package li.doerf.hacked.db.ui.adapters;
+package li.doerf.hacked.ui.adapters;
 
 import android.content.Context;
 import android.database.Cursor;
@@ -6,7 +6,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.widget.CardView;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import li.doerf.hacked.R;

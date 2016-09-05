@@ -1,27 +1,25 @@
 package li.doerf.hacked;
 
-import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.AttributeSet;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import li.doerf.hacked.db.HackedSQLiteHelper;
 import li.doerf.hacked.db.tables.Account;
-import li.doerf.hacked.db.ui.adapters.AccountsAdapter;
+import li.doerf.hacked.ui.AddAccountDialogFragment;
+import li.doerf.hacked.ui.adapters.AccountsAdapter;
 import li.doerf.hacked.services.HaveIBeenPwnedCheckService;
 
-public class AccountListActivity extends AppCompatActivity {
+public class AccountListActivity extends AppCompatActivity implements AddAccountDialogFragment.AccountAddedListener {
 
     private SQLiteDatabase myReadbableDb;
     private AccountsAdapter myAccountsAdapter;
@@ -38,8 +36,10 @@ public class AccountListActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+//                        .setAction("Action", null).show();
+                AddAccountDialogFragment newFragment = new AddAccountDialogFragment();
+                newFragment.show(getSupportFragmentManager(), "addaccount");
             }
         });
 
@@ -99,5 +99,10 @@ public class AccountListActivity extends AppCompatActivity {
     public void refreshList() {
         myCursor = Account.listAll(myReadbableDb);
         myAccountsAdapter.swapCursor(myCursor);
+    }
+
+    @Override
+    public void accountAdded(Account aNumber) {
+        refreshList();
     }
 }
