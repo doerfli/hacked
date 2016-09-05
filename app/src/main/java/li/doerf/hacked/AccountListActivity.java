@@ -16,10 +16,11 @@ import android.view.MenuItem;
 import li.doerf.hacked.db.HackedSQLiteHelper;
 import li.doerf.hacked.db.tables.Account;
 import li.doerf.hacked.ui.AddAccountDialogFragment;
+import li.doerf.hacked.ui.DeleteAccountDialogFragment;
 import li.doerf.hacked.ui.adapters.AccountsAdapter;
 import li.doerf.hacked.services.HaveIBeenPwnedCheckService;
 
-public class AccountListActivity extends AppCompatActivity implements AddAccountDialogFragment.AccountAddedListener {
+public class AccountListActivity extends AppCompatActivity implements AddAccountDialogFragment.AccountAddedListener, DeleteAccountDialogFragment.AccountDeletedListener {
 
     private SQLiteDatabase myReadbableDb;
     private AccountsAdapter myAccountsAdapter;
@@ -44,7 +45,7 @@ public class AccountListActivity extends AppCompatActivity implements AddAccount
         });
 
         myReadbableDb = HackedSQLiteHelper.getInstance(getApplicationContext()).getReadableDatabase();
-        myAccountsAdapter = new AccountsAdapter(getApplicationContext(), null);
+        myAccountsAdapter = new AccountsAdapter(this, null, getSupportFragmentManager());
 
         RecyclerView accountsList = (RecyclerView) findViewById(R.id.accounts_list);
         accountsList.setHasFixedSize(true);
@@ -103,6 +104,11 @@ public class AccountListActivity extends AppCompatActivity implements AddAccount
 
     @Override
     public void accountAdded(Account aNumber) {
+        refreshList();
+    }
+
+    @Override
+    public void accountDeleted(Account aNumber) {
         refreshList();
     }
 }
