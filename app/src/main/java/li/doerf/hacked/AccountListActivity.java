@@ -1,6 +1,7 @@
 package li.doerf.hacked;
 
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -18,6 +19,7 @@ import android.view.MenuItem;
 import li.doerf.hacked.db.HackedSQLiteHelper;
 import li.doerf.hacked.db.tables.Account;
 import li.doerf.hacked.db.ui.adapters.AccountsAdapter;
+import li.doerf.hacked.services.HaveIBeenPwnedCheckService;
 
 public class AccountListActivity extends AppCompatActivity {
 
@@ -68,6 +70,12 @@ public class AccountListActivity extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            return true;
+        }
+
+        if (id == R.id.action_check) {
+            Intent i = new Intent(getBaseContext(), HaveIBeenPwnedCheckService.class);
+            startService(i);
             return true;
         }
         return super.onOptionsItemSelected(item);

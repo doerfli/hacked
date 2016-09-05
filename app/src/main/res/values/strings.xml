@@ -91,4 +91,5 @@
     </string>
     <string name="action_settings">Settings</string>
     <string name="name_placeholder">Account name ...</string>
+    <string name="action_check">Check</string>
 </resources>
