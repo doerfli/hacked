@@ -6,9 +6,13 @@ import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
 import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
+import li.doerf.hacked.db.DatasetChangeListener;
 import li.doerf.hacked.db.annotations.Column;
 import li.doerf.hacked.db.annotations.Table;
 
@@ -227,7 +231,7 @@ abstract class TableBase  {
                     field.set(this, value);
                 } else if (Boolean.class.isAssignableFrom(type)) {
                     Integer value = aCursor.getInt(aCursor.getColumnIndex(columnName));
-                    field.set(this, value == 0);
+                    field.set(this, value == 1);
                 } else {
                     Column column = getColumn(field);
                     if (column.isReference() && db != null) {
@@ -257,6 +261,7 @@ abstract class TableBase  {
                     values);
             setId(id);
             Log.i(LOGTAG, "Inserted entity - id: " + id);
+            notifyObservers( getTableName());
         } catch (IllegalAccessException e) {
             Log.e(LOGTAG, "caught IllegalAccessException during insert", e);
         }
@@ -276,6 +281,7 @@ abstract class TableBase  {
                     getPrimaryKeyColumnName() + " = ?",
                     new String[] { idAsString });
             Log.i(LOGTAG, "Updated entity - id: " + idAsString);
+            notifyObservers( getTableName());
         } catch (IllegalAccessException e) {
             Log.e(LOGTAG, "caught IllegalAccessException during update", e);
         }
@@ -292,5 +298,59 @@ abstract class TableBase  {
                 getPrimaryKeyColumnName() + " = ?",
                 new String[] { idAsString });
         Log.i(LOGTAG, "Deleted entity - id: " + idAsString);
+        notifyObservers( getTableName());
+    }
+
+    private static Map<String,List<DatasetChangeListener>> myDatasetChangedListeners;
+    static {
+        myDatasetChangedListeners = new HashMap<>();
+    }
+
+    public synchronized static <T extends TableBase> void registerDatasetChangedListener(DatasetChangeListener anObserver, Class<T> aTableClass) {
+        String tablename;
+
+        try {
+            tablename = aTableClass.newInstance().getTableName();
+        } catch (InstantiationException e) {
+            throw new RuntimeException(e);
+        } catch (IllegalAccessException e) {
+            throw new RuntimeException(e);
+        }
+
+        List<DatasetChangeListener> observerList = myDatasetChangedListeners.get(tablename);
+        if ( observerList == null ) {
+            observerList = new ArrayList<>();
+            myDatasetChangedListeners.put(tablename, observerList);
+        }
+        observerList.add( anObserver);
+    }
+
+    public synchronized static <T extends TableBase> void unregisterDatasetChangedListener(DatasetChangeListener anObserver, Class<T> aTableClass) {
+        String tablename;
+
+        try {
+            tablename = aTableClass.newInstance().getTableName();
+        } catch (InstantiationException e) {
+            throw new RuntimeException(e);
+        } catch (IllegalAccessException e) {
+            throw new RuntimeException(e);
+        }
+
+        List<DatasetChangeListener> observerList = myDatasetChangedListeners.get(tablename);
+        if ( observerList == null ) {
+            return;
+        }
+        observerList.remove( anObserver);
+    }
+
+    private void notifyObservers(String tableName) {
+        List<DatasetChangeListener> observerList = myDatasetChangedListeners.get(tableName);
+        if ( observerList == null ) {
+            return;
+        }
+
+        for ( DatasetChangeListener o : observerList ) {
+            o.datasetChanged();
+        }
     }
 }

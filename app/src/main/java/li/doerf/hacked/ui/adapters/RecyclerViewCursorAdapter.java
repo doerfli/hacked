@@ -3,6 +3,8 @@ package li.doerf.hacked.ui.adapters;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.DataSetObserver;
+import android.os.Handler;
+import android.os.Looper;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 
@@ -98,7 +100,13 @@ public abstract class RecyclerViewCursorAdapter<VH extends RecyclerView.ViewHold
         } else {
             mDataValid = false;
         }
-        notifyDataSetChanged();
+
+        new Handler(Looper.getMainLooper()).post(new Runnable() {
+            @Override
+            public void run() {
+                notifyDataSetChanged();
+            }
+        });
 
         return oldCursor;
     }

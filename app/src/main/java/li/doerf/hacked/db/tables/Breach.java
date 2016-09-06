@@ -201,6 +201,30 @@ public class Breach extends TableBase {
         }
     }
 
+    public static Cursor listAll(SQLiteDatabase db) {
+        Breach item = new Breach();
+        return db.query(
+                item.getTableName(),
+                item.getColumnNames(),
+                null,
+                null,
+                null,
+                null,
+                "name");
+    }
+
+    public static Cursor findByAccount(SQLiteDatabase db, Account account) {
+        Breach item = new Breach();
+        return db.query(
+                item.getTableName(),
+                item.getColumnNames(),
+                "account == ?",
+                new String[]{account.getId().toString()},
+                null,
+                null,
+                "name");
+    }
+
     public static Breach findByAccountAndName(SQLiteDatabase db, Account account, String aName) {
         Cursor c = null;
 

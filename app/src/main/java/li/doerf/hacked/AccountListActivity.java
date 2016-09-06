@@ -14,14 +14,14 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import li.doerf.hacked.db.DatasetChangeListener;
 import li.doerf.hacked.db.HackedSQLiteHelper;
 import li.doerf.hacked.db.tables.Account;
 import li.doerf.hacked.ui.AddAccountDialogFragment;
-import li.doerf.hacked.ui.DeleteAccountDialogFragment;
 import li.doerf.hacked.ui.adapters.AccountsAdapter;
 import li.doerf.hacked.services.HaveIBeenPwnedCheckService;
 
-public class AccountListActivity extends AppCompatActivity {
+public class AccountListActivity extends AppCompatActivity implements DatasetChangeListener {
 
     private SQLiteDatabase myReadbableDb;
     private AccountsAdapter myAccountsAdapter;
@@ -84,9 +84,16 @@ public class AccountListActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onStart() {
-        super.onStart();
+    protected void onResume() {
+        super.onResume();
+        Account.registerDatasetChangedListener(this, Account.class);
         refreshList();
+    }
+
+    @Override
+    protected void onPause() {
+        Account.unregisterDatasetChangedListener(this, Account.class);
+        super.onPause();
     }
 
     @Override
@@ -103,4 +110,8 @@ public class AccountListActivity extends AppCompatActivity {
         myAccountsAdapter.swapCursor(myCursor);
     }
 
+    @Override
+    public void datasetChanged() {
+        refreshList();
+    }
 }

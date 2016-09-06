@@ -10,9 +10,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import java.util.List;
+
 import li.doerf.hacked.R;
 import li.doerf.hacked.db.HackedSQLiteHelper;
 import li.doerf.hacked.db.tables.Account;
+import li.doerf.hacked.db.tables.Breach;
 import li.doerf.hacked.ui.DeleteAccountDialogFragment;
 
 public class AccountsAdapter extends RecyclerViewCursorAdapter<RecyclerViewHolder> {
@@ -39,9 +42,16 @@ public class AccountsAdapter extends RecyclerViewCursorAdapter<RecyclerViewHolde
 
         final SQLiteDatabase db = HackedSQLiteHelper.getInstance(getContext()).getReadableDatabase();
         final Account account = Account.create(db, aCursor);
+//        Cursor breachesCursor = Breach.findByAccount(db, account);
+//        int num = breachesCursor.getCount();
+//        breachesCursor.close();
 
         TextView numberView = (TextView) cardView.findViewById(R.id.name);
         numberView.setText(account.getName());
+
+        if ( account.isHacked() ) {
+            numberView.setText(numberView.getText().toString().concat(" breached"));
+        }
 
         cardView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
@@ -53,9 +63,4 @@ public class AccountsAdapter extends RecyclerViewCursorAdapter<RecyclerViewHolde
             }
         });
     }
-
-//    public interface AdapterModelChangedListener {
-//        void itemsAdded();
-//        void itemsDeleted();
-//    }
 }

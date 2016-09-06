@@ -43,9 +43,18 @@ public class Account extends TableBase {
         this.lastChecked = lastChecked != null ? lastChecked.getMillis() : null;
     }
 
+    public Boolean isHacked() {
+        return isHacked;
+    }
+
+    public void setHacked(Boolean hacked) {
+        isHacked = hacked;
+    }
+
     public static Account create(String aName) {
         Account property = new Account();
         property.setName(aName);
+        property.setHacked(false);
         return property;
     }
 

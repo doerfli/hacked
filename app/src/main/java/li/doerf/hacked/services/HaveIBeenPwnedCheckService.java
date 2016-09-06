@@ -74,7 +74,6 @@ public class HaveIBeenPwnedCheckService extends IntentService {
                         Breach existing = Breach.findByAccountAndName(db, account, ba.getName());
 
                         if ( existing != null ) {
-                            // TODO handle existing (change account?)
                             Log.d(LOGTAG, "breach already existing: " + ba.getName());
                             continue;
                         }
@@ -95,12 +94,19 @@ public class HaveIBeenPwnedCheckService extends IntentService {
                         );
                         breach.insert(db);
                         Log.i(LOGTAG, "breach inserted into db");
-                        // TODO update account
+
+                        // update account
+                        account.setLastChecked(DateTime.now());
+                        account.setHacked(true);
+                        account.update(db);
                     }
                 } else {
                     if ( response.code() == 404 ) {
                         Log.i(LOGTAG, "no breach found: " + account.getName());
-                        // TODO update account checked
+
+                        // update account
+                        account.setLastChecked(DateTime.now());
+                        account.update(db);
                     } else {
                         Log.w(LOGTAG, "unexpected response code: " + response.code());
                     }
