@@ -156,7 +156,7 @@ public class Breach extends TableBase {
         breach.setPwnCount(pwnCount);
         breach.setDescription(description);
         breach.setDataClasses(dataClasses != null ? Joiner.on(",").join(dataClasses) : "");
-        breach.setVerified(isVerified);
+        breach.setIsVerified(isVerified);
         breach.setIsAcknowledged(isAcknowledged);
         return breach;
     }
