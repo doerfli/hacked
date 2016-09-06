@@ -7,9 +7,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
-
 import org.joda.time.DateTime;
-import org.xml.sax.DTDHandler;
 
 import java.io.IOException;
 import java.util.List;
@@ -75,6 +73,9 @@ public class HaveIBeenPwnedCheckService extends IntentService {
 
                         if ( existing != null ) {
                             Log.d(LOGTAG, "breach already existing: " + ba.getName());
+                            // update account
+                            account.setLastChecked(DateTime.now());
+                            account.update(db);
                             continue;
                         }
 

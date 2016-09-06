@@ -10,9 +10,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
+
+import java.util.Collection;
+
 import li.doerf.hacked.R;
 import li.doerf.hacked.db.HackedSQLiteHelper;
 import li.doerf.hacked.db.tables.Account;
+import li.doerf.hacked.db.tables.Breach;
 import li.doerf.hacked.ui.DeleteAccountDialogFragment;
 
 public class AccountsAdapter extends RecyclerViewCursorAdapter<RecyclerViewHolder> {
@@ -39,15 +45,29 @@ public class AccountsAdapter extends RecyclerViewCursorAdapter<RecyclerViewHolde
 
         final SQLiteDatabase db = HackedSQLiteHelper.getInstance(getContext()).getReadableDatabase();
         final Account account = Account.create(db, aCursor);
-//        Cursor breachesCursor = Breach.findByAccount(db, account);
-//        int num = breachesCursor.getCount();
-//        breachesCursor.close();
+        Collection<Breach> breaches = Breach.findAllByAccount(db, account);
 
-        TextView numberView = (TextView) cardView.findViewById(R.id.name);
-        numberView.setText(account.getName());
+        TextView nameView = (TextView) cardView.findViewById(R.id.name);
+        nameView.setText(account.getName());
 
-        if ( account.isHacked() ) {
-            numberView.setText(numberView.getText().toString().concat(" breached"));
+        TextView lastCheckedView = (TextView) cardView.findViewById(R.id.last_checked);
+        if ( account.getLastChecked() != null ) {
+            DateTimeFormatter dtfOut = DateTimeFormat.forPattern("yyyy/MM/dd HH:mm");
+            lastCheckedView.setText(account.getLastChecked().toString( dtfOut.print(account.getLastChecked())));
+        } else {
+            lastCheckedView.setText("-");
+        }
+
+        TextView breachStatus = (TextView) cardView.findViewById(R.id.breach_state);
+        if ( account.isHacked()) {
+            breachStatus.setText(getContext().getString(R.string.status_breaches_found, breaches.size()));
+            cardView.setCardBackgroundColor(getContext().getResources().getColor(R.color.account_status_breached));
+        } else if ( ! account.isHacked() && account.getLastChecked() == null ) {
+            breachStatus.setText("-");
+            cardView.setCardBackgroundColor(getContext().getResources().getColor(R.color.account_status_unknown));
+        } else {
+            breachStatus.setText(getContext().getString(R.string.status_no_breach_found));
+            cardView.setCardBackgroundColor(getContext().getResources().getColor(R.color.account_status_ok));
         }
 
         cardView.setOnLongClickListener(new View.OnLongClickListener() {

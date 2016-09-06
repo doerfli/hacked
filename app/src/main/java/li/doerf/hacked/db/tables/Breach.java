@@ -4,10 +4,12 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.google.common.base.Joiner;
+import com.google.common.collect.Lists;
 
 import org.joda.time.DateTime;
 
 import java.lang.reflect.Field;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -223,6 +225,21 @@ public class Breach extends TableBase {
                 null,
                 null,
                 "name");
+    }
+
+    public static Collection<Breach> findAllByAccount(SQLiteDatabase db, Account account) {
+        Collection<Breach> breaches = Lists.newArrayList();
+        Cursor c = findByAccount( db, account);
+
+        try {
+            while ( c.moveToNext()) {
+                breaches.add(Breach.create(db, c));
+            }
+        } finally {
+            c.close();
+        }
+
+        return breaches;
     }
 
     public static Breach findByAccountAndName(SQLiteDatabase db, Account account, String aName) {

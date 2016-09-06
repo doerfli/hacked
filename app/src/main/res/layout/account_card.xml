@@ -20,6 +20,42 @@
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
             />
 
+        <TextView
+            android:id="@+id/desc_last_checked"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/last_checked"
+            android:layout_below="@+id/name"
+            android:paddingRight="@dimen/text_space"
+            />
+
+        <TextView
+            android:id="@+id/last_checked"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/date_placeholder"
+            android:layout_below="@+id/name"
+            android:layout_toRightOf="@+id/desc_last_checked"
+            />
+
+        <TextView
+            android:id="@+id/desc_breach_status"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/status"
+            android:layout_below="@+id/desc_last_checked"
+            android:paddingRight="@dimen/text_space"
+            />
+
+        <TextView
+            android:id="@+id/breach_state"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/status_placeholder"
+            android:layout_below="@+id/desc_last_checked"
+            android:layout_toRightOf="@+id/desc_breach_status"
+            />
+
     </RelativeLayout>
 
 </android.support.v7.widget.CardView>

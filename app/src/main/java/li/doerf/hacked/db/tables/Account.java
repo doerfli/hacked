@@ -4,7 +4,6 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import org.joda.time.DateTime;
-import org.joda.time.format.DateTimeParser;
 
 import java.lang.reflect.Field;
 import java.util.Map;
@@ -36,7 +35,7 @@ public class Account extends TableBase {
     public void setName(String key) { this.name = key; }
 
     public DateTime getLastChecked() {
-        return new DateTime(lastChecked);
+        return lastChecked <= 0 ? null : new DateTime(lastChecked);
     }
 
     public void setLastChecked(DateTime lastChecked) {
@@ -52,10 +51,11 @@ public class Account extends TableBase {
     }
 
     public static Account create(String aName) {
-        Account property = new Account();
-        property.setName(aName);
-        property.setHacked(false);
-        return property;
+        Account acc = new Account();
+        acc.setName(aName);
+        acc.setHacked(false);
+        acc.setLastChecked(null);
+        return acc;
     }
 
     public static Account create(SQLiteDatabase db, Cursor aCursor) {
@@ -100,7 +100,7 @@ public class Account extends TableBase {
                 null,
                 null,
                 null,
-                "name");
+                "is_hacked DESC, name");
     }
 
 }
