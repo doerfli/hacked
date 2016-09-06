@@ -10,12 +10,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import java.util.List;
-
 import li.doerf.hacked.R;
 import li.doerf.hacked.db.HackedSQLiteHelper;
 import li.doerf.hacked.db.tables.Account;
-import li.doerf.hacked.db.tables.Breach;
 import li.doerf.hacked.ui.DeleteAccountDialogFragment;
 
 public class AccountsAdapter extends RecyclerViewCursorAdapter<RecyclerViewHolder> {
