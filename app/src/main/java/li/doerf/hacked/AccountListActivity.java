@@ -21,7 +21,7 @@ import li.doerf.hacked.ui.DeleteAccountDialogFragment;
 import li.doerf.hacked.ui.adapters.AccountsAdapter;
 import li.doerf.hacked.services.HaveIBeenPwnedCheckService;
 
-public class AccountListActivity extends AppCompatActivity implements AddAccountDialogFragment.AccountAddedListener, DeleteAccountDialogFragment.AccountDeletedListener {
+public class AccountListActivity extends AppCompatActivity {
 
     private SQLiteDatabase myReadbableDb;
     private AccountsAdapter myAccountsAdapter;
@@ -103,13 +103,4 @@ public class AccountListActivity extends AppCompatActivity implements AddAccount
         myAccountsAdapter.swapCursor(myCursor);
     }
 
-    @Override
-    public void accountAdded(Account aNumber) {
-        refreshList();
-    }
-
-    @Override
-    public void accountDeleted(Account aNumber) {
-        refreshList();
-    }
 }

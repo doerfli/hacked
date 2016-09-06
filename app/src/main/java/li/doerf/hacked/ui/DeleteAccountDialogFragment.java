@@ -19,25 +19,6 @@ public class DeleteAccountDialogFragment extends DialogFragment {
     private final String LOGTAG = getClass().getSimpleName();
     private Account myAccount;
     private SQLiteDatabase myDb;
-    private AccountDeletedListener myListener;
-
-    public interface AccountDeletedListener {
-        void accountDeleted(Account aNumber);
-    }
-
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        // Verify that the host activity implements the callback interface
-        try {
-            // Instantiate the NoticeDialogListener so we can send events to the host
-            myListener = (AccountDeletedListener) activity;
-        } catch (ClassCastException e) {
-            // The activity doesn't implement the interface, throw exception
-//            throw new ClassCastException(activity.toString()
-//                    + " must implement NumberAddedListener");
-            Log.w(LOGTAG, "activity does not implement NumberAddedListener. no notification");
-        }
-    }
 
     public void setAccountAndDb(Account account, SQLiteDatabase db) {
         myAccount = account;
@@ -52,7 +33,6 @@ public class DeleteAccountDialogFragment extends DialogFragment {
                 .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         myAccount.delete(myDb);
-                        myListener.accountDeleted(myAccount);
                     }
                 })
                 .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {

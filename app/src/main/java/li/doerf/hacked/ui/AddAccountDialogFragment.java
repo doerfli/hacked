@@ -25,25 +25,6 @@ import li.doerf.hacked.db.tables.Account;
 public class AddAccountDialogFragment extends DialogFragment {
     private final String LOGTAG = getClass().getSimpleName();
     private String myName;
-    private AccountAddedListener myListener;
-
-    public interface AccountAddedListener {
-        void accountAdded(Account aNumber);
-    }
-
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        // Verify that the host activity implements the callback interface
-        try {
-            // Instantiate the NoticeDialogListener so we can send events to the host
-            myListener = (AccountAddedListener) activity;
-        } catch (ClassCastException e) {
-            // The activity doesn't implement the interface, throw exception
-//            throw new ClassCastException(activity.toString()
-//                    + " must implement NumberAddedListener");
-            Log.w(LOGTAG, "activity does not implement NumberAddedListener. no notification");
-        }
-    }
 
     @NonNull
     @Override
@@ -85,6 +66,5 @@ public class AddAccountDialogFragment extends DialogFragment {
         SQLiteDatabase db = HackedSQLiteHelper.getInstance(getContext()).getWritableDatabase();
         Account account = Account.create( name);
         account.insert(db);
-        myListener.accountAdded(account);
     }
 }
