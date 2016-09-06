@@ -5,6 +5,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -37,10 +38,10 @@ public class AccountListActivity extends AppCompatActivity implements AddAccount
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-//                        .setAction("Action", null).show();
-                AddAccountDialogFragment newFragment = new AddAccountDialogFragment();
-                newFragment.show(getSupportFragmentManager(), "addaccount");
+                Intent i = new Intent(getBaseContext(), HaveIBeenPwnedCheckService.class);
+                startService(i);
+                Snackbar.make(view, getString(R.string.snackbar_checking_account), Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();
             }
         });
 
@@ -74,9 +75,9 @@ public class AccountListActivity extends AppCompatActivity implements AddAccount
             return true;
         }
 
-        if (id == R.id.action_check) {
-            Intent i = new Intent(getBaseContext(), HaveIBeenPwnedCheckService.class);
-            startService(i);
+        if (id == R.id.action_add_account) {
+            AddAccountDialogFragment newFragment = new AddAccountDialogFragment();
+            newFragment.show(getSupportFragmentManager(), "addaccount");
             return true;
         }
         return super.onOptionsItemSelected(item);

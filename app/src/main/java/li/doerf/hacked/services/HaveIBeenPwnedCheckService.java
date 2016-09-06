@@ -89,6 +89,6 @@ public class HaveIBeenPwnedCheckService extends IntentService {
             }
         }
 
-
+        Log.i(LOGTAG, "finished checking");
     }
 }
