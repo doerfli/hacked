@@ -8,12 +8,16 @@ import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
 
+import org.joda.time.DateTime;
+import org.xml.sax.DTDHandler;
+
 import java.io.IOException;
 import java.util.List;
 
 import li.doerf.hacked.db.HackedSQLiteHelper;
 import li.doerf.hacked.db.tables.Account;
-import li.doerf.hacked.remote.BreachedAccounts;
+import li.doerf.hacked.db.tables.Breach;
+import li.doerf.hacked.remote.BreachedAccount;
 import li.doerf.hacked.remote.HaveIBeenPwned;
 import retrofit2.Call;
 import retrofit2.Response;
@@ -51,7 +55,7 @@ public class HaveIBeenPwnedCheckService extends IntentService {
                     .build();
 
             HaveIBeenPwned service = retrofit.create(HaveIBeenPwned.class);
-            Call<List<BreachedAccounts>> breachedAccountsList = service.listBreachedAccounts( account.getName());
+            Call<List<BreachedAccount>> breachedAccountsList = service.listBreachedAccounts( account.getName());
 
             if ( waitForNextRequest > 0 ) {
                 try {
@@ -63,15 +67,40 @@ public class HaveIBeenPwnedCheckService extends IntentService {
             }
 
             try {
-                Response<List<BreachedAccounts>> response = breachedAccountsList.execute();
+                Response<List<BreachedAccount>> response = breachedAccountsList.execute();
 
                 if ( response.isSuccessful()) {
-                    for (BreachedAccounts ba : response.body()) {
-                        Log.d(LOGTAG, ba.getName());
+                    for (BreachedAccount ba : response.body()) {
+                        Breach existing = Breach.findByAccountAndName(db, account, ba.getName());
+
+                        if ( existing != null ) {
+                            // TODO handle existing (change account?)
+                            Log.d(LOGTAG, "breach already existing: " + ba.getName());
+                            continue;
+                        }
+
+                        Log.d(LOGTAG, "new breach: " + ba.getName());
+                        Breach breach = Breach.create(
+                                account,
+                                ba.getName(),
+                                ba.getTitle(),
+                                ba.getDomain(),
+                                DateTime.parse(ba.getBreachDate()),
+                                DateTime.parse(ba.getAddedDate()),
+                                ba.getPwnCount(),
+                                ba.getDescription(),
+                                ba.getDataClass(),
+                                ba.getVerified(),
+                                false
+                        );
+                        breach.insert(db);
+                        Log.i(LOGTAG, "breach inserted into db");
+                        // TODO update account
                     }
                 } else {
                     if ( response.code() == 404 ) {
                         Log.i(LOGTAG, "no breach found: " + account.getName());
+                        // TODO update account checked
                     } else {
                         Log.w(LOGTAG, "unexpected response code: " + response.code());
                     }

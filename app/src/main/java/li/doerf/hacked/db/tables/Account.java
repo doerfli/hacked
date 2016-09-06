@@ -3,6 +3,9 @@ package li.doerf.hacked.db.tables;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeParser;
+
 import java.lang.reflect.Field;
 import java.util.Map;
 
@@ -15,6 +18,11 @@ public class Account extends TableBase {
     private Long id;
     @Column(name = "name", type = "TEXT")
     private String name;
+    @Column(name = "last_checked", type = "INTEGER")
+    private Long lastChecked;
+    @Column(name = "is_hacked", type = "INTEGER")
+    private Boolean isHacked;
+
 
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
@@ -26,6 +34,14 @@ public class Account extends TableBase {
 
     public String getName() { return name; }
     public void setName(String key) { this.name = key; }
+
+    public DateTime getLastChecked() {
+        return new DateTime(lastChecked);
+    }
+
+    public void setLastChecked(DateTime lastChecked) {
+        this.lastChecked = lastChecked != null ? lastChecked.getMillis() : null;
+    }
 
     public static Account create(String aName) {
         Account property = new Account();

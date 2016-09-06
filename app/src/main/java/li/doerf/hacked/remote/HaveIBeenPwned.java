@@ -17,6 +17,6 @@ public interface HaveIBeenPwned {
             "User-Agent: Hacked_Android_Client"
     })
     @GET("/api/v2/breachedaccount/{account}")
-    Call<List<BreachedAccounts>> listBreachedAccounts(@Path("account") String account);
+    Call<List<BreachedAccount>> listBreachedAccounts(@Path("account") String account);
 
 }

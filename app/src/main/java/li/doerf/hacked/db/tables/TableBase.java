@@ -185,13 +185,15 @@ abstract class TableBase  {
             contentValues.put(key, (Float) fieldValue);
         } else if (fieldValue instanceof Double) {
             contentValues.put(key, (Double) fieldValue);
+        } else if (fieldValue instanceof Boolean) {
+            contentValues.put(key, ((Boolean) fieldValue == true) ? 1 : 0);
         } else {
             Column column = getColumn(field);
             if (column.isReference()) {
                 contentValues.put(key, ((TableBase) fieldValue).getId());
             } else {
                 // Byte, Byte[] and Boolean are currently not supported
-                Log.w(LOGTAG, "Ignoring field - unsupported datatype: " + field);
+                throw new IllegalArgumentException("unsupported type: " + field);
             }
         }
     }
@@ -223,6 +225,9 @@ abstract class TableBase  {
                 } else if (Double.class.isAssignableFrom(type)) {
                     Double value = aCursor.getDouble(aCursor.getColumnIndex(columnName));
                     field.set(this, value);
+                } else if (Boolean.class.isAssignableFrom(type)) {
+                    Integer value = aCursor.getInt(aCursor.getColumnIndex(columnName));
+                    field.set(this, value == 0);
                 } else {
                     Column column = getColumn(field);
                     if (column.isReference() && db != null) {
@@ -230,8 +235,7 @@ abstract class TableBase  {
                         TableBase value = getReference(db, columnName, id);
                         field.set(this, value);
                     } else {
-                        // Byte, Byte[] and Boolean are currently not supported
-                        Log.w(LOGTAG, "Ignoring field - unsupported datatype: " + type);
+                        throw new IllegalArgumentException("unsupported type: " + field);
                     }
                 }
             }

@@ -28,7 +28,6 @@ dependencies {
     compile 'com.android.support:recyclerview-v7:24.2.0'
     compile 'com.squareup.retrofit2:retrofit:2.1.0'              // http://square.github.io/retrofit/
     compile 'com.squareup.retrofit2:converter-gson:2.1.0'
-    //compile 'com.squareup.okhttp:okhttp:2.3.0'                  // http://square.github.io/okhttp/
-    //compile 'com.google.guava:guava:19.0'                         // https://github.com/google/guava
+    compile 'com.google.guava:guava:19.0'                         // https://github.com/google/guava
     compile 'joda-time:joda-time:2.9.4'                           // http://www.joda.org/joda-time/
 }

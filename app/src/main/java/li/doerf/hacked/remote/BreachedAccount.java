@@ -3,7 +3,7 @@ package li.doerf.hacked.remote;
 /**
  * Created by moo on 05/09/16.
  */
-public class BreachedAccounts {
+public class BreachedAccount {
 
     private String Name;
     private String Title;
@@ -81,11 +81,11 @@ public class BreachedAccounts {
         DataClass = dataClass;
     }
 
-    public Boolean getVerified() {
+    public Boolean getIsVerified() {
         return isVerified;
     }
 
-    public void setVerified(Boolean verified) {
+    public void setIsVerified(Boolean verified) {
         isVerified = verified;
     }
 
@@ -104,6 +104,4 @@ public class BreachedAccounts {
     public void setRetired(Boolean retired) {
         isRetired = retired;
     }
-
-
 }
