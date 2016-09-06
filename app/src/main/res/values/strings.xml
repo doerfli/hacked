@@ -10,4 +10,5 @@
     <string name="ok">Ok</string>
     <string name="action_add_account">Add account</string>
     <string name="snackbar_checking_account">Checking for breaches. This might take a moment &#8230;</string>
+    <string name="not_implemented_yet">Coming soon - not implemented yet</string>
 </resources>

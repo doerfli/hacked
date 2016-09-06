@@ -10,16 +10,17 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Toast;
 
 import li.doerf.hacked.db.DatasetChangeListener;
 import li.doerf.hacked.db.HackedSQLiteHelper;
 import li.doerf.hacked.db.tables.Account;
+import li.doerf.hacked.services.HaveIBeenPwnedCheckService;
 import li.doerf.hacked.ui.AddAccountDialogFragment;
 import li.doerf.hacked.ui.adapters.AccountsAdapter;
-import li.doerf.hacked.services.HaveIBeenPwnedCheckService;
 
 public class AccountListActivity extends AppCompatActivity implements DatasetChangeListener {
 
@@ -72,6 +73,7 @@ public class AccountListActivity extends AppCompatActivity implements DatasetCha
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            Toast.makeText(getApplicationContext(), getString(R.string.not_implemented_yet), Toast.LENGTH_SHORT).show();
             return true;
         }
 
