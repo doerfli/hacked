@@ -90,7 +90,7 @@ public class HaveIBeenPwnedCheckService extends IntentService {
                                 ba.getPwnCount(),
                                 ba.getDescription(),
                                 ba.getDataClass(),
-                                ba.getVerified(),
+                                ba.getIsVerified(),
                                 false
                         );
                         breach.insert(db);
