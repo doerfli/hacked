@@ -8,8 +8,8 @@ public class BreachedAccount {
     private String Name;
     private String Title;
     private String Domain;
-    private String BreachDate; // TODO date
-    private String AddedDate; // TODO date
+    private String BreachDate;
+    private String AddedDate;
     private Long PwnCount;
     private String Description;
     private String[] DataClass;

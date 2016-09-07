@@ -47,7 +47,7 @@ public class AccountsAdapter extends RecyclerViewCursorAdapter<RecyclerViewHolde
 
         final SQLiteDatabase db = HackedSQLiteHelper.getInstance(getContext()).getReadableDatabase();
         final Account account = Account.create(db, aCursor);
-        Collection<Breach> breaches = Breach.findAllByAccount(db, account);
+        final Collection<Breach> breaches = Breach.findAllByAccount(db, account);
 
         TextView nameView = (TextView) cardView.findViewById(R.id.name);
         nameView.setText(account.getName());
@@ -72,15 +72,16 @@ public class AccountsAdapter extends RecyclerViewCursorAdapter<RecyclerViewHolde
             cardView.setCardBackgroundColor(getContext().getResources().getColor(R.color.account_status_ok));
         }
 
-        cardView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // TODO check for breaches and show toast if none
-                Intent showBreachDetails = new Intent(getContext(), BreachDetailsActivity.class);
-                showBreachDetails.putExtra(BreachDetailsActivity.EXTRA_ACCOUNT_ID, account.getId());
-                getContext().startActivity(showBreachDetails);
-            }
-        });
+        if ( breaches.size() > 0 ) {
+            cardView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent showBreachDetails = new Intent(getContext(), BreachDetailsActivity.class);
+                    showBreachDetails.putExtra(BreachDetailsActivity.EXTRA_ACCOUNT_ID, account.getId());
+                    getContext().startActivity(showBreachDetails);
+                }
+            });
+        }
 
         cardView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
