@@ -106,7 +106,7 @@ public class HaveIBeenPwnedCheckService extends IntentService {
                                     DateTime.parse(ba.getAddedDate()),
                                     ba.getPwnCount(),
                                     ba.getDescription(),
-                                    ba.getDataClass(),
+                                    ba.getDataClasses(),
                                     ba.getIsVerified(),
                                     false
                             );

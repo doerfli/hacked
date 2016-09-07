@@ -12,7 +12,7 @@ public class BreachedAccount {
     private String AddedDate;
     private Long PwnCount;
     private String Description;
-    private String[] DataClass;
+    private String[] DataClasses;
     private Boolean isVerified;
     private Boolean isSensitive;
     private Boolean isRetired;
@@ -73,12 +73,12 @@ public class BreachedAccount {
         Description = description;
     }
 
-    public String[] getDataClass() {
-        return DataClass;
+    public String[] getDataClasses() {
+        return DataClasses;
     }
 
-    public void setDataClass(String[] dataClass) {
-        DataClass = dataClass;
+    public void setDataClasses(String[] dataClasses) {
+        DataClasses = dataClasses;
     }
 
     public Boolean getIsVerified() {

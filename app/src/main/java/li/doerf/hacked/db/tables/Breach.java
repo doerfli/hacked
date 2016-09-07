@@ -158,7 +158,7 @@ public class Breach extends TableBase implements Identifiable {
         breach.setAddedDate(addedDate);
         breach.setPwnCount(pwnCount);
         breach.setDescription(description);
-        breach.setDataClasses(dataClasses != null ? Joiner.on(",").join(dataClasses) : "");
+        breach.setDataClasses(dataClasses != null ? Joiner.on(", ").join(dataClasses) : "");
         breach.setIsVerified(isVerified);
         breach.setIsAcknowledged(isAcknowledged);
         return breach;
