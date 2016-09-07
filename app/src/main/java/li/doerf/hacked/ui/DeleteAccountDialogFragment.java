@@ -30,7 +30,7 @@ public class DeleteAccountDialogFragment extends DialogFragment {
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         // Use the Builder class for convenient dialog construction
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setMessage(R.string.dialog_account_delete_msg)
+        builder.setMessage(getString(R.string.dialog_account_delete_msg, myAccount.getName()))
                 .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         Collection<Breach> breaches = Breach.findAllByAccount(myDb, myAccount);

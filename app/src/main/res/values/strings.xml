@@ -6,7 +6,7 @@
     <string name="hint_name">Account name …</string>
     <string name="add">Add</string>
     <string name="cancel">Cancel</string>
-    <string name="dialog_account_delete_msg">Do you want to delete this account?</string>
+    <string name="dialog_account_delete_msg">Do you want to delete account \'%1$s\'?</string>
     <string name="ok">OK</string>
     <string name="action_add_account">Add account</string>
     <string name="snackbar_checking_account">Checking for breaches. This might take a moment &#8230;</string>
