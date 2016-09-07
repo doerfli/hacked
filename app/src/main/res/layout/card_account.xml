@@ -16,7 +16,7 @@
             android:id="@+id/name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/name_placeholder"
+            android:text="@string/placeholder_name"
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
             />
 
@@ -33,7 +33,7 @@
             android:id="@+id/last_checked"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/date_placeholder"
+            android:text="@string/placeholder_date"
             android:layout_below="@+id/name"
             android:layout_toRightOf="@+id/desc_last_checked"
             />

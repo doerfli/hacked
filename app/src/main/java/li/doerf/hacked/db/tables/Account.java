@@ -65,6 +65,32 @@ public class Account extends TableBase {
         return item;
     }
 
+    public static Account findById(SQLiteDatabase db, Long anId) {
+        Cursor c = null;
+
+        try {
+            Account item = new Account();
+            c = db.query(
+                    item.getTableName(),
+                    item.getColumnNames(),
+                    "_id = ?",
+                    new String[]{anId.toString()},
+                    null,
+                    null,
+                    "name");
+
+            if (c.moveToFirst()) {
+                return Account.create(db, c);
+            }
+
+            return null;
+        } finally {
+            if ( c != null ) {
+                c.close();
+            }
+        }
+    }
+
     public static Account findByName(SQLiteDatabase db, String aName) {
         Cursor c = null;
 

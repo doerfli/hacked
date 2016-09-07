@@ -1,6 +1,7 @@
 package li.doerf.hacked.ui.adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.v4.app.FragmentManager;
@@ -15,6 +16,7 @@ import org.joda.time.format.DateTimeFormatter;
 
 import java.util.Collection;
 
+import li.doerf.hacked.BreachDetailsActivity;
 import li.doerf.hacked.R;
 import li.doerf.hacked.db.HackedSQLiteHelper;
 import li.doerf.hacked.db.tables.Account;
@@ -35,7 +37,7 @@ public class AccountsAdapter extends RecyclerViewCursorAdapter<RecyclerViewHolde
     @Override
     public RecyclerViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         CardView itemLayout = (CardView) LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.account_card, parent, false);
+                .inflate(R.layout.card_account, parent, false);
         return new RecyclerViewHolder(itemLayout);
     }
 
@@ -69,6 +71,16 @@ public class AccountsAdapter extends RecyclerViewCursorAdapter<RecyclerViewHolde
             breachStatus.setText(getContext().getString(R.string.status_no_breach_found));
             cardView.setCardBackgroundColor(getContext().getResources().getColor(R.color.account_status_ok));
         }
+
+        cardView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // TODO check for breaches and show toast if none
+                Intent showBreachDetails = new Intent(getContext(), BreachDetailsActivity.class);
+                showBreachDetails.putExtra(BreachDetailsActivity.EXTRA_ACCOUNT_ID, account.getId());
+                getContext().startActivity(showBreachDetails);
+            }
+        });
 
         cardView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override

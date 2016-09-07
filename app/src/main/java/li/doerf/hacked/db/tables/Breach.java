@@ -9,15 +9,16 @@ import com.google.common.collect.Lists;
 import org.joda.time.DateTime;
 
 import java.lang.reflect.Field;
-import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import li.doerf.hacked.db.annotations.Column;
 import li.doerf.hacked.db.annotations.Table;
+import li.doerf.hacked.utils.Identifiable;
 
 @Table(name = "breaches")
-public class Breach extends TableBase {
+public class Breach extends TableBase implements Identifiable {
     private static Map<Long, Account> accountCache = new HashMap<>();
 
     @Column(name = "_id", type = "INTEGER", isPrimaryKey = true, isAutoincrement = true)
@@ -227,8 +228,8 @@ public class Breach extends TableBase {
                 "name");
     }
 
-    public static Collection<Breach> findAllByAccount(SQLiteDatabase db, Account account) {
-        Collection<Breach> breaches = Lists.newArrayList();
+    public static List<Breach> findAllByAccount(SQLiteDatabase db, Account account) {
+        List<Breach> breaches = Lists.newArrayList();
         Cursor c = findByAccount( db, account);
 
         try {
