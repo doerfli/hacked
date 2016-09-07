@@ -43,93 +43,95 @@ public class HaveIBeenPwnedCheckService extends IntentService {
         Context context = getBaseContext();
         SQLiteDatabase db = HackedSQLiteHelper.getInstance(context).getReadableDatabase();
 
-        Cursor c = Account.listAll(db);
+        Cursor c = null;
 
-        while( c.moveToNext()) {
-            Account account = Account.create( db, c);
-            Log.d(LOGTAG, "Checking for account: " + account.getName());
+        try {
+            c = Account.listAll(db);
 
-            Retrofit retrofit = new Retrofit.Builder()
-                    .baseUrl("https://haveibeenpwned.com/")
-                    .addConverterFactory(GsonConverterFactory.create())
-                    .build();
+            while (c.moveToNext()) {
+                Account account = Account.create(db, c);
+                Log.d(LOGTAG, "Checking for account: " + account.getName());
 
-            HaveIBeenPwned service = retrofit.create(HaveIBeenPwned.class);
-            Call<List<BreachedAccount>> breachedAccountsList = service.listBreachedAccounts( account.getName());
-            long timeDelta = noReqBefore - System.currentTimeMillis();
+                Retrofit retrofit = new Retrofit.Builder()
+                        .baseUrl("https://haveibeenpwned.com/")
+                        .addConverterFactory(GsonConverterFactory.create())
+                        .build();
 
-            if ( timeDelta > 0 ) {
+                HaveIBeenPwned service = retrofit.create(HaveIBeenPwned.class);
+                Call<List<BreachedAccount>> breachedAccountsList = service.listBreachedAccounts(account.getName());
+                long timeDelta = noReqBefore - System.currentTimeMillis();
+
+                if (timeDelta > 0) {
+                    try {
+                        Log.d(LOGTAG, "waiting for " + timeDelta + "ms before next request");
+                        Thread.sleep(timeDelta);
+                    } catch (InterruptedException e) {
+                        Log.e(LOGTAG, "caught InterruptedException while waiting for next request slot", e);
+                    }
+                }
+
+                boolean isNewBreachFound = false;
+
                 try {
-                    Log.d(LOGTAG, "waiting for " + timeDelta + "ms before next request");
-                    Thread.sleep( timeDelta);
-                } catch (InterruptedException e) {
-                    Log.e(LOGTAG, "caught InterruptedException while waiting for next request slot", e);
-                }
-            }
+                    Response<List<BreachedAccount>> response = breachedAccountsList.execute();
 
-            try {
-                Response<List<BreachedAccount>> response = breachedAccountsList.execute();
-
-                if ( response.isSuccessful()) {
-                    for (BreachedAccount ba : response.body()) {
-                        Breach existing = Breach.findByAccountAndName(db, account, ba.getName());
-
-                        if ( existing != null ) {
-                            Log.d(LOGTAG, "breach already existing: " + ba.getName());
-                            // update account
-                            account.setLastChecked(DateTime.now());
-                            account.update(db);
-                            continue;
-                        }
-
-                        Log.d(LOGTAG, "new breach: " + ba.getName());
-                        Breach breach = Breach.create(
-                                account,
-                                ba.getName(),
-                                ba.getTitle(),
-                                ba.getDomain(),
-                                DateTime.parse(ba.getBreachDate()),
-                                DateTime.parse(ba.getAddedDate()),
-                                ba.getPwnCount(),
-                                ba.getDescription(),
-                                ba.getDataClass(),
-                                ba.getIsVerified(),
-                                false
-                        );
-                        breach.insert(db);
-                        Log.i(LOGTAG, "breach inserted into db");
-
-                        // update account
-                        account.setLastChecked(DateTime.now());
-                        account.setHacked(true);
-                        account.update(db);
-                    }
-                } else {
-                    if ( response.code() == 404 ) {
-                        Log.i(LOGTAG, "no breach found: " + account.getName());
-
-                        // update account
-                        account.setLastChecked(DateTime.now());
-                        account.update(db);
+                    // check for next request timeout
+                    String retryAfter = response.headers().get("Retry-After");
+                    Random random = new Random();
+                    if (retryAfter != null) {
+                        noReqBefore = System.currentTimeMillis() + (Integer.parseInt(retryAfter) * 1000) + random.nextInt(100);
                     } else {
-                        Log.w(LOGTAG, "unexpected response code: " + response.code());
+                        noReqBefore = System.currentTimeMillis() + (1500 + random.nextInt(100));
                     }
-                }
 
-//                Log.d(LOGTAG, response.headers().toString());
-                String retryAfter = response.headers().get("Retry-After");
-                Random random = new Random();
-                if ( retryAfter != null ) {
-                    Log.d(LOGTAG, String.format("haveibeenpwned wants us to wait for %ss until next request", retryAfter));
-                    noReqBefore = System.currentTimeMillis() + ( Integer.parseInt(retryAfter) * 1000 ) + random.nextInt(100);
-                } else {
-                    noReqBefore = System.currentTimeMillis() + ( 1500 + random.nextInt(100) );
+                    if (response.isSuccessful()) {
+                        for (BreachedAccount ba : response.body()) {
+                            Breach existing = Breach.findByAccountAndName(db, account, ba.getName());
+
+                            if (existing != null) {
+                                Log.d(LOGTAG, "breach already existing: " + ba.getName());
+                                continue;
+                            }
+
+                            Log.d(LOGTAG, "new breach: " + ba.getName());
+                            Breach breach = Breach.create(
+                                    account,
+                                    ba.getName(),
+                                    ba.getTitle(),
+                                    ba.getDomain(),
+                                    DateTime.parse(ba.getBreachDate()),
+                                    DateTime.parse(ba.getAddedDate()),
+                                    ba.getPwnCount(),
+                                    ba.getDescription(),
+                                    ba.getDataClass(),
+                                    ba.getIsVerified(),
+                                    false
+                            );
+                            breach.insert(db);
+                            Log.i(LOGTAG, "breach inserted into db");
+                            isNewBreachFound = true;
+                        }
+                    } else {
+                        if (response.code() == 404) {
+                            Log.i(LOGTAG, "no breach found: " + account.getName());
+                        } else {
+                            Log.w(LOGTAG, "unexpected response code: " + response.code());
+                        }
+                    }
+
+                    account.setLastChecked(DateTime.now());
+                    if (isNewBreachFound) {
+                        account.setHacked(isNewBreachFound);
+                    }
+                    account.update(db);
+                } catch (IOException e) {
+                    Log.e(LOGTAG, "caughtIOException while contacting www.haveibeenpwned.com", e);
                 }
-            } catch (IOException e) {
-                Log.e(LOGTAG, "caughtIOException while contacting www.haveibeenpwned.com", e);
             }
+        } finally {
+            Log.d(LOGTAG, "finished checking for beaches");
+            if ( c != null ) c.close();
         }
 
-        Log.d(LOGTAG, "finished checking for beaches");
     }
 }
