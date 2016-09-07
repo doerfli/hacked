@@ -11,6 +11,7 @@ import org.joda.time.DateTime;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Random;
 
 import li.doerf.hacked.db.HackedSQLiteHelper;
 import li.doerf.hacked.db.tables.Account;
@@ -25,6 +26,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class HaveIBeenPwnedCheckService extends IntentService {
     private final String LOGTAG = getClass().getSimpleName();
+    private static long noReqBefore = 0;
 
     public HaveIBeenPwnedCheckService() {
         super("HaveIBeenPwnedCheckService");
@@ -37,11 +39,11 @@ public class HaveIBeenPwnedCheckService extends IntentService {
     }
 
     private void doCheck() {
+        Log.d(LOGTAG, "starting check for braches");
         Context context = getBaseContext();
         SQLiteDatabase db = HackedSQLiteHelper.getInstance(context).getReadableDatabase();
 
         Cursor c = Account.listAll(db);
-        int waitForNextRequest = 1500;
 
         while( c.moveToNext()) {
             Account account = Account.create( db, c);
@@ -54,13 +56,14 @@ public class HaveIBeenPwnedCheckService extends IntentService {
 
             HaveIBeenPwned service = retrofit.create(HaveIBeenPwned.class);
             Call<List<BreachedAccount>> breachedAccountsList = service.listBreachedAccounts( account.getName());
+            long timeDelta = noReqBefore - System.currentTimeMillis();
 
-            if ( waitForNextRequest > 0 ) {
+            if ( timeDelta > 0 ) {
                 try {
-                    Log.d(LOGTAG, "waiting for " + waitForNextRequest + " before next request");
-                    Thread.sleep( waitForNextRequest);
+                    Log.d(LOGTAG, "waiting for " + timeDelta + "ms before next request");
+                    Thread.sleep( timeDelta);
                 } catch (InterruptedException e) {
-                    e.printStackTrace();
+                    Log.e(LOGTAG, "caught InterruptedException while waiting for next request slot", e);
                 }
             }
 
@@ -115,16 +118,18 @@ public class HaveIBeenPwnedCheckService extends IntentService {
 
 //                Log.d(LOGTAG, response.headers().toString());
                 String retryAfter = response.headers().get("Retry-After");
+                Random random = new Random();
                 if ( retryAfter != null ) {
-                    waitForNextRequest = Integer.parseInt(retryAfter) * 1000;
+                    Log.d(LOGTAG, String.format("haveibeenpwned wants us to wait for %ss until next request", retryAfter));
+                    noReqBefore = System.currentTimeMillis() + ( Integer.parseInt(retryAfter) * 1000 ) + random.nextInt(100);
                 } else {
-                    waitForNextRequest = 1500;
+                    noReqBefore = System.currentTimeMillis() + ( 1500 + random.nextInt(100) );
                 }
             } catch (IOException e) {
                 Log.e(LOGTAG, "caughtIOException while contacting www.haveibeenpwned.com", e);
             }
         }
 
-        Log.i(LOGTAG, "finished checking");
+        Log.d(LOGTAG, "finished checking for beaches");
     }
 }
