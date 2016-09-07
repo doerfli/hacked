@@ -73,6 +73,7 @@ public class HaveIBeenPwnedCheckService extends IntentService {
                 boolean isNewBreachFound = false;
 
                 try {
+
                     Response<List<BreachedAccount>> response = breachedAccountsList.execute();
 
                     // check for next request timeout
@@ -83,6 +84,8 @@ public class HaveIBeenPwnedCheckService extends IntentService {
                     } else {
                         noReqBefore = System.currentTimeMillis() + (1500 + random.nextInt(100));
                     }
+
+                    db.beginTransaction();
 
                     if (response.isSuccessful()) {
                         for (BreachedAccount ba : response.body()) {
@@ -124,12 +127,16 @@ public class HaveIBeenPwnedCheckService extends IntentService {
                         account.setHacked(isNewBreachFound);
                     }
                     account.update(db);
+                    db.setTransactionSuccessful();
                 } catch (IOException e) {
                     Log.e(LOGTAG, "caughtIOException while contacting www.haveibeenpwned.com", e);
+                } finally {
+                    db.endTransaction();
+                    account.notifyObservers();
                 }
             }
         } finally {
-            Log.d(LOGTAG, "finished checking for beaches");
+            Log.d(LOGTAG, "finished checking for breaches");
             if ( c != null ) c.close();
         }
 

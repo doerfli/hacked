@@ -41,7 +41,7 @@ public class AddAccountDialogFragment extends DialogFragment {
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
                         myName = ((EditText) view.findViewById(R.id.account)).getText().toString();
-                        addPhoneNumberToDb(myName);
+                        addAccount(myName);
                     }
                 })
                 .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
@@ -56,13 +56,17 @@ public class AddAccountDialogFragment extends DialogFragment {
     }
 
 
-    private void addPhoneNumberToDb(String name) {
+    private void addAccount(String name) {
         if (name == null || name.trim().equals("")) {
             name = "<Not set>";
         }
 
         SQLiteDatabase db = HackedSQLiteHelper.getInstance(getContext()).getWritableDatabase();
+        db.beginTransaction();
         Account account = Account.create( name);
         account.insert(db);
+        db.setTransactionSuccessful();
+        db.endTransaction();
+        account.notifyObservers();
     }
 }

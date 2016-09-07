@@ -343,7 +343,11 @@ abstract class TableBase  {
         observerList.remove( anObserver);
     }
 
-    private void notifyObservers(String tableName) {
+    public synchronized void notifyObservers() {
+        notifyObservers(getTableName());
+    }
+
+    private synchronized static void notifyObservers(String tableName) {
         List<DatasetChangeListener> observerList = myDatasetChangedListeners.get(tableName);
         if ( observerList == null ) {
             return;
