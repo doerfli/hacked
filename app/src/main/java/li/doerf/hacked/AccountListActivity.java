@@ -77,6 +77,14 @@ public class AccountListActivity extends AppCompatActivity implements DatasetCha
             return true;
         }
 
+        if (id == R.id.action_check) {
+            Intent i = new Intent(getBaseContext(), HaveIBeenPwnedCheckService.class);
+            startService(i);
+            Snackbar.make(this.findViewById(android.R.id.content), getString(R.string.snackbar_checking_account), Snackbar.LENGTH_LONG)
+                    .setAction("Action", null).show();
+            return true;
+        }
+
         if (id == R.id.action_add_account) {
             AddAccountDialogFragment newFragment = new AddAccountDialogFragment();
             newFragment.show(getSupportFragmentManager(), "addaccount");
