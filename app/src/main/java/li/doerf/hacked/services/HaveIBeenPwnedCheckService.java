@@ -5,7 +5,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
+import android.widget.Toast;
 
 import org.joda.time.DateTime;
 
@@ -13,6 +16,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Random;
 
+import li.doerf.hacked.R;
 import li.doerf.hacked.db.HackedSQLiteHelper;
 import li.doerf.hacked.db.tables.Account;
 import li.doerf.hacked.db.tables.Breach;
@@ -71,6 +75,7 @@ public class HaveIBeenPwnedCheckService extends IntentService {
                 }
 
                 boolean isNewBreachFound = false;
+                db.beginTransaction();
 
                 try {
 
@@ -84,8 +89,6 @@ public class HaveIBeenPwnedCheckService extends IntentService {
                     } else {
                         noReqBefore = System.currentTimeMillis() + (1500 + random.nextInt(100));
                     }
-
-                    db.beginTransaction();
 
                     if (response.isSuccessful()) {
                         for (BreachedAccount ba : response.body()) {
@@ -129,7 +132,14 @@ public class HaveIBeenPwnedCheckService extends IntentService {
                     account.update(db);
                     db.setTransactionSuccessful();
                 } catch (IOException e) {
-                    Log.e(LOGTAG, "caughtIOException while contacting www.haveibeenpwned.com", e);
+                    Log.e(LOGTAG, "caughtIOException while contacting www.haveibeenpwned.com - " + e.getMessage(), e);
+                    new Handler(Looper.getMainLooper()).post(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(getApplicationContext(), getString(R.string.toast_error_error_during_check), Toast.LENGTH_LONG).show();
+                        }
+                    });
+                    break;
                 } finally {
                     db.endTransaction();
                     account.notifyObservers();
