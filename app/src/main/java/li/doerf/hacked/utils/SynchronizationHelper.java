@@ -21,9 +21,8 @@ public class SynchronizationHelper {
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(aContext);
         disableSync(aContext);
         if (settings.getBoolean(aContext.getString(R.string.pref_key_sync_enable), false)) {
-            // TODO reenable after testing
-//            enableSync(aContext, AlarmManager.INTERVAL_HALF_HOUR);
-            enableSync(aContext, 15000);
+            enableSync(aContext, AlarmManager.INTERVAL_HALF_HOUR);
+//            enableSync(aContext, 15000); // for testing
         }
     }
 

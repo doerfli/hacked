@@ -4,6 +4,8 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
 
     <application
         android:allowBackup="true"
@@ -24,15 +26,15 @@
             android:name=".activities.BreachDetailsActivity"
             android:label="@string/title_breach_details"
             android:parentActivityName=".activities.AccountListActivity"
-            ></activity>
+            />
         <activity
             android:name=".activities.SettingsActivity"
             android:label="@string/title_settings"
             android:parentActivityName=".activities.AccountListActivity"
-            ></activity>
+            />
 
-        <service android:name=".services.HaveIBeenPwnedCheckService"></service>
-        <service android:name=".services.ScheduledCheckService"></service>
+        <service android:name=".services.HaveIBeenPwnedCheckService"/>
+        <service android:name=".services.ScheduledCheckService"/>
 
         <receiver android:name=".receiver.BootupCompleteReceiver">
             <intent-filter>

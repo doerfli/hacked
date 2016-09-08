@@ -7,6 +7,7 @@ import android.preference.PreferenceManager;
 import android.util.Log;
 
 import li.doerf.hacked.R;
+import li.doerf.hacked.utils.ConnectivityHelper;
 
 /**
  * Created by moo on 08/09/16.
@@ -32,6 +33,12 @@ public class ScheduledCheckService extends IntentService {
             return;
         }
 
+        boolean runCheckOnCellular = settings.getBoolean(getString(R.string.pref_key_sync_via_cellular), false);
+        if ( ! runCheckOnCellular && ! ConnectivityHelper.isWifiNetwork( getApplicationContext())) {
+            Log.d(LOGTAG, "no wifi available. try next time");
+            return;
+        }
+
         Log.i(LOGTAG, "check interval expired. run check now");
         Intent i = new Intent(this, HaveIBeenPwnedCheckService.class);
         startService(i);
@@ -46,9 +53,8 @@ public class ScheduledCheckService extends IntentService {
 
         switch ( intervalString) {
             case "everyday":
-                return 1000 * 30;
-            // TODO reenable after testing
-//                return 1000 * 60 * 60 * 24;
+                return 1000 * 60 * 60 * 24;
+//                return 1000 * 30; // for testing
 
             case "everytwodays":
                 return 1000 * 60 * 60 * 24 * 2;
