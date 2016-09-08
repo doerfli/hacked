@@ -26,6 +26,7 @@ import li.doerf.hacked.db.tables.Account;
 import li.doerf.hacked.services.HaveIBeenPwnedCheckService;
 import li.doerf.hacked.ui.AddAccountDialogFragment;
 import li.doerf.hacked.ui.adapters.AccountsAdapter;
+import li.doerf.hacked.utils.ConnectivityHelper;
 
 public class AccountListActivity extends AppCompatActivity implements DatasetChangeListener {
 
@@ -44,10 +45,7 @@ public class AccountListActivity extends AppCompatActivity implements DatasetCha
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent i = new Intent(getBaseContext(), HaveIBeenPwnedCheckService.class);
-                startService(i);
-                Snackbar.make(view, getString(R.string.snackbar_checking_account), Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                checkForBreaches(view);
             }
         });
 
@@ -81,13 +79,13 @@ public class AccountListActivity extends AppCompatActivity implements DatasetCha
         }
     }
 
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_account_list, menu);
         return true;
     }
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -104,10 +102,7 @@ public class AccountListActivity extends AppCompatActivity implements DatasetCha
         }
 
         if (id == R.id.action_check) {
-            Intent i = new Intent(getBaseContext(), HaveIBeenPwnedCheckService.class);
-            startService(i);
-            Snackbar.make(this.findViewById(android.R.id.content), getString(R.string.snackbar_checking_account), Snackbar.LENGTH_LONG)
-                    .setAction("Action", null).show();
+            checkForBreaches(this.findViewById(android.R.id.content));
             return true;
         }
 
@@ -149,5 +144,17 @@ public class AccountListActivity extends AppCompatActivity implements DatasetCha
     @Override
     public void datasetChanged() {
         refreshList();
+    }
+
+    private void checkForBreaches(View view) {
+        if ( ! ConnectivityHelper.isConnected( getApplicationContext()) ) {
+            Toast.makeText(getApplicationContext(), getString(R.string.toast_error_no_network), Toast.LENGTH_LONG).show();
+            return;
+        }
+
+        Intent i = new Intent(getBaseContext(), HaveIBeenPwnedCheckService.class);
+        startService(i);
+        Snackbar.make(view, getString(R.string.snackbar_checking_account), Snackbar.LENGTH_LONG)
+                .setAction("Action", null).show();
     }
 }
