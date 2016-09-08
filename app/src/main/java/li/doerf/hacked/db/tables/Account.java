@@ -129,4 +129,16 @@ public class Account extends TableBase {
                 "is_hacked DESC, name");
     }
 
+    public void updateIsHacked(SQLiteDatabase db) {
+        if ( ! isHacked() ) {
+            return;
+        }
+
+        if ( Breach.countUnacknowledged( db, this) > 0 ) {
+            return;
+        }
+
+        setHacked(false);
+        update(db);
+    }
 }

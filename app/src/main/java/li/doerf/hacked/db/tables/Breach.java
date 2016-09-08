@@ -1,6 +1,7 @@
 package li.doerf.hacked.db.tables;
 
 import android.database.Cursor;
+import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.google.common.base.Joiner;
@@ -205,6 +206,14 @@ public class Breach extends TableBase implements Identifiable {
     }
 
     public static Cursor listAll(SQLiteDatabase db) {
+        return listAll(db, "breach_date");
+    }
+
+    public static Cursor listAllOrderByAcknowledged(SQLiteDatabase db) {
+        return listAll(db, "is_acknowledged, breach_date");
+    }
+
+    public static Cursor listAll(SQLiteDatabase db, String order) {
         Breach item = new Breach();
         return db.query(
                 item.getTableName(),
@@ -213,9 +222,21 @@ public class Breach extends TableBase implements Identifiable {
                 null,
                 null,
                 null,
-                "name");
+                order);
     }
 
+    public static long countUnacknowledged(SQLiteDatabase db, Account account) {
+        Breach item = new Breach();
+        return DatabaseUtils.queryNumEntries( db, item.getTableName(), "account == ? AND is_acknowledged = 0", new String[] { account.getId().toString() });
+    }
+
+    /**
+     * creates a cursor for all breaches belonging to an account sorted by is_acknoweldged and
+     * breached_date.
+     * @param db
+     * @param account
+     * @return
+     */
     public static Cursor findByAccount(SQLiteDatabase db, Account account) {
         Breach item = new Breach();
         return db.query(
@@ -225,7 +246,7 @@ public class Breach extends TableBase implements Identifiable {
                 new String[]{account.getId().toString()},
                 null,
                 null,
-                "name");
+                "is_acknowledged, breach_date DESC");
     }
 
     public static List<Breach> findAllByAccount(SQLiteDatabase db, Account account) {

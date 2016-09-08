@@ -1,10 +1,14 @@
 package li.doerf.hacked.ui.adapters;
 
 import android.content.Context;
+import android.database.sqlite.SQLiteDatabase;
+import android.support.design.widget.Snackbar;
 import android.support.v7.widget.CardView;
 import android.text.Html;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import org.joda.time.format.DateTimeFormat;
@@ -13,6 +17,8 @@ import org.joda.time.format.DateTimeFormatter;
 import java.util.List;
 
 import li.doerf.hacked.R;
+import li.doerf.hacked.db.HackedSQLiteHelper;
+import li.doerf.hacked.db.tables.Account;
 import li.doerf.hacked.db.tables.Breach;
 
 /**
@@ -33,8 +39,8 @@ public class BreachesAdapter extends RecyclerViewListAdapter<RecyclerViewHolder,
     }
 
     @Override
-    public void onBindViewHolder(RecyclerViewHolder holder, Breach aBreach) {
-        CardView cardView = (CardView) holder.getView();
+    public void onBindViewHolder(RecyclerViewHolder holder, final Breach aBreach) {
+        final CardView cardView = (CardView) holder.getView();
 
         TextView title = (TextView) cardView.findViewById(R.id.title);
         title.setText(aBreach.getTitle());
@@ -51,5 +57,31 @@ public class BreachesAdapter extends RecyclerViewListAdapter<RecyclerViewHolder,
 
         TextView description = (TextView) cardView.findViewById(R.id.description);
         description.setText(Html.fromHtml(aBreach.getDescription()).toString());
+
+        Button acknowledge = (Button) cardView.findViewById(R.id.acknowledge);
+
+        if ( ! aBreach.getIsAcknowledged() ) {
+            cardView.setCardBackgroundColor(getContext().getResources().getColor(R.color.not_acknoweldged));
+            acknowledge.setVisibility(View.VISIBLE);
+            acknowledge.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    SQLiteDatabase db = HackedSQLiteHelper.getInstance(getContext()).getWritableDatabase();
+                    db.beginTransaction();
+                    aBreach.setIsAcknowledged(true);
+                    aBreach.update(db);
+                    db.setTransactionSuccessful();
+                    db.endTransaction();
+                    Snackbar.make(cardView, getContext().getString(R.string.breach_acknowledged), Snackbar.LENGTH_LONG).show();
+                    notifyDataSetChanged();
+
+                    Account account = Account.findById(db, aBreach.getAccount().getId());
+                    account.updateIsHacked(db);
+                }
+            });
+        } else {
+            cardView.setCardBackgroundColor(getContext().getResources().getColor(R.color.acknoweldged));
+            acknowledge.setVisibility(View.GONE);
+        }
     }
 }

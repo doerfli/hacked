@@ -31,4 +31,6 @@
     <string name="dismiss">Dismiss</string>
     <string name="pref_initial_help_dismissed">PREF_INITIAL_HELP_DISMISSED</string>
     <string name="toast_dont_show_initial_help_again">You have dismissed the introduction. It will not be shown again.</string>
+    <string name="acknowledge">Acknowledge</string>
+    <string name="breach_acknowledged">Breach acknowledged</string>
 </resources>

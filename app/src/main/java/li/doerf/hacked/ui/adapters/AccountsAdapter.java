@@ -60,15 +60,22 @@ public class AccountsAdapter extends RecyclerViewCursorAdapter<RecyclerViewHolde
             lastCheckedView.setText("-");
         }
 
+        // set breach status text
         TextView breachStatus = (TextView) cardView.findViewById(R.id.breach_state);
-        if ( account.isHacked()) {
+        if ( account.getLastChecked() == null ) {
+            breachStatus.setText("-");
+        } else if ( breaches.size() == 0 ) {
+            breachStatus.setText(getContext().getString(R.string.status_no_breach_found));
+        } else {
             breachStatus.setText(getContext().getString(R.string.status_breaches_found, breaches.size()));
+        }
+
+        // set color of card
+        if ( account.isHacked()) {
             cardView.setCardBackgroundColor(getContext().getResources().getColor(R.color.account_status_breached));
         } else if ( ! account.isHacked() && account.getLastChecked() == null ) {
-            breachStatus.setText("-");
             cardView.setCardBackgroundColor(getContext().getResources().getColor(R.color.account_status_unknown));
         } else {
-            breachStatus.setText(getContext().getString(R.string.status_no_breach_found));
             cardView.setCardBackgroundColor(getContext().getResources().getColor(R.color.account_status_ok));
         }
 

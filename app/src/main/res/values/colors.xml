@@ -6,4 +6,6 @@
     <color name="account_status_ok">#caff96</color>
     <color name="account_status_breached">#ff848a</color>
     <color name="account_status_unknown">#eaeaea</color>
+    <color name="acknoweldged">#AAAAAA</color>
+    <color name="not_acknoweldged">#ffffff</color>
 </resources>
