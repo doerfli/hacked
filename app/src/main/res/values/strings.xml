@@ -26,7 +26,7 @@
     <string name="placeholder_description">text describing breach</string>
     <string name="placeholder_compromised_data">comp, data, columns</string>
     <string name="initial_help_text_1">Welcome to Hacked?!</string>
-    <string name="initial_help_text_2">Add your username(s) and email address(es) to the list below and click the orange sync button to let Hacked? find them in known data breaches. Click on a breached account (red) for more details.</string>
+    <string name="initial_help_text_2">Add your username(s) or email address(es) to the list below and click the orange sync button to let Hacked? find them in known data breaches. Click on a breached account (red) for more details.</string>
     <string name="initial_help_text_4">To remove entries from the list, long-click them and confirm removal.</string>
     <string name="dismiss">Dismiss</string>
     <string name="pref_initial_help_dismissed">PREF_INITIAL_HELP_DISMISSED</string>
