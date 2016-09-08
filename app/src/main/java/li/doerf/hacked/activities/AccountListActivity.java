@@ -98,7 +98,8 @@ public class AccountListActivity extends AppCompatActivity implements DatasetCha
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
-            Toast.makeText(getApplicationContext(), getString(R.string.not_implemented_yet), Toast.LENGTH_SHORT).show();
+            Intent settingsIntent = new Intent(this, SettingsActivity.class);
+            startActivity(settingsIntent);
             return true;
         }
 

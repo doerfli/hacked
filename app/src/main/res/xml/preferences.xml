@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory
+        android:title="@string/pref_title_syncronization"
+        android:key="pref_key_sync">
+        <CheckBoxPreference
+            android:key="@string/pref_key_sync_enable"
+            android:title="@string/pref_title_sync_enable"
+            android:summary="@string/pref_summary_sync_enable"
+            android:defaultValue="false" />
+        <CheckBoxPreference
+            android:dependency="@string/pref_key_sync_enable"
+            android:key="@string/pref_key_sync_via_cellular"
+            android:title="@string/pref_title_sync_via_cellular"
+            android:summary="@string/pref_summary_sync_via_cellular"
+            android:defaultValue="false" />
+        <ListPreference
+            android:dependency="@string/pref_key_sync_enable"
+            android:key="@string/pref_key_sync_interval"
+            android:title="@string/pref_title_sync_interval"
+            android:summary="@string/pref_summary_sync_interval"
+            android:dialogTitle="@string/pref_title_dialog_interval"
+            android:entries="@array/pref_sync_interval_entries"
+            android:entryValues="@array/pref_sync_interval_values"
+            android:defaultValue="@string/pref_sync_interval_default" />
+    </PreferenceCategory>
+</PreferenceScreen>

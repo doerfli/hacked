@@ -24,6 +24,12 @@
             android:label="@string/title_breach_details"
             android:parentActivityName=".activities.AccountListActivity"
             ></activity>
+        <activity
+            android:name=".activities.SettingsActivity"
+            android:label="@string/title_settings"
+            android:parentActivityName=".activities.AccountListActivity"
+            ></activity>
+
         <service android:name=".services.HaveIBeenPwnedCheckService"></service>
     </application>
 
