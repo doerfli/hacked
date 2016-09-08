@@ -16,7 +16,8 @@
     <string name="status">Breach status:</string>
     <string name="status_placeholder">No breach found</string>
     <string name="status_no_breach_found">No breach found</string>
-    <string name="status_breaches_found">Found %1$d breaches</string>
+    <string name="status_breaches_found">%1$d breaches</string>
+    <string name="status_breaches_found_acknowledged">%1$d breaches (%2$d acknowledged)</string>
     <string name="title_breach_details">Breach details</string>
     <string name="breaches">Breaches for</string>
     <string name="label_domain">Domain:</string>

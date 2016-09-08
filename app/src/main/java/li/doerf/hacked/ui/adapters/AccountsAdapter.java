@@ -11,6 +11,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.google.common.base.Predicate;
+import com.google.common.collect.FluentIterable;
+
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
@@ -48,6 +51,13 @@ public class AccountsAdapter extends RecyclerViewCursorAdapter<RecyclerViewHolde
         final SQLiteDatabase db = HackedSQLiteHelper.getInstance(getContext()).getReadableDatabase();
         final Account account = Account.create(db, aCursor);
         final Collection<Breach> breaches = Breach.findAllByAccount(db, account);
+        int numBreaches = breaches.size();
+        int numAcknowledgedBreaches = FluentIterable.from(breaches).filter(new Predicate<Breach>() {
+            @Override
+            public boolean apply(Breach input) {
+                return input.getIsAcknowledged();
+            }
+        }).size();
 
         TextView nameView = (TextView) cardView.findViewById(R.id.name);
         nameView.setText(account.getName());
@@ -64,10 +74,14 @@ public class AccountsAdapter extends RecyclerViewCursorAdapter<RecyclerViewHolde
         TextView breachStatus = (TextView) cardView.findViewById(R.id.breach_state);
         if ( account.getLastChecked() == null ) {
             breachStatus.setText("-");
-        } else if ( breaches.size() == 0 ) {
+        } else if ( numBreaches == 0 ) {
             breachStatus.setText(getContext().getString(R.string.status_no_breach_found));
         } else {
-            breachStatus.setText(getContext().getString(R.string.status_breaches_found, breaches.size()));
+            if ( numAcknowledgedBreaches == 0 ) {
+                breachStatus.setText(getContext().getString(R.string.status_breaches_found, numBreaches));
+            } else {
+                breachStatus.setText(getContext().getString(R.string.status_breaches_found_acknowledged, numBreaches, numAcknowledgedBreaches));
+            }
         }
 
         // set color of card
@@ -76,10 +90,14 @@ public class AccountsAdapter extends RecyclerViewCursorAdapter<RecyclerViewHolde
         } else if ( ! account.isHacked() && account.getLastChecked() == null ) {
             cardView.setCardBackgroundColor(getContext().getResources().getColor(R.color.account_status_unknown));
         } else {
-            cardView.setCardBackgroundColor(getContext().getResources().getColor(R.color.account_status_ok));
+            if ( numBreaches == 0 ) {
+                cardView.setCardBackgroundColor(getContext().getResources().getColor(R.color.account_status_ok));
+            } else {
+                cardView.setCardBackgroundColor(getContext().getResources().getColor(R.color.account_status_only_acknowledged));
+            }
         }
 
-        if ( breaches.size() > 0 ) {
+        if ( numBreaches > 0 ) {
             cardView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
