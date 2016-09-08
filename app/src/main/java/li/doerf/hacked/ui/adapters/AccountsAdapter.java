@@ -19,8 +19,8 @@ import org.joda.time.format.DateTimeFormatter;
 
 import java.util.Collection;
 
-import li.doerf.hacked.BreachDetailsActivity;
 import li.doerf.hacked.R;
+import li.doerf.hacked.activities.BreachDetailsActivity;
 import li.doerf.hacked.db.HackedSQLiteHelper;
 import li.doerf.hacked.db.tables.Account;
 import li.doerf.hacked.db.tables.Breach;

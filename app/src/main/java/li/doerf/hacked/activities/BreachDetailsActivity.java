@@ -1,4 +1,4 @@
-package li.doerf.hacked;
+package li.doerf.hacked.activities;
 
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -8,6 +8,7 @@ import android.support.v7.widget.RecyclerView;
 
 import java.util.List;
 
+import li.doerf.hacked.R;
 import li.doerf.hacked.db.HackedSQLiteHelper;
 import li.doerf.hacked.db.tables.Account;
 import li.doerf.hacked.db.tables.Breach;

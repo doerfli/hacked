@@ -11,7 +11,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".AccountListActivity"
+            android:name=".activities.AccountListActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
@@ -20,9 +20,9 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".BreachDetailsActivity"
+            android:name=".activities.BreachDetailsActivity"
             android:label="@string/title_breach_details"
-            android:parentActivityName=".AccountListActivity"
+            android:parentActivityName=".activities.AccountListActivity"
             ></activity>
         <service android:name=".services.HaveIBeenPwnedCheckService"></service>
     </application>

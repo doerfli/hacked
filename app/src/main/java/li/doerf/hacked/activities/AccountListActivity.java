@@ -1,4 +1,4 @@
-package li.doerf.hacked;
+package li.doerf.hacked.activities;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -19,6 +19,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import li.doerf.hacked.R;
 import li.doerf.hacked.db.DatasetChangeListener;
 import li.doerf.hacked.db.HackedSQLiteHelper;
 import li.doerf.hacked.db.tables.Account;
