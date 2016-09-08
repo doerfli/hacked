@@ -127,7 +127,7 @@ public class HaveIBeenPwnedCheckService extends IntentService {
 
                     account.setLastChecked(DateTime.now());
                     if (isNewBreachFound) {
-                        account.setHacked(isNewBreachFound);
+                        account.setHacked(true);
                     }
                     account.update(db);
                     db.setTransactionSuccessful();
