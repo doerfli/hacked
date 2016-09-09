@@ -25,9 +25,10 @@
     <string name="label_compromised_data">Compromised data:</string>
     <string name="placeholder_description">text describing breach</string>
     <string name="placeholder_compromised_data">comp, data, columns</string>
-    <string name="initial_help_text_1">Welcome to Hacked?!</string>
-    <string name="initial_help_text_2">Click on the plus-icon to add your username(s) or email address(es) to the list. Then click the orange sync button to let Hacked? find them in known data breaches. Select a breached account (red) for more details.</string>
-    <string name="initial_help_text_4">To remove entries from the list, long-click them and confirm removal.</string>
+    <string name="initial_account_welcome_title">Welcome to Hacked?!</string>
+    <string name="initial_account_text">Let\'s get you set up and ready to use <i>Hacked?</i>. Please enter a first account name or email address below and press add.</string>
+    <string name="initial_help_title">What else is in there?</string>
+    <string name="initial_help_text_2">Click the plus icon to add another username or email address.\nClick the orange sync button to let <i>Hacked?</i> find breaches for accounts.\nSelect an account to see more details on the breaches.\nRemove an account by long-clicking on it.</string>
     <string name="dismiss">Dismiss</string>
     <string name="toast_dont_show_initial_help_again">You have dismissed the introduction. It will not be shown again.</string>
     <string name="acknowledge">Acknowledge</string>
@@ -49,8 +50,6 @@
     <string name="PREF_KEY_LAST_SYNC_TIMESTAMP">LAST_SYNC_TIMESTAMP</string>
     <string name="toast_error_no_network">No network available. Please try again later.</string>
     <string name="toast_error_error_during_check">A problem occured while checking for breaches. Please try again later.</string>
-    <string name="initial_account_title">Add your first account</string>
-    <string name="initial_account_text">Let\'s get you set up and ready to use the app. Please enter a first account name or email address below and press add.</string>
     <string name="pref_initial_account_setup">PREF_INITIAL_ACCOUNT_SETUP</string>
     <string name="toast_please_enter_account">Please enter an accout name and try again.</string>
     <string name="toast_account_added">Congratulations, you have added your first account!</string>
