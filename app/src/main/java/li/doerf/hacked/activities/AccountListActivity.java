@@ -78,7 +78,7 @@ public class AccountListActivity extends AppCompatActivity implements DatasetCha
                     EditText accountET = (EditText) findViewById(R.id.account);
                     String accountName = accountET.getText().toString().trim();
 
-                    if ( accountName == "" ) {
+                    if ( accountName.equals("") ) {
                         Toast.makeText(getApplicationContext(), getString(R.string.toast_please_enter_account), Toast.LENGTH_LONG).show();
                         return;
                     }
