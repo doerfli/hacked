@@ -65,21 +65,39 @@ public class AccountListActivity extends AppCompatActivity implements DatasetCha
         showInitialHelp();
     }
 
-    private void showInitialHelp() {
+    private void showInitialSetupAccount() {
         final SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        boolean initialHelpDismissed = settings.getBoolean(getString(R.string.pref_initial_help_dismissed), false);
-        if ( ! initialHelpDismissed ) {
-            final CardView initialHelp = (CardView) findViewById(R.id.initial_help);
-            initialHelp.setVisibility(View.VISIBLE);
-            Button dismissB = (Button) findViewById(R.id.button_dismiss_help);
-            dismissB.setOnClickListener(new View.OnClickListener() {
+        boolean initialSetupAccountDone = settings.getBoolean(getString(R.string.pref_initial_setup_account_done), false);
+        if ( ! initialSetupAccountDone ) {
+            final CardView initialAccount = (CardView) findViewById(R.id.initial_account);
+            initialAccount.setVisibility(View.VISIBLE);
+            Button addB = (Button) findViewById(R.id.button_add_initial_account);
+            addB.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    initialHelp.setVisibility(View.GONE);
-                    Toast.makeText(getApplicationContext(), getString(R.string.toast_dont_show_initial_help_again), Toast.LENGTH_SHORT).show();
+                    EditText accountET = (EditText) findViewById(R.id.account);
+                    String accountName = accountET.getText().toString().trim();
+
+                    if ( accountName == "" ) {
+                        Toast.makeText(getApplicationContext(), getString(R.string.toast_please_enter_account), Toast.LENGTH_LONG).show();
+                        return;
+                    }
+
+                    initialAccount.setVisibility(View.GONE);
+
+                    SQLiteDatabase db = HackedSQLiteHelper.getInstance(getApplicationContext()).getWritableDatabase();
+                    db.beginTransaction();
+                    Account account = Account.create( accountName);
+                    account.insert(db);
+                    db.setTransactionSuccessful();
+                    db.endTransaction();
+                    account.notifyObservers();
+
+                    Toast.makeText(getApplicationContext(), getString(R.string.toast_account_added), Toast.LENGTH_LONG).show();
+                    checkForBreaches(initialAccount);
 
                     SharedPreferences.Editor editor = settings.edit();
-                    editor.putBoolean(getString(R.string.pref_initial_help_dismissed), true);
+                    editor.putBoolean(getString(R.string.pref_initial_setup_account_done), true);
                     editor.apply();
                 }
             });
@@ -124,39 +142,21 @@ public class AccountListActivity extends AppCompatActivity implements DatasetCha
         }
     }
 
-    private void showInitialSetupAccount() {
+    private void showInitialHelp() {
         final SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        boolean initialSetupAccountDone = settings.getBoolean(getString(R.string.pref_initial_setup_account_done), false);
-        if ( ! initialSetupAccountDone ) {
-            final CardView initialAccount = (CardView) findViewById(R.id.initial_account);
-            initialAccount.setVisibility(View.VISIBLE);
-            Button addB = (Button) findViewById(R.id.button_add_initial_account);
-            addB.setOnClickListener(new View.OnClickListener() {
+        boolean initialHelpDismissed = settings.getBoolean(getString(R.string.pref_initial_help_dismissed), false);
+        if ( ! initialHelpDismissed ) {
+            final CardView initialHelp = (CardView) findViewById(R.id.initial_help);
+            initialHelp.setVisibility(View.VISIBLE);
+            Button dismissB = (Button) findViewById(R.id.button_dismiss_help);
+            dismissB.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    EditText accountET = (EditText) findViewById(R.id.account);
-                    String accountName = accountET.getText().toString().trim();
-
-                    if ( accountName == "" ) {
-                        Toast.makeText(getApplicationContext(), getString(R.string.toast_please_enter_account), Toast.LENGTH_LONG).show();
-                        return;
-                    }
-
-                    initialAccount.setVisibility(View.GONE);
-
-                    SQLiteDatabase db = HackedSQLiteHelper.getInstance(getApplicationContext()).getWritableDatabase();
-                    db.beginTransaction();
-                    Account account = Account.create( accountName);
-                    account.insert(db);
-                    db.setTransactionSuccessful();
-                    db.endTransaction();
-                    account.notifyObservers();
-
-                    Toast.makeText(getApplicationContext(), getString(R.string.toast_account_added), Toast.LENGTH_LONG).show();
-                    checkForBreaches(initialAccount);
+                    initialHelp.setVisibility(View.GONE);
+                    Toast.makeText(getApplicationContext(), getString(R.string.toast_dont_show_initial_help_again), Toast.LENGTH_SHORT).show();
 
                     SharedPreferences.Editor editor = settings.edit();
-                    editor.putBoolean(getString(R.string.pref_initial_setup_account_done), true);
+                    editor.putBoolean(getString(R.string.pref_initial_help_dismissed), true);
                     editor.apply();
                 }
             });
