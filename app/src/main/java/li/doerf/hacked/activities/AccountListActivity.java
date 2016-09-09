@@ -28,6 +28,7 @@ import li.doerf.hacked.services.HaveIBeenPwnedCheckService;
 import li.doerf.hacked.ui.AddAccountDialogFragment;
 import li.doerf.hacked.ui.adapters.AccountsAdapter;
 import li.doerf.hacked.utils.ConnectivityHelper;
+import li.doerf.hacked.utils.SynchronizationHelper;
 
 public class AccountListActivity extends AppCompatActivity implements DatasetChangeListener {
 
@@ -66,7 +67,6 @@ public class AccountListActivity extends AppCompatActivity implements DatasetCha
             final CardView initialHelp = (CardView) findViewById(R.id.initial_help);
             initialHelp.setVisibility(View.VISIBLE);
             Button dismissB = (Button) findViewById(R.id.button_dismiss_help);
-            dismissB.requestFocus();
             dismissB.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -92,7 +92,7 @@ public class AccountListActivity extends AppCompatActivity implements DatasetCha
                     String accountName = accountET.getText().toString().trim();
 
                     if ( accountName == "" ) {
-                        Toast.makeText(getApplicationContext(), getString(R.string.toast_please_enter_account), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), getString(R.string.toast_please_enter_account), Toast.LENGTH_LONG).show();
                         return;
                     }
 
@@ -112,6 +112,42 @@ public class AccountListActivity extends AppCompatActivity implements DatasetCha
                     SharedPreferences.Editor editor = settings.edit();
                     editor.putBoolean(getString(R.string.pref_initial_account_setup), true);
                     editor.apply();
+                }
+            });
+        }
+
+        boolean initialSetupCheckDone = settings.getBoolean(getString(R.string.pref_initial_setup_check_done), false);
+
+        if ( ! initialSetupCheckDone ) {
+            final CardView initialSetupCheck = (CardView) findViewById(R.id.initial_setup_check);
+            initialSetupCheck.setVisibility(View.VISIBLE);
+
+            Button noB = (Button) findViewById(R.id.initial_setup_check_no);
+            noB.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    initialSetupCheck.setVisibility(View.GONE);
+                    Toast.makeText(getApplicationContext(), getString(R.string.toast_check_not_enabled), Toast.LENGTH_LONG).show();
+
+                    SharedPreferences.Editor editor = settings.edit();
+                    editor.putBoolean(getString(R.string.pref_initial_setup_check_done), true);
+                    editor.apply();
+                }
+            });
+
+            Button yesB = (Button) findViewById(R.id.initial_setup_check_yes);
+            yesB.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    initialSetupCheck.setVisibility(View.GONE);
+
+                    SharedPreferences.Editor editor = settings.edit();
+                    editor.putBoolean(getString(R.string.pref_key_sync_enable), true);
+                    editor.putBoolean(getString(R.string.pref_initial_setup_check_done), true);
+                    editor.apply();
+
+                    SynchronizationHelper.scheduleSync(getApplicationContext());
+                    Toast.makeText(getApplicationContext(), getString(R.string.toast_check_enabled), Toast.LENGTH_LONG).show();
                 }
             });
         }

@@ -53,4 +53,11 @@
     <string name="pref_initial_account_setup">PREF_INITIAL_ACCOUNT_SETUP</string>
     <string name="toast_please_enter_account">Please enter an accout name and try again.</string>
     <string name="toast_account_added">Congratulations, you have added your first account!</string>
+    <string name="initial_setup_check_title">Background checks</string>
+    <string name="initial_setup_check_text">Would you like <i>Hacked?</i> to check for breaches daily?\nIf you choose no, you can enable this feature any time by opening the settings.\nThe app will only check if connected to a Wifi network (you can change this in the settings too).</string>
+    <string name="no">No</string>
+    <string name="yes">Yes</string>
+    <string name="pref_initial_setup_check_done">PREF_INITIAL_SETUP_CHECK_DONE</string>
+    <string name="toast_check_not_enabled">Automatic check not enabled. You can change this any time by opening the settings.</string>
+    <string name="toast_check_enabled">Enabled daily check for breaches.</string>
 </resources>
