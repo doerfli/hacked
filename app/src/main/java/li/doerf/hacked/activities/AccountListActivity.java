@@ -60,9 +60,14 @@ public class AccountListActivity extends AppCompatActivity implements DatasetCha
         accountsList.setLayoutManager(lm);
         accountsList.setAdapter(myAccountsAdapter);
 
+        showInitialSetupAccount();
+        showInitialSetupCheck();
+        showInitialHelp();
+    }
+
+    private void showInitialHelp() {
         final SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         boolean initialHelpDismissed = settings.getBoolean(getString(R.string.pref_initial_help_dismissed), false);
-
         if ( ! initialHelpDismissed ) {
             final CardView initialHelp = (CardView) findViewById(R.id.initial_help);
             initialHelp.setVisibility(View.VISIBLE);
@@ -79,45 +84,11 @@ public class AccountListActivity extends AppCompatActivity implements DatasetCha
                 }
             });
         }
+    }
 
-        boolean initialAccountDone = settings.getBoolean(getString(R.string.pref_initial_account_setup), false);
-        if ( ! initialAccountDone ) {
-            final CardView initialAccount = (CardView) findViewById(R.id.initial_account);
-            initialAccount.setVisibility(View.VISIBLE);
-            Button addB = (Button) findViewById(R.id.button_add_initial_account);
-            addB.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    EditText accountET = (EditText) findViewById(R.id.account);
-                    String accountName = accountET.getText().toString().trim();
-
-                    if ( accountName == "" ) {
-                        Toast.makeText(getApplicationContext(), getString(R.string.toast_please_enter_account), Toast.LENGTH_LONG).show();
-                        return;
-                    }
-
-                    initialAccount.setVisibility(View.GONE);
-
-                    SQLiteDatabase db = HackedSQLiteHelper.getInstance(getApplicationContext()).getWritableDatabase();
-                    db.beginTransaction();
-                    Account account = Account.create( accountName);
-                    account.insert(db);
-                    db.setTransactionSuccessful();
-                    db.endTransaction();
-                    account.notifyObservers();
-
-                    Toast.makeText(getApplicationContext(), getString(R.string.toast_account_added), Toast.LENGTH_LONG).show();
-                    checkForBreaches(initialAccount);
-
-                    SharedPreferences.Editor editor = settings.edit();
-                    editor.putBoolean(getString(R.string.pref_initial_account_setup), true);
-                    editor.apply();
-                }
-            });
-        }
-
+    private void showInitialSetupCheck() {
+        final SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         boolean initialSetupCheckDone = settings.getBoolean(getString(R.string.pref_initial_setup_check_done), false);
-
         if ( ! initialSetupCheckDone ) {
             final CardView initialSetupCheck = (CardView) findViewById(R.id.initial_setup_check);
             initialSetupCheck.setVisibility(View.VISIBLE);
@@ -148,6 +119,45 @@ public class AccountListActivity extends AppCompatActivity implements DatasetCha
 
                     SynchronizationHelper.scheduleSync(getApplicationContext());
                     Toast.makeText(getApplicationContext(), getString(R.string.toast_check_enabled), Toast.LENGTH_LONG).show();
+                }
+            });
+        }
+    }
+
+    private void showInitialSetupAccount() {
+        final SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        boolean initialSetupAccountDone = settings.getBoolean(getString(R.string.pref_initial_setup_account_done), false);
+        if ( ! initialSetupAccountDone ) {
+            final CardView initialAccount = (CardView) findViewById(R.id.initial_account);
+            initialAccount.setVisibility(View.VISIBLE);
+            Button addB = (Button) findViewById(R.id.button_add_initial_account);
+            addB.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    EditText accountET = (EditText) findViewById(R.id.account);
+                    String accountName = accountET.getText().toString().trim();
+
+                    if ( accountName == "" ) {
+                        Toast.makeText(getApplicationContext(), getString(R.string.toast_please_enter_account), Toast.LENGTH_LONG).show();
+                        return;
+                    }
+
+                    initialAccount.setVisibility(View.GONE);
+
+                    SQLiteDatabase db = HackedSQLiteHelper.getInstance(getApplicationContext()).getWritableDatabase();
+                    db.beginTransaction();
+                    Account account = Account.create( accountName);
+                    account.insert(db);
+                    db.setTransactionSuccessful();
+                    db.endTransaction();
+                    account.notifyObservers();
+
+                    Toast.makeText(getApplicationContext(), getString(R.string.toast_account_added), Toast.LENGTH_LONG).show();
+                    checkForBreaches(initialAccount);
+
+                    SharedPreferences.Editor editor = settings.edit();
+                    editor.putBoolean(getString(R.string.pref_initial_setup_account_done), true);
+                    editor.apply();
                 }
             });
         }
