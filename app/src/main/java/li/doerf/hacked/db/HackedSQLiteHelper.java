@@ -34,8 +34,6 @@ public class HackedSQLiteHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         Log.i(LOGTAG, "Initializing Database: " + DATABASE_NAME);
         new Account().createTable(db);
-        Account.create("myAccount").insert(db);
-        Account.create("name@email.com").insert(db);
         new Breach().createTable(db);
     }
 
