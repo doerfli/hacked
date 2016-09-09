@@ -49,4 +49,9 @@
     <string name="PREF_KEY_LAST_SYNC_TIMESTAMP">LAST_SYNC_TIMESTAMP</string>
     <string name="toast_error_no_network">No network available. Please try again later.</string>
     <string name="toast_error_error_during_check">A problem occured while checking for breaches. Please try again later.</string>
+    <string name="initial_account_title">Add your first account</string>
+    <string name="initial_account_text">Let\'s get you set up and ready to use the app. Please enter a first account name or email address below and press add.</string>
+    <string name="pref_initial_account_setup">PREF_INITIAL_ACCOUNT_SETUP</string>
+    <string name="toast_please_enter_account">Please enter an accout name and try again.</string>
+    <string name="toast_account_added">Congratulations, you have added your first account!</string>
 </resources>

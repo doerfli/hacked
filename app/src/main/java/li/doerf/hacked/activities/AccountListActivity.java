@@ -17,6 +17,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import li.doerf.hacked.R;
@@ -65,6 +66,7 @@ public class AccountListActivity extends AppCompatActivity implements DatasetCha
             final CardView initialHelp = (CardView) findViewById(R.id.initial_help);
             initialHelp.setVisibility(View.VISIBLE);
             Button dismissB = (Button) findViewById(R.id.button_dismiss_help);
+            dismissB.requestFocus();
             dismissB.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -73,6 +75,42 @@ public class AccountListActivity extends AppCompatActivity implements DatasetCha
 
                     SharedPreferences.Editor editor = settings.edit();
                     editor.putBoolean(getString(R.string.pref_initial_help_dismissed), true);
+                    editor.apply();
+                }
+            });
+        }
+
+        boolean initialAccountDone = settings.getBoolean(getString(R.string.pref_initial_account_setup), false);
+        if ( ! initialAccountDone ) {
+            final CardView initialAccount = (CardView) findViewById(R.id.initial_account);
+            initialAccount.setVisibility(View.VISIBLE);
+            Button addB = (Button) findViewById(R.id.button_add_initial_account);
+            addB.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    EditText accountET = (EditText) findViewById(R.id.account);
+                    String accountName = accountET.getText().toString().trim();
+
+                    if ( accountName == "" ) {
+                        Toast.makeText(getApplicationContext(), getString(R.string.toast_please_enter_account), Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+
+                    initialAccount.setVisibility(View.GONE);
+
+                    SQLiteDatabase db = HackedSQLiteHelper.getInstance(getApplicationContext()).getWritableDatabase();
+                    db.beginTransaction();
+                    Account account = Account.create( accountName);
+                    account.insert(db);
+                    db.setTransactionSuccessful();
+                    db.endTransaction();
+                    account.notifyObservers();
+
+                    Toast.makeText(getApplicationContext(), getString(R.string.toast_account_added), Toast.LENGTH_LONG).show();
+                    checkForBreaches(initialAccount);
+
+                    SharedPreferences.Editor editor = settings.edit();
+                    editor.putBoolean(getString(R.string.pref_initial_account_setup), true);
                     editor.apply();
                 }
             });

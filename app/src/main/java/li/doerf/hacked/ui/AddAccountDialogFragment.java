@@ -63,7 +63,7 @@ public class AddAccountDialogFragment extends DialogFragment {
 
         SQLiteDatabase db = HackedSQLiteHelper.getInstance(getContext()).getWritableDatabase();
         db.beginTransaction();
-        Account account = Account.create( name);
+        Account account = Account.create( name.trim());
         account.insert(db);
         db.setTransactionSuccessful();
         db.endTransaction();
