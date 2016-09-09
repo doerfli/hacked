@@ -9,5 +9,5 @@
     <color name="account_status_unknown">#eaeaea</color>
     <color name="acknoweldged">#AAAAAA</color>
     <color name="not_acknoweldged">#ffffff</color>
-
+    <color name="green">#007900</color>
 </resources>

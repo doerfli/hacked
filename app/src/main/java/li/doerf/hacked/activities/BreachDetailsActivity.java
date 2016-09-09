@@ -3,8 +3,10 @@ package li.doerf.hacked.activities;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
 
 import java.util.List;
 
@@ -31,7 +33,12 @@ public class BreachDetailsActivity extends AppCompatActivity {
         myAccount = Account.findById(myReadbableDb, accountId);
         myBreaches = Breach.findAllByAccount(myReadbableDb, myAccount);
 
-        setTitle( getString(R.string.breaches) + " " + myAccount.getName());
+        setTitle(myAccount.getName());
+
+        if ( myBreaches.size() == 0 ) {
+            CardView noBreachFound = (CardView) findViewById(R.id.no_breach_found);
+            noBreachFound.setVisibility(View.VISIBLE);
+        }
 
         myBreachesAdapter = new BreachesAdapter(this, myBreaches);
 

@@ -60,4 +60,6 @@
     <string name="pref_initial_setup_check_done">PREF_INITIAL_SETUP_CHECK_DONE</string>
     <string name="toast_check_not_enabled">Automatic check not enabled. You can change this any time by opening the settings.</string>
     <string name="toast_check_enabled">Enabled daily check for breaches.</string>
+    <string name="congratulations">Congratulations!</string>
+    <string name="no_breaches_found">No breaches were found for this account.</string>
 </resources>

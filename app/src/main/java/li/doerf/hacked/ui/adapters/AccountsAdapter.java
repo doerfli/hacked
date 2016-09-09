@@ -97,16 +97,14 @@ public class AccountsAdapter extends RecyclerViewCursorAdapter<RecyclerViewHolde
             }
         }
 
-        if ( numBreaches > 0 ) {
-            cardView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent showBreachDetails = new Intent(getContext(), BreachDetailsActivity.class);
-                    showBreachDetails.putExtra(BreachDetailsActivity.EXTRA_ACCOUNT_ID, account.getId());
-                    getContext().startActivity(showBreachDetails);
-                }
-            });
-        }
+        cardView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent showBreachDetails = new Intent(getContext(), BreachDetailsActivity.class);
+                showBreachDetails.putExtra(BreachDetailsActivity.EXTRA_ACCOUNT_ID, account.getId());
+                getContext().startActivity(showBreachDetails);
+            }
+        });
 
         cardView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
