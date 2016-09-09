@@ -72,7 +72,7 @@ public class BreachesAdapter extends RecyclerViewListAdapter<RecyclerViewHolder,
                     aBreach.update(db);
                     db.setTransactionSuccessful();
                     db.endTransaction();
-                    Snackbar.make(cardView, getContext().getString(R.string.breach_acknowledged), Snackbar.LENGTH_LONG).show();
+                    Snackbar.make(cardView, getContext().getString(R.string.breach_acknowledged), Snackbar.LENGTH_SHORT).show();
                     notifyDataSetChanged();
 
                     Account account = Account.findById(db, aBreach.getAccount().getId());

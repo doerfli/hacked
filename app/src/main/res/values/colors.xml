@@ -3,9 +3,9 @@
     <color name="colorPrimary">#009688</color>
     <color name="colorPrimaryDark">#00796B</color>
     <color name="colorAccent">#FFAB40</color>
-    <color name="account_status_ok">#caff96</color>
-    <color name="account_status_only_acknowledged">#7da359</color>
-    <color name="account_status_breached">#ff848a</color>
+    <color name="account_status_ok">#bcffa5</color>
+    <color name="account_status_only_acknowledged">#ffffad</color>
+    <color name="account_status_breached">#ffb1b5</color>
     <color name="account_status_unknown">#eaeaea</color>
     <color name="acknoweldged">#AAAAAA</color>
     <color name="not_acknoweldged">#ffffff</color>
