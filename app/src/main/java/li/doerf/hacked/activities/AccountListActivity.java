@@ -39,6 +39,7 @@ public class AccountListActivity extends AppCompatActivity implements DatasetCha
     private SQLiteDatabase myReadbableDb;
     private AccountsAdapter myAccountsAdapter;
     private Cursor myCursor;
+    private FloatingActionButton myFloatingActionButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,8 +48,8 @@ public class AccountListActivity extends AppCompatActivity implements DatasetCha
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
+        myFloatingActionButton = (FloatingActionButton) findViewById(R.id.fab);
+        myFloatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 checkForBreaches(view);
@@ -234,6 +235,12 @@ public class AccountListActivity extends AppCompatActivity implements DatasetCha
     public void refreshList() {
         myCursor = Account.listAll(myReadbableDb);
         myAccountsAdapter.swapCursor(myCursor);
+
+        if ( myCursor.getCount() > 0 ) {
+            myFloatingActionButton.setVisibility(View.VISIBLE);
+        } else {
+            myFloatingActionButton.setVisibility(View.GONE);
+        }
     }
 
     @Override

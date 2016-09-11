@@ -2,7 +2,7 @@
 <resources>
     <color name="colorPrimary">#388E3C</color>
     <color name="colorPrimaryDark">#1B5E20</color>
-    <color name="colorAccent">#D50000</color>
+    <color name="colorAccent">#FF9100</color>
     <color name="account_status_ok">#4CAF50</color>
     <color name="account_status_only_acknowledged">#FFEB3B</color>
     <color name="account_status_breached">#F44336</color>
