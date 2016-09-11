@@ -7,9 +7,11 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import li.doerf.hacked.R;
 import li.doerf.hacked.db.HackedSQLiteHelper;
@@ -61,9 +63,16 @@ public class AddAccountDialogFragment extends DialogFragment {
             name = "<Not set>";
         }
 
-        SQLiteDatabase db = HackedSQLiteHelper.getInstance(getContext()).getWritableDatabase();
-        db.beginTransaction();
         Account account = Account.create( name.trim());
+        SQLiteDatabase db = HackedSQLiteHelper.getInstance(getContext()).getWritableDatabase();
+
+        if ( account.exists(db) ) {
+            Toast.makeText(getContext(), getString(R.string.toast_account_exists), Toast.LENGTH_LONG).show();
+            Log.w(LOGTAG, "account already exists");
+            return;
+        }
+
+        db.beginTransaction();
         account.insert(db);
         db.setTransactionSuccessful();
         db.endTransaction();

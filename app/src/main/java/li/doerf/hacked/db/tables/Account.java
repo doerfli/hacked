@@ -117,6 +117,10 @@ public class Account extends TableBase {
         }
     }
 
+    public boolean exists(SQLiteDatabase db) {
+        return findByName(db, getName()) != null;
+    }
+
     public static Cursor listAll(SQLiteDatabase db) {
         Account item = new Account();
         return db.query(

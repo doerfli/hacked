@@ -14,6 +14,7 @@ import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -33,6 +34,7 @@ import li.doerf.hacked.utils.ConnectivityHelper;
 import li.doerf.hacked.utils.SynchronizationHelper;
 
 public class AccountListActivity extends AppCompatActivity implements DatasetChangeListener {
+    private final String LOGTAG = getClass().getSimpleName();
 
     private SQLiteDatabase myReadbableDb;
     private AccountsAdapter myAccountsAdapter;
@@ -85,23 +87,27 @@ public class AccountListActivity extends AppCompatActivity implements DatasetCha
                         return;
                     }
 
-                    initialAccount.setVisibility(View.GONE);
-
-                    SQLiteDatabase db = HackedSQLiteHelper.getInstance(getApplicationContext()).getWritableDatabase();
-                    db.beginTransaction();
                     Account account = Account.create( accountName);
+                    SQLiteDatabase db = HackedSQLiteHelper.getInstance(getApplicationContext()).getWritableDatabase();
+
+                    if ( account.exists(db) ) {
+                        Log.w(LOGTAG, "account already exists");
+                        Toast.makeText(getApplicationContext(), getString(R.string.toast_account_exists), Toast.LENGTH_LONG).show();
+                        return;
+                    }
+
+                    db.beginTransaction();
                     account.insert(db);
                     db.setTransactionSuccessful();
                     db.endTransaction();
                     account.notifyObservers();
 
+                    initialAccount.setVisibility(View.GONE);
                     Toast.makeText(getApplicationContext(), getString(R.string.toast_account_added), Toast.LENGTH_LONG).show();
                     checkForBreaches(initialAccount);
-
                     SharedPreferences.Editor editor = settings.edit();
                     editor.putBoolean(getString(R.string.pref_initial_setup_account_done), true);
                     editor.apply();
-
                     InputMethodManager mgr = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                     mgr.hideSoftInputFromWindow(accountET.getWindowToken(), 0);
                 }

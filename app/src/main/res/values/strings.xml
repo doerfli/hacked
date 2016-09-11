@@ -62,4 +62,5 @@
     <string name="toast_check_enabled">Enabled daily check for breaches.</string>
     <string name="congratulations">Congratulations!</string>
     <string name="no_breaches_found">No breaches were found for this account.</string>
+    <string name="toast_account_exists">This account already exists. Please enter a different name.</string>
 </resources>
