@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#009688</color>
-    <color name="colorPrimaryDark">#00796B</color>
-    <color name="colorAccent">#FFAB40</color>
-    <color name="account_status_ok">#bcffa5</color>
-    <color name="account_status_only_acknowledged">#ffffad</color>
-    <color name="account_status_breached">#ffb1b5</color>
-    <color name="account_status_unknown">#eaeaea</color>
+    <color name="colorPrimary">#388E3C</color>
+    <color name="colorPrimaryDark">#1B5E20</color>
+    <color name="colorAccent">#D50000</color>
+    <color name="account_status_ok">#C8E6C9</color>
+    <color name="account_status_only_acknowledged">#FFF9C4</color>
+    <color name="account_status_breached">#FFCDD2</color>
+    <color name="account_status_unknown">#F5F5F5</color>
     <color name="acknoweldged">#AAAAAA</color>
     <color name="not_acknoweldged">#ffffff</color>
     <color name="green">#007900</color>
