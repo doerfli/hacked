@@ -13,4 +13,5 @@
     <dimen name="card_margin">2dp</dimen>
     <dimen name="text_space">8dp</dimen>
     <dimen name="width_status">20dp</dimen>
+    <dimen name="width_status_breach">10dp</dimen>
 </resources>

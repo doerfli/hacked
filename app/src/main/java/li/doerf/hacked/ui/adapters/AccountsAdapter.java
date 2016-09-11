@@ -84,7 +84,7 @@ public class AccountsAdapter extends RecyclerViewCursorAdapter<RecyclerViewHolde
             }
         }
 
-        View statusIndicator = (View) cardView.findViewById(R.id.status_indicator);
+        View statusIndicator = cardView.findViewById(R.id.status_indicator);
         // set color of card
         if ( account.isHacked()) {
             statusIndicator.setBackgroundColor(getContext().getResources().getColor(R.color.account_status_breached));

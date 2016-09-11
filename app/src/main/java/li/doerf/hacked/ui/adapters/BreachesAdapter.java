@@ -58,10 +58,11 @@ public class BreachesAdapter extends RecyclerViewListAdapter<RecyclerViewHolder,
         TextView description = (TextView) cardView.findViewById(R.id.description);
         description.setText(Html.fromHtml(aBreach.getDescription()).toString());
 
+        View statusIndicator = cardView.findViewById(R.id.status_indicator);
         Button acknowledge = (Button) cardView.findViewById(R.id.acknowledge);
 
         if ( ! aBreach.getIsAcknowledged() ) {
-            cardView.setCardBackgroundColor(getContext().getResources().getColor(R.color.not_acknoweldged));
+            statusIndicator.setBackgroundColor(getContext().getResources().getColor(R.color.account_status_breached));
             acknowledge.setVisibility(View.VISIBLE);
             acknowledge.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -80,7 +81,7 @@ public class BreachesAdapter extends RecyclerViewListAdapter<RecyclerViewHolder,
                 }
             });
         } else {
-            cardView.setCardBackgroundColor(getContext().getResources().getColor(R.color.acknoweldged));
+            statusIndicator.setBackgroundColor(getContext().getResources().getColor(R.color.account_status_only_acknowledged));
             acknowledge.setVisibility(View.GONE);
         }
     }
