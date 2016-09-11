@@ -8,7 +8,7 @@
     <string name="dialog_account_delete_msg">Do you want to delete account \'%1$s\'?</string>
     <string name="ok">OK</string>
     <string name="action_add_account">Add account</string>
-    <string name="snackbar_checking_account">Checking for breaches - this will take a moment.\nThe list will be updated.</string>
+    <string name="snackbar_checking_account">Checking for breaches - this will take approximatly %1$d seconds.\nThe list will be updated.</string>
     <string name="not_implemented_yet">Coming soon - not implemented yet</string>
     <string name="last_checked">Last checked:</string>
     <string name="placeholder_date">yyyy/mm/dd hh:mm</string>

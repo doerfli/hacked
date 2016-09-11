@@ -254,9 +254,11 @@ public class AccountListActivity extends AppCompatActivity implements DatasetCha
             return;
         }
 
+        int expectedDuration = (int) Math.ceil(myAccountsAdapter.getItemCount() * 2.5);
+
         Intent i = new Intent(getBaseContext(), HaveIBeenPwnedCheckService.class);
         startService(i);
-        Snackbar.make(view, getString(R.string.snackbar_checking_account), Snackbar.LENGTH_LONG)
+        Snackbar.make(view, getString(R.string.snackbar_checking_account, expectedDuration), Snackbar.LENGTH_LONG)
                 .setAction("Action", null).show();
     }
 }
