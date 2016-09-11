@@ -63,4 +63,5 @@
     <string name="congratulations">Congratulations!</string>
     <string name="no_breaches_found">No breaches were found for this account.</string>
     <string name="toast_account_exists">This account already exists. Please enter a different name.</string>
+    <string name="notification_new_breach_found">New account breach found</string>
 </resources>

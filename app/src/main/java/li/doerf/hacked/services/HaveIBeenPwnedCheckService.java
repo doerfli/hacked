@@ -1,27 +1,37 @@
 package li.doerf.hacked.services;
 
 import android.app.IntentService;
+import android.app.Notification;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Handler;
 import android.os.Looper;
+import android.support.v7.app.NotificationCompat;
 import android.util.Log;
 import android.widget.Toast;
+
+import com.google.common.base.Function;
+import com.google.common.base.Joiner;
+import com.google.common.collect.FluentIterable;
 
 import org.joda.time.DateTime;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
 import li.doerf.hacked.R;
+import li.doerf.hacked.activities.AccountListActivity;
 import li.doerf.hacked.db.HackedSQLiteHelper;
 import li.doerf.hacked.db.tables.Account;
 import li.doerf.hacked.db.tables.Breach;
 import li.doerf.hacked.remote.BreachedAccount;
 import li.doerf.hacked.remote.HaveIBeenPwned;
+import li.doerf.hacked.utils.NotificationHelper;
 import retrofit2.Call;
 import retrofit2.Response;
 import retrofit2.Retrofit;
@@ -48,6 +58,7 @@ public class HaveIBeenPwnedCheckService extends IntentService {
         SQLiteDatabase db = HackedSQLiteHelper.getInstance(context).getReadableDatabase();
 
         Cursor c = null;
+        List<Account> newBreachedAccounts = new ArrayList<>();
 
         try {
             c = Account.listAll(db);
@@ -128,6 +139,7 @@ public class HaveIBeenPwnedCheckService extends IntentService {
                     account.setLastChecked(DateTime.now());
                     if (isNewBreachFound) {
                         account.setHacked(true);
+                        newBreachedAccounts.add(account);
                     }
                     account.update(db);
                     db.setTransactionSuccessful();
@@ -145,10 +157,42 @@ public class HaveIBeenPwnedCheckService extends IntentService {
                     account.notifyObservers();
                 }
             }
+
+            if ( newBreachedAccounts.size() > 0 ) {
+                showNotification(newBreachedAccounts);
+            }
         } finally {
             Log.d(LOGTAG, "finished checking for breaches");
             if ( c != null ) c.close();
         }
 
+    }
+
+    private void showNotification(List<Account> newBreachedAccounts) {
+        List<String> names = FluentIterable.from(newBreachedAccounts).transform(new Function<Account,String>() {
+            @Override
+            public String apply(Account input) {
+                return input.getName();
+            }
+        }).toList();
+
+        android.support.v4.app.NotificationCompat.Builder mBuilder =
+                new NotificationCompat.Builder(getApplicationContext())
+                        .setSmallIcon(android.R.drawable.ic_dialog_info)
+                        .setContentTitle(getApplicationContext().getString(R.string.notification_new_breach_found))
+                        .setContentText(Joiner.on(", ").join(names));
+
+        Intent showBreachDetails = new Intent(getApplicationContext(), AccountListActivity.class);
+        PendingIntent resultPendingIntent =
+                PendingIntent.getActivity(
+                        getApplicationContext(),
+                        0,
+                        showBreachDetails,
+                        PendingIntent.FLAG_ONE_SHOT
+                );
+        mBuilder.setContentIntent(resultPendingIntent);
+        Notification notification = mBuilder.build();
+        notification.flags = Notification.DEFAULT_LIGHTS | Notification.FLAG_AUTO_CANCEL;
+        NotificationHelper.notify(getApplicationContext(), notification);
     }
 }
