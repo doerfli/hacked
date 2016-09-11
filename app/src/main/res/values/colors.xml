@@ -3,10 +3,10 @@
     <color name="colorPrimary">#388E3C</color>
     <color name="colorPrimaryDark">#1B5E20</color>
     <color name="colorAccent">#D50000</color>
-    <color name="account_status_ok">#C8E6C9</color>
-    <color name="account_status_only_acknowledged">#FFF9C4</color>
-    <color name="account_status_breached">#FFCDD2</color>
-    <color name="account_status_unknown">#F5F5F5</color>
+    <color name="account_status_ok">#4CAF50</color>
+    <color name="account_status_only_acknowledged">#FFEB3B</color>
+    <color name="account_status_breached">#F44336</color>
+    <color name="account_status_unknown">#9E9E9E</color>
     <color name="acknoweldged">#AAAAAA</color>
     <color name="not_acknoweldged">#ffffff</color>
     <color name="green">#007900</color>

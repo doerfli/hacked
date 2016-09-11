@@ -84,16 +84,17 @@ public class AccountsAdapter extends RecyclerViewCursorAdapter<RecyclerViewHolde
             }
         }
 
+        View statusIndicator = (View) cardView.findViewById(R.id.status_indicator);
         // set color of card
         if ( account.isHacked()) {
-            cardView.setCardBackgroundColor(getContext().getResources().getColor(R.color.account_status_breached));
+            statusIndicator.setBackgroundColor(getContext().getResources().getColor(R.color.account_status_breached));
         } else if ( ! account.isHacked() && account.getLastChecked() == null ) {
-            cardView.setCardBackgroundColor(getContext().getResources().getColor(R.color.account_status_unknown));
+            statusIndicator.setBackgroundColor(getContext().getResources().getColor(R.color.account_status_unknown));
         } else {
             if ( numBreaches == 0 ) {
-                cardView.setCardBackgroundColor(getContext().getResources().getColor(R.color.account_status_ok));
+                statusIndicator.setBackgroundColor(getContext().getResources().getColor(R.color.account_status_ok));
             } else {
-                cardView.setCardBackgroundColor(getContext().getResources().getColor(R.color.account_status_only_acknowledged));
+                statusIndicator.setBackgroundColor(getContext().getResources().getColor(R.color.account_status_only_acknowledged));
             }
         }
 
