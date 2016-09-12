@@ -47,7 +47,7 @@ public abstract class RecyclerViewListAdapter<VH extends RecyclerView.ViewHolder
      * Change the underlying cursor to a new cursor. If there is an existing cursor it will be
      * closed.
      */
-    public void changeList(List aNewList) {
+    public void changeList(List<T> aNewList) {
         myList = aNewList;
     }
 

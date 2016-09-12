@@ -70,6 +70,10 @@ public class BreachesAdapter extends RecyclerViewListAdapter<RecyclerViewHolder,
                 public void onClick(View v) {
                     SQLiteDatabase db = HackedSQLiteHelper.getInstance(getContext()).getWritableDatabase();
                     Breach breach = Breach.findById(db, breachId);
+                    if ( breach == null ) {
+                        return;
+                    }
+
                     db.beginTransaction();
                     breach.setIsAcknowledged(true);
                     breach.update(db);
@@ -79,6 +83,9 @@ public class BreachesAdapter extends RecyclerViewListAdapter<RecyclerViewHolder,
                     breach.notifyObservers();
 
                     Account account = Account.findById(db, breach.getAccount().getId());
+                    if ( account == null ) {
+                        return;
+                    }
                     account.updateIsHacked(db);
                     notifyDataSetChanged();
                 }

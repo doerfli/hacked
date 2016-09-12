@@ -53,8 +53,7 @@ public class AddAccountDialogFragment extends DialogFragment {
                     }
                 });
 
-        final AlertDialog dialog = builder.create();
-        return dialog;
+        return builder.create();
     }
 
 

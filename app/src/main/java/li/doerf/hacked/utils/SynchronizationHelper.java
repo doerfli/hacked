@@ -21,20 +21,21 @@ public class SynchronizationHelper {
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(aContext);
         disableSync(aContext);
         if (settings.getBoolean(aContext.getString(R.string.pref_key_sync_enable), false)) {
-            enableSync(aContext, AlarmManager.INTERVAL_HALF_HOUR);
+            enableSync(aContext);
 //            enableSync(aContext, 15000); // for testing
         }
     }
 
-    private static void enableSync(Context aContext, long aInterval) {
-        PendingIntent ktipsync = getPendingIntent(aContext);
+    private static void enableSync(Context aContext) {
+        long interval = AlarmManager.INTERVAL_HALF_HOUR;
+        PendingIntent checkerService = getPendingIntent(aContext);
 
         AlarmManager alarmManager = (AlarmManager) aContext.getSystemService(Context.ALARM_SERVICE);
         alarmManager.setInexactRepeating(AlarmManager.ELAPSED_REALTIME,
                 0,
-                aInterval,
-                ktipsync);
-        Log.i(LOGTAG, "scheduled service to run every " + aInterval + " ms");
+                interval,
+                checkerService);
+        Log.i(LOGTAG, "scheduled service to run every " + interval + " ms");
     }
 
     private static PendingIntent getPendingIntent(Context aContext) {

@@ -10,16 +10,15 @@ import li.doerf.hacked.ui.fragments.SettingsFragment;
  */
 public class SettingsActivity extends AppCompatActivity {
     private final String LOGTAG = getClass().getSimpleName();
-    private SettingsFragment mySettingsFragment;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        mySettingsFragment = new SettingsFragment();
+        SettingsFragment settingsFragment = new SettingsFragment();
         // Display the fragment as the main content.
         getFragmentManager().beginTransaction()
-                .replace(android.R.id.content, mySettingsFragment)
+                .replace(android.R.id.content, settingsFragment)
                 .commit();
     }
 }

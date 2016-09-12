@@ -190,7 +190,7 @@ abstract class TableBase  {
         } else if (fieldValue instanceof Double) {
             contentValues.put(key, (Double) fieldValue);
         } else if (fieldValue instanceof Boolean) {
-            contentValues.put(key, ((Boolean) fieldValue == true) ? 1 : 0);
+            contentValues.put(key, ((Boolean) fieldValue) ? 1 : 0);
         } else {
             Column column = getColumn(field);
             if (column.isReference()) {
