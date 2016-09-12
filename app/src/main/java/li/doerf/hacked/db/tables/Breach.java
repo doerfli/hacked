@@ -230,6 +230,32 @@ public class Breach extends TableBase implements Identifiable {
         return DatabaseUtils.queryNumEntries( db, item.getTableName(), "account == ? AND is_acknowledged = 0", new String[] { account.getId().toString() });
     }
 
+    public static Breach findById(SQLiteDatabase db, Long anId) {
+        Cursor c = null;
+
+        try {
+            Breach item = new Breach();
+            c = db.query(
+                    item.getTableName(),
+                    item.getColumnNames(),
+                    "_id = ?",
+                    new String[]{anId.toString()},
+                    null,
+                    null,
+                    "name");
+
+            if (c.moveToFirst()) {
+                return Breach.create(db, c);
+            }
+
+            return null;
+        } finally {
+            if ( c != null ) {
+                c.close();
+            }
+        }
+    }
+
     /**
      * creates a cursor for all breaches belonging to an account sorted by is_acknoweldged and
      * breached_date.

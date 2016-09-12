@@ -41,6 +41,7 @@ public class BreachesAdapter extends RecyclerViewListAdapter<RecyclerViewHolder,
     @Override
     public void onBindViewHolder(RecyclerViewHolder holder, final Breach aBreach) {
         final CardView cardView = (CardView) holder.getView();
+        final long breachId = aBreach.getId();
 
         TextView title = (TextView) cardView.findViewById(R.id.title);
         title.setText(aBreach.getTitle());
@@ -68,16 +69,18 @@ public class BreachesAdapter extends RecyclerViewListAdapter<RecyclerViewHolder,
                 @Override
                 public void onClick(View v) {
                     SQLiteDatabase db = HackedSQLiteHelper.getInstance(getContext()).getWritableDatabase();
+                    Breach breach = Breach.findById(db, breachId);
                     db.beginTransaction();
-                    aBreach.setIsAcknowledged(true);
-                    aBreach.update(db);
+                    breach.setIsAcknowledged(true);
+                    breach.update(db);
                     db.setTransactionSuccessful();
                     db.endTransaction();
                     Snackbar.make(cardView, getContext().getString(R.string.breach_acknowledged), Snackbar.LENGTH_SHORT).show();
-                    notifyDataSetChanged();
+                    breach.notifyObservers();
 
-                    Account account = Account.findById(db, aBreach.getAccount().getId());
+                    Account account = Account.findById(db, breach.getAccount().getId());
                     account.updateIsHacked(db);
+                    notifyDataSetChanged();
                 }
             });
         } else {
@@ -85,4 +88,5 @@ public class BreachesAdapter extends RecyclerViewListAdapter<RecyclerViewHolder,
             acknowledge.setVisibility(View.GONE);
         }
     }
+
 }

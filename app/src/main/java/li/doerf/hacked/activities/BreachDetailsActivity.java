@@ -11,12 +11,13 @@ import android.view.View;
 import java.util.List;
 
 import li.doerf.hacked.R;
+import li.doerf.hacked.db.DatasetChangeListener;
 import li.doerf.hacked.db.HackedSQLiteHelper;
 import li.doerf.hacked.db.tables.Account;
 import li.doerf.hacked.db.tables.Breach;
 import li.doerf.hacked.ui.adapters.BreachesAdapter;
 
-public class BreachDetailsActivity extends AppCompatActivity {
+public class BreachDetailsActivity extends AppCompatActivity implements DatasetChangeListener {
 
     public static final String EXTRA_ACCOUNT_ID = "AccountId";
     private SQLiteDatabase myReadbableDb;
@@ -50,8 +51,26 @@ public class BreachDetailsActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        Breach.registerDatasetChangedListener(this, Breach.class);
+    }
+
+    @Override
+    protected void onPause() {
+        Breach.unregisterDatasetChangedListener(this, Breach.class);
+        super.onPause();
+    }
+
+    @Override
     public void onDestroy() {
         myReadbableDb = null;
         super.onDestroy();
+    }
+
+    @Override
+    public void datasetChanged() {
+        myBreaches = Breach.findAllByAccount(myReadbableDb, myAccount);
+        myBreachesAdapter.changeList(myBreaches);
     }
 }
