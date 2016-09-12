@@ -47,6 +47,7 @@ public class AccountListActivity extends AppCompatActivity implements DatasetCha
     private Cursor myCursor;
     private FloatingActionButton myFloatingActionButton;
     private AnimatorSet myFabAnimation;
+    private boolean mySyncActive;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -259,7 +260,14 @@ public class AccountListActivity extends AppCompatActivity implements DatasetCha
 
     private void checkForBreaches(View view) {
         if ( ! ConnectivityHelper.isConnected( getApplicationContext()) ) {
-            Toast.makeText(getApplicationContext(), getString(R.string.toast_error_no_network), Toast.LENGTH_LONG).show();
+            Log.i(LOGTAG, "no network");
+            Toast.makeText(getApplicationContext(), getString(R.string.toast_error_no_network), Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        if ( mySyncActive) {
+            Log.i(LOGTAG, "check already in progress");
+            Toast.makeText(getApplicationContext(), getString(R.string.toast_check_in_progress), Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -279,6 +287,7 @@ public class AccountListActivity extends AppCompatActivity implements DatasetCha
                     public void run() {
                         switch (anEvent) {
                             case STARTED:
+                                mySyncActive = true;
                                 if (myFabAnimation == null) {
                                     myFabAnimation = (AnimatorSet) AnimatorInflater.loadAnimator(getApplicationContext(),
                                             R.animator.rotate_right_repeated);
@@ -290,6 +299,8 @@ public class AccountListActivity extends AppCompatActivity implements DatasetCha
                                 break;
 
                             case STOPPED:
+                                mySyncActive = false;
+
                                 if (myFabAnimation != null) {
                                     myFabAnimation.cancel();
                                     myFabAnimation = null;
