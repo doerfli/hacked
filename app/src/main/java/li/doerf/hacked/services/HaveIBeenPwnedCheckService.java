@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import li.doerf.hacked.HackedApplication;
 import li.doerf.hacked.R;
 import li.doerf.hacked.activities.AccountListActivity;
 import li.doerf.hacked.db.HackedSQLiteHelper;
@@ -31,6 +32,7 @@ import li.doerf.hacked.db.tables.Account;
 import li.doerf.hacked.db.tables.Breach;
 import li.doerf.hacked.remote.BreachedAccount;
 import li.doerf.hacked.remote.HaveIBeenPwned;
+import li.doerf.hacked.utils.IServiceRunningListener;
 import li.doerf.hacked.utils.NotificationHelper;
 import retrofit2.Call;
 import retrofit2.Response;
@@ -49,7 +51,14 @@ public class HaveIBeenPwnedCheckService extends IntentService {
     @Override
     protected void onHandleIntent(Intent intent) {
         Log.d(LOGTAG, "onHandleIntent");
-        doCheck();
+
+        try {
+            ((HackedApplication) getApplication()).notifyServiceRunningListeners(IServiceRunningListener.Event.STARTED);
+            doCheck();
+        } finally {
+            ((HackedApplication) getApplication()).notifyServiceRunningListeners(IServiceRunningListener.Event.STOPPED);
+        }
+
     }
 
     private void doCheck() {
