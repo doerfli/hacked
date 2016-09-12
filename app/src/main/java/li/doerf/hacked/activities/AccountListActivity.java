@@ -2,13 +2,14 @@ package li.doerf.hacked.activities;
 
 import android.animation.AnimatorInflater;
 import android.animation.AnimatorSet;
-import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -26,7 +27,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import li.doerf.hacked.HackedApplication;
 import li.doerf.hacked.R;
 import li.doerf.hacked.db.DatasetChangeListener;
 import li.doerf.hacked.db.HackedSQLiteHelper;
@@ -36,6 +36,7 @@ import li.doerf.hacked.ui.AddAccountDialogFragment;
 import li.doerf.hacked.ui.adapters.AccountsAdapter;
 import li.doerf.hacked.utils.ConnectivityHelper;
 import li.doerf.hacked.utils.IServiceRunningListener;
+import li.doerf.hacked.utils.ServiceRunningNotifier;
 import li.doerf.hacked.utils.SynchronizationHelper;
 
 public class AccountListActivity extends AppCompatActivity implements DatasetChangeListener, IServiceRunningListener {
@@ -220,14 +221,14 @@ public class AccountListActivity extends AppCompatActivity implements DatasetCha
     protected void onResume() {
         super.onResume();
         Account.registerDatasetChangedListener(this, Account.class);
-        ((HackedApplication) getApplication()).registerServiceRunningListener(this);
+        ServiceRunningNotifier.registerServiceRunningListener(this);
         refreshList();
     }
 
     @Override
     protected void onPause() {
         Account.unregisterDatasetChangedListener(this, Account.class);
-        ((HackedApplication) getApplication()).unregisterServiceRunningListener(this);
+        ServiceRunningNotifier.unregisterServiceRunningListener(this);
         super.onPause();
     }
 
@@ -271,27 +272,36 @@ public class AccountListActivity extends AppCompatActivity implements DatasetCha
     }
 
     @Override
-    public void notifyListener(Event anEvent) {
-        switch ( anEvent ) {
-            case STARTED:
-                if ( myFabAnimation == null ) {
-                    myFabAnimation = (AnimatorSet) AnimatorInflater.loadAnimator(getApplicationContext(),
-                            R.animator.rotate_right_repeated);
-                    myFabAnimation.setTarget(myFloatingActionButton);
-                    myFabAnimation.start();
-                    Log.d(LOGTAG, "animation started");
-                } else {
-                    Log.w(LOGTAG, "animation already active");
-                }
-            break;
+    public void notifyListener(final Event anEvent) {
+        new Handler(Looper.getMainLooper()).post(
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        switch (anEvent) {
+                            case STARTED:
+                                if (myFabAnimation == null) {
 
-            case STOPPED:
-                if ( myFabAnimation != null ) {
-                    myFabAnimation.cancel();
-                    myFabAnimation = null;
-                    Log.d(LOGTAG, "animation stopped");
+                                    myFabAnimation = (AnimatorSet) AnimatorInflater.loadAnimator(getApplicationContext(),
+                                            R.animator.rotate_right_repeated);
+                                    myFabAnimation.setTarget(myFloatingActionButton);
+                                    myFabAnimation.start();
+                                    Log.d(LOGTAG, "animation started");
+                                } else {
+                                    Log.w(LOGTAG, "animation already active");
+                                }
+                                break;
+
+                            case STOPPED:
+                                if (myFabAnimation != null) {
+                                    myFabAnimation.cancel();
+                                    myFabAnimation = null;
+                                    myFloatingActionButton.setRotation(0);
+                                    Log.d(LOGTAG, "animation stopped");
+                                }
+                                break;
+                        }
+                    }
                 }
-            break;
-        }
+        );
     }
 }

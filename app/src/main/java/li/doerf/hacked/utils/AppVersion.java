@@ -9,7 +9,7 @@ import android.util.Log;
  * Created by moo on 12/09/16.
  */
 public class AppVersion {
-    private final String LOGTAG = "AppVersion";
+    private static final String LOGTAG = "AppVersion";
 
     public static String getAppVersion( Context aContext) {
         try {

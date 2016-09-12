@@ -33,6 +33,7 @@
             android:parentActivityName=".activities.AccountListActivity"
             />
 
+        <!-- run in separate process to not block animation -->
         <service android:name=".services.HaveIBeenPwnedCheckService"/>
         <service android:name=".services.ScheduledCheckService"/>
 
