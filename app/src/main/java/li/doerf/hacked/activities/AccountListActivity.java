@@ -280,14 +280,12 @@ public class AccountListActivity extends AppCompatActivity implements DatasetCha
                         switch (anEvent) {
                             case STARTED:
                                 if (myFabAnimation == null) {
-
                                     myFabAnimation = (AnimatorSet) AnimatorInflater.loadAnimator(getApplicationContext(),
                                             R.animator.rotate_right_repeated);
                                     myFabAnimation.setTarget(myFloatingActionButton);
                                     myFabAnimation.start();
-                                    Log.d(LOGTAG, "animation started");
                                 } else {
-                                    Log.w(LOGTAG, "animation already active");
+                                    Log.d(LOGTAG, "animation already active");
                                 }
                                 break;
 
@@ -296,7 +294,6 @@ public class AccountListActivity extends AppCompatActivity implements DatasetCha
                                     myFabAnimation.cancel();
                                     myFabAnimation = null;
                                     myFloatingActionButton.setRotation(0);
-                                    Log.d(LOGTAG, "animation stopped");
                                 }
                                 break;
                         }
