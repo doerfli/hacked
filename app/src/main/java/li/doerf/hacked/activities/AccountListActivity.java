@@ -288,7 +288,14 @@ public class AccountListActivity extends AppCompatActivity implements DatasetCha
                         switch (anEvent) {
                             case STARTED:
                                 mySyncActive = true;
+
+                                if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.LOLLIPOP) {
+                                    Log.w(LOGTAG, "showing no animation on api < 21");
+                                    return;
+                                }
+
                                 if (myFabAnimation == null) {
+                                    Log.d(LOGTAG, "animation starting");
                                     myFabAnimation = (AnimatorSet) AnimatorInflater.loadAnimator(getApplicationContext(),
                                             R.animator.rotate_right_repeated);
                                     myFabAnimation.setTarget(myFloatingActionButton);
@@ -302,6 +309,7 @@ public class AccountListActivity extends AppCompatActivity implements DatasetCha
                                 mySyncActive = false;
 
                                 if (myFabAnimation != null) {
+                                    Log.d(LOGTAG, "animation stopping");
                                     myFabAnimation.cancel();
                                     myFabAnimation = null;
                                     myFloatingActionButton.setRotation(0);
