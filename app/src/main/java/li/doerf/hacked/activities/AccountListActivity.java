@@ -2,6 +2,7 @@ package li.doerf.hacked.activities;
 
 import android.animation.AnimatorInflater;
 import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -46,7 +47,7 @@ public class AccountListActivity extends AppCompatActivity implements DatasetCha
     private AccountsAdapter myAccountsAdapter;
     private Cursor myCursor;
     private FloatingActionButton myFloatingActionButton;
-    private AnimatorSet myFabAnimation;
+    private ObjectAnimator myFabAnimation;
     private boolean mySyncActive;
 
     @Override
@@ -296,7 +297,7 @@ public class AccountListActivity extends AppCompatActivity implements DatasetCha
 
                                 if (myFabAnimation == null) {
                                     Log.d(LOGTAG, "animation starting");
-                                    myFabAnimation = (AnimatorSet) AnimatorInflater.loadAnimator(getApplicationContext(),
+                                    myFabAnimation = (ObjectAnimator) AnimatorInflater.loadAnimator(getApplicationContext(),
                                             R.animator.rotate_right_repeated);
                                     myFabAnimation.setTarget(myFloatingActionButton);
                                     myFabAnimation.start();
@@ -310,8 +311,11 @@ public class AccountListActivity extends AppCompatActivity implements DatasetCha
 
                                 if (myFabAnimation != null) {
                                     Log.d(LOGTAG, "animation stopping");
+                                    myFabAnimation.removeAllListeners();
+                                    myFabAnimation.end();
                                     myFabAnimation.cancel();
                                     myFabAnimation = null;
+                                    myFloatingActionButton.setAnimation(null);
                                     myFloatingActionButton.setRotation(0);
                                 }
                                 break;
