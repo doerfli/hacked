@@ -1,7 +1,6 @@
 package li.doerf.hacked.activities;
 
 import android.animation.AnimatorInflater;
-import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.content.Intent;
@@ -46,7 +45,7 @@ public class AccountListActivity extends AppCompatActivity implements DatasetCha
     private SQLiteDatabase myReadbableDb;
     private AccountsAdapter myAccountsAdapter;
     private Cursor myCursor;
-    private FloatingActionButton myFloatingActionButton;
+    private FloatingActionButton myFloatingActionCheckButton;
     private ObjectAnimator myFabAnimation;
     private boolean mySyncActive;
 
@@ -57,8 +56,8 @@ public class AccountListActivity extends AppCompatActivity implements DatasetCha
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        myFloatingActionButton = (FloatingActionButton) findViewById(R.id.fab);
-        myFloatingActionButton.setOnClickListener(new View.OnClickListener() {
+        myFloatingActionCheckButton = (FloatingActionButton) findViewById(R.id.button_check);
+        myFloatingActionCheckButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 checkForBreaches(view);
@@ -248,9 +247,9 @@ public class AccountListActivity extends AppCompatActivity implements DatasetCha
         myAccountsAdapter.swapCursor(myCursor);
 
         if ( myCursor.getCount() > 0 ) {
-            myFloatingActionButton.setVisibility(View.VISIBLE);
+            myFloatingActionCheckButton.setVisibility(View.VISIBLE);
         } else {
-            myFloatingActionButton.setVisibility(View.GONE);
+            myFloatingActionCheckButton.setVisibility(View.GONE);
         }
     }
 
@@ -299,7 +298,7 @@ public class AccountListActivity extends AppCompatActivity implements DatasetCha
                                     Log.d(LOGTAG, "animation starting");
                                     myFabAnimation = (ObjectAnimator) AnimatorInflater.loadAnimator(getApplicationContext(),
                                             R.animator.rotate_right_repeated);
-                                    myFabAnimation.setTarget(myFloatingActionButton);
+                                    myFabAnimation.setTarget(myFloatingActionCheckButton);
                                     myFabAnimation.start();
                                 } else {
                                     Log.d(LOGTAG, "animation already active");
@@ -315,8 +314,8 @@ public class AccountListActivity extends AppCompatActivity implements DatasetCha
                                     myFabAnimation.end();
                                     myFabAnimation.cancel();
                                     myFabAnimation = null;
-                                    myFloatingActionButton.setAnimation(null);
-                                    myFloatingActionButton.setRotation(0);
+                                    myFloatingActionCheckButton.setAnimation(null);
+                                    myFloatingActionCheckButton.setRotation(0);
                                 }
                                 break;
                         }
