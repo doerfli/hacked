@@ -289,11 +289,6 @@ public class AccountListActivity extends AppCompatActivity implements DatasetCha
                             case STARTED:
                                 mySyncActive = true;
 
-                                if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.LOLLIPOP) {
-                                    Log.w(LOGTAG, "showing no animation on api < 21");
-                                    return;
-                                }
-
                                 if (myFabAnimation == null) {
                                     Log.d(LOGTAG, "animation starting");
                                     myFabAnimation = (ObjectAnimator) AnimatorInflater.loadAnimator(getApplicationContext(),
