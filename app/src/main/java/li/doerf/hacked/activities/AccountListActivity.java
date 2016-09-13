@@ -314,7 +314,7 @@ public class AccountListActivity extends AppCompatActivity implements DatasetCha
                                     myFabAnimation.end();
                                     myFabAnimation.cancel();
                                     myFabAnimation = null;
-                                    myFloatingActionCheckButton.setAnimation(null);
+                                    myFloatingActionCheckButton.clearAnimation();
                                     myFloatingActionCheckButton.setRotation(0);
                                 }
                                 break;
