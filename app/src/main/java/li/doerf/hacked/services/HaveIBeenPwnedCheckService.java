@@ -9,6 +9,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Handler;
 import android.os.Looper;
+import android.support.annotation.NonNull;
 import android.support.v7.app.NotificationCompat;
 import android.util.Log;
 import android.widget.Toast;
@@ -76,67 +77,15 @@ public class HaveIBeenPwnedCheckService extends IntentService {
                 Account account = Account.create(db, c);
                 Log.d(LOGTAG, "Checking for account: " + account.getName());
 
-                Retrofit retrofit = new Retrofit.Builder()
-                        .baseUrl("https://haveibeenpwned.com/")
-                        .addConverterFactory(GsonConverterFactory.create())
-                        .build();
-
-                HaveIBeenPwned service = retrofit.create(HaveIBeenPwned.class);
-                Call<List<BreachedAccount>> breachedAccountsList = service.listBreachedAccounts(account.getName());
-                long timeDelta = noReqBefore - System.currentTimeMillis();
-
-                if (timeDelta > 0) {
-                    try {
-                        Log.d(LOGTAG, "waiting for " + timeDelta + "ms before next request");
-                        Thread.sleep(timeDelta);
-                    } catch (InterruptedException e) {
-                        Log.e(LOGTAG, "caught InterruptedException while waiting for next request slot", e);
-                    }
-                }
-
                 boolean isNewBreachFound = false;
-                db.beginTransaction();
 
                 try {
-
-                    Response<List<BreachedAccount>> response = breachedAccountsList.execute();
-
-                    // check for next request timeout
-                    String retryAfter = response.headers().get("Retry-After");
-                    Random random = new Random();
-                    if (retryAfter != null) {
-                        noReqBefore = System.currentTimeMillis() + (Integer.parseInt(retryAfter) * 1000) + random.nextInt(100);
-                    } else {
-                        noReqBefore = System.currentTimeMillis() + (1500 + random.nextInt(100));
-                    }
+                    db.beginTransaction();
+                    Response<List<BreachedAccount>> response = retrieveBreaches(account);
 
                     if (response.isSuccessful()) {
-                        for (BreachedAccount ba : response.body()) {
-                            Breach existing = Breach.findByAccountAndName(db, account, ba.getName());
-
-                            if (existing != null) {
-                                Log.d(LOGTAG, "breach already existing: " + ba.getName());
-                                continue;
-                            }
-
-                            Log.d(LOGTAG, "new breach: " + ba.getName());
-                            Breach breach = Breach.create(
-                                    account,
-                                    ba.getName(),
-                                    ba.getTitle(),
-                                    ba.getDomain(),
-                                    DateTime.parse(ba.getBreachDate()),
-                                    DateTime.parse(ba.getAddedDate()),
-                                    ba.getPwnCount(),
-                                    ba.getDescription(),
-                                    ba.getDataClasses(),
-                                    ba.getIsVerified(),
-                                    false
-                            );
-                            breach.insert(db);
-                            Log.i(LOGTAG, "breach inserted into db");
-                            isNewBreachFound = true;
-                        }
+                        List<BreachedAccount> breachedAccounts = response.body();
+                        isNewBreachFound = processBreachedAccounts(db, account, breachedAccounts);
                     } else {
                         if (response.code() == 404) {
                             Log.i(LOGTAG, "no breach found: " + account.getName());
@@ -175,6 +124,74 @@ public class HaveIBeenPwnedCheckService extends IntentService {
             if ( c != null ) c.close();
         }
 
+    }
+
+    private boolean processBreachedAccounts(SQLiteDatabase db, Account account, List<BreachedAccount> breachedAccounts) {
+        boolean isNewBreachFound = false;
+
+        for (BreachedAccount ba : breachedAccounts) {
+            Breach existing = Breach.findByAccountAndName(db, account, ba.getName());
+
+            if (existing != null) {
+                Log.d(LOGTAG, "breach already existing: " + ba.getName());
+                continue;
+            }
+
+            Log.d(LOGTAG, "new breach: " + ba.getName());
+            Breach breach = Breach.create(
+                    account,
+                    ba.getName(),
+                    ba.getTitle(),
+                    ba.getDomain(),
+                    DateTime.parse(ba.getBreachDate()),
+                    DateTime.parse(ba.getAddedDate()),
+                    ba.getPwnCount(),
+                    ba.getDescription(),
+                    ba.getDataClasses(),
+                    ba.getIsVerified(),
+                    false
+            );
+            breach.insert(db);
+            Log.i(LOGTAG, "breach inserted into db");
+            isNewBreachFound = true;
+        }
+
+        return isNewBreachFound;
+    }
+
+    @NonNull
+    private Response<List<BreachedAccount>> retrieveBreaches(Account account) throws IOException {
+        Log.d(LOGTAG, "retrieving breaches: " + account.getName());
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("https://haveibeenpwned.com/")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+        HaveIBeenPwned service = retrofit.create(HaveIBeenPwned.class);
+        Call<List<BreachedAccount>> breachedAccountsList = service.listBreachedAccounts(account.getName());
+        long timeDelta = noReqBefore - System.currentTimeMillis();
+
+        if (timeDelta > 0) {
+            try {
+                Log.d(LOGTAG, "waiting for " + timeDelta + "ms before next request");
+                Thread.sleep(timeDelta);
+            } catch (InterruptedException e) {
+                Log.e(LOGTAG, "caught InterruptedException while waiting for next request slot", e);
+            }
+        }
+
+        Response<List<BreachedAccount>> response = breachedAccountsList.execute();
+
+        // check next request timeout
+        String retryAfter = response.headers().get("Retry-After");
+        Random random = new Random();
+        if (retryAfter != null) {
+            noReqBefore = System.currentTimeMillis() + (Integer.parseInt(retryAfter) * 1000) + random.nextInt(100);
+        } else {
+            noReqBefore = System.currentTimeMillis() + (1500 + random.nextInt(100));
+        }
+
+        return response;
     }
 
     private void showNotification(List<Account> newBreachedAccounts) {
