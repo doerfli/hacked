@@ -2,6 +2,7 @@ package li.doerf.hacked.ui;
 
 import android.app.Dialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -16,6 +17,8 @@ import android.widget.Toast;
 import li.doerf.hacked.R;
 import li.doerf.hacked.db.HackedSQLiteHelper;
 import li.doerf.hacked.db.tables.Account;
+import li.doerf.hacked.services.HaveIBeenPwnedCheckService;
+import li.doerf.hacked.utils.ConnectivityHelper;
 
 /**
  * The fragment used to add new numbers.
@@ -76,5 +79,14 @@ public class AddAccountDialogFragment extends DialogFragment {
         db.setTransactionSuccessful();
         db.endTransaction();
         account.notifyObservers();
+
+        if ( ! ConnectivityHelper.isConnected( getContext()) ) {
+            Log.i(LOGTAG, "no network");
+            return;
+        }
+
+        Intent i = new Intent(getContext(), HaveIBeenPwnedCheckService.class);
+        i.putExtra( HaveIBeenPwnedCheckService.EXTRA_IDS, new long[] { account.getId()});
+        getContext().startService(i);
     }
 }

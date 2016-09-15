@@ -3,6 +3,8 @@ package li.doerf.hacked.db.tables;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import com.google.common.base.Joiner;
+
 import org.joda.time.DateTime;
 
 import java.lang.reflect.Field;
@@ -69,15 +71,7 @@ public class Account extends TableBase {
         Cursor c = null;
 
         try {
-            Account item = new Account();
-            c = db.query(
-                    item.getTableName(),
-                    item.getColumnNames(),
-                    "_id = ?",
-                    new String[]{anId.toString()},
-                    null,
-                    null,
-                    "name");
+            c = findCursorById(db, anId);
 
             if (c.moveToFirst()) {
                 return Account.create(db, c);
@@ -89,6 +83,30 @@ public class Account extends TableBase {
                 c.close();
             }
         }
+    }
+
+    public static Cursor findCursorById(SQLiteDatabase db, Long id) {
+        Account item = new Account();
+        return db.query(
+                item.getTableName(),
+                item.getColumnNames(),
+                "_id = ?",
+                new String[]{id.toString()},
+                null,
+                null,
+                "name");
+    }
+
+    public static Cursor findCursorByIds(SQLiteDatabase db, Long[] ids) {
+        Account item = new Account();
+        return db.query(
+                item.getTableName(),
+                item.getColumnNames(),
+                "_id IN (?)",
+                new String[]{Joiner.on(',').join(ids)},
+                null,
+                null,
+                "name");
     }
 
     public static Account findByName(SQLiteDatabase db, String aName) {

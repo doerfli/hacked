@@ -42,6 +42,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 
 public class HaveIBeenPwnedCheckService extends IntentService {
+    public static final String EXTRA_IDS = "EXTRA_IDS";
     private final String LOGTAG = getClass().getSimpleName();
     private static long noReqBefore = 0;
 
@@ -55,15 +56,28 @@ public class HaveIBeenPwnedCheckService extends IntentService {
 
         try {
             ServiceRunningNotifier.notifyServiceRunningListeners(IServiceRunningListener.Event.STARTED);
-            doCheck();
+
+            long[] ids = intent.getLongArrayExtra(EXTRA_IDS);
+
+            doCheck(ids != null ? toLongArray(ids) : null);
         } finally {
             ServiceRunningNotifier.notifyServiceRunningListeners(IServiceRunningListener.Event.STOPPED);
         }
 
     }
 
-    private void doCheck() {
-        Log.d(LOGTAG, "starting check for braches");
+    private Long[] toLongArray(long[] longs) {
+        Long[] r = new Long[longs.length];
+
+        for ( int i = 0; i < longs.length; i++) {
+            r[i] = longs[i];
+        }
+
+        return r;
+    }
+
+    private void doCheck(Long[] ids) {
+        Log.d(LOGTAG, "starting check for breaches");
         Context context = getBaseContext();
         SQLiteDatabase db = HackedSQLiteHelper.getInstance(context).getReadableDatabase();
 
@@ -71,7 +85,13 @@ public class HaveIBeenPwnedCheckService extends IntentService {
         List<Account> newBreachedAccounts = new ArrayList<>();
 
         try {
-            c = Account.listAll(db);
+            if ( ids == null ) {
+                Log.d(LOGTAG, "all ids");
+                c = Account.listAll(db);
+            } else {
+                Log.d(LOGTAG, "only " + ids.length + " ids");
+                c = Account.findCursorByIds(db, ids);
+            }
 
             while (c.moveToNext()) {
                 Account account = Account.create(db, c);
