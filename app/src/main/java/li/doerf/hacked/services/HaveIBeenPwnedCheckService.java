@@ -27,6 +27,7 @@ import java.util.Random;
 
 import li.doerf.hacked.R;
 import li.doerf.hacked.activities.AccountListActivity;
+import li.doerf.hacked.activities.BreachDetailsActivity;
 import li.doerf.hacked.db.HackedSQLiteHelper;
 import li.doerf.hacked.db.tables.Account;
 import li.doerf.hacked.db.tables.Breach;
@@ -44,6 +45,8 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class HaveIBeenPwnedCheckService extends IntentService {
     // extra contains the list of ids to check. if empty, check all.
     public static final String EXTRA_IDS = "EXTRA_IDS";
+    private final static String NOTIFICATION_GROUP_KEY_BREACHES = "group_key_breachs";
+
     private final String LOGTAG = getClass().getSimpleName();
     private static long noReqBefore = 0;
 
@@ -221,24 +224,41 @@ public class HaveIBeenPwnedCheckService extends IntentService {
                 return input.getName();
             }
         }).toList();
+//
 
-        android.support.v4.app.NotificationCompat.Builder mBuilder =
-                new NotificationCompat.Builder(getApplicationContext())
-                        .setSmallIcon(android.R.drawable.ic_dialog_info)
-                        .setContentTitle(getApplicationContext().getString(R.string.notification_new_breach_found))
-                        .setContentText(Joiner.on(", ").join(names));
+        for ( Account account : newBreachedAccounts ) {
+            android.support.v4.app.NotificationCompat.Builder mBuilder =
+                    new NotificationCompat.Builder(getApplicationContext())
+                            .setSmallIcon(android.R.drawable.ic_dialog_info)
+                            .setContentTitle(getApplicationContext().getString(R.string.notification_new_breach_found, account.getName()))
+                            .setGroup(NOTIFICATION_GROUP_KEY_BREACHES);
 
-        Intent showBreachDetails = new Intent(getApplicationContext(), AccountListActivity.class);
-        PendingIntent resultPendingIntent =
-                PendingIntent.getActivity(
-                        getApplicationContext(),
-                        0,
-                        showBreachDetails,
-                        PendingIntent.FLAG_ONE_SHOT
-                );
-        mBuilder.setContentIntent(resultPendingIntent);
-        Notification notification = mBuilder.build();
-        notification.flags = Notification.DEFAULT_LIGHTS | Notification.FLAG_AUTO_CANCEL;
+            Intent showBreachDetails = new Intent(getApplicationContext(), BreachDetailsActivity.class);
+            showBreachDetails.putExtra(BreachDetailsActivity.EXTRA_ACCOUNT_ID, account.getId());
+            PendingIntent resultPendingIntent =
+                    PendingIntent.getActivity(
+                            getApplicationContext(),
+                            0,
+                            showBreachDetails,
+                            PendingIntent.FLAG_ONE_SHOT
+                    );
+            mBuilder.setContentIntent(resultPendingIntent);
+            Notification notification = mBuilder.build();
+            notification.flags |= Notification.DEFAULT_LIGHTS | Notification.FLAG_AUTO_CANCEL;
+            NotificationHelper.notify(getApplicationContext(), notification);
+        }
+
+        // Create an InboxStyle notification
+        android.support.v4.app.NotificationCompat.Builder summaryNotificationBuilder = new NotificationCompat.Builder(getApplicationContext())
+                .setSmallIcon(android.R.drawable.ic_dialog_info)
+                .setStyle(new NotificationCompat.InboxStyle()
+                        .setSummaryText(getString(R.string.notifiation_summary_found_breaches, newBreachedAccounts.size())))
+                .setGroup(NOTIFICATION_GROUP_KEY_BREACHES)
+                .setGroupSummary(true);
+
+
+        Notification notification = summaryNotificationBuilder.build();
+        notification.flags |= Notification.FLAG_GROUP_SUMMARY | Notification.FLAG_AUTO_CANCEL;
         NotificationHelper.notify(getApplicationContext(), notification);
     }
 }

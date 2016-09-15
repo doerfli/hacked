@@ -8,7 +8,7 @@
     <string name="dialog_account_delete_msg">Do you want to delete account \'%1$s\'?</string>
     <string name="ok">OK</string>
     <string name="action_add_account">Add account</string>
-    <string name="snackbar_checking_account">Checking for breaches - this will take approximatly %1$d seconds.\nThe list will be updated.</string>
+    <string name="snackbar_checking_account">Checking for breaches - this will take approximately %1$d seconds.\nThe list will be updated.</string>
     <string name="last_checked">Last checked:</string>
     <string name="placeholder_date">yyyy/mm/dd hh:mm</string>
     <string name="status">Breach status:</string>
@@ -47,9 +47,9 @@
     <string name="title_settings">Settings</string>
     <string name="PREF_KEY_LAST_SYNC_TIMESTAMP">LAST_SYNC_TIMESTAMP</string>
     <string name="toast_error_no_network">No network available. Please try again later.</string>
-    <string name="toast_error_error_during_check">A problem occured while checking for breaches. Please try again later.</string>
+    <string name="toast_error_error_during_check">A problem occurred while checking for breaches. Please try again later.</string>
     <string name="pref_initial_setup_account_done">PREF_INITIAL_SETUP_ACCOUNT_DONE</string>
-    <string name="toast_please_enter_account">Please enter an accout name and try again.</string>
+    <string name="toast_please_enter_account">Please enter an account name and try again.</string>
     <string name="toast_account_added">Congratulations, you have added your first account!</string>
     <string name="initial_setup_check_title">Background checks</string>
     <string name="initial_setup_check_text">Would you like <i>Hacked?</i> to check for breaches daily?\nIf you choose no, you can enable this feature any time by opening the settings.\nThe app will only check if connected to a Wifi network (you can change this in the settings too).</string>
@@ -61,6 +61,7 @@
     <string name="congratulations">Congratulations!</string>
     <string name="no_breaches_found">No breaches were found for this account.</string>
     <string name="toast_account_exists">This account already exists. Please enter a different name.</string>
-    <string name="notification_new_breach_found">New account breach found</string>
+    <string name="notification_new_breach_found">Breached account: %1$s</string>
     <string name="toast_check_in_progress">A check is already in progress. Please try again later.</string>
+    <string name="notifiation_summary_found_breaches">%1$d accounts breached</string>
 </resources>

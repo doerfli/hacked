@@ -3,6 +3,7 @@ package li.doerf.hacked.utils;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.content.Context;
+import android.support.v4.app.NotificationManagerCompat;
 import android.util.Log;
 
 import java.util.concurrent.atomic.AtomicInteger;
@@ -26,8 +27,9 @@ public class NotificationHelper {
 
     public static int notify(Context aContext, Notification aNotification, int aNotificationId) {
         // Gets an instance of the NotificationManager service
-        NotificationManager notificationManager =
-                (NotificationManager) aContext.getSystemService(Context.NOTIFICATION_SERVICE);
+//        NotificationManager notificationManager =
+//                (NotificationManager) aContext.getSystemService(Context.NOTIFICATION_SERVICE);
+        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(aContext);
         // Builds the notification and issues it.
         notificationManager.notify(aNotificationId, aNotification);
         Log.d(LOGTAG, "notification build and issued: " + aNotificationId);
