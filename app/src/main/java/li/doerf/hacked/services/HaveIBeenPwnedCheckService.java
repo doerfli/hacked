@@ -42,6 +42,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 
 public class HaveIBeenPwnedCheckService extends IntentService {
+    // extra contains the list of ids to check. if empty, check all.
     public static final String EXTRA_IDS = "EXTRA_IDS";
     private final String LOGTAG = getClass().getSimpleName();
     private static long noReqBefore = 0;
@@ -58,7 +59,6 @@ public class HaveIBeenPwnedCheckService extends IntentService {
             ServiceRunningNotifier.notifyServiceRunningListeners(IServiceRunningListener.Event.STARTED);
 
             long[] ids = intent.getLongArrayExtra(EXTRA_IDS);
-
             doCheck(ids != null ? toLongArray(ids) : null);
         } finally {
             ServiceRunningNotifier.notifyServiceRunningListeners(IServiceRunningListener.Event.STOPPED);

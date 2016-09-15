@@ -31,6 +31,7 @@ import li.doerf.hacked.R;
 import li.doerf.hacked.db.DatasetChangeListener;
 import li.doerf.hacked.db.HackedSQLiteHelper;
 import li.doerf.hacked.db.tables.Account;
+import li.doerf.hacked.remote.HaveIBeenPwned;
 import li.doerf.hacked.services.HaveIBeenPwnedCheckService;
 import li.doerf.hacked.ui.AddAccountDialogFragment;
 import li.doerf.hacked.ui.adapters.AccountsAdapter;
@@ -60,7 +61,7 @@ public class AccountListActivity extends AppCompatActivity implements DatasetCha
         myFloatingActionCheckButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                checkForBreaches(view);
+                checkForBreaches(view, null);
             }
         });
 
@@ -113,7 +114,7 @@ public class AccountListActivity extends AppCompatActivity implements DatasetCha
 
                     initialAccount.setVisibility(View.GONE);
                     Toast.makeText(getApplicationContext(), getString(R.string.toast_account_added), Toast.LENGTH_LONG).show();
-                    checkForBreaches(initialAccount);
+                    checkForBreaches(initialAccount, account);
                     SharedPreferences.Editor editor = settings.edit();
                     editor.putBoolean(getString(R.string.pref_initial_setup_account_done), true);
                     editor.apply();
@@ -206,7 +207,7 @@ public class AccountListActivity extends AppCompatActivity implements DatasetCha
         }
 
         if (id == R.id.action_check) {
-            checkForBreaches(this.findViewById(android.R.id.content));
+            checkForBreaches(this.findViewById(android.R.id.content), null);
             return true;
         }
 
@@ -258,25 +259,33 @@ public class AccountListActivity extends AppCompatActivity implements DatasetCha
         refreshList();
     }
 
-    private void checkForBreaches(View view) {
+    private void checkForBreaches(View view, Account account) {
         if ( ! ConnectivityHelper.isConnected( getApplicationContext()) ) {
             Log.i(LOGTAG, "no network");
             Toast.makeText(getApplicationContext(), getString(R.string.toast_error_no_network), Toast.LENGTH_SHORT).show();
             return;
         }
 
-        if ( mySyncActive) {
+        // only do this when checking more than one account (possible timing issue)
+        if ( account == null && mySyncActive) {
             Log.i(LOGTAG, "check already in progress");
             Toast.makeText(getApplicationContext(), getString(R.string.toast_check_in_progress), Toast.LENGTH_SHORT).show();
             return;
         }
 
         Intent i = new Intent(getBaseContext(), HaveIBeenPwnedCheckService.class);
+
+        if ( account != null ) {
+            i.putExtra(HaveIBeenPwnedCheckService.EXTRA_IDS, new long[] {account.getId()});
+        }
+
         startService(i);
 
-        int expectedDuration = (int) Math.ceil(myAccountsAdapter.getItemCount() * 2.5);
-        Snackbar.make(view, getString(R.string.snackbar_checking_account, expectedDuration), Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show();
+        if ( account == null ) { // only show this message when checking for more then one account
+            int expectedDuration = (int) Math.ceil(myAccountsAdapter.getItemCount() * 2.5);
+            Snackbar.make(view, getString(R.string.snackbar_checking_account, expectedDuration), Snackbar.LENGTH_LONG)
+                    .setAction("Action", null).show();
+        }
     }
 
     @Override
