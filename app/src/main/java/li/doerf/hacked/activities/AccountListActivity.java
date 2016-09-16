@@ -31,7 +31,6 @@ import li.doerf.hacked.R;
 import li.doerf.hacked.db.DatasetChangeListener;
 import li.doerf.hacked.db.HackedSQLiteHelper;
 import li.doerf.hacked.db.tables.Account;
-import li.doerf.hacked.remote.HaveIBeenPwned;
 import li.doerf.hacked.services.HaveIBeenPwnedCheckService;
 import li.doerf.hacked.ui.AddAccountDialogFragment;
 import li.doerf.hacked.ui.adapters.AccountsAdapter;
@@ -49,6 +48,7 @@ public class AccountListActivity extends AppCompatActivity implements DatasetCha
     private FloatingActionButton myFloatingActionCheckButton;
     private ObjectAnimator myFabAnimation;
     private boolean mySyncActive;
+    private static boolean myIsActive = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -225,12 +225,14 @@ public class AccountListActivity extends AppCompatActivity implements DatasetCha
         Account.registerDatasetChangedListener(this, Account.class);
         ServiceRunningNotifier.registerServiceRunningListener(this);
         refreshList();
+        myIsActive = true;
     }
 
     @Override
     protected void onPause() {
         Account.unregisterDatasetChangedListener(this, Account.class);
         ServiceRunningNotifier.unregisterServiceRunningListener(this);
+        myIsActive = false;
         super.onPause();
     }
 
@@ -240,6 +242,7 @@ public class AccountListActivity extends AppCompatActivity implements DatasetCha
             myCursor.close();
         }
         myReadbableDb = null;
+        myIsActive = false; // just to be sure
         super.onDestroy();
     }
 
@@ -326,5 +329,9 @@ public class AccountListActivity extends AppCompatActivity implements DatasetCha
                     }
                 }
         );
+    }
+
+    public static boolean isActive() {
+        return myIsActive;
     }
 }

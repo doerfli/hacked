@@ -218,6 +218,11 @@ public class HaveIBeenPwnedCheckService extends IntentService {
     }
 
     private void showNotification(List<Account> newBreachedAccounts) {
+        if ( AccountListActivity.isActive() ) {
+            Log.d(LOGTAG, "AccountListActivity active, no notification shown");
+            return;
+        }
+
         List<String> names = FluentIterable.from(newBreachedAccounts).transform(new Function<Account,String>() {
             @Override
             public String apply(Account input) {
