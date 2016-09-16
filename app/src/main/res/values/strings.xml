@@ -64,4 +64,5 @@
     <string name="notification_new_breach_found">Breached account: %1$s</string>
     <string name="toast_check_in_progress">A check is already in progress. Please try again later.</string>
     <string name="notifiation_summary_found_breaches">%1$d accounts breached</string>
+    <string name="toast_enter_valid_name">Please enter a valid account name.</string>
 </resources>

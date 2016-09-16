@@ -62,7 +62,9 @@ public class AddAccountDialogFragment extends DialogFragment {
 
     private void addAccount(String name) {
         if (name == null || name.trim().equals("")) {
-            name = "<Not set>";
+            Toast.makeText(getContext(), getString(R.string.toast_enter_valid_name), Toast.LENGTH_LONG).show();
+            Log.w(LOGTAG, "account name not valid");
+            return;
         }
 
         Account account = Account.create( name.trim());
