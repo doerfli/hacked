@@ -1,44 +1,16 @@
 package li.doerf.hacked.activities;
 
-import android.animation.AnimatorInflater;
 import android.animation.ObjectAnimator;
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
-import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.CardView;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.inputmethod.InputMethodManager;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.Toast;
 
 import li.doerf.hacked.R;
-import li.doerf.hacked.db.DatasetChangeListener;
-import li.doerf.hacked.db.HackedSQLiteHelper;
-import li.doerf.hacked.db.tables.Account;
-import li.doerf.hacked.services.HaveIBeenPwnedCheckService;
-import li.doerf.hacked.ui.AddAccountDialogFragment;
-import li.doerf.hacked.ui.adapters.AccountsAdapter;
 import li.doerf.hacked.ui.fragments.AccountListFragment;
-import li.doerf.hacked.utils.ConnectivityHelper;
-import li.doerf.hacked.utils.IServiceRunningListener;
-import li.doerf.hacked.utils.ServiceRunningNotifier;
-import li.doerf.hacked.utils.SynchronizationHelper;
 
 public class AccountListActivity extends AppCompatActivity {
     private final String LOGTAG = getClass().getSimpleName();
@@ -75,7 +47,7 @@ public class AccountListActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_account_list, menu);
+        getMenuInflater().inflate(R.menu.menu_activity_account_list, menu);
         return true;
     }
 
@@ -94,17 +66,6 @@ public class AccountListActivity extends AppCompatActivity {
             return true;
         }
 
-        // TODO move to AccountListFragment
-//        if (id == R.id.action_check) {
-//            checkForBreaches(this.findViewById(android.R.id.content), null);
-//            return true;
-//        }
-
-        if (id == R.id.action_add_account) {
-            AddAccountDialogFragment newFragment = new AddAccountDialogFragment();
-            newFragment.show(getSupportFragmentManager(), "addaccount");
-            return true;
-        }
         return super.onOptionsItemSelected(item);
     }
 

@@ -1,7 +1,5 @@
 package li.doerf.hacked.ui.fragments;
 
-import android.animation.AnimatorInflater;
-import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -19,6 +17,9 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
@@ -31,6 +32,7 @@ import li.doerf.hacked.db.DatasetChangeListener;
 import li.doerf.hacked.db.HackedSQLiteHelper;
 import li.doerf.hacked.db.tables.Account;
 import li.doerf.hacked.services.HaveIBeenPwnedCheckService;
+import li.doerf.hacked.ui.AddAccountDialogFragment;
 import li.doerf.hacked.ui.adapters.AccountsAdapter;
 import li.doerf.hacked.utils.ConnectivityHelper;
 import li.doerf.hacked.utils.IServiceRunningListener;
@@ -44,6 +46,7 @@ public class AccountListFragment extends Fragment implements DatasetChangeListen
     private SQLiteDatabase myReadbableDb;
     private AccountsAdapter myAccountsAdapter;
     private Cursor myCursor;
+    private View myFragmentRootView;
 
     public static AccountListFragment create() {
         return new AccountListFragment();
@@ -56,6 +59,7 @@ public class AccountListFragment extends Fragment implements DatasetChangeListen
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
         myReadbableDb = HackedSQLiteHelper.getInstance(getContext()).getReadableDatabase();
         myAccountsAdapter = new AccountsAdapter(getContext(), null, getFragmentManager());
     }
@@ -63,25 +67,49 @@ public class AccountListFragment extends Fragment implements DatasetChangeListen
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View fragmentRoot =  inflater.inflate(R.layout.fragment_account_list, container, false);
+        myFragmentRootView =  inflater.inflate(R.layout.fragment_account_list, container, false);
 
-        RecyclerView accountsList = (RecyclerView) fragmentRoot.findViewById(R.id.accounts_list);
+        RecyclerView accountsList = (RecyclerView) myFragmentRootView.findViewById(R.id.accounts_list);
         accountsList.setHasFixedSize(true);
         LinearLayoutManager lm = new LinearLayoutManager(getContext());
         accountsList.setLayoutManager(lm);
         accountsList.setAdapter(myAccountsAdapter);
 
-        showInitialSetupAccount(fragmentRoot);
-        showInitialSetupCheck(fragmentRoot);
-        showInitialHelp(fragmentRoot);
+        showInitialSetupAccount(myFragmentRootView);
+        showInitialSetupCheck(myFragmentRootView);
+        showInitialHelp(myFragmentRootView);
 
-        return fragmentRoot;
+        return myFragmentRootView;
     }
 
     @Override
     public void onResume() {
         super.onResume();
         refreshList();
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.menu_fragment_account_list, menu);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == R.id.action_check) {
+            checkForBreaches(null);
+            return true;
+        }
+
+        if (id == R.id.action_add_account) {
+            AddAccountDialogFragment newFragment = new AddAccountDialogFragment();
+            newFragment.show(getFragmentManager(), "addaccount");
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     private void showInitialSetupAccount(final View aRootView) {
@@ -119,7 +147,7 @@ public class AccountListFragment extends Fragment implements DatasetChangeListen
 
                     initialAccount.setVisibility(View.GONE);
                     Toast.makeText(getContext(), getString(R.string.toast_account_added), Toast.LENGTH_LONG).show();
-                    checkForBreaches(initialAccount, account);
+                    checkForBreaches(account);
                     SharedPreferences.Editor editor = settings.edit();
                     editor.putBoolean(getString(R.string.pref_initial_setup_account_done), true);
                     editor.apply();
@@ -206,7 +234,7 @@ public class AccountListFragment extends Fragment implements DatasetChangeListen
         refreshList();
     }
 
-    private void checkForBreaches(View view, Account account) {
+    private void checkForBreaches(Account account) {
         if ( ! ConnectivityHelper.isConnected( getContext()) ) {
             Log.i(LOGTAG, "no network");
             Toast.makeText(getContext(), getString(R.string.toast_error_no_network), Toast.LENGTH_SHORT).show();
@@ -231,7 +259,7 @@ public class AccountListFragment extends Fragment implements DatasetChangeListen
 
         if ( account == null ) { // only show this message when checking for more then one account
             int expectedDuration = (int) Math.ceil(myAccountsAdapter.getItemCount() * 2.5);
-            Snackbar.make(view, getString(R.string.snackbar_checking_account, expectedDuration), Snackbar.LENGTH_LONG)
+            Snackbar.make(myFragmentRootView, getString(R.string.snackbar_checking_account, expectedDuration), Snackbar.LENGTH_LONG)
                     .setAction("Action", null).show();
         }
     }
