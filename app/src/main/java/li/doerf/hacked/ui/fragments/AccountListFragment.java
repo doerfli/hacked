@@ -6,8 +6,6 @@ import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
@@ -35,13 +33,12 @@ import li.doerf.hacked.services.HaveIBeenPwnedCheckService;
 import li.doerf.hacked.ui.AddAccountDialogFragment;
 import li.doerf.hacked.ui.adapters.AccountsAdapter;
 import li.doerf.hacked.utils.ConnectivityHelper;
-import li.doerf.hacked.utils.IServiceRunningListener;
 import li.doerf.hacked.utils.SynchronizationHelper;
 
 /**
  * Created by moo on 05/10/16.
  */
-public class AccountListFragment extends Fragment implements DatasetChangeListener, IServiceRunningListener {
+public class AccountListFragment extends Fragment implements DatasetChangeListener {
     private final String LOGTAG = getClass().getSimpleName();
     private SQLiteDatabase myReadbableDb;
     private AccountsAdapter myAccountsAdapter;
@@ -86,6 +83,23 @@ public class AccountListFragment extends Fragment implements DatasetChangeListen
     public void onResume() {
         super.onResume();
         refreshList();
+        Account.registerDatasetChangedListener(this, Account.class);
+    }
+
+    @Override
+    public void onPause() {
+        Account.unregisterDatasetChangedListener(this, Account.class);
+        super.onPause();
+    }
+
+    @Override
+    public void onDestroy() {
+        if ( myCursor != null ) {
+            myCursor.close();
+        }
+        myReadbableDb = null;
+
+        super.onDestroy();
     }
 
     @Override
@@ -241,13 +255,12 @@ public class AccountListFragment extends Fragment implements DatasetChangeListen
             return;
         }
 
-        // TODO
-//        // only do this when checking more than one account (possible timing issue)
-//        if ( account == null && mySyncActive) {
-//            Log.i(LOGTAG, "check already in progress");
-//            Toast.makeText(getContext(), getString(R.string.toast_check_in_progress), Toast.LENGTH_SHORT).show();
-//            return;
-//        }
+        // only do this when checking more than one account (possible timing issue)
+        if ( account == null ) { // TODO && mySyncActive) {
+            Log.i(LOGTAG, "check already in progress");
+            Toast.makeText(getContext(), getString(R.string.toast_check_in_progress), Toast.LENGTH_SHORT).show();
+            return;
+        }
 
         Intent i = new Intent(getContext(), HaveIBeenPwnedCheckService.class);
 
@@ -262,47 +275,6 @@ public class AccountListFragment extends Fragment implements DatasetChangeListen
             Snackbar.make(myFragmentRootView, getString(R.string.snackbar_checking_account, expectedDuration), Snackbar.LENGTH_LONG)
                     .setAction("Action", null).show();
         }
-    }
-
-    @Override
-    public void notifyListener(final Event anEvent) {
-        new Handler(Looper.getMainLooper()).post(
-                new Runnable() {
-                    @Override
-                    public void run() {
-                        // TODO
-//                        switch (anEvent) {
-//                            case STARTED:
-//                                mySyncActive = true;
-//
-//                                if (myFabAnimation == null) {
-//                                    Log.d(LOGTAG, "animation starting");
-//                                    myFabAnimation = (ObjectAnimator) AnimatorInflater.loadAnimator(getContext(),
-//                                            R.animator.rotate_right_repeated);
-//                                    myFabAnimation.setTarget(myFloatingActionCheckButton);
-//                                    myFabAnimation.start();
-//                                } else {
-//                                    Log.d(LOGTAG, "animation already active");
-//                                }
-//                                break;
-//
-//                            case STOPPED:
-//                                mySyncActive = false;
-//
-//                                if (myFabAnimation != null) {
-//                                    Log.d(LOGTAG, "animation stopping");
-//                                    myFabAnimation.removeAllListeners();
-//                                    myFabAnimation.end();
-//                                    myFabAnimation.cancel();
-//                                    myFabAnimation = null;
-//                                    myFloatingActionCheckButton.clearAnimation();
-//                                    myFloatingActionCheckButton.setRotation(0);
-//                                }
-//                                break;
-//                        }
-                    }
-                }
-        );
     }
 
 }

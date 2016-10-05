@@ -3,6 +3,8 @@ package li.doerf.hacked.activities;
 import android.animation.ObjectAnimator;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -11,8 +13,10 @@ import android.view.MenuItem;
 
 import li.doerf.hacked.R;
 import li.doerf.hacked.ui.fragments.AccountListFragment;
+import li.doerf.hacked.utils.IServiceRunningListener;
+import li.doerf.hacked.utils.ServiceRunningNotifier;
 
-public class AccountListActivity extends AppCompatActivity {
+public class AccountListActivity extends AppCompatActivity implements IServiceRunningListener {
     private final String LOGTAG = getClass().getSimpleName();
 
     private FloatingActionButton myFloatingActionCheckButton;
@@ -72,35 +76,65 @@ public class AccountListActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        // TODO
-//        Account.registerDatasetChangedListener(this, Account.class);
-//        ServiceRunningNotifier.registerServiceRunningListener(this);
-        // TODO
-//        refreshList();
+        ServiceRunningNotifier.registerServiceRunningListener(this);
         myIsActive = true;
     }
 
     @Override
     protected void onPause() {
-        // TODO
-//        Account.unregisterDatasetChangedListener(this, Account.class);
-//        ServiceRunningNotifier.unregisterServiceRunningListener(this);
+        ServiceRunningNotifier.unregisterServiceRunningListener(this);
         myIsActive = false;
         super.onPause();
     }
 
     @Override
     public void onDestroy() {
-        // TODO
-//        if ( myCursor != null ) {
-//            myCursor.close();
-//        }
-//        myReadbableDb = null;
         myIsActive = false; // just to be sure
         super.onDestroy();
     }
 
     public static boolean isActive() {
         return myIsActive;
+    }
+
+    @Override
+    public void notifyListener(final Event anEvent) {
+        new Handler(Looper.getMainLooper()).post(
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        // TODO
+//                        switch (anEvent) {
+//                            case STARTED:
+//                                mySyncActive = true;
+//
+//                                if (myFabAnimation == null) {
+//                                    Log.d(LOGTAG, "animation starting");
+//                                    myFabAnimation = (ObjectAnimator) AnimatorInflater.loadAnimator(getContext(),
+//                                            R.animator.rotate_right_repeated);
+//                                    myFabAnimation.setTarget(myFloatingActionCheckButton);
+//                                    myFabAnimation.start();
+//                                } else {
+//                                    Log.d(LOGTAG, "animation already active");
+//                                }
+//                                break;
+//
+//                            case STOPPED:
+//                                mySyncActive = false;
+//
+//                                if (myFabAnimation != null) {
+//                                    Log.d(LOGTAG, "animation stopping");
+//                                    myFabAnimation.removeAllListeners();
+//                                    myFabAnimation.end();
+//                                    myFabAnimation.cancel();
+//                                    myFabAnimation = null;
+//                                    myFloatingActionCheckButton.clearAnimation();
+//                                    myFloatingActionCheckButton.setRotation(0);
+//                                }
+//                                break;
+//                        }
+                    }
+                }
+        );
     }
 }
