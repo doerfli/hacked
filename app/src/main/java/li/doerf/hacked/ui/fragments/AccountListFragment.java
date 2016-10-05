@@ -234,13 +234,6 @@ public class AccountListFragment extends Fragment implements DatasetChangeListen
     public void refreshList() {
         myCursor = Account.listAll(myReadbableDb);
         myAccountsAdapter.swapCursor(myCursor);
-
-        // TODO
-//        if ( myCursor.getCount() > 0 ) {
-//            myFloatingActionCheckButton.setVisibility(View.VISIBLE);
-//        } else {
-//            myFloatingActionCheckButton.setVisibility(View.GONE);
-//        }
     }
 
     @Override
