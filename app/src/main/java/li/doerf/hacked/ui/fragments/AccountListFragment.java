@@ -44,6 +44,7 @@ public class AccountListFragment extends Fragment implements DatasetChangeListen
     private AccountsAdapter myAccountsAdapter;
     private Cursor myCursor;
     private View myFragmentRootView;
+    private boolean mySyncActive;
 
     public static AccountListFragment create() {
         return new AccountListFragment();
@@ -241,7 +242,7 @@ public class AccountListFragment extends Fragment implements DatasetChangeListen
         refreshList();
     }
 
-    private void checkForBreaches(Account account) {
+    public void checkForBreaches(Account account) {
         if ( ! ConnectivityHelper.isConnected( getContext()) ) {
             Log.i(LOGTAG, "no network");
             Toast.makeText(getContext(), getString(R.string.toast_error_no_network), Toast.LENGTH_SHORT).show();
@@ -249,7 +250,7 @@ public class AccountListFragment extends Fragment implements DatasetChangeListen
         }
 
         // only do this when checking more than one account (possible timing issue)
-        if ( account == null ) { // TODO && mySyncActive) {
+        if ( account == null && mySyncActive) {
             Log.i(LOGTAG, "check already in progress");
             Toast.makeText(getContext(), getString(R.string.toast_check_in_progress), Toast.LENGTH_SHORT).show();
             return;
@@ -268,6 +269,10 @@ public class AccountListFragment extends Fragment implements DatasetChangeListen
             Snackbar.make(myFragmentRootView, getString(R.string.snackbar_checking_account, expectedDuration), Snackbar.LENGTH_LONG)
                     .setAction("Action", null).show();
         }
+    }
+
+    public void setSyncActive(boolean active) {
+        mySyncActive = active;
     }
 
 }

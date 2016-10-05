@@ -1,5 +1,6 @@
 package li.doerf.hacked.activities;
 
+import android.animation.AnimatorInflater;
 import android.animation.ObjectAnimator;
 import android.content.Intent;
 import android.os.Bundle;
@@ -8,8 +9,10 @@ import android.os.Looper;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 import li.doerf.hacked.R;
 import li.doerf.hacked.ui.fragments.AccountListFragment;
@@ -21,8 +24,8 @@ public class AccountListActivity extends AppCompatActivity implements IServiceRu
 
     private FloatingActionButton myFloatingActionCheckButton;
     private ObjectAnimator myFabAnimation;
-    private boolean mySyncActive;
     private static boolean myIsActive = false;
+    private AccountListFragment myContentFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,19 +34,19 @@ public class AccountListActivity extends AppCompatActivity implements IServiceRu
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        myContentFragment = AccountListFragment.create();
         getSupportFragmentManager()
                 .beginTransaction()
-                .add(R.id.fragment_container, AccountListFragment.create())
+                .add(R.id.fragment_container, myContentFragment)
                 .commit();
 
-        // TODO
-//        myFloatingActionCheckButton = (FloatingActionButton) findViewById(R.id.button_check);
-//        myFloatingActionCheckButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                checkForBreaches(view, null);
-//            }
-//        });
+        myFloatingActionCheckButton = (FloatingActionButton) findViewById(R.id.button_check);
+        myFloatingActionCheckButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                myContentFragment.checkForBreaches(null);
+            }
+        });
     }
 
 
@@ -103,36 +106,35 @@ public class AccountListActivity extends AppCompatActivity implements IServiceRu
                 new Runnable() {
                     @Override
                     public void run() {
-                        // TODO
-//                        switch (anEvent) {
-//                            case STARTED:
-//                                mySyncActive = true;
-//
-//                                if (myFabAnimation == null) {
-//                                    Log.d(LOGTAG, "animation starting");
-//                                    myFabAnimation = (ObjectAnimator) AnimatorInflater.loadAnimator(getContext(),
-//                                            R.animator.rotate_right_repeated);
-//                                    myFabAnimation.setTarget(myFloatingActionCheckButton);
-//                                    myFabAnimation.start();
-//                                } else {
-//                                    Log.d(LOGTAG, "animation already active");
-//                                }
-//                                break;
-//
-//                            case STOPPED:
-//                                mySyncActive = false;
-//
-//                                if (myFabAnimation != null) {
-//                                    Log.d(LOGTAG, "animation stopping");
-//                                    myFabAnimation.removeAllListeners();
-//                                    myFabAnimation.end();
-//                                    myFabAnimation.cancel();
-//                                    myFabAnimation = null;
-//                                    myFloatingActionCheckButton.clearAnimation();
-//                                    myFloatingActionCheckButton.setRotation(0);
-//                                }
-//                                break;
-//                        }
+                        switch (anEvent) {
+                            case STARTED:
+                                myContentFragment.setSyncActive(true);
+
+                                if (myFabAnimation == null) {
+                                    Log.d(LOGTAG, "animation starting");
+                                    myFabAnimation = (ObjectAnimator) AnimatorInflater.loadAnimator(getApplicationContext(),
+                                            R.animator.rotate_right_repeated);
+                                    myFabAnimation.setTarget(myFloatingActionCheckButton);
+                                    myFabAnimation.start();
+                                } else {
+                                    Log.d(LOGTAG, "animation already active");
+                                }
+                                break;
+
+                            case STOPPED:
+                                myContentFragment.setSyncActive(false);
+
+                                if (myFabAnimation != null) {
+                                    Log.d(LOGTAG, "animation stopping");
+                                    myFabAnimation.removeAllListeners();
+                                    myFabAnimation.end();
+                                    myFabAnimation.cancel();
+                                    myFabAnimation = null;
+                                    myFloatingActionCheckButton.clearAnimation();
+                                    myFloatingActionCheckButton.setRotation(0);
+                                }
+                                break;
+                        }
                     }
                 }
         );
