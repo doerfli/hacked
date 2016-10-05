@@ -34,17 +34,15 @@ import li.doerf.hacked.db.tables.Account;
 import li.doerf.hacked.services.HaveIBeenPwnedCheckService;
 import li.doerf.hacked.ui.AddAccountDialogFragment;
 import li.doerf.hacked.ui.adapters.AccountsAdapter;
+import li.doerf.hacked.ui.fragments.AccountListFragment;
 import li.doerf.hacked.utils.ConnectivityHelper;
 import li.doerf.hacked.utils.IServiceRunningListener;
 import li.doerf.hacked.utils.ServiceRunningNotifier;
 import li.doerf.hacked.utils.SynchronizationHelper;
 
-public class AccountListActivity extends AppCompatActivity implements DatasetChangeListener, IServiceRunningListener {
+public class AccountListActivity extends AppCompatActivity {
     private final String LOGTAG = getClass().getSimpleName();
 
-    private SQLiteDatabase myReadbableDb;
-    private AccountsAdapter myAccountsAdapter;
-    private Cursor myCursor;
     private FloatingActionButton myFloatingActionCheckButton;
     private ObjectAnimator myFabAnimation;
     private boolean mySyncActive;
@@ -57,132 +55,22 @@ public class AccountListActivity extends AppCompatActivity implements DatasetCha
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        myFloatingActionCheckButton = (FloatingActionButton) findViewById(R.id.button_check);
-        myFloatingActionCheckButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                checkForBreaches(view, null);
-            }
-        });
+        getSupportFragmentManager()
+                .beginTransaction()
+                .add(R.id.fragment_container, AccountListFragment.create())
+                .commit();
 
-        myReadbableDb = HackedSQLiteHelper.getInstance(getApplicationContext()).getReadableDatabase();
-        myAccountsAdapter = new AccountsAdapter(this, null, getSupportFragmentManager());
-
-        RecyclerView accountsList = (RecyclerView) findViewById(R.id.accounts_list);
-        accountsList.setHasFixedSize(true);
-        LinearLayoutManager lm = new LinearLayoutManager(getApplicationContext());
-        accountsList.setLayoutManager(lm);
-        accountsList.setAdapter(myAccountsAdapter);
-
-        showInitialSetupAccount();
-        showInitialSetupCheck();
-        showInitialHelp();
+        // TODO
+//        myFloatingActionCheckButton = (FloatingActionButton) findViewById(R.id.button_check);
+//        myFloatingActionCheckButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                checkForBreaches(view, null);
+//            }
+//        });
     }
 
-    private void showInitialSetupAccount() {
-        final SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        boolean initialSetupAccountDone = settings.getBoolean(getString(R.string.pref_initial_setup_account_done), false);
-        if ( ! initialSetupAccountDone ) {
-            final CardView initialAccount = (CardView) findViewById(R.id.initial_account);
-            initialAccount.setVisibility(View.VISIBLE);
-            Button addB = (Button) findViewById(R.id.button_add_initial_account);
-            addB.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    EditText accountET = (EditText) findViewById(R.id.account);
-                    String accountName = accountET.getText().toString().trim();
 
-                    if ( accountName.equals("") ) {
-                        Toast.makeText(getApplicationContext(), getString(R.string.toast_please_enter_account), Toast.LENGTH_LONG).show();
-                        return;
-                    }
-
-                    Account account = Account.create( accountName);
-                    SQLiteDatabase db = HackedSQLiteHelper.getInstance(getApplicationContext()).getWritableDatabase();
-
-                    if ( account.exists(db) ) {
-                        Log.w(LOGTAG, "account already exists");
-                        Toast.makeText(getApplicationContext(), getString(R.string.toast_account_exists), Toast.LENGTH_LONG).show();
-                        return;
-                    }
-
-                    db.beginTransaction();
-                    account.insert(db);
-                    db.setTransactionSuccessful();
-                    db.endTransaction();
-                    account.notifyObservers();
-
-                    initialAccount.setVisibility(View.GONE);
-                    Toast.makeText(getApplicationContext(), getString(R.string.toast_account_added), Toast.LENGTH_LONG).show();
-                    checkForBreaches(initialAccount, account);
-                    SharedPreferences.Editor editor = settings.edit();
-                    editor.putBoolean(getString(R.string.pref_initial_setup_account_done), true);
-                    editor.apply();
-                    InputMethodManager mgr = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                    mgr.hideSoftInputFromWindow(accountET.getWindowToken(), 0);
-                }
-            });
-        }
-    }
-
-    private void showInitialSetupCheck() {
-        final SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        boolean initialSetupCheckDone = settings.getBoolean(getString(R.string.pref_initial_setup_check_done), false);
-        if ( ! initialSetupCheckDone ) {
-            final CardView initialSetupCheck = (CardView) findViewById(R.id.initial_setup_check);
-            initialSetupCheck.setVisibility(View.VISIBLE);
-
-            Button noB = (Button) findViewById(R.id.initial_setup_check_no);
-            noB.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    initialSetupCheck.setVisibility(View.GONE);
-                    Toast.makeText(getApplicationContext(), getString(R.string.toast_check_not_enabled), Toast.LENGTH_LONG).show();
-
-                    SharedPreferences.Editor editor = settings.edit();
-                    editor.putBoolean(getString(R.string.pref_initial_setup_check_done), true);
-                    editor.apply();
-                }
-            });
-
-            Button yesB = (Button) findViewById(R.id.initial_setup_check_yes);
-            yesB.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    initialSetupCheck.setVisibility(View.GONE);
-
-                    SharedPreferences.Editor editor = settings.edit();
-                    editor.putBoolean(getString(R.string.pref_key_sync_enable), true);
-                    editor.putBoolean(getString(R.string.pref_initial_setup_check_done), true);
-                    editor.apply();
-
-                    SynchronizationHelper.scheduleSync(getApplicationContext());
-                    Toast.makeText(getApplicationContext(), getString(R.string.toast_check_enabled), Toast.LENGTH_LONG).show();
-                }
-            });
-        }
-    }
-
-    private void showInitialHelp() {
-        final SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        boolean initialHelpDismissed = settings.getBoolean(getString(R.string.pref_initial_help_dismissed), false);
-        if ( ! initialHelpDismissed ) {
-            final CardView initialHelp = (CardView) findViewById(R.id.initial_help);
-            initialHelp.setVisibility(View.VISIBLE);
-            Button dismissB = (Button) findViewById(R.id.button_dismiss_help);
-            dismissB.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    initialHelp.setVisibility(View.GONE);
-                    Toast.makeText(getApplicationContext(), getString(R.string.toast_dont_show_initial_help_again), Toast.LENGTH_SHORT).show();
-
-                    SharedPreferences.Editor editor = settings.edit();
-                    editor.putBoolean(getString(R.string.pref_initial_help_dismissed), true);
-                    editor.apply();
-                }
-            });
-        }
-    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -206,10 +94,11 @@ public class AccountListActivity extends AppCompatActivity implements DatasetCha
             return true;
         }
 
-        if (id == R.id.action_check) {
-            checkForBreaches(this.findViewById(android.R.id.content), null);
-            return true;
-        }
+        // TODO move to AccountListFragment
+//        if (id == R.id.action_check) {
+//            checkForBreaches(this.findViewById(android.R.id.content), null);
+//            return true;
+//        }
 
         if (id == R.id.action_add_account) {
             AddAccountDialogFragment newFragment = new AddAccountDialogFragment();
@@ -222,113 +111,32 @@ public class AccountListActivity extends AppCompatActivity implements DatasetCha
     @Override
     protected void onResume() {
         super.onResume();
-        Account.registerDatasetChangedListener(this, Account.class);
-        ServiceRunningNotifier.registerServiceRunningListener(this);
-        refreshList();
+        // TODO
+//        Account.registerDatasetChangedListener(this, Account.class);
+//        ServiceRunningNotifier.registerServiceRunningListener(this);
+        // TODO
+//        refreshList();
         myIsActive = true;
     }
 
     @Override
     protected void onPause() {
-        Account.unregisterDatasetChangedListener(this, Account.class);
-        ServiceRunningNotifier.unregisterServiceRunningListener(this);
+        // TODO
+//        Account.unregisterDatasetChangedListener(this, Account.class);
+//        ServiceRunningNotifier.unregisterServiceRunningListener(this);
         myIsActive = false;
         super.onPause();
     }
 
     @Override
     public void onDestroy() {
-        if ( myCursor != null ) {
-            myCursor.close();
-        }
-        myReadbableDb = null;
+        // TODO
+//        if ( myCursor != null ) {
+//            myCursor.close();
+//        }
+//        myReadbableDb = null;
         myIsActive = false; // just to be sure
         super.onDestroy();
-    }
-
-    public void refreshList() {
-        myCursor = Account.listAll(myReadbableDb);
-        myAccountsAdapter.swapCursor(myCursor);
-
-        if ( myCursor.getCount() > 0 ) {
-            myFloatingActionCheckButton.setVisibility(View.VISIBLE);
-        } else {
-            myFloatingActionCheckButton.setVisibility(View.GONE);
-        }
-    }
-
-    @Override
-    public void datasetChanged() {
-        refreshList();
-    }
-
-    private void checkForBreaches(View view, Account account) {
-        if ( ! ConnectivityHelper.isConnected( getApplicationContext()) ) {
-            Log.i(LOGTAG, "no network");
-            Toast.makeText(getApplicationContext(), getString(R.string.toast_error_no_network), Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        // only do this when checking more than one account (possible timing issue)
-        if ( account == null && mySyncActive) {
-            Log.i(LOGTAG, "check already in progress");
-            Toast.makeText(getApplicationContext(), getString(R.string.toast_check_in_progress), Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        Intent i = new Intent(getBaseContext(), HaveIBeenPwnedCheckService.class);
-
-        if ( account != null ) {
-            i.putExtra(HaveIBeenPwnedCheckService.EXTRA_IDS, new long[] {account.getId()});
-        }
-
-        startService(i);
-
-        if ( account == null ) { // only show this message when checking for more then one account
-            int expectedDuration = (int) Math.ceil(myAccountsAdapter.getItemCount() * 2.5);
-            Snackbar.make(view, getString(R.string.snackbar_checking_account, expectedDuration), Snackbar.LENGTH_LONG)
-                    .setAction("Action", null).show();
-        }
-    }
-
-    @Override
-    public void notifyListener(final Event anEvent) {
-        new Handler(Looper.getMainLooper()).post(
-                new Runnable() {
-                    @Override
-                    public void run() {
-                        switch (anEvent) {
-                            case STARTED:
-                                mySyncActive = true;
-
-                                if (myFabAnimation == null) {
-                                    Log.d(LOGTAG, "animation starting");
-                                    myFabAnimation = (ObjectAnimator) AnimatorInflater.loadAnimator(getApplicationContext(),
-                                            R.animator.rotate_right_repeated);
-                                    myFabAnimation.setTarget(myFloatingActionCheckButton);
-                                    myFabAnimation.start();
-                                } else {
-                                    Log.d(LOGTAG, "animation already active");
-                                }
-                                break;
-
-                            case STOPPED:
-                                mySyncActive = false;
-
-                                if (myFabAnimation != null) {
-                                    Log.d(LOGTAG, "animation stopping");
-                                    myFabAnimation.removeAllListeners();
-                                    myFabAnimation.end();
-                                    myFabAnimation.cancel();
-                                    myFabAnimation = null;
-                                    myFloatingActionCheckButton.clearAnimation();
-                                    myFloatingActionCheckButton.setRotation(0);
-                                }
-                                break;
-                        }
-                    }
-                }
-        );
     }
 
     public static boolean isActive() {

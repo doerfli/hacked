@@ -25,16 +25,15 @@ import li.doerf.hacked.db.HackedSQLiteHelper;
 import li.doerf.hacked.db.tables.Account;
 import li.doerf.hacked.db.tables.Breach;
 import li.doerf.hacked.ui.DeleteAccountDialogFragment;
+import li.doerf.hacked.ui.fragments.AccountListFragment;
 
 public class AccountsAdapter extends RecyclerViewCursorAdapter<RecyclerViewHolder> {
     private final String LOGTAG = getClass().getSimpleName();
     private final FragmentManager mySupportFragmentManager;
-//    private final AdapterModelChangedListener myItemsChangedListener;
 
-    public AccountsAdapter(Context aContext, Cursor aCursor, FragmentManager supportFragmentManager){ // , AdapterModelChangedListener anItemsChangesListener) {
+    public AccountsAdapter(Context aContext, Cursor aCursor, FragmentManager supportFragmentManager){
         super(aContext, aCursor);
         mySupportFragmentManager = supportFragmentManager;
-//        myItemsChangedListener = anItemsChangesListener;
     }
 
     @Override
