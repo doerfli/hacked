@@ -1,5 +1,6 @@
 package li.doerf.hacked.ui.fragments;
 
+import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -38,9 +39,10 @@ public class BreachDetailsFragment extends Fragment implements DatasetChangeList
         return fragment;
     }
 
+
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    public void onAttach(Context context) {
+        super.onAttach(context);
         myReadbableDb = HackedSQLiteHelper.getInstance(getContext()).getWritableDatabase();
         myAccount = Account.findById(myReadbableDb, myAccountId);
         myBreaches = Breach.findAllByAccount(myReadbableDb, myAccount);
@@ -81,9 +83,9 @@ public class BreachDetailsFragment extends Fragment implements DatasetChangeList
     }
 
     @Override
-    public void onDestroy() {
+    public void onDetach() {
         myReadbableDb = null;
-        super.onDestroy();
+        super.onDetach();
     }
 
     @Override
