@@ -34,7 +34,18 @@ public abstract class RecyclerViewCursorAdapter<VH extends RecyclerView.ViewHold
             return;
         }
 
-        myCursor.moveToPosition(position);
+        boolean success = myCursor.moveToPosition(position);
+        if ( ! success ) {
+            Log.e(LOGTAG, "move to position not successful");
+            return;
+        }
+
+        if ( myCursor.getPosition() < 0 ) {
+            // this is a workaround due to a situation where movetoposition(0) is not working and the result is -1
+            Log.w(LOGTAG, "movetoposition not successful: -1 - ignore view");
+            return;
+        }
+
         onBindViewHolder(holder, myCursor);
     }
 

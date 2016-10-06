@@ -25,7 +25,6 @@ import li.doerf.hacked.db.HackedSQLiteHelper;
 import li.doerf.hacked.db.tables.Account;
 import li.doerf.hacked.db.tables.Breach;
 import li.doerf.hacked.ui.DeleteAccountDialogFragment;
-import li.doerf.hacked.ui.fragments.AccountListFragment;
 
 public class AccountsAdapter extends RecyclerViewCursorAdapter<RecyclerViewHolder> {
     private final String LOGTAG = getClass().getSimpleName();
@@ -47,7 +46,7 @@ public class AccountsAdapter extends RecyclerViewCursorAdapter<RecyclerViewHolde
     public void onBindViewHolder(final RecyclerViewHolder holder, Cursor aCursor) {
         CardView cardView = (CardView) holder.getView();
 
-        final SQLiteDatabase db = HackedSQLiteHelper.getInstance(getContext()).getReadableDatabase();
+        final SQLiteDatabase db = HackedSQLiteHelper.getInstance(getContext()).getWritableDatabase();
         final Account account = Account.create(db, aCursor);
         final Collection<Breach> breaches = Breach.findAllByAccount(db, account);
         int numBreaches = breaches.size();

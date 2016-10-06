@@ -15,7 +15,6 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.google.common.base.Function;
-import com.google.common.base.Joiner;
 import com.google.common.collect.FluentIterable;
 
 import org.joda.time.DateTime;
@@ -82,7 +81,7 @@ public class HaveIBeenPwnedCheckService extends IntentService {
     private void doCheck(Long[] ids) {
         Log.d(LOGTAG, "starting check for breaches");
         Context context = getBaseContext();
-        SQLiteDatabase db = HackedSQLiteHelper.getInstance(context).getReadableDatabase();
+        SQLiteDatabase db = HackedSQLiteHelper.getInstance(context).getWritableDatabase();
 
         Cursor c = null;
         List<Account> newBreachedAccounts = new ArrayList<>();
@@ -103,7 +102,9 @@ public class HaveIBeenPwnedCheckService extends IntentService {
                 boolean isNewBreachFound = false;
 
                 try {
-                    db.beginTransaction();
+                    // transactions are currently disabled as these lead to locking issues when
+                    // querying in parallel to inserts
+                    //  db.beginTransaction();
                     Response<List<BreachedAccount>> response = retrieveBreaches(account);
 
                     if (response.isSuccessful()) {
@@ -123,7 +124,7 @@ public class HaveIBeenPwnedCheckService extends IntentService {
                         newBreachedAccounts.add(account);
                     }
                     account.update(db);
-                    db.setTransactionSuccessful();
+                    // db.setTransactionSuccessful();
                 } catch (IOException e) {
                     Log.e(LOGTAG, "caughtIOException while contacting www.haveibeenpwned.com - " + e.getMessage(), e);
                     new Handler(Looper.getMainLooper()).post(new Runnable() {
@@ -134,7 +135,7 @@ public class HaveIBeenPwnedCheckService extends IntentService {
                     });
                     break;
                 } finally {
-                    db.endTransaction();
+                    // db.endTransaction();
                     account.notifyObservers();
                 }
             }

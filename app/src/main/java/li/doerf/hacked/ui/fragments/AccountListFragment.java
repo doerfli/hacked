@@ -55,11 +55,11 @@ public class AccountListFragment extends Fragment implements DatasetChangeListen
     }
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setHasOptionsMenu(true);
+    public void onAttach(Context context) {
+        super.onAttach(context);
         myReadbableDb = HackedSQLiteHelper.getInstance(getContext()).getReadableDatabase();
         myAccountsAdapter = new AccountsAdapter(getContext(), null, getFragmentManager());
+        setHasOptionsMenu(true);
     }
 
     @Nullable
@@ -94,13 +94,13 @@ public class AccountListFragment extends Fragment implements DatasetChangeListen
     }
 
     @Override
-    public void onDestroy() {
+    public void onDetach() {
         if ( myCursor != null ) {
             myCursor.close();
         }
         myReadbableDb = null;
 
-        super.onDestroy();
+        super.onDetach();
     }
 
     @Override
@@ -234,7 +234,20 @@ public class AccountListFragment extends Fragment implements DatasetChangeListen
 
     public void refreshList() {
         myCursor = Account.listAll(myReadbableDb);
-        myAccountsAdapter.swapCursor(myCursor);
+        if ( ! myCursor.isClosed() ) {
+            Cursor old = null;
+            try {
+                old = myAccountsAdapter.swapCursor(myCursor);
+            } finally {
+                if ( old != null ) {
+                    old.close();
+                }
+            }
+        } else {
+            Log.w(LOGTAG, "cursor closed");
+            myAccountsAdapter.swapCursor(null);
+        }
+
     }
 
     @Override

@@ -41,7 +41,7 @@ public class BreachDetailsFragment extends Fragment implements DatasetChangeList
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        myReadbableDb = HackedSQLiteHelper.getInstance(getContext()).getReadableDatabase();
+        myReadbableDb = HackedSQLiteHelper.getInstance(getContext()).getWritableDatabase();
         myAccount = Account.findById(myReadbableDb, myAccountId);
         myBreaches = Breach.findAllByAccount(myReadbableDb, myAccount);
     }
