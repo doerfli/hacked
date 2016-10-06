@@ -46,7 +46,7 @@ public class AccountsAdapter extends RecyclerViewCursorAdapter<RecyclerViewHolde
     public void onBindViewHolder(final RecyclerViewHolder holder, Cursor aCursor) {
         CardView cardView = (CardView) holder.getView();
 
-        final SQLiteDatabase db = HackedSQLiteHelper.getInstance(getContext()).getWritableDatabase();
+        final SQLiteDatabase db = HackedSQLiteHelper.getInstance(getContext()).getReadableDatabase();
         final Account account = Account.create(db, aCursor);
         final Collection<Breach> breaches = Breach.findAllByAccount(db, account);
         int numBreaches = breaches.size();
@@ -109,7 +109,7 @@ public class AccountsAdapter extends RecyclerViewCursorAdapter<RecyclerViewHolde
             @Override
             public boolean onLongClick(View v) {
                 DeleteAccountDialogFragment d = new DeleteAccountDialogFragment();
-                d.setAccountAndDb(account, db);
+                d.setAccount(account);
                 d.show(mySupportFragmentManager, "deleteAccount");
                 return true;
             }

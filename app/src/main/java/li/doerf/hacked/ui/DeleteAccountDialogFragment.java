@@ -11,6 +11,7 @@ import android.support.v7.app.AlertDialog;
 import java.util.Collection;
 
 import li.doerf.hacked.R;
+import li.doerf.hacked.db.HackedSQLiteHelper;
 import li.doerf.hacked.db.tables.Account;
 import li.doerf.hacked.db.tables.Breach;
 
@@ -22,9 +23,9 @@ public class DeleteAccountDialogFragment extends DialogFragment {
     private Account myAccount;
     private SQLiteDatabase myDb;
 
-    public void setAccountAndDb(Account account, SQLiteDatabase db) {
+    public void setAccount(Account account) {
         myAccount = account;
-        myDb = db;
+        myDb = HackedSQLiteHelper.getInstance(getContext()).getWritableDatabase();
     }
 
     @Override
