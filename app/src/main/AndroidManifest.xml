@@ -14,28 +14,32 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".activities.AccountListActivity"
-            android:label="@string/app_name"
+            android:name=".activities.MainActivity"
+            android:label="@string/title_activity_main"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity
+            android:name=".activities.AccountListActivity"
+            android:label="@string/app_name"
+            android:theme="@style/AppTheme.NoActionBar">
+        </activity>
         <activity
             android:name=".activities.BreachDetailsActivity"
             android:label="@string/title_breach_details"
-            android:parentActivityName=".activities.AccountListActivity"
-            />
+            android:parentActivityName=".activities.AccountListActivity" />
         <activity
             android:name=".activities.SettingsActivity"
             android:label="@string/title_settings"
-            android:parentActivityName=".activities.AccountListActivity"
-            />
+            android:parentActivityName=".activities.AccountListActivity" />
 
         <!-- run in separate process to not block animation -->
-        <service android:name=".services.HaveIBeenPwnedCheckService"/>
-        <service android:name=".services.ScheduledCheckService"/>
+        <service android:name=".services.HaveIBeenPwnedCheckService" />
+        <service android:name=".services.ScheduledCheckService" />
 
         <receiver android:name=".receiver.BootupCompleteReceiver">
             <intent-filter>
@@ -43,7 +47,8 @@
             </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.PACKAGE_REPLACED" />
-                <data android:scheme="package"  />
+
+                <data android:scheme="package" />
             </intent-filter>
         </receiver>
     </application>

@@ -65,4 +65,8 @@
     <string name="toast_check_in_progress">A check is already in progress. Please try again later.</string>
     <string name="notifiation_summary_found_breaches">%1$d accounts breached</string>
     <string name="toast_enter_valid_name">Please enter a valid account name.</string>
+    <string name="title_activity_main">MainActivity</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
 </resources>
