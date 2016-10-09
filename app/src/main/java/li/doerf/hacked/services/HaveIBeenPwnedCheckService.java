@@ -25,8 +25,8 @@ import java.util.List;
 import java.util.Random;
 
 import li.doerf.hacked.R;
-import li.doerf.hacked.activities.AccountListActivity;
 import li.doerf.hacked.activities.BreachDetailsActivity;
+import li.doerf.hacked.activities.MainActivity;
 import li.doerf.hacked.db.HackedSQLiteHelper;
 import li.doerf.hacked.db.tables.Account;
 import li.doerf.hacked.db.tables.Breach;
@@ -219,8 +219,8 @@ public class HaveIBeenPwnedCheckService extends IntentService {
     }
 
     private void showNotification(List<Account> newBreachedAccounts) {
-        if ( AccountListActivity.isActive() ) {
-            Log.d(LOGTAG, "AccountListActivity active, no notification shown");
+        if ( MainActivity.isActive() ) {
+            Log.d(LOGTAG, "MainActivity active, no notification shown");
             return;
         }
 
