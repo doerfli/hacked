@@ -230,7 +230,6 @@ public class HaveIBeenPwnedCheckService extends IntentService {
                 return input.getName();
             }
         }).toList();
-//
 
         for ( Account account : newBreachedAccounts ) {
             android.support.v4.app.NotificationCompat.Builder mBuilder =
