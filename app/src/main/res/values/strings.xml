@@ -69,4 +69,7 @@
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="site_name">Site name</string>
+    <string name="nd_top_20_breached_websites">Top 20 breached websites</string>
+    <string name="nd_accounts">Accounts</string>
 </resources>

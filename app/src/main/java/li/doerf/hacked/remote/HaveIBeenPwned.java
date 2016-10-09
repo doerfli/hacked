@@ -19,4 +19,10 @@ public interface HaveIBeenPwned {
     @GET("/api/v2/breachedaccount/{account}")
     Call<List<BreachedAccount>> listBreachedAccounts(@Path("account") String account);
 
+    @Headers({
+            "Accept: application/vnd.haveibeenpwned.v2+json",
+            "User-Agent: Hacked_Android_Client"
+    })
+    @GET("/api/v2/breaches")
+    Call<List<BreachedAccount>> getBreachedSites();
 }

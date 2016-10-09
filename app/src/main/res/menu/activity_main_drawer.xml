@@ -1,16 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <group>
+    <group android:id="@+id/menu_1">
         <item
             android:id="@+id/action_accounts_list"
-            android:title="Accounts" />
+            android:title="@string/nd_accounts" />
+        <item
+            android:id="@+id/action_top_breached_sites"
+            android:title="@string/nd_top_20_breached_websites" />
     </group>
 
-    <group>
+    <group android:id="@+id/menu_2">
         <item
             android:id="@+id/action_settings"
-            android:title="Settings" />
+            android:title="@string/action_settings" />
     </group>
 
 </menu>

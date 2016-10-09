@@ -194,4 +194,9 @@ public class BreachedSite extends TableBase implements Identifiable {
             }
         }
     }
+
+    public static void deleteAll(SQLiteDatabase db) {
+        BreachedSite site = new BreachedSite();
+        db.delete(site.getTableName(), null, null);
+    }
 }

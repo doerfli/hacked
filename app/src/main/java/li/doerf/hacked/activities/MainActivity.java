@@ -6,8 +6,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -19,7 +21,9 @@ import android.view.MenuItem;
 import android.view.View;
 
 import li.doerf.hacked.R;
+import li.doerf.hacked.services.haveibeenpwned.GetBreachedSitesAsyncTask;
 import li.doerf.hacked.ui.fragments.AccountListFragment;
+import li.doerf.hacked.ui.fragments.BreachedSitesListFragment;
 import li.doerf.hacked.utils.IServiceRunningListener;
 import li.doerf.hacked.utils.ServiceRunningNotifier;
 
@@ -27,7 +31,7 @@ public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, IServiceRunningListener {
     private final String LOGTAG = getClass().getSimpleName();
 
-    private AccountListFragment myContentFragment;
+    private Fragment myContentFragment;
     private FloatingActionButton myFloatingActionCheckButton;
     private ObjectAnimator myFabAnimation;
     private static boolean myIsActive;
@@ -50,7 +54,11 @@ public class MainActivity extends AppCompatActivity
         myFloatingActionCheckButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                myContentFragment.checkForBreaches(null);
+                if ( myContentFragment instanceof AccountListFragment ) {
+                    ((AccountListFragment) myContentFragment).checkForBreaches(null);
+                } else if ( myContentFragment instanceof BreachedSitesListFragment ) {
+                    new GetBreachedSitesAsyncTask( getApplicationContext()).execute();
+                }
             }
         });
 
@@ -113,14 +121,25 @@ public class MainActivity extends AppCompatActivity
         return super.onOptionsItemSelected(item);
     }
 
-    @SuppressWarnings("StatementWithEmptyBody")
     @Override
-    public boolean onNavigationItemSelected(MenuItem item) {
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.accounts_list) {
-            // TODO open accounts list (only once other actions are available)
+        if (id == R.id.action_accounts_list) {
+            myContentFragment = AccountListFragment.create();
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.fragment_container, myContentFragment)
+                    .addToBackStack("account_list")
+                    .commit();
+        } else if (id == R.id.action_top_breached_sites) {
+            myContentFragment = BreachedSitesListFragment.create("pwn_count DESC");
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.fragment_container, myContentFragment)
+                    .addToBackStack("top20_breached_sites")
+                    .commit();
         } else if (id == R.id.action_settings) {
             Intent settingsIntent = new Intent(this, SettingsActivity.class);
             startActivity(settingsIntent);
@@ -141,34 +160,37 @@ public class MainActivity extends AppCompatActivity
                 new Runnable() {
                     @Override
                     public void run() {
-                        switch (anEvent) {
-                            case STARTED:
-                                myContentFragment.setSyncActive(true);
+                        if ( myContentFragment instanceof AccountListFragment ) {
+                            AccountListFragment fragment = (AccountListFragment) myContentFragment;
+                            switch (anEvent) {
+                                case STARTED:
+                                    fragment.setSyncActive(true);
 
-                                if (myFabAnimation == null) {
-                                    Log.d(LOGTAG, "animation starting");
-                                    myFabAnimation = (ObjectAnimator) AnimatorInflater.loadAnimator(getApplicationContext(),
-                                            R.animator.rotate_right_repeated);
-                                    myFabAnimation.setTarget(myFloatingActionCheckButton);
-                                    myFabAnimation.start();
-                                } else {
-                                    Log.d(LOGTAG, "animation already active");
-                                }
-                                break;
+                                    if (myFabAnimation == null) {
+                                        Log.d(LOGTAG, "animation starting");
+                                        myFabAnimation = (ObjectAnimator) AnimatorInflater.loadAnimator(getApplicationContext(),
+                                                R.animator.rotate_right_repeated);
+                                        myFabAnimation.setTarget(myFloatingActionCheckButton);
+                                        myFabAnimation.start();
+                                    } else {
+                                        Log.d(LOGTAG, "animation already active");
+                                    }
+                                    break;
 
-                            case STOPPED:
-                                myContentFragment.setSyncActive(false);
+                                case STOPPED:
+                                    fragment.setSyncActive(false);
 
-                                if (myFabAnimation != null) {
-                                    Log.d(LOGTAG, "animation stopping");
-                                    myFabAnimation.removeAllListeners();
-                                    myFabAnimation.end();
-                                    myFabAnimation.cancel();
-                                    myFabAnimation = null;
-                                    myFloatingActionCheckButton.clearAnimation();
-                                    myFloatingActionCheckButton.setRotation(0);
-                                }
-                                break;
+                                    if (myFabAnimation != null) {
+                                        Log.d(LOGTAG, "animation stopping");
+                                        myFabAnimation.removeAllListeners();
+                                        myFabAnimation.end();
+                                        myFabAnimation.cancel();
+                                        myFabAnimation = null;
+                                        myFloatingActionCheckButton.clearAnimation();
+                                        myFloatingActionCheckButton.setRotation(0);
+                                    }
+                                    break;
+                            }
                         }
                     }
                 }
