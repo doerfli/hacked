@@ -23,6 +23,7 @@ import android.view.View;
 import li.doerf.hacked.R;
 import li.doerf.hacked.services.haveibeenpwned.GetBreachedSitesAsyncTask;
 import li.doerf.hacked.ui.fragments.AccountListFragment;
+import li.doerf.hacked.ui.fragments.BreachListType;
 import li.doerf.hacked.ui.fragments.BreachedSitesListFragment;
 import li.doerf.hacked.utils.IServiceRunningListener;
 import li.doerf.hacked.utils.ServiceRunningNotifier;
@@ -57,7 +58,7 @@ public class MainActivity extends AppCompatActivity
                 if ( myContentFragment instanceof AccountListFragment ) {
                     ((AccountListFragment) myContentFragment).checkForBreaches(null);
                 } else if ( myContentFragment instanceof BreachedSitesListFragment ) {
-                    new GetBreachedSitesAsyncTask( getApplicationContext()).execute();
+                    new GetBreachedSitesAsyncTask( (BreachedSitesListFragment) myContentFragment).execute();
                 }
             }
         });
@@ -134,11 +135,18 @@ public class MainActivity extends AppCompatActivity
                     .addToBackStack("account_list")
                     .commit();
         } else if (id == R.id.action_top_breached_sites) {
-            myContentFragment = BreachedSitesListFragment.create("pwn_count DESC");
+            myContentFragment = BreachedSitesListFragment.create(BreachListType.Top20);
             getSupportFragmentManager()
                     .beginTransaction()
                     .replace(R.id.fragment_container, myContentFragment)
                     .addToBackStack("top20_breached_sites")
+                    .commit();
+        } else if (id == R.id.action_most_recent_breaches) {
+            myContentFragment = BreachedSitesListFragment.create(BreachListType.MostRecent);
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.fragment_container, myContentFragment)
+                    .addToBackStack("most_recent_breached_sites")
                     .commit();
         } else if (id == R.id.action_settings) {
             Intent settingsIntent = new Intent(this, SettingsActivity.class);

@@ -23,15 +23,15 @@ import li.doerf.hacked.ui.adapters.BreachedSitesAdapter;
  */
 public class BreachedSitesListFragment extends Fragment {
     private final String LOGTAG = getClass().getSimpleName();
-    private String myOrderBy;
     private SQLiteDatabase myReadbableDb;
     private BreachedSitesAdapter myBreachedSitesAdapter;
     private View myFragmentRootView;
     private Cursor myCursor;
+    private BreachListType myBreachListType;
 
-    public static BreachedSitesListFragment create(String orderby) {
+    public static BreachedSitesListFragment create(BreachListType aType) {
         BreachedSitesListFragment fragment = new BreachedSitesListFragment();
-        fragment.setOrderBy(orderby);
+        fragment.setMyBreachListType(aType);
         return fragment;
     }
 
@@ -73,12 +73,23 @@ public class BreachedSitesListFragment extends Fragment {
         super.onDetach();
     }
 
-    public void setOrderBy(String orderBy) {
-        myOrderBy = orderBy;
-    }
 
     public void refreshList() {
-        myCursor = BreachedSite.listAll(myReadbableDb, myOrderBy);
+        Log.d(LOGTAG, "refreshing list");
+
+        switch ( myBreachListType){
+            case Top20:
+                myCursor = BreachedSite.listTop20(myReadbableDb);
+            break;
+
+            case MostRecent:
+                myCursor = BreachedSite.listMostRecent(myReadbableDb);
+            break;
+
+            case All:
+            default:
+                myCursor = BreachedSite.listAll(myReadbableDb);
+        }
         if ( ! myCursor.isClosed() ) {
             Cursor old = null;
             try {
@@ -92,5 +103,9 @@ public class BreachedSitesListFragment extends Fragment {
             Log.w(LOGTAG, "cursor closed");
             myBreachedSitesAdapter.swapCursor(null);
         }
+    }
+
+    public void setMyBreachListType(BreachListType myBreachListType) {
+        this.myBreachListType = myBreachListType;
     }
 }

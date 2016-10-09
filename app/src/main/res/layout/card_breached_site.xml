@@ -21,81 +21,13 @@
             android:textColor="@android:color/black"
             />
 
-        <!--<TextView-->
-            <!--android:id="@+id/label_domain"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:text="@string/label_domain"-->
-            <!--android:paddingRight="@dimen/text_space"-->
-            <!--android:layout_below="@+id/title"-->
-            <!--/>-->
-
-        <!--<TextView-->
-            <!--android:id="@+id/domain"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:text="@string/placeholder_domain"-->
-            <!--android:layout_below="@+id/title"-->
-            <!--android:layout_toRightOf="@id/label_domain"-->
-            <!--android:textColor="@android:color/black"-->
-            <!--/>-->
-
-        <!--<TextView-->
-            <!--android:id="@+id/label_breach_date"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:text="@string/label_breach_date"-->
-            <!--android:layout_below="@+id/domain"-->
-            <!--android:paddingRight="@dimen/text_space"-->
-            <!--/>-->
-
-        <!--<TextView-->
-            <!--android:id="@+id/breach_date"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:text="@string/placeholder_date"-->
-            <!--android:textColor="@android:color/black"-->
-            <!--android:layout_below="@+id/domain"-->
-            <!--android:layout_toRightOf="@id/label_breach_date"-->
-            <!--/>-->
-
-        <!--<TextView-->
-            <!--android:id="@+id/label_compromised_data"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:text="@string/label_compromised_data"-->
-            <!--android:layout_below="@+id/breach_date"-->
-            <!--android:paddingRight="@dimen/text_space"-->
-            <!--/>-->
-
-        <!--<TextView-->
-            <!--android:id="@+id/compromised_data"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:text="@string/placeholder_compromised_data"-->
-            <!--android:textColor="@android:color/holo_red_dark"-->
-            <!--android:layout_below="@+id/breach_date"-->
-            <!--android:layout_toRightOf="@id/label_compromised_data"-->
-            <!--/>-->
-
-        <!--<TextView-->
-            <!--android:id="@+id/description"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:text="@string/placeholder_description"-->
-            <!--android:textColor="@android:color/black"-->
-            <!--android:layout_below="@+id/compromised_data"-->
-            <!--/>-->
-
-        <!--<android.support.v7.widget.AppCompatButton-->
-            <!--android:id="@+id/acknowledge"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_below="@id/description"-->
-            <!--android:layout_alignRight="@+id/description"-->
-            <!--android:text="@string/acknowledge"-->
-            <!--style="@style/Widget.AppCompat.Button.Borderless.Colored"-->
-            <!--/>-->
+        <TextView
+            android:id="@+id/pwn_count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/sample_pwn_count"
+            android:layout_below="@+id/site_name"
+            />
 
     </RelativeLayout>
 

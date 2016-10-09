@@ -35,5 +35,8 @@ public class BreachedSitesAdapter extends RecyclerViewCursorAdapter<RecyclerView
 
         TextView nameView = (TextView) cardView.findViewById(R.id.site_name);
         nameView.setText(site.getName());
+
+        TextView pwnCountView = (TextView) cardView.findViewById(R.id.pwn_count);
+        pwnCountView.setText( String.format("%,d %s", site.getPwnCount(), getContext().getString(R.string.accounts)));
     }
 }

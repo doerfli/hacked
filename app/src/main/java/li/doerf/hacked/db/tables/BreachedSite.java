@@ -169,6 +169,32 @@ public class BreachedSite extends TableBase implements Identifiable {
                 order);
     }
 
+    public static Cursor listTop20(SQLiteDatabase db) {
+        BreachedSite item = new BreachedSite();
+        return db.query(
+                item.getTableName(),
+                item.getColumnNames(),
+                null,
+                null,
+                null,
+                null,
+                "pwn_count DESC",
+                "20");
+    }
+
+    public static Cursor listMostRecent(SQLiteDatabase db) {
+        BreachedSite item = new BreachedSite();
+        return db.query(
+                item.getTableName(),
+                item.getColumnNames(),
+                null,
+                null,
+                null,
+                null,
+                "breach_date DESC",
+                "20");
+    }
+
     public static BreachedSite findById(SQLiteDatabase db, Long anId) {
         Cursor c = null;
 
@@ -199,4 +225,6 @@ public class BreachedSite extends TableBase implements Identifiable {
         BreachedSite site = new BreachedSite();
         db.delete(site.getTableName(), null, null);
     }
+
+
 }

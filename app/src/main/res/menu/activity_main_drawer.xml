@@ -8,6 +8,9 @@
         <item
             android:id="@+id/action_top_breached_sites"
             android:title="@string/nd_top_20_breached_websites" />
+        <item
+            android:id="@+id/action_most_recent_breaches"
+            android:title="@string/nd_most_recent_breaches" />
     </group>
 
     <group android:id="@+id/menu_2">

@@ -14,6 +14,7 @@ import li.doerf.hacked.db.HackedSQLiteHelper;
 import li.doerf.hacked.db.tables.BreachedSite;
 import li.doerf.hacked.remote.BreachedAccount;
 import li.doerf.hacked.remote.HaveIBeenPwned;
+import li.doerf.hacked.ui.fragments.BreachedSitesListFragment;
 import retrofit2.Call;
 import retrofit2.Response;
 import retrofit2.Retrofit;
@@ -22,16 +23,18 @@ import retrofit2.converter.gson.GsonConverterFactory;
 /**
  * Created by moo on 09/10/16.
  */
-public class GetBreachedSitesAsyncTask extends AsyncTask {
+public class GetBreachedSitesAsyncTask extends AsyncTask<Void,Void,Void> {
     private final String LOGTAG = getClass().getSimpleName();
     private final Context myContext;
+    private final BreachedSitesListFragment myUiFragment;
 
-    public GetBreachedSitesAsyncTask(Context aContext) {
-        myContext = aContext;
+    public GetBreachedSitesAsyncTask(BreachedSitesListFragment uiFragment) {
+        myContext = uiFragment.getContext();
+        myUiFragment = uiFragment;
     }
 
     @Override
-    protected Object doInBackground(Object[] params) {
+    protected Void doInBackground(Void[] params) {
         SQLiteDatabase db = HackedSQLiteHelper.getInstance(myContext).getWritableDatabase();
 
         BreachedSite.deleteAll(db);
@@ -70,5 +73,10 @@ public class GetBreachedSitesAsyncTask extends AsyncTask {
         }
 
         return null;
+    }
+
+    @Override
+    protected void onPostExecute(Void aVoid) {
+        myUiFragment.refreshList();
     }
 }

@@ -72,4 +72,7 @@
     <string name="site_name">Site name</string>
     <string name="nd_top_20_breached_websites">Top 20 breached websites</string>
     <string name="nd_accounts">Accounts</string>
+    <string name="accounts">accounts</string>
+    <string name="sample_pwn_count">1000 accounts</string>
+    <string name="nd_most_recent_breaches">Most recent breaches</string>
 </resources>
