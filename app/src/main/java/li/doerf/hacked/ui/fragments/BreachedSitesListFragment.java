@@ -1,9 +1,11 @@
 package li.doerf.hacked.ui.fragments;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -16,6 +18,7 @@ import android.view.ViewGroup;
 import li.doerf.hacked.R;
 import li.doerf.hacked.db.HackedSQLiteHelper;
 import li.doerf.hacked.db.tables.BreachedSite;
+import li.doerf.hacked.services.haveibeenpwned.GetBreachedSitesAsyncTask;
 import li.doerf.hacked.ui.adapters.BreachedSitesAdapter;
 
 /**
@@ -61,6 +64,20 @@ public class BreachedSitesListFragment extends Fragment {
     public void onResume() {
         super.onResume();
         refreshList();
+        if ( myBreachedSitesAdapter.getCursor().getCount() == 0 || lastUpdateBeforeOneHour()) {
+            reloadBreachedSites();
+        }
+        if ( myBreachListType == null ) {
+            // TODO save state correct
+            myBreachListType = BreachListType.MostRecent;
+        }
+    }
+
+    private boolean lastUpdateBeforeOneHour() {
+        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getContext());
+        long lastsync = settings.getLong(getString(R.string.PREF_KEY_LAST_SYNC_HIBP_TOP20), 0);
+        long now = System.currentTimeMillis();
+        return lastsync < ( now - 60 * 60 * 1000 );
     }
 
     @Override
@@ -107,5 +124,10 @@ public class BreachedSitesListFragment extends Fragment {
 
     public void setMyBreachListType(BreachListType myBreachListType) {
         this.myBreachListType = myBreachListType;
+    }
+
+    public void reloadBreachedSites() {
+        // TODO execute according to settings
+        new GetBreachedSitesAsyncTask(this).execute();
     }
 }

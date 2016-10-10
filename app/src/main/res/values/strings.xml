@@ -75,4 +75,5 @@
     <string name="accounts">accounts</string>
     <string name="sample_pwn_count">1000 accounts</string>
     <string name="nd_most_recent_breaches">Most recent breaches</string>
+    <string name="PREF_KEY_LAST_SYNC_HIBP_TOP20">LAST_SYNC_HIBP_TOP20</string>
 </resources>

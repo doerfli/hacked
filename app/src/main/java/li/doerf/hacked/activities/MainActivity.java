@@ -21,7 +21,6 @@ import android.view.MenuItem;
 import android.view.View;
 
 import li.doerf.hacked.R;
-import li.doerf.hacked.services.haveibeenpwned.GetBreachedSitesAsyncTask;
 import li.doerf.hacked.ui.fragments.AccountListFragment;
 import li.doerf.hacked.ui.fragments.BreachListType;
 import li.doerf.hacked.ui.fragments.BreachedSitesListFragment;
@@ -58,7 +57,7 @@ public class MainActivity extends AppCompatActivity
                 if ( myContentFragment instanceof AccountListFragment ) {
                     ((AccountListFragment) myContentFragment).checkForBreaches(null);
                 } else if ( myContentFragment instanceof BreachedSitesListFragment ) {
-                    new GetBreachedSitesAsyncTask( (BreachedSitesListFragment) myContentFragment).execute();
+                    ((BreachedSitesListFragment)myContentFragment).reloadBreachedSites();
                 }
             }
         });

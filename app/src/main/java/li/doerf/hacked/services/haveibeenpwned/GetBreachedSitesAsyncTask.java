@@ -1,8 +1,10 @@
 package li.doerf.hacked.services.haveibeenpwned;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
+import android.preference.PreferenceManager;
 import android.util.Log;
 
 import org.joda.time.DateTime;
@@ -10,6 +12,7 @@ import org.joda.time.DateTime;
 import java.io.IOException;
 import java.util.List;
 
+import li.doerf.hacked.R;
 import li.doerf.hacked.db.HackedSQLiteHelper;
 import li.doerf.hacked.db.tables.BreachedSite;
 import li.doerf.hacked.remote.BreachedAccount;
@@ -70,6 +73,9 @@ public class GetBreachedSitesAsyncTask extends AsyncTask<Void,Void,Void> {
         } catch ( IOException e) {
             Log.e(LOGTAG, "caught IOException while getting breached sites", e);
             // TODO handle this
+        } finally {
+            SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(myContext);
+            settings.edit().putLong(myContext.getString(R.string.PREF_KEY_LAST_SYNC_HIBP_TOP20), System.currentTimeMillis()).apply();
         }
 
         return null;
