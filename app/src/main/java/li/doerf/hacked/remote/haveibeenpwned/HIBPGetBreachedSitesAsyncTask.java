@@ -1,4 +1,4 @@
-package li.doerf.hacked.services.haveibeenpwned;
+package li.doerf.hacked.remote.haveibeenpwned;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -16,8 +16,6 @@ import java.util.List;
 import li.doerf.hacked.R;
 import li.doerf.hacked.db.HackedSQLiteHelper;
 import li.doerf.hacked.db.tables.BreachedSite;
-import li.doerf.hacked.remote.BreachedAccount;
-import li.doerf.hacked.remote.HaveIBeenPwned;
 import li.doerf.hacked.ui.fragments.BreachedSitesListFragment;
 import retrofit2.Call;
 import retrofit2.Response;

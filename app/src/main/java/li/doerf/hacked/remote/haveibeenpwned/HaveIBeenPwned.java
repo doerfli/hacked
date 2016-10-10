@@ -1,4 +1,4 @@
-package li.doerf.hacked.remote;
+package li.doerf.hacked.remote.haveibeenpwned;
 
 import java.util.List;
 

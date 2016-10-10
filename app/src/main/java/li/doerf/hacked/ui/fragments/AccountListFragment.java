@@ -32,7 +32,7 @@ import li.doerf.hacked.R;
 import li.doerf.hacked.db.DatasetChangeListener;
 import li.doerf.hacked.db.HackedSQLiteHelper;
 import li.doerf.hacked.db.tables.Account;
-import li.doerf.hacked.services.haveibeenpwned.HIBPCheckAccountAsyncTask;
+import li.doerf.hacked.remote.haveibeenpwned.HIBPCheckAccountAsyncTask;
 import li.doerf.hacked.ui.AddAccountDialogFragment;
 import li.doerf.hacked.ui.adapters.AccountsAdapter;
 import li.doerf.hacked.utils.ConnectivityHelper;

@@ -1,4 +1,4 @@
-package li.doerf.hacked.services.haveibeenpwned;
+package li.doerf.hacked.remote.haveibeenpwned;
 
 import android.app.Notification;
 import android.app.PendingIntent;
@@ -29,8 +29,6 @@ import li.doerf.hacked.activities.BreachDetailsActivity;
 import li.doerf.hacked.db.HackedSQLiteHelper;
 import li.doerf.hacked.db.tables.Account;
 import li.doerf.hacked.db.tables.Breach;
-import li.doerf.hacked.remote.BreachedAccount;
-import li.doerf.hacked.remote.HaveIBeenPwned;
 import li.doerf.hacked.ui.fragments.AccountListFragment;
 import li.doerf.hacked.utils.IServiceRunningListener;
 import li.doerf.hacked.utils.NotificationHelper;

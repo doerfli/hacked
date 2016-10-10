@@ -17,7 +17,7 @@ import android.widget.Toast;
 import li.doerf.hacked.R;
 import li.doerf.hacked.db.HackedSQLiteHelper;
 import li.doerf.hacked.db.tables.Account;
-import li.doerf.hacked.services.haveibeenpwned.HIBPCheckAccountAsyncTask;
+import li.doerf.hacked.remote.haveibeenpwned.HIBPCheckAccountAsyncTask;
 import li.doerf.hacked.utils.ConnectivityHelper;
 
 /**

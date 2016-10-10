@@ -1,4 +1,4 @@
-package li.doerf.hacked.remote;
+package li.doerf.hacked.remote.haveibeenpwned;
 
 /**
  * Created by moo on 05/09/16.

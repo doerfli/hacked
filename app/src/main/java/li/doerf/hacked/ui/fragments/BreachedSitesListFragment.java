@@ -21,7 +21,7 @@ import java.io.Serializable;
 import li.doerf.hacked.R;
 import li.doerf.hacked.db.HackedSQLiteHelper;
 import li.doerf.hacked.db.tables.BreachedSite;
-import li.doerf.hacked.services.haveibeenpwned.HIBPGetBreachedSitesAsyncTask;
+import li.doerf.hacked.remote.haveibeenpwned.HIBPGetBreachedSitesAsyncTask;
 import li.doerf.hacked.ui.adapters.BreachedSitesAdapter;
 
 /**

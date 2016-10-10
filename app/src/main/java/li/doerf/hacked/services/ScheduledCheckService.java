@@ -10,7 +10,7 @@ import android.preference.PreferenceManager;
 import android.util.Log;
 
 import li.doerf.hacked.R;
-import li.doerf.hacked.services.haveibeenpwned.HIBPCheckAccountAsyncTask;
+import li.doerf.hacked.remote.haveibeenpwned.HIBPCheckAccountAsyncTask;
 import li.doerf.hacked.utils.ConnectivityHelper;
 
 /**
