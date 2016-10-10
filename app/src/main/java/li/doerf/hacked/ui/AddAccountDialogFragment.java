@@ -2,7 +2,6 @@ package li.doerf.hacked.ui;
 
 import android.app.Dialog;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -18,7 +17,7 @@ import android.widget.Toast;
 import li.doerf.hacked.R;
 import li.doerf.hacked.db.HackedSQLiteHelper;
 import li.doerf.hacked.db.tables.Account;
-import li.doerf.hacked.services.haveibeenpwned.HIBPCheckAccountService;
+import li.doerf.hacked.services.haveibeenpwned.HIBPCheckAccountAsyncTask;
 import li.doerf.hacked.utils.ConnectivityHelper;
 
 /**
@@ -90,8 +89,6 @@ public class AddAccountDialogFragment extends DialogFragment {
             return;
         }
 
-        Intent i = new Intent(getContext(), HIBPCheckAccountService.class);
-        i.putExtra( HIBPCheckAccountService.EXTRA_IDS, new long[] { account.getId()});
-        getContext().startService(i);
+        new HIBPCheckAccountAsyncTask(getContext()).execute( account.getId());
     }
 }

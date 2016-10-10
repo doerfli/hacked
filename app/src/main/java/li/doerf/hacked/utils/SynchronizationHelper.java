@@ -22,12 +22,12 @@ public class SynchronizationHelper {
         disableSync(aContext);
         if (settings.getBoolean(aContext.getString(R.string.pref_key_sync_enable), false)) {
             enableSync(aContext);
-//            enableSync(aContext, 15000); // for testing
         }
     }
 
     private static void enableSync(Context aContext) {
-        long interval = AlarmManager.INTERVAL_HALF_HOUR;
+//TODO        long interval = AlarmManager.INTERVAL_HALF_HOUR;
+        long interval = 15000;
         PendingIntent checkerService = getPendingIntent(aContext);
 
         AlarmManager alarmManager = (AlarmManager) aContext.getSystemService(Context.ALARM_SERVICE);

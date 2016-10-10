@@ -25,6 +25,5 @@ public class BootupCompleteReceiver extends BroadcastReceiver {
             Log.d(LOGTAG, "checking app status after ACTION_PACKAGE_REPLACED");
             SynchronizationHelper.scheduleSync(context);
         }
-
     }
 }

@@ -1,12 +1,12 @@
 package li.doerf.hacked.services.haveibeenpwned;
 
-import android.app.IntentService;
 import android.app.Notification;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.os.AsyncTask;
 import android.os.Handler;
 import android.os.Looper;
 import android.support.annotation.NonNull;
@@ -41,58 +41,55 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 
-public class HIBPCheckAccountService extends IntentService {
-    // extra contains the list of ids to check. if empty, check all.
-    public static final String EXTRA_IDS = "EXTRA_IDS";
+public class HIBPCheckAccountAsyncTask extends AsyncTask<Long,Void,Void> {
     private final static String NOTIFICATION_GROUP_KEY_BREACHES = "group_key_breachs";
 
     private final String LOGTAG = getClass().getSimpleName();
     private static long noReqBefore = 0;
+    private final Context myContext;
 
-    public HIBPCheckAccountService() {
-        super("HIBPCheckAccountService");
+    public HIBPCheckAccountAsyncTask(Context aContext) {
+        myContext = aContext;
     }
 
     @Override
-    protected void onHandleIntent(Intent intent) {
-        Log.d(LOGTAG, "onHandleIntent");
-
-        try {
-            ServiceRunningNotifier.notifyServiceRunningListeners(IServiceRunningListener.Event.STARTED);
-
-            long[] ids = intent.getLongArrayExtra(EXTRA_IDS);
-            doCheck(ids != null ? toLongArray(ids) : null);
-        } finally {
-            ServiceRunningNotifier.notifyServiceRunningListeners(IServiceRunningListener.Event.STOPPED);
-        }
-
+    protected void onPreExecute() {
+        super.onPreExecute();
+        ServiceRunningNotifier.notifyServiceRunningListeners(IServiceRunningListener.Event.STARTED);
     }
 
-    private Long[] toLongArray(long[] longs) {
-        Long[] r = new Long[longs.length];
-
-        for ( int i = 0; i < longs.length; i++) {
-            r[i] = longs[i];
+    @Override
+    protected Void doInBackground(Long... accountids) {
+        if ( accountids.length > 0 ) {
+            for (Long id : accountids) {
+                doCheck(id);
+            }
+        } else {
+            doCheck(null);
         }
-
-        return r;
+        return null;
     }
 
-    private void doCheck(Long[] ids) {
+    @Override
+    protected void onPostExecute(Void aVoid) {
+        super.onPostExecute(aVoid);
+        ServiceRunningNotifier.notifyServiceRunningListeners(IServiceRunningListener.Event.STOPPED);
+    }
+
+    private void doCheck(Long id) {
         Log.d(LOGTAG, "starting check for breaches");
-        Context context = getBaseContext();
-        SQLiteDatabase db = HackedSQLiteHelper.getInstance(context).getWritableDatabase();
+        SQLiteDatabase db = HackedSQLiteHelper.getInstance(myContext).getWritableDatabase();
 
         Cursor c = null;
         List<Account> newBreachedAccounts = new ArrayList<>();
 
         try {
-            if ( ids == null ) {
+            if ( id == null ) {
                 Log.d(LOGTAG, "all ids");
                 c = Account.listAll(db);
             } else {
-                Log.d(LOGTAG, "only " + ids.length + " ids");
-                c = Account.findCursorByIds(db, ids);
+                Log.d(LOGTAG, "only id " + id);
+                c = Account.findCursorById(db, id);
             }
 
             while (c.moveToNext()) {
@@ -130,7 +127,7 @@ public class HIBPCheckAccountService extends IntentService {
                     new Handler(Looper.getMainLooper()).post(new Runnable() {
                         @Override
                         public void run() {
-                            Toast.makeText(getApplicationContext(), getString(R.string.toast_error_error_during_check), Toast.LENGTH_LONG).show();
+                            Toast.makeText(myContext, myContext.getString(R.string.toast_error_error_during_check), Toast.LENGTH_LONG).show();
                         }
                     });
                     break;
@@ -233,16 +230,16 @@ public class HIBPCheckAccountService extends IntentService {
 
         for ( Account account : newBreachedAccounts ) {
             android.support.v4.app.NotificationCompat.Builder mBuilder =
-                    new NotificationCompat.Builder(getApplicationContext())
+                    new NotificationCompat.Builder(myContext)
                             .setSmallIcon(android.R.drawable.ic_dialog_info)
-                            .setContentTitle(getApplicationContext().getString(R.string.notification_new_breach_found, account.getName()))
+                            .setContentTitle(myContext.getString(R.string.notification_new_breach_found, account.getName()))
                             .setGroup(NOTIFICATION_GROUP_KEY_BREACHES);
 
-            Intent showBreachDetails = new Intent(getApplicationContext(), BreachDetailsActivity.class);
+            Intent showBreachDetails = new Intent(myContext, BreachDetailsActivity.class);
             showBreachDetails.putExtra(BreachDetailsActivity.EXTRA_ACCOUNT_ID, account.getId());
             PendingIntent resultPendingIntent =
                     PendingIntent.getActivity(
-                            getApplicationContext(),
+                            myContext,
                             0,
                             showBreachDetails,
                             PendingIntent.FLAG_ONE_SHOT
@@ -250,20 +247,20 @@ public class HIBPCheckAccountService extends IntentService {
             mBuilder.setContentIntent(resultPendingIntent);
             Notification notification = mBuilder.build();
             notification.flags |= Notification.DEFAULT_LIGHTS | Notification.FLAG_AUTO_CANCEL;
-            NotificationHelper.notify(getApplicationContext(), notification);
+            NotificationHelper.notify(myContext, notification);
         }
 
         // Create an InboxStyle notification
-        android.support.v4.app.NotificationCompat.Builder summaryNotificationBuilder = new NotificationCompat.Builder(getApplicationContext())
+        android.support.v4.app.NotificationCompat.Builder summaryNotificationBuilder = new NotificationCompat.Builder(myContext)
                 .setSmallIcon(android.R.drawable.ic_dialog_info)
                 .setStyle(new NotificationCompat.InboxStyle()
-                        .setSummaryText(getString(R.string.notifiation_summary_found_breaches, newBreachedAccounts.size())))
+                        .setSummaryText(myContext.getString(R.string.notifiation_summary_found_breaches, newBreachedAccounts.size())))
                 .setGroup(NOTIFICATION_GROUP_KEY_BREACHES)
                 .setGroupSummary(true);
 
 
         Notification notification = summaryNotificationBuilder.build();
         notification.flags |= Notification.FLAG_GROUP_SUMMARY | Notification.FLAG_AUTO_CANCEL;
-        NotificationHelper.notify(getApplicationContext(), notification);
+        NotificationHelper.notify(myContext, notification);
     }
 }

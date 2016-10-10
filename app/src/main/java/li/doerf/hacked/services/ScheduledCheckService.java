@@ -3,11 +3,14 @@ package li.doerf.hacked.services;
 import android.app.IntentService;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.AsyncTask;
+import android.os.Handler;
+import android.os.Looper;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
 import li.doerf.hacked.R;
-import li.doerf.hacked.services.haveibeenpwned.HIBPCheckAccountService;
+import li.doerf.hacked.services.haveibeenpwned.HIBPCheckAccountAsyncTask;
 import li.doerf.hacked.utils.ConnectivityHelper;
 
 /**
@@ -39,8 +42,13 @@ public class ScheduledCheckService extends IntentService {
         }
 
         Log.i(LOGTAG, "check interval expired. run check now");
-        Intent i = new Intent(this, HIBPCheckAccountService.class);
-        startService(i);
+        new Handler(Looper.getMainLooper()).post(
+                new Runnable() {
+                     @Override
+                     public void run() {
+                         new HIBPCheckAccountAsyncTask(getApplicationContext()).executeOnExecutor(AsyncTask.SERIAL_EXECUTOR);
+                     }
+                 });
 
         SharedPreferences.Editor editor = settings.edit();
         editor.putLong(getString(R.string.PREF_KEY_LAST_SYNC_TIMESTAMP), System.currentTimeMillis());
@@ -52,8 +60,8 @@ public class ScheduledCheckService extends IntentService {
 
         switch ( intervalString) {
             case "everyday":
-                return 1000 * 60 * 60 * 24;
-//                return 1000 * 30; // for testing
+//TODO                return 1000 * 60 * 60 * 24;
+                return 1000 * 30; // for testing
 
             case "everytwodays":
                 return 1000 * 60 * 60 * 24 * 2;

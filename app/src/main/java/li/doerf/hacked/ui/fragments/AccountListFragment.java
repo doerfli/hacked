@@ -1,10 +1,10 @@
 package li.doerf.hacked.ui.fragments;
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -32,7 +32,7 @@ import li.doerf.hacked.R;
 import li.doerf.hacked.db.DatasetChangeListener;
 import li.doerf.hacked.db.HackedSQLiteHelper;
 import li.doerf.hacked.db.tables.Account;
-import li.doerf.hacked.services.haveibeenpwned.HIBPCheckAccountService;
+import li.doerf.hacked.services.haveibeenpwned.HIBPCheckAccountAsyncTask;
 import li.doerf.hacked.ui.AddAccountDialogFragment;
 import li.doerf.hacked.ui.adapters.AccountsAdapter;
 import li.doerf.hacked.utils.ConnectivityHelper;
@@ -285,13 +285,7 @@ public class AccountListFragment extends Fragment implements DatasetChangeListen
             return;
         }
 
-        Intent i = new Intent(getContext(), HIBPCheckAccountService.class);
-
-        if ( account != null ) {
-            i.putExtra(HIBPCheckAccountService.EXTRA_IDS, new long[] {account.getId()});
-        }
-
-        getContext().startService(i);
+        new HIBPCheckAccountAsyncTask(getContext()).executeOnExecutor(AsyncTask.SERIAL_EXECUTOR, account != null ? account.getId() : null );
 
         mySwipeRefreshLayout.setRefreshing(true);
 
