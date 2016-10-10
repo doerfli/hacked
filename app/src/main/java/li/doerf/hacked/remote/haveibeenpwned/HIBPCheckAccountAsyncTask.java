@@ -16,6 +16,7 @@ import android.widget.Toast;
 
 import com.google.common.base.Function;
 import com.google.common.collect.FluentIterable;
+import com.google.common.collect.Lists;
 
 import org.joda.time.DateTime;
 
@@ -39,7 +40,7 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 
-public class HIBPCheckAccountAsyncTask extends AsyncTask<Long,Void,Void> {
+public class HIBPCheckAccountAsyncTask extends AsyncTask<Long,Account,List<Account>> {
     private final static String NOTIFICATION_GROUP_KEY_BREACHES = "group_key_breachs";
 
     private final String LOGTAG = getClass().getSimpleName();
@@ -57,24 +58,39 @@ public class HIBPCheckAccountAsyncTask extends AsyncTask<Long,Void,Void> {
     }
 
     @Override
-    protected Void doInBackground(Long... accountids) {
+    protected List<Account> doInBackground(Long... accountids) {
+        List<Account> result = Lists.newArrayList();
+
         if ( accountids.length > 0 ) {
             for (Long id : accountids) {
-                doCheck(id);
+                result.addAll(doCheck(id));
             }
         } else {
-            doCheck(null);
+            result.addAll(doCheck(null));
         }
-        return null;
+
+        return result;
     }
 
     @Override
-    protected void onPostExecute(Void aVoid) {
-        super.onPostExecute(aVoid);
-        ServiceRunningNotifier.notifyServiceRunningListeners(IServiceRunningListener.Event.STOPPED);
+    protected void onProgressUpdate(Account... accounts) {
+        super.onProgressUpdate(accounts);
+        // db.endTransaction();
+        if ( accounts.length > 0 ) {
+            accounts[0].notifyObservers();
+        }
     }
 
-    private void doCheck(Long id) {
+    @Override
+    protected void onPostExecute(List<Account> accounts) {
+        super.onPostExecute(accounts);
+        ServiceRunningNotifier.notifyServiceRunningListeners(IServiceRunningListener.Event.STOPPED);
+        if ( accounts.size() > 0 ) {
+            showNotification(accounts);
+        }
+    }
+
+    private List<Account> doCheck(Long id) {
         Log.d(LOGTAG, "starting check for breaches");
         SQLiteDatabase db = HackedSQLiteHelper.getInstance(myContext).getWritableDatabase();
 
@@ -130,19 +146,15 @@ public class HIBPCheckAccountAsyncTask extends AsyncTask<Long,Void,Void> {
                     });
                     break;
                 } finally {
-                    // db.endTransaction();
-                    account.notifyObservers();
+                    publishProgress();
                 }
-            }
-
-            if ( newBreachedAccounts.size() > 0 ) {
-                showNotification(newBreachedAccounts);
             }
         } finally {
             Log.d(LOGTAG, "finished checking for breaches");
             if ( c != null ) c.close();
         }
 
+        return newBreachedAccounts;
     }
 
     private boolean processBreachedAccounts(SQLiteDatabase db, Account account, List<BreachedAccount> breachedAccounts) {
