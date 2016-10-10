@@ -1,11 +1,7 @@
 package li.doerf.hacked.activities;
 
-import android.animation.AnimatorInflater;
-import android.animation.ObjectAnimator;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -15,7 +11,6 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -24,18 +19,12 @@ import li.doerf.hacked.R;
 import li.doerf.hacked.ui.fragments.AccountListFragment;
 import li.doerf.hacked.ui.fragments.BreachListType;
 import li.doerf.hacked.ui.fragments.BreachedSitesListFragment;
-import li.doerf.hacked.utils.IServiceRunningListener;
-import li.doerf.hacked.utils.ServiceRunningNotifier;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, IServiceRunningListener {
+        implements NavigationView.OnNavigationItemSelectedListener {
     private final String LOGTAG = getClass().getSimpleName();
 
     private Fragment myContentFragment;
-    private FloatingActionButton myFloatingActionCheckButton;
-    private ObjectAnimator myFabAnimation;
-    private static boolean myIsActive;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,8 +39,8 @@ public class MainActivity extends AppCompatActivity
                 .replace(R.id.fragment_container, myContentFragment)
                 .commit();
 
-        myFloatingActionCheckButton = (FloatingActionButton) findViewById(R.id.fab);
-        myFloatingActionCheckButton.setOnClickListener(new View.OnClickListener() {
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if ( myContentFragment instanceof AccountListFragment ) {
@@ -72,25 +61,20 @@ public class MainActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        ServiceRunningNotifier.registerServiceRunningListener(this);
-        myIsActive = true;
-    }
+//    @Override
+//    protected void onResume() {
+//        super.onResume();
+//    }
 
-    @Override
-    protected void onPause() {
-        ServiceRunningNotifier.unregisterServiceRunningListener(this);
-        myIsActive = false;
-        super.onPause();
-    }
+//    @Override
+//    protected void onPause() {
+//        super.onPause();
+//    }
 
-    @Override
-    public void onDestroy() {
-        myIsActive = false; // just to be sure
-        super.onDestroy();
-    }
+//    @Override
+//    public void onDestroy() {
+//        super.onDestroy();
+//    }
 
     @Override
     public void onBackPressed() {
@@ -109,15 +93,15 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        return super.onOptionsItemSelected(item);
-    }
+//    @Override
+//    public boolean onOptionsItemSelected(MenuItem item) {
+//        // Handle action bar item clicks here. The action bar will
+//        // automatically handle clicks on the Home/Up button, so long
+//        // as you specify a parent activity in AndroidManifest.xml.
+//        int id = item.getItemId();
+//
+//        return super.onOptionsItemSelected(item);
+//    }
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -155,51 +139,4 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
-    public static boolean isActive() {
-        return myIsActive;
-    }
-
-    @Override
-    public void notifyListener(final Event anEvent) {
-        new Handler(Looper.getMainLooper()).post(
-                new Runnable() {
-                    @Override
-                    public void run() {
-                        if ( myContentFragment instanceof AccountListFragment ) {
-                            AccountListFragment fragment = (AccountListFragment) myContentFragment;
-                            switch (anEvent) {
-                                case STARTED:
-                                    fragment.setSyncActive(true);
-
-                                    if (myFabAnimation == null) {
-                                        Log.d(LOGTAG, "animation starting");
-                                        myFabAnimation = (ObjectAnimator) AnimatorInflater.loadAnimator(getApplicationContext(),
-                                                R.animator.rotate_right_repeated);
-                                        myFabAnimation.setTarget(myFloatingActionCheckButton);
-                                        myFabAnimation.start();
-                                    } else {
-                                        Log.d(LOGTAG, "animation already active");
-                                    }
-                                    break;
-
-                                case STOPPED:
-                                    fragment.refreshComplete();
-                                    fragment.setSyncActive(false);
-
-                                    if (myFabAnimation != null) {
-                                        Log.d(LOGTAG, "animation stopping");
-                                        myFabAnimation.removeAllListeners();
-                                        myFabAnimation.end();
-                                        myFabAnimation.cancel();
-                                        myFabAnimation = null;
-                                        myFloatingActionCheckButton.clearAnimation();
-                                        myFloatingActionCheckButton.setRotation(0);
-                                    }
-                                    break;
-                            }
-                        }
-                    }
-                }
-        );
-    }
 }

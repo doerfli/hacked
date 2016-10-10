@@ -6,6 +6,8 @@ import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
@@ -34,18 +36,20 @@ import li.doerf.hacked.services.haveibeenpwned.HIBPCheckAccountService;
 import li.doerf.hacked.ui.AddAccountDialogFragment;
 import li.doerf.hacked.ui.adapters.AccountsAdapter;
 import li.doerf.hacked.utils.ConnectivityHelper;
+import li.doerf.hacked.utils.IServiceRunningListener;
+import li.doerf.hacked.utils.ServiceRunningNotifier;
 import li.doerf.hacked.utils.SynchronizationHelper;
 
 /**
  * Created by moo on 05/10/16.
  */
-public class AccountListFragment extends Fragment implements DatasetChangeListener {
+public class AccountListFragment extends Fragment implements DatasetChangeListener, IServiceRunningListener {
     private final String LOGTAG = getClass().getSimpleName();
     private SQLiteDatabase myReadbableDb;
     private AccountsAdapter myAccountsAdapter;
     private Cursor myCursor;
     private View myFragmentRootView;
-    private boolean mySyncActive;
+    private static boolean mySyncActive;
     private SwipeRefreshLayout mySwipeRefreshLayout;
 
     public static AccountListFragment create() {
@@ -95,11 +99,13 @@ public class AccountListFragment extends Fragment implements DatasetChangeListen
         super.onResume();
         refreshList();
         Account.registerDatasetChangedListener(this, Account.class);
+        ServiceRunningNotifier.registerServiceRunningListener(this);
     }
 
     @Override
     public void onPause() {
         Account.unregisterDatasetChangedListener(this, Account.class);
+        ServiceRunningNotifier.unregisterServiceRunningListener(this);
         super.onPause();
     }
 
@@ -296,14 +302,35 @@ public class AccountListFragment extends Fragment implements DatasetChangeListen
         }
     }
 
-    public void setSyncActive(boolean active) {
-        mySyncActive = active;
-    }
-
     /**
      * Indicate that the refresh is complete to stop refresh animation.
      */
-    public void refreshComplete() {
+    private void refreshComplete() {
         mySwipeRefreshLayout.setRefreshing(false);
+    }
+
+    @Override
+    public void notifyListener(final Event anEvent) {
+        new Handler(Looper.getMainLooper()).post(
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        switch (anEvent) {
+                            case STARTED:
+                                mySyncActive = true;
+                            break;
+
+                            case STOPPED:
+                                mySyncActive = false;
+                                refreshComplete();
+                            break;
+                        }
+                    }
+                }
+        );
+    }
+
+    public static boolean isActive() {
+        return mySyncActive;
     }
 }

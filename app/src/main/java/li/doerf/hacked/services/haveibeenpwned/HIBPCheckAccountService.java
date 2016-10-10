@@ -26,12 +26,12 @@ import java.util.Random;
 
 import li.doerf.hacked.R;
 import li.doerf.hacked.activities.BreachDetailsActivity;
-import li.doerf.hacked.activities.MainActivity;
 import li.doerf.hacked.db.HackedSQLiteHelper;
 import li.doerf.hacked.db.tables.Account;
 import li.doerf.hacked.db.tables.Breach;
 import li.doerf.hacked.remote.BreachedAccount;
 import li.doerf.hacked.remote.HaveIBeenPwned;
+import li.doerf.hacked.ui.fragments.AccountListFragment;
 import li.doerf.hacked.utils.IServiceRunningListener;
 import li.doerf.hacked.utils.NotificationHelper;
 import li.doerf.hacked.utils.ServiceRunningNotifier;
@@ -219,8 +219,8 @@ public class HIBPCheckAccountService extends IntentService {
     }
 
     private void showNotification(List<Account> newBreachedAccounts) {
-        if ( MainActivity.isActive() ) {
-            Log.d(LOGTAG, "MainActivity active, no notification shown");
+        if ( AccountListFragment.isActive() ) {
+            Log.d(LOGTAG, "AccountListFragment active, no notification shown");
             return;
         }
 
