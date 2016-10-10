@@ -73,7 +73,7 @@ public class HIBPGetBreachedSitesAsyncTask extends AsyncTask<Void,Void,Void> {
                 );
                 site.insert(db);
 
-                if ( i++ % 5 == 0 ) {
+                if ( i++ % 10 == 0 ) {
                     publishProgress();
                 }
             }
@@ -98,5 +98,6 @@ public class HIBPGetBreachedSitesAsyncTask extends AsyncTask<Void,Void,Void> {
     @Override
     protected void onPostExecute(Void aVoid) {
         myUiFragment.refreshList();
+        myUiFragment.refreshComplete();
     }
 }

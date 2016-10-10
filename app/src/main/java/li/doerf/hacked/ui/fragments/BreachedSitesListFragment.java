@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -33,6 +34,7 @@ public class BreachedSitesListFragment extends Fragment {
     private BreachedSitesAdapter myBreachedSitesAdapter;
     private Cursor myCursor;
     private BreachListType myBreachListType;
+    private SwipeRefreshLayout mySwipeRefreshLayout;
 
     public static BreachedSitesListFragment create(BreachListType aType) {
         BreachedSitesListFragment fragment = new BreachedSitesListFragment();
@@ -58,6 +60,14 @@ public class BreachedSitesListFragment extends Fragment {
         LinearLayoutManager lm = new LinearLayoutManager(getContext());
         accountsList.setLayoutManager(lm);
         accountsList.setAdapter(myBreachedSitesAdapter);
+
+        mySwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_refresh_layout);
+        mySwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                reloadBreachedSites();
+            }
+        });
 
         return view;
     }
@@ -144,6 +154,16 @@ public class BreachedSitesListFragment extends Fragment {
     }
 
     public void reloadBreachedSites() {
+        if ( ! mySwipeRefreshLayout.isRefreshing() ) {
+            mySwipeRefreshLayout.setRefreshing(true);
+        }
         new HIBPGetBreachedSitesAsyncTask(this).execute();
+    }
+
+    /**
+     * Indicate that the refresh is complete to stop refresh animation.
+     */
+    public void refreshComplete() {
+        mySwipeRefreshLayout.setRefreshing(false);
     }
 }
