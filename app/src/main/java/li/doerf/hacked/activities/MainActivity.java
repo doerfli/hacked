@@ -47,7 +47,7 @@ public class MainActivity extends AppCompatActivity
         myContentFragment = AccountListFragment.create();
         getSupportFragmentManager()
                 .beginTransaction()
-                .add(R.id.fragment_container, myContentFragment)
+                .replace(R.id.fragment_container, myContentFragment)
                 .commit();
 
         myFloatingActionCheckButton = (FloatingActionButton) findViewById(R.id.fab);
@@ -183,6 +183,7 @@ public class MainActivity extends AppCompatActivity
                                     break;
 
                                 case STOPPED:
+                                    fragment.refreshComplete();
                                     fragment.setSyncActive(false);
 
                                     if (myFabAnimation != null) {

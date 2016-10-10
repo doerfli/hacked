@@ -10,6 +10,7 @@ import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -45,6 +46,7 @@ public class AccountListFragment extends Fragment implements DatasetChangeListen
     private Cursor myCursor;
     private View myFragmentRootView;
     private boolean mySyncActive;
+    private SwipeRefreshLayout mySwipeRefreshLayout;
 
     public static AccountListFragment create() {
         return new AccountListFragment();
@@ -72,6 +74,14 @@ public class AccountListFragment extends Fragment implements DatasetChangeListen
         LinearLayoutManager lm = new LinearLayoutManager(getContext());
         accountsList.setLayoutManager(lm);
         accountsList.setAdapter(myAccountsAdapter);
+
+        mySwipeRefreshLayout = (SwipeRefreshLayout) myFragmentRootView.findViewById(R.id.swipe_refresh_layout);
+        mySwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                checkForBreaches(null);
+            }
+        });
 
         showInitialSetupAccount(myFragmentRootView);
         showInitialSetupCheck(myFragmentRootView);
@@ -277,6 +287,8 @@ public class AccountListFragment extends Fragment implements DatasetChangeListen
 
         getContext().startService(i);
 
+        mySwipeRefreshLayout.setRefreshing(true);
+
         if ( account == null ) { // only show this message when checking for more then one account
             int expectedDuration = (int) Math.ceil(myAccountsAdapter.getItemCount() * 2.5);
             Snackbar.make(myFragmentRootView, getString(R.string.snackbar_checking_account, expectedDuration), Snackbar.LENGTH_LONG)
@@ -288,4 +300,10 @@ public class AccountListFragment extends Fragment implements DatasetChangeListen
         mySyncActive = active;
     }
 
+    /**
+     * Indicate that the refresh is complete to stop refresh animation.
+     */
+    public void refreshComplete() {
+        mySwipeRefreshLayout.setRefreshing(false);
+    }
 }
