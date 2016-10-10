@@ -27,12 +27,12 @@ import retrofit2.converter.gson.GsonConverterFactory;
 /**
  * Created by moo on 09/10/16.
  */
-public class GetBreachedSitesAsyncTask extends AsyncTask<Void,Void,Void> {
+public class HIBPGetBreachedSitesAsyncTask extends AsyncTask<Void,Void,Void> {
     private final String LOGTAG = getClass().getSimpleName();
     private final Context myContext;
     private final BreachedSitesListFragment myUiFragment;
 
-    public GetBreachedSitesAsyncTask(BreachedSitesListFragment uiFragment) {
+    public HIBPGetBreachedSitesAsyncTask(BreachedSitesListFragment uiFragment) {
         myContext = uiFragment.getContext();
         myUiFragment = uiFragment;
     }

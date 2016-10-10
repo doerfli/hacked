@@ -7,6 +7,7 @@ import android.preference.PreferenceManager;
 import android.util.Log;
 
 import li.doerf.hacked.R;
+import li.doerf.hacked.services.haveibeenpwned.HIBPCheckAccountService;
 import li.doerf.hacked.utils.ConnectivityHelper;
 
 /**
@@ -38,7 +39,7 @@ public class ScheduledCheckService extends IntentService {
         }
 
         Log.i(LOGTAG, "check interval expired. run check now");
-        Intent i = new Intent(this, HaveIBeenPwnedCheckService.class);
+        Intent i = new Intent(this, HIBPCheckAccountService.class);
         startService(i);
 
         SharedPreferences.Editor editor = settings.edit();

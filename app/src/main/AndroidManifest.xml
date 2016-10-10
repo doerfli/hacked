@@ -33,7 +33,7 @@
             android:parentActivityName=".activities.MainActivity" />
 
         <!-- run in separate process to not block animation -->
-        <service android:name=".services.HaveIBeenPwnedCheckService" />
+        <service android:name=".services.haveibeenpwned.HIBPCheckAccountService" />
         <service android:name=".services.ScheduledCheckService" />
 
         <receiver android:name=".receiver.BootupCompleteReceiver">

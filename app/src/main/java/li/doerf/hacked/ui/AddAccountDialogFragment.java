@@ -18,7 +18,7 @@ import android.widget.Toast;
 import li.doerf.hacked.R;
 import li.doerf.hacked.db.HackedSQLiteHelper;
 import li.doerf.hacked.db.tables.Account;
-import li.doerf.hacked.services.HaveIBeenPwnedCheckService;
+import li.doerf.hacked.services.haveibeenpwned.HIBPCheckAccountService;
 import li.doerf.hacked.utils.ConnectivityHelper;
 
 /**
@@ -90,8 +90,8 @@ public class AddAccountDialogFragment extends DialogFragment {
             return;
         }
 
-        Intent i = new Intent(getContext(), HaveIBeenPwnedCheckService.class);
-        i.putExtra( HaveIBeenPwnedCheckService.EXTRA_IDS, new long[] { account.getId()});
+        Intent i = new Intent(getContext(), HIBPCheckAccountService.class);
+        i.putExtra( HIBPCheckAccountService.EXTRA_IDS, new long[] { account.getId()});
         getContext().startService(i);
     }
 }

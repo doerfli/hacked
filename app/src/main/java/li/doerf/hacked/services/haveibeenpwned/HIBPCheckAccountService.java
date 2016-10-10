@@ -1,4 +1,4 @@
-package li.doerf.hacked.services;
+package li.doerf.hacked.services.haveibeenpwned;
 
 import android.app.IntentService;
 import android.app.Notification;
@@ -41,7 +41,7 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 
-public class HaveIBeenPwnedCheckService extends IntentService {
+public class HIBPCheckAccountService extends IntentService {
     // extra contains the list of ids to check. if empty, check all.
     public static final String EXTRA_IDS = "EXTRA_IDS";
     private final static String NOTIFICATION_GROUP_KEY_BREACHES = "group_key_breachs";
@@ -49,8 +49,8 @@ public class HaveIBeenPwnedCheckService extends IntentService {
     private final String LOGTAG = getClass().getSimpleName();
     private static long noReqBefore = 0;
 
-    public HaveIBeenPwnedCheckService() {
-        super("HaveIBeenPwnedCheckService");
+    public HIBPCheckAccountService() {
+        super("HIBPCheckAccountService");
     }
 
     @Override

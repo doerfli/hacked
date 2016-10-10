@@ -20,7 +20,7 @@ import java.io.Serializable;
 import li.doerf.hacked.R;
 import li.doerf.hacked.db.HackedSQLiteHelper;
 import li.doerf.hacked.db.tables.BreachedSite;
-import li.doerf.hacked.services.haveibeenpwned.GetBreachedSitesAsyncTask;
+import li.doerf.hacked.services.haveibeenpwned.HIBPGetBreachedSitesAsyncTask;
 import li.doerf.hacked.ui.adapters.BreachedSitesAdapter;
 
 /**
@@ -144,6 +144,6 @@ public class BreachedSitesListFragment extends Fragment {
     }
 
     public void reloadBreachedSites() {
-        new GetBreachedSitesAsyncTask(this).execute();
+        new HIBPGetBreachedSitesAsyncTask(this).execute();
     }
 }
