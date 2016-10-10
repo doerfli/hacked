@@ -15,6 +15,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.io.Serializable;
+
 import li.doerf.hacked.R;
 import li.doerf.hacked.db.HackedSQLiteHelper;
 import li.doerf.hacked.db.tables.BreachedSite;
@@ -25,6 +27,7 @@ import li.doerf.hacked.ui.adapters.BreachedSitesAdapter;
  * Created by moo on 09/10/16.
  */
 public class BreachedSitesListFragment extends Fragment {
+    private static final String KEY_BREACH_LIST_TYPE = "BreachListType";
     private final String LOGTAG = getClass().getSimpleName();
     private SQLiteDatabase myReadbableDb;
     private BreachedSitesAdapter myBreachedSitesAdapter;
@@ -61,6 +64,17 @@ public class BreachedSitesListFragment extends Fragment {
     }
 
     @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        if ( savedInstanceState != null ) {
+            Serializable blt = savedInstanceState.getSerializable(KEY_BREACH_LIST_TYPE);
+            if ( blt != null ) {
+                myBreachListType = (BreachListType) blt;
+            }
+        }
+    }
+
+    @Override
     public void onResume() {
         super.onResume();
         refreshList();
@@ -68,9 +82,14 @@ public class BreachedSitesListFragment extends Fragment {
             reloadBreachedSites();
         }
         if ( myBreachListType == null ) {
-            // TODO save state correct
             myBreachListType = BreachListType.MostRecent;
         }
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putSerializable(KEY_BREACH_LIST_TYPE, myBreachListType);
     }
 
     private boolean lastUpdateBeforeOneHour() {
@@ -89,7 +108,6 @@ public class BreachedSitesListFragment extends Fragment {
 
         super.onDetach();
     }
-
 
     public void refreshList() {
         Log.d(LOGTAG, "refreshing list");

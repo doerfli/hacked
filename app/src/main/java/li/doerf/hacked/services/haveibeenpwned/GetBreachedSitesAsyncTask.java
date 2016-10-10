@@ -6,6 +6,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
 import android.preference.PreferenceManager;
 import android.util.Log;
+import android.widget.Toast;
 
 import org.joda.time.DateTime;
 
@@ -72,7 +73,7 @@ public class GetBreachedSitesAsyncTask extends AsyncTask<Void,Void,Void> {
 
         } catch ( IOException e) {
             Log.e(LOGTAG, "caught IOException while getting breached sites", e);
-            // TODO handle this
+            Toast.makeText(myContext, myContext.getString(R.string.error_download_data), Toast.LENGTH_LONG).show();
         } finally {
             SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(myContext);
             settings.edit().putLong(myContext.getString(R.string.PREF_KEY_LAST_SYNC_HIBP_TOP20), System.currentTimeMillis()).apply();
