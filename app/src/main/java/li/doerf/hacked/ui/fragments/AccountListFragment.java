@@ -86,6 +86,11 @@ public class AccountListFragment extends Fragment implements DatasetChangeListen
                 checkForBreaches(null);
             }
         });
+        mySwipeRefreshLayout.setColorSchemeResources(
+                R.color.refresh_progress_1,
+                R.color.refresh_progress_2,
+                R.color.refresh_progress_3,
+                R.color.refresh_progress_4);
 
         showInitialSetupAccount(myFragmentRootView);
         showInitialSetupCheck(myFragmentRootView);

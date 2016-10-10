@@ -3,6 +3,10 @@
     <color name="colorPrimary">#388E3C</color>
     <color name="colorPrimaryDark">#1B5E20</color>
     <color name="colorAccent">#FF9100</color>
+    <color name="refresh_progress_1">@color/colorPrimary</color>
+    <color name="refresh_progress_2">@color/colorAccent</color>
+    <color name="refresh_progress_3">@android:color/holo_purple</color>
+    <color name="refresh_progress_4">@android:color/holo_blue_light</color>
     <color name="account_status_ok">#4CAF50</color>
     <color name="account_status_only_acknowledged">#FFEB3B</color>
     <color name="account_status_breached">#F44336</color>
