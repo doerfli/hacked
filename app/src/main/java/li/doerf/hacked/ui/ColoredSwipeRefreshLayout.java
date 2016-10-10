@@ -7,10 +7,9 @@ import android.util.AttributeSet;
 import li.doerf.hacked.R;
 
 /**
- * Created by moo on 10/10/16.
+ * SwipeRefreshLayout with custom coloring.
  */
 public class ColoredSwipeRefreshLayout extends SwipeRefreshLayout {
-    private final String LOGTAG = getClass().getSimpleName();
 
     public ColoredSwipeRefreshLayout(Context context) {
         super(context);
