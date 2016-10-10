@@ -49,6 +49,9 @@ public class HIBPGetBreachedSitesAsyncTask extends AsyncTask<Void,Void,Void> {
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 
+        long i = 0;
+        publishProgress();
+
         try {
             HaveIBeenPwned service = retrofit.create(HaveIBeenPwned.class);
             Call<List<BreachedAccount>> breachedSitesCall = service.getBreachedSites();
@@ -69,6 +72,10 @@ public class HIBPGetBreachedSitesAsyncTask extends AsyncTask<Void,Void,Void> {
                         ba.getIsVerified()
                 );
                 site.insert(db);
+
+                if ( i++ % 5 == 0 ) {
+                    publishProgress();
+                }
             }
 
         } catch ( IOException e) {
@@ -80,6 +87,12 @@ public class HIBPGetBreachedSitesAsyncTask extends AsyncTask<Void,Void,Void> {
         }
 
         return null;
+    }
+
+    @Override
+    protected void onProgressUpdate(Void... values) {
+        super.onProgressUpdate(values);
+        myUiFragment.refreshList();
     }
 
     @Override
