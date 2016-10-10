@@ -31,7 +31,6 @@ public class BreachedSitesListFragment extends Fragment {
     private final String LOGTAG = getClass().getSimpleName();
     private SQLiteDatabase myReadbableDb;
     private BreachedSitesAdapter myBreachedSitesAdapter;
-    private View myFragmentRootView;
     private Cursor myCursor;
     private BreachListType myBreachListType;
 
@@ -52,15 +51,15 @@ public class BreachedSitesListFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        myFragmentRootView =  inflater.inflate(R.layout.fragment_breached_sites_list, container, false);
+        View view = inflater.inflate(R.layout.fragment_breached_sites_list, container, false);
 
-        RecyclerView accountsList = (RecyclerView) myFragmentRootView.findViewById(R.id.breached_sites_list);
+        RecyclerView accountsList = (RecyclerView) view.findViewById(R.id.breached_sites_list);
         accountsList.setHasFixedSize(true);
         LinearLayoutManager lm = new LinearLayoutManager(getContext());
         accountsList.setLayoutManager(lm);
         accountsList.setAdapter(myBreachedSitesAdapter);
 
-        return myFragmentRootView;
+        return view;
     }
 
     @Override
@@ -145,7 +144,6 @@ public class BreachedSitesListFragment extends Fragment {
     }
 
     public void reloadBreachedSites() {
-        // TODO execute according to settings
         new GetBreachedSitesAsyncTask(this).execute();
     }
 }

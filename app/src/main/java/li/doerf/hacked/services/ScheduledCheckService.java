@@ -33,9 +33,7 @@ public class ScheduledCheckService extends IntentService {
             return;
         }
 
-        boolean runCheckOnCellular = settings.getBoolean(getString(R.string.pref_key_sync_via_cellular), false);
-        if ( ! runCheckOnCellular && ! ConnectivityHelper.isWifiNetwork( getApplicationContext())) {
-            Log.d(LOGTAG, "no wifi available. try next time");
+        if ( ! ConnectivityHelper.isAllowedToAccessNetwork( getApplicationContext()) ) {
             return;
         }
 

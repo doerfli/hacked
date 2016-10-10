@@ -1,14 +1,19 @@
 package li.doerf.hacked.utils;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.preference.PreferenceManager;
+import android.util.Log;
+
+import li.doerf.hacked.R;
 
 /**
  * Created by moo on 09/09/16.
  */
 public class ConnectivityHelper {
-    private final String LOGTAG = getClass().getSimpleName();
+    private static final String LOGTAG = "ConnectivityHelper";
 
     public static boolean isConnected( Context aContext) {
         ConnectivityManager cm =
@@ -29,5 +34,22 @@ public class ConnectivityHelper {
         }
 
         return activeNetwork.getType() == ConnectivityManager.TYPE_WIFI;
+    }
+
+    /**
+     * Checks if its currently allowed to access the network according to the settings.
+     *
+     * @param aContext
+     *
+     * @return
+     */
+    public static boolean isAllowedToAccessNetwork(Context aContext) {
+        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(aContext);
+        boolean runCheckOnCellular = settings.getBoolean(aContext.getString(R.string.pref_key_sync_via_cellular), false);
+        if ( ! runCheckOnCellular && ! ConnectivityHelper.isWifiNetwork( aContext)) {
+            Log.d(LOGTAG, "no wifi available. try next time");
+            return false;
+        }
+        return true;
     }
 }
