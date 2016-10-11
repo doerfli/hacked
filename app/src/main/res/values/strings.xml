@@ -32,7 +32,7 @@
     <string name="acknowledge">Acknowledge</string>
     <string name="breach_acknowledged">Breach acknowledged</string>
     <string name="pref_initial_help_dismissed">PREF_INITIAL_HELP_DISMISSED</string>
-    <string name="pref_title_syncronization">Synchronization</string>
+    <string name="pref_title_synchronization">Synchronization</string>
     <string name="pref_key_sync_enable">ENABLE_BACKGROUND_SYNC</string>
     <string name="pref_title_sync_enable">Enable</string>
     <string name="pref_summary_sync_enable">Enables automatic checking for breaches in regular intervals</string>
@@ -63,7 +63,7 @@
     <string name="toast_account_exists">This account already exists. Please enter a different name.</string>
     <string name="notification_new_breach_found">Breached: %1$s</string>
     <string name="toast_check_in_progress">A check is already in progress. Please try again later.</string>
-    <string name="notifiation_summary_found_breaches">%1$d accounts breached</string>
+    <string name="notification_summary_found_breaches">Found %1$d account breaches</string>
     <string name="toast_enter_valid_name">Please enter a valid account name.</string>
     <string name="title_activity_main">MainActivity</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>

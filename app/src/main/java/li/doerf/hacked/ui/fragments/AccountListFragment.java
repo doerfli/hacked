@@ -49,7 +49,8 @@ public class AccountListFragment extends Fragment implements DatasetChangeListen
     private AccountsAdapter myAccountsAdapter;
     private Cursor myCursor;
     private View myFragmentRootView;
-    private static boolean mySyncActive;
+    private static boolean mySyncActive = false;
+    private static boolean isFragmentShown = false;
     private SwipeRefreshLayout mySwipeRefreshLayout;
 
     public static AccountListFragment create() {
@@ -100,12 +101,14 @@ public class AccountListFragment extends Fragment implements DatasetChangeListen
         refreshList();
         Account.registerDatasetChangedListener(this, Account.class);
         ServiceRunningNotifier.registerServiceRunningListener(this);
+        isFragmentShown = true;
     }
 
     @Override
     public void onPause() {
         Account.unregisterDatasetChangedListener(this, Account.class);
         ServiceRunningNotifier.unregisterServiceRunningListener(this);
+        isFragmentShown = false;
         super.onPause();
     }
 
@@ -324,7 +327,7 @@ public class AccountListFragment extends Fragment implements DatasetChangeListen
         );
     }
 
-    public static boolean isActive() {
-        return mySyncActive;
+    public static boolean isFragmentShown() {
+        return isFragmentShown;
     }
 }

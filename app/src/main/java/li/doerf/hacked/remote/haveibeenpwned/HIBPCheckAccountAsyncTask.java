@@ -28,7 +28,7 @@ import java.util.List;
 import java.util.Random;
 
 import li.doerf.hacked.R;
-import li.doerf.hacked.activities.BreachDetailsActivity;
+import li.doerf.hacked.activities.MainActivity;
 import li.doerf.hacked.db.HackedSQLiteHelper;
 import li.doerf.hacked.db.tables.Account;
 import li.doerf.hacked.db.tables.Breach;
@@ -228,12 +228,15 @@ public class HIBPCheckAccountAsyncTask extends AsyncTask<Long,Account,List<Accou
     }
 
     private void showNotification(List<Account> newBreachedAccounts) {
-        if ( AccountListFragment.isActive() ) {
+        if ( AccountListFragment.isFragmentShown() ) {
             Log.d(LOGTAG, "AccountListFragment active, no notification shown");
             return;
         }
 
+        List<String> titles = Lists.newArrayList();
+        List<String> contents = Lists.newArrayList();
 
+        // one notification per breached account
         for ( Account account : newBreachedAccounts ) {
             List<Breach> breaches = Breach.findAllByAccount(HackedSQLiteHelper.getInstance(myContext).getReadableDatabase(), account);
             List<String> names = FluentIterable.from(breaches).filter(new Predicate<Breach>() {
@@ -249,36 +252,47 @@ public class HIBPCheckAccountAsyncTask extends AsyncTask<Long,Account,List<Accou
             }).toList();
 
 
+            String title = account.getName();
+            String text = myContext.getString(R.string.affected_sites, Joiner.on(", ").join(names));
             android.support.v4.app.NotificationCompat.Builder mBuilder =
                     new NotificationCompat.Builder(myContext)
                             .setSmallIcon(android.R.drawable.ic_dialog_info)
-                            .setContentTitle(myContext.getString(R.string.notification_new_breach_found, account.getName()))
-                            .setContentText(myContext.getString(R.string.affected_sites, Joiner.on(", ").join(names)))
+                            .setContentTitle(title)
+                            .setContentText(text)
                             .setGroup(NOTIFICATION_GROUP_KEY_BREACHES);
 
-            Intent showBreachDetails = new Intent(myContext, BreachDetailsActivity.class);
-            showBreachDetails.putExtra(BreachDetailsActivity.EXTRA_ACCOUNT_ID, account.getId());
-            PendingIntent resultPendingIntent =
-                    PendingIntent.getActivity(
-                            myContext,
-                            0,
-                            showBreachDetails,
-                            PendingIntent.FLAG_ONE_SHOT
-                    );
-            mBuilder.setContentIntent(resultPendingIntent);
+            titles.add(title);
+            contents.add(text);
+
             Notification notification = mBuilder.build();
             notification.flags |= Notification.DEFAULT_LIGHTS | Notification.FLAG_AUTO_CANCEL;
             NotificationHelper.notify(myContext, notification);
         }
 
-        // Create an InboxStyle notification
+        // InboxStyle summary notification
+        android.support.v4.app.NotificationCompat.InboxStyle inboxStyle = new NotificationCompat.InboxStyle()
+                .setBigContentTitle(myContext.getString(R.string.notification_summary_found_breaches, newBreachedAccounts.size()))
+                .setSummaryText("Click to open Hacked?");
+
+        for ( int i = 0; i < titles.size(); i++) {
+            inboxStyle.addLine(titles.get(i) + " - " + contents.get(i));
+        }
+
         android.support.v4.app.NotificationCompat.Builder summaryNotificationBuilder = new NotificationCompat.Builder(myContext)
                 .setSmallIcon(android.R.drawable.ic_dialog_info)
-                .setStyle(new NotificationCompat.InboxStyle()
-                        .setSummaryText(myContext.getString(R.string.notifiation_summary_found_breaches, newBreachedAccounts.size())))
+                .setStyle(inboxStyle)
                 .setGroup(NOTIFICATION_GROUP_KEY_BREACHES)
                 .setGroupSummary(true);
 
+        Intent showBreachDetails = new Intent(myContext, MainActivity.class);
+        PendingIntent resultPendingIntent =
+                PendingIntent.getActivity(
+                        myContext,
+                        0,
+                        showBreachDetails,
+                        PendingIntent.FLAG_ONE_SHOT
+                );
+        summaryNotificationBuilder.setContentIntent(resultPendingIntent);
 
         Notification notification = summaryNotificationBuilder.build();
         notification.flags |= Notification.FLAG_GROUP_SUMMARY | Notification.FLAG_AUTO_CANCEL;
