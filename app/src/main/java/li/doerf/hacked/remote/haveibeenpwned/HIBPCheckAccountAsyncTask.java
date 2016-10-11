@@ -15,6 +15,8 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.google.common.base.Function;
+import com.google.common.base.Joiner;
+import com.google.common.base.Predicate;
 import com.google.common.collect.FluentIterable;
 import com.google.common.collect.Lists;
 
@@ -231,18 +233,27 @@ public class HIBPCheckAccountAsyncTask extends AsyncTask<Long,Account,List<Accou
             return;
         }
 
-        List<String> names = FluentIterable.from(newBreachedAccounts).transform(new Function<Account,String>() {
-            @Override
-            public String apply(Account input) {
-                return input.getName();
-            }
-        }).toList();
 
         for ( Account account : newBreachedAccounts ) {
+            List<Breach> breaches = Breach.findAllByAccount(HackedSQLiteHelper.getInstance(myContext).getReadableDatabase(), account);
+            List<String> names = FluentIterable.from(breaches).filter(new Predicate<Breach>() {
+                @Override
+                public boolean apply(Breach input) {
+                    return ! input.getIsAcknowledged();
+                }
+            }).transform(new Function<Breach,String>() {
+                @Override
+                public String apply(Breach input) {
+                    return input.getTitle();
+                }
+            }).toList();
+
+
             android.support.v4.app.NotificationCompat.Builder mBuilder =
                     new NotificationCompat.Builder(myContext)
                             .setSmallIcon(android.R.drawable.ic_dialog_info)
                             .setContentTitle(myContext.getString(R.string.notification_new_breach_found, account.getName()))
+                            .setContentText(myContext.getString(R.string.affected_sites, Joiner.on(", ").join(names)))
                             .setGroup(NOTIFICATION_GROUP_KEY_BREACHES);
 
             Intent showBreachDetails = new Intent(myContext, BreachDetailsActivity.class);
