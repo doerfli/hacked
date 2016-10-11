@@ -278,6 +278,7 @@ public class AccountListFragment extends Fragment implements DatasetChangeListen
         if ( ! ConnectivityHelper.isConnected( getContext()) ) {
             Log.i(LOGTAG, "no network");
             Toast.makeText(getContext(), getString(R.string.toast_error_no_network), Toast.LENGTH_SHORT).show();
+            refreshComplete();
             return;
         }
 
