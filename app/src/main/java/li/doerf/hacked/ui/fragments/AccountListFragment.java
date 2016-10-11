@@ -6,8 +6,6 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
@@ -36,20 +34,17 @@ import li.doerf.hacked.remote.haveibeenpwned.HIBPCheckAccountAsyncTask;
 import li.doerf.hacked.ui.AddAccountDialogFragment;
 import li.doerf.hacked.ui.adapters.AccountsAdapter;
 import li.doerf.hacked.utils.ConnectivityHelper;
-import li.doerf.hacked.utils.IServiceRunningListener;
-import li.doerf.hacked.utils.ServiceRunningNotifier;
 import li.doerf.hacked.utils.SynchronizationHelper;
 
 /**
  * Created by moo on 05/10/16.
  */
-public class AccountListFragment extends Fragment implements DatasetChangeListener, IServiceRunningListener {
+public class AccountListFragment extends Fragment implements DatasetChangeListener {
     private final String LOGTAG = getClass().getSimpleName();
     private SQLiteDatabase myReadbableDb;
     private AccountsAdapter myAccountsAdapter;
     private Cursor myCursor;
     private View myFragmentRootView;
-    private static boolean mySyncActive = false;
     private static boolean isFragmentShown = false;
     private SwipeRefreshLayout mySwipeRefreshLayout;
 
@@ -100,14 +95,12 @@ public class AccountListFragment extends Fragment implements DatasetChangeListen
         super.onResume();
         refreshList();
         Account.registerDatasetChangedListener(this, Account.class);
-        ServiceRunningNotifier.registerServiceRunningListener(this);
         isFragmentShown = true;
     }
 
     @Override
     public void onPause() {
         Account.unregisterDatasetChangedListener(this, Account.class);
-        ServiceRunningNotifier.unregisterServiceRunningListener(this);
         isFragmentShown = false;
         super.onPause();
     }
@@ -283,13 +276,14 @@ public class AccountListFragment extends Fragment implements DatasetChangeListen
         }
 
         // only do this when checking more than one account (possible timing issue)
-        if ( account == null && mySyncActive) {
+        if ( account == null && HIBPCheckAccountAsyncTask.isRunning()) {
             Log.i(LOGTAG, "check already in progress");
             Toast.makeText(getContext(), getString(R.string.toast_check_in_progress), Toast.LENGTH_SHORT).show();
+            refreshComplete();
             return;
         }
 
-        new HIBPCheckAccountAsyncTask(getContext()).executeOnExecutor(AsyncTask.SERIAL_EXECUTOR, account != null ? account.getId() : null );
+        new HIBPCheckAccountAsyncTask(getContext(), this).executeOnExecutor(AsyncTask.SERIAL_EXECUTOR, account != null ? account.getId() : null );
 
         mySwipeRefreshLayout.setRefreshing(true);
 
@@ -303,29 +297,8 @@ public class AccountListFragment extends Fragment implements DatasetChangeListen
     /**
      * Indicate that the refresh is complete to stop refresh animation.
      */
-    private void refreshComplete() {
+    public void refreshComplete() {
         mySwipeRefreshLayout.setRefreshing(false);
-    }
-
-    @Override
-    public void notifyListener(final Event anEvent) {
-        new Handler(Looper.getMainLooper()).post(
-                new Runnable() {
-                    @Override
-                    public void run() {
-                        switch (anEvent) {
-                            case STARTED:
-                                mySyncActive = true;
-                            break;
-
-                            case STOPPED:
-                                mySyncActive = false;
-                                refreshComplete();
-                            break;
-                        }
-                    }
-                }
-        );
     }
 
     public static boolean isFragmentShown() {

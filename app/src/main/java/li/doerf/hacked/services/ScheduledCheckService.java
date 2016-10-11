@@ -46,7 +46,7 @@ public class ScheduledCheckService extends IntentService {
                 new Runnable() {
                      @Override
                      public void run() {
-                         new HIBPCheckAccountAsyncTask(getApplicationContext()).executeOnExecutor(AsyncTask.SERIAL_EXECUTOR);
+                         new HIBPCheckAccountAsyncTask(getApplicationContext(), null).executeOnExecutor(AsyncTask.SERIAL_EXECUTOR);
                      }
                  });
 

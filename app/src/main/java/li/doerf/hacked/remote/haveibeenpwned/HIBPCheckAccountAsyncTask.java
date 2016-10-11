@@ -33,9 +33,7 @@ import li.doerf.hacked.db.HackedSQLiteHelper;
 import li.doerf.hacked.db.tables.Account;
 import li.doerf.hacked.db.tables.Breach;
 import li.doerf.hacked.ui.fragments.AccountListFragment;
-import li.doerf.hacked.utils.IServiceRunningListener;
 import li.doerf.hacked.utils.NotificationHelper;
-import li.doerf.hacked.utils.ServiceRunningNotifier;
 import retrofit2.Call;
 import retrofit2.Response;
 import retrofit2.Retrofit;
@@ -46,17 +44,24 @@ public class HIBPCheckAccountAsyncTask extends AsyncTask<Long,Account,List<Accou
     private final static String NOTIFICATION_GROUP_KEY_BREACHES = "group_key_breachs";
 
     private final String LOGTAG = getClass().getSimpleName();
-    private static long noReqBefore = 0;
     private final Context myContext;
+    private static long noReqBefore = 0;
+    private static boolean running;
+    private final AccountListFragment myFragment;
 
-    public HIBPCheckAccountAsyncTask(Context aContext) {
+    public HIBPCheckAccountAsyncTask(Context aContext, AccountListFragment aFragment) {
         myContext = aContext;
+        myFragment = aFragment;
+    }
+
+    public static boolean isRunning() {
+        return running;
     }
 
     @Override
     protected void onPreExecute() {
         super.onPreExecute();
-        ServiceRunningNotifier.notifyServiceRunningListeners(IServiceRunningListener.Event.STARTED);
+        running = true;
     }
 
     @Override
@@ -86,7 +91,10 @@ public class HIBPCheckAccountAsyncTask extends AsyncTask<Long,Account,List<Accou
     @Override
     protected void onPostExecute(List<Account> accounts) {
         super.onPostExecute(accounts);
-        ServiceRunningNotifier.notifyServiceRunningListeners(IServiceRunningListener.Event.STOPPED);
+        running = false;
+        if ( myFragment != null ) {
+            myFragment.refreshComplete();
+        }
         if ( accounts.size() > 0 ) {
             showNotification(accounts);
         }

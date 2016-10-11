@@ -89,6 +89,6 @@ public class AddAccountDialogFragment extends DialogFragment {
             return;
         }
 
-        new HIBPCheckAccountAsyncTask(getContext()).execute( account.getId());
+        new HIBPCheckAccountAsyncTask(getContext(), null).execute( account.getId());
     }
 }
