@@ -26,8 +26,8 @@ public class SynchronizationHelper {
     }
 
     private static void enableSync(Context aContext) {
-//TODO        long interval = AlarmManager.INTERVAL_HALF_HOUR;
-        long interval = 15000;
+        long interval = AlarmManager.INTERVAL_HALF_HOUR;
+//        long interval = 15000; // testing
         PendingIntent checkerService = getPendingIntent(aContext);
 
         AlarmManager alarmManager = (AlarmManager) aContext.getSystemService(Context.ALARM_SERVICE);
