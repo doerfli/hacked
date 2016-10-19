@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
+import android.os.Handler;
+import android.os.Looper;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.widget.Toast;
@@ -17,6 +19,7 @@ import li.doerf.hacked.R;
 import li.doerf.hacked.db.HackedSQLiteHelper;
 import li.doerf.hacked.db.tables.BreachedSite;
 import li.doerf.hacked.ui.fragments.BreachedSitesListFragment;
+import li.doerf.hacked.utils.ConnectivityHelper;
 import retrofit2.Call;
 import retrofit2.Response;
 import retrofit2.Retrofit;
@@ -38,6 +41,17 @@ public class HIBPGetBreachedSitesAsyncTask extends AsyncTask<Void,Void,Void> {
     @Override
     protected Void doInBackground(Void[] params) {
         SQLiteDatabase db = HackedSQLiteHelper.getInstance(myContext).getWritableDatabase();
+
+        if ( ! ConnectivityHelper.isConnected(myContext) ) {
+            Log.w(LOGTAG, "no network available");
+            new Handler(Looper.getMainLooper()).post(new Runnable() {
+                @Override
+                public void run() {
+                    Toast.makeText(myContext, myContext.getString(R.string.toast_error_no_network), Toast.LENGTH_LONG).show();
+                }
+            });
+            return null;
+        }
 
         BreachedSite.deleteAll(db);
 
@@ -78,7 +92,12 @@ public class HIBPGetBreachedSitesAsyncTask extends AsyncTask<Void,Void,Void> {
 
         } catch ( IOException e) {
             Log.e(LOGTAG, "caught IOException while getting breached sites", e);
-            Toast.makeText(myContext, myContext.getString(R.string.error_download_data), Toast.LENGTH_LONG).show();
+            new Handler(Looper.getMainLooper()).post(new Runnable() {
+                @Override
+                public void run() {
+                    Toast.makeText(myContext, myContext.getString(R.string.error_download_data), Toast.LENGTH_LONG).show();
+                }
+            });
         } finally {
             SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(myContext);
             settings.edit().putLong(myContext.getString(R.string.PREF_KEY_LAST_SYNC_HIBP_TOP20), System.currentTimeMillis()).apply();
