@@ -78,4 +78,5 @@
     <string name="PREF_KEY_LAST_SYNC_HIBP_TOP20">LAST_SYNC_HIBP_TOP20</string>
     <string name="error_download_data">Fehler beim Herunterladen der Daten - Bitte versuchen Sie es später noch einmal</string>
     <string name="affected_sites">Seiten: %1$s</string>
+    <string name="unconfirmed">(unbestätigt)</string>
 </resources>
