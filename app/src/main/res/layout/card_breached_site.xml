@@ -29,6 +29,95 @@
             android:layout_below="@+id/site_name"
             />
 
+        <ImageView
+            android:id="@+id/arrow_down"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_alignParentRight="true"
+            android:layout_below="@id/site_name"
+            android:src="@drawable/ic_action_hardware_keyboard_arrow_down"
+            />
+
+        <ImageView
+            android:id="@+id/arrow_up"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_alignParentRight="true"
+            android:layout_below="@id/site_name"
+            android:visibility="gone"
+            android:src="@drawable/ic_action_hardware_keyboard_arrow_up"
+            />
+
+        <RelativeLayout
+            android:id="@+id/breach_details"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:layout_below="@id/pwn_count">
+            <TextView
+                android:id="@+id/label_domain"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/label_domain"
+                android:paddingRight="@dimen/text_space"
+                />
+
+            <TextView
+                android:id="@+id/domain"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/placeholder_domain"
+                android:layout_toRightOf="@id/label_domain"
+                android:textColor="@android:color/black"
+                />
+
+            <TextView
+                android:id="@+id/label_breach_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/label_breach_date"
+                android:layout_below="@+id/domain"
+                android:paddingRight="@dimen/text_space"
+                />
+
+            <TextView
+                android:id="@+id/breach_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/placeholder_date"
+                android:textColor="@android:color/black"
+                android:layout_below="@+id/domain"
+                android:layout_toRightOf="@id/label_breach_date"
+                />
+
+            <TextView
+                android:id="@+id/label_compromised_data"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/label_compromised_data"
+                android:layout_below="@+id/breach_date"
+                android:paddingRight="@dimen/text_space"
+                />
+
+            <TextView
+                android:id="@+id/compromised_data"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/placeholder_compromised_data"
+                android:layout_below="@+id/breach_date"
+                android:layout_toRightOf="@id/label_compromised_data"
+                />
+
+            <TextView
+                android:id="@+id/description"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/placeholder_description"
+                android:textColor="@android:color/black"
+                android:layout_below="@+id/compromised_data"
+                />
+        </RelativeLayout>
+
     </RelativeLayout>
 
 </android.support.v7.widget.CardView>
