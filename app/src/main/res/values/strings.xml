@@ -71,11 +71,11 @@
     <string name="site_name">Site name</string>
     <string name="nd_top_20_breached_websites">Top 20 breached websites</string>
     <string name="nd_accounts">Accounts</string>
+    <string name="nd_all_breaches">All breaches</string>
+    <string name="nd_most_recent_breaches">Most recent breaches</string>
     <string name="accounts">breached accounts</string>
     <string name="sample_pwn_count">1000 accounts</string>
-    <string name="nd_most_recent_breaches">Most recent breaches</string>
     <string name="PREF_KEY_LAST_SYNC_HIBP_TOP20">LAST_SYNC_HIBP_TOP20</string>
     <string name="error_download_data">Error while downloading data - please try again later</string>
     <string name="affected_sites">Sites: %1$s</string>
-    <string name="nd_all_breaches">All breaches</string>
 </resources>

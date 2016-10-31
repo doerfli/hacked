@@ -70,6 +70,7 @@
     <string name="navigation_drawer_close">Navigationsleiste schliessen</string>
     <string name="site_name">Name der Seite</string>
     <string name="nd_top_20_breached_websites">Top 20 Lecks</string>
+    <string name="nd_all_breaches">Alle Lecks</string>
     <string name="nd_accounts">Konten</string>
     <string name="accounts">kompromittierte Konten</string>
     <string name="sample_pwn_count">1000 Konten</string>
