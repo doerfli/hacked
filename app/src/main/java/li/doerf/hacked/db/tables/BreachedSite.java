@@ -154,7 +154,7 @@ public class BreachedSite extends TableBase implements Identifiable {
     }
 
     public static Cursor listAll(SQLiteDatabase db) {
-        return listAll(db, "breach_date");
+        return listAll(db, "name");
     }
 
     public static Cursor listAll(SQLiteDatabase db, String order) {

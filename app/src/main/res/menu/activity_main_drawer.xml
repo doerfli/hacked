@@ -11,6 +11,9 @@
         <item
             android:id="@+id/action_most_recent_breaches"
             android:title="@string/nd_most_recent_breaches" />
+        <item
+            android:id="@+id/action_all_breaches"
+            android:title="@string/nd_all_breaches" />
     </group>
 
     <group android:id="@+id/menu_2">

@@ -129,6 +129,13 @@ public class MainActivity extends AppCompatActivity
                     .replace(R.id.fragment_container, myContentFragment)
                     .addToBackStack("most_recent_breached_sites")
                     .commit();
+        } else if (id == R.id.action_all_breaches) {
+            myContentFragment = BreachedSitesListFragment.create(BreachListType.All);
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.fragment_container, myContentFragment)
+                    .addToBackStack("all_breached_sites")
+                    .commit();
         } else if (id == R.id.action_settings) {
             Intent settingsIntent = new Intent(this, SettingsActivity.class);
             startActivity(settingsIntent);
