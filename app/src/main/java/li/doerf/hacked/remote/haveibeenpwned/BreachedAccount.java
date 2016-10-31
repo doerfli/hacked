@@ -13,9 +13,9 @@ public class BreachedAccount {
     private Long PwnCount;
     private String Description;
     private String[] DataClasses;
-    private Boolean isVerified;
-    private Boolean isSensitive;
-    private Boolean isRetired;
+    private Boolean IsVerified;
+    private Boolean IsSensitive;
+    private Boolean IsRetired;
 
     public String getName() {
         return Name;
@@ -82,26 +82,26 @@ public class BreachedAccount {
     }
 
     public Boolean getIsVerified() {
-        return isVerified;
+        return IsVerified;
     }
 
     public void setIsVerified(Boolean verified) {
-        isVerified = verified;
+        IsVerified = verified;
     }
 
     public Boolean getSensitive() {
-        return isSensitive;
+        return IsSensitive;
     }
 
     public void setSensitive(Boolean sensitive) {
-        isSensitive = sensitive;
+        IsSensitive = sensitive;
     }
 
     public Boolean getRetired() {
-        return isRetired;
+        return IsRetired;
     }
 
     public void setRetired(Boolean retired) {
-        isRetired = retired;
+        IsRetired = retired;
     }
 }

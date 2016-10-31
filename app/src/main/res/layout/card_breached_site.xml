@@ -21,6 +21,18 @@
             />
 
         <TextView
+            android:id="@+id/unconfirmed"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/unconfirmed"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
+            android:textColor="@color/account_status_unknown"
+            android:paddingLeft="8dp"
+            android:layout_toRightOf="@+id/site_name"
+            android:layout_alignBottom="@+id/site_name"
+            />
+
+        <TextView
             android:id="@+id/pwn_count"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

@@ -43,6 +43,16 @@ public class BreachedSitesAdapter extends RecyclerViewCursorAdapter<RecyclerView
         TextView nameView = (TextView) cardView.findViewById(R.id.site_name);
         nameView.setText(site.getName());
 
+        TextView unconfirmed = (TextView) cardView.findViewById(R.id.unconfirmed);
+
+        if ( site.getIsVerified()) {
+            nameView.setTextColor(getContext().getResources().getColor(android.R.color.primary_text_light));
+            unconfirmed.setVisibility(View.GONE);
+        } else {
+            nameView.setTextColor(getContext().getResources().getColor(R.color.account_status_unknown));
+            unconfirmed.setVisibility(View.VISIBLE);
+        }
+
         TextView pwnCountView = (TextView) cardView.findViewById(R.id.pwn_count);
         pwnCountView.setText( String.format(getContext().getResources().getConfiguration().locale, "%,d %s", site.getPwnCount(), getContext().getString(R.string.accounts)));
 

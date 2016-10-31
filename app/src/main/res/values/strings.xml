@@ -78,4 +78,5 @@
     <string name="PREF_KEY_LAST_SYNC_HIBP_TOP20">LAST_SYNC_HIBP_TOP20</string>
     <string name="error_download_data">Error while downloading data - please try again later</string>
     <string name="affected_sites">Sites: %1$s</string>
+    <string name="unconfirmed">(unconfirmed)</string>
 </resources>
