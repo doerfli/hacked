@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Hacked?</string>
     <string name="action_settings">Einstellungen</string>
-    <string name="action_check">Auswählen</string>
+    <string name="action_check">Synchronisieren</string>
     <string name="hint_name">Benutzername oder Email-Adresse</string>
     <string name="add">Hinzufügen</string>
     <string name="cancel">Abbrechen</string>
@@ -15,7 +15,7 @@
     <string name="status_placeholder">Keine Datenlecks gefunden</string>
     <string name="status_no_breach_found">Keine Datenlecks gefunden</string>
     <string name="status_breaches_found">%1$d Datenlecks</string>
-    <string name="status_breaches_found_acknowledged">%1$d Datenlecks (%2$d bekannte)</string>
+    <string name="status_breaches_found_acknowledged">%1$d Datenleck(s) gefunden (%2$d bekannte(s))</string>
     <string name="title_breach_details">Beschreibung</string>
     <string name="label_domain">Adresse:</string>
     <string name="placeholder_domain">http://www.something.com</string>
@@ -29,21 +29,21 @@
     <string name="initial_help_text_2">Drücken Sie das Plus Symbol um einen weiteren Benutzernamen oder eine Email Adresse hinzuzufügen.\nDrücken Sie den Sync Knopf um <i>Hacked?</i> Datenlecks für die angegebenen Konten finden zu lassen.\nWählen Sie ein Konto aus um eine detailliertee Beschreibung des Lecks zu sehen.\nLöschen eines Kontos durch langes drücken.</string>
     <string name="dismiss">Verwerfen</string>
     <string name="toast_dont_show_initial_help_again">Sie haben die Anleitung geschlossen. Diese wird in Zukunft nicht mehr angezeigt.</string>
-    <string name="acknowledge">Bestätigung</string>
-    <string name="breach_acknowledged">Leck bestätigen</string>
+    <string name="acknowledge">Zur Kenntnis nehmen</string>
+    <string name="breach_acknowledged">Leck bestätigt</string>
     <string name="pref_initial_help_dismissed">PREF_INITIAL_HELP_DISMISSED</string>
     <string name="pref_title_synchronization">Synchronisieren</string>
     <string name="pref_key_sync_enable">ENABLE_BACKGROUND_SYNC</string>
-    <string name="pref_title_sync_enable">Aktivieren</string>
-    <string name="pref_summary_sync_enable">Automatischen Prüfung auf Lecks in regelmässigen Abständen</string>
+    <string name="pref_title_sync_enable">Automatisch prüfen</string>
+    <string name="pref_summary_sync_enable">Regelmässige Prüfung auf Lecks im Hintergrund</string>
     <string name="pref_key_sync_interval">BG_SYNC_INTERVAL</string>
-    <string name="pref_title_sync_interval">Synchronisierungs Intervall</string>
-    <string name="pref_summary_sync_interval">Wie oft soll die Hintergrundprüfung gemacht werden</string>
-    <string name="pref_title_dialog_interval">Synchronisierungs Intervall</string>
+    <string name="pref_title_sync_interval">Synchronisierungsintervall</string>
+    <string name="pref_summary_sync_interval">Wie oft soll die Hintergrundprüfung durchgeführt werden</string>
+    <string name="pref_title_dialog_interval">Synchronisierungsintervall</string>
     <string name="pref_sync_interval_default">täglich</string>
     <string name="pref_key_sync_via_cellular">SYNC_VIA_CELLULAR</string>
     <string name="pref_title_sync_via_cellular">Mobile Netzwerke zum Synchronisieren nutzen</string>
-    <string name="pref_summary_sync_via_cellular">Auch synchronisieren wenn mobile Daten aktiviert sind (Mobile Dateen können Kosten verursachen)</string>
+    <string name="pref_summary_sync_via_cellular">Synchronisieren wenn kein Wifi verfügbar ist (Mobile Daten können Kosten verursachen)</string>
     <string name="title_settings">Einstellungen</string>
     <string name="PREF_KEY_LAST_SYNC_TIMESTAMP">LAST_SYNC_TIMESTAMP</string>
     <string name="toast_error_no_network">Kein Netzwerk verfügbar. Bitte nochmals versuchen.</string>
@@ -62,7 +62,7 @@
     <string name="no_breaches_found">Für dieses Benutzerkonto wurden keine Lecks gefunden.</string>
     <string name="toast_account_exists">Dieses Benutzerkonto existiert bereits</string>
     <string name="notification_new_breach_found">Verletzungen: %1$s</string>
-    <string name="toast_check_in_progress">Eine Prüfung wird bereits durchgeführt. Bitte später nochmals versuchen.</string>
+    <string name="toast_check_in_progress">Prüfung wird derzeit durchgeführt. Bitte später nochmals versuchen.</string>
     <string name="notification_summary_found_breaches">Gefundene Lecks: %1$d</string>
     <string name="toast_enter_valid_name">Bitte ein gültiges Benutzerkonto angeben.</string>
     <string name="title_activity_main">Hacked?</string>
@@ -73,7 +73,7 @@
     <string name="nd_accounts">Konten</string>
     <string name="accounts">Konten</string>
     <string name="sample_pwn_count">1000 Konten</string>
-    <string name="nd_most_recent_breaches">Aktuellste Datenlecks</string>
+    <string name="nd_most_recent_breaches">Neueste Datenlecks</string>
     <string name="PREF_KEY_LAST_SYNC_HIBP_TOP20">LAST_SYNC_HIBP_TOP20</string>
     <string name="error_download_data">Fehler beim Herunterladen der Daten - Bitte versuchen Sie es später noch einmal</string>
     <string name="affected_sites">Seiten: %1$s</string>

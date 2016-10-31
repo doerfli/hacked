@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="pref_sync_interval_entries">
+        <item>Jeden Tag</item>
+        <item>Jeden zweiten Tag</item>
+        <item>Jeden dritten Tag</item>
+        <item>Einmal pro Woche</item>
+    </string-array>
+</resources>
