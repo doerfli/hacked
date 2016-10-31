@@ -8,7 +8,7 @@
     <string name="dialog_account_delete_msg">Wollen Sie das Konto \'%1$s\' löschen?</string>
     <string name="ok">OK</string>
     <string name="action_add_account">Konto hinzufügen</string>
-    <string name="snackbar_checking_account">Kontos werden überprüft - dieser Vorgang wird vorraussichtlich %1$d Sekunden dauern.\n</string>
+    <string name="snackbar_checking_account">Konten werden überprüft - dieser Vorgang wird vorraussichtlich %1$d Sekunden dauern.\n</string>
     <string name="last_checked">Letzte Prüfung:</string>
     <string name="placeholder_date">dd/mm/yyyy hh:mm</string>
     <string name="status">Status:</string>
