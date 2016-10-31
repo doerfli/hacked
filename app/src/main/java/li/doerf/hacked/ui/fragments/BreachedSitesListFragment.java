@@ -9,6 +9,7 @@ import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -55,11 +56,15 @@ public class BreachedSitesListFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_breached_sites_list, container, false);
 
-        RecyclerView accountsList = (RecyclerView) view.findViewById(R.id.breached_sites_list);
-        accountsList.setHasFixedSize(true);
+        RecyclerView breachedSites = (RecyclerView) view.findViewById(R.id.breached_sites_list);
+        breachedSites.setHasFixedSize(true);
         LinearLayoutManager lm = new LinearLayoutManager(getContext());
-        accountsList.setLayoutManager(lm);
-        accountsList.setAdapter(myBreachedSitesAdapter);
+        breachedSites.setLayoutManager(lm);
+        breachedSites.setAdapter(myBreachedSitesAdapter);
+
+        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(breachedSites.getContext(),
+                lm.getOrientation());
+        breachedSites.addItemDecoration(dividerItemDecoration);
 
         mySwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_refresh_layout);
         mySwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {

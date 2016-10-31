@@ -12,6 +12,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.CardView;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -74,6 +75,10 @@ public class AccountListFragment extends Fragment implements DatasetChangeListen
         LinearLayoutManager lm = new LinearLayoutManager(getContext());
         accountsList.setLayoutManager(lm);
         accountsList.setAdapter(myAccountsAdapter);
+        
+        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(accountsList.getContext(),
+                lm.getOrientation());
+        accountsList.addItemDecoration(dividerItemDecoration);
 
         mySwipeRefreshLayout = (SwipeRefreshLayout) myFragmentRootView.findViewById(R.id.swipe_refresh_layout);
         mySwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
