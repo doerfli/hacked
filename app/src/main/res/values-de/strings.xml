@@ -79,4 +79,5 @@
     <string name="error_download_data">Fehler beim Herunterladen der Daten - Bitte versuchen Sie es später noch einmal</string>
     <string name="affected_sites">Seiten: %1$s</string>
     <string name="unconfirmed">(unbestätigt)</string>
+    <string name="data_provided_by">Daten bereitgestellt von</string>
 </resources>
