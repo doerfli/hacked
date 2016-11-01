@@ -25,13 +25,14 @@ public class MainActivity extends AppCompatActivity
     private final String LOGTAG = getClass().getSimpleName();
 
     private Fragment myContentFragment;
+    private Toolbar myToolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        myToolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(myToolbar);
 
         myContentFragment = AccountListFragment.create();
         getSupportFragmentManager()
@@ -53,12 +54,14 @@ public class MainActivity extends AppCompatActivity
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+                this, drawer, myToolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        setTitle(getString(R.string.nd_accounts));
     }
 
 //    @Override
@@ -110,6 +113,7 @@ public class MainActivity extends AppCompatActivity
 
         if (id == R.id.action_accounts_list) {
             myContentFragment = AccountListFragment.create();
+            myToolbar.setTitle(getString(R.string.nd_accounts));
             getSupportFragmentManager()
                     .beginTransaction()
                     .replace(R.id.fragment_container, myContentFragment)
@@ -117,6 +121,7 @@ public class MainActivity extends AppCompatActivity
                     .commit();
         } else if (id == R.id.action_top_breached_sites) {
             myContentFragment = BreachedSitesListFragment.create(BreachListType.Top20);
+            myToolbar.setTitle(getString(R.string.nd_top_20_breached_websites));
             getSupportFragmentManager()
                     .beginTransaction()
                     .replace(R.id.fragment_container, myContentFragment)
@@ -124,6 +129,7 @@ public class MainActivity extends AppCompatActivity
                     .commit();
         } else if (id == R.id.action_most_recent_breaches) {
             myContentFragment = BreachedSitesListFragment.create(BreachListType.MostRecent);
+            myToolbar.setTitle(getString(R.string.nd_most_recent_breaches));
             getSupportFragmentManager()
                     .beginTransaction()
                     .replace(R.id.fragment_container, myContentFragment)
@@ -131,6 +137,7 @@ public class MainActivity extends AppCompatActivity
                     .commit();
         } else if (id == R.id.action_all_breaches) {
             myContentFragment = BreachedSitesListFragment.create(BreachListType.All);
+            myToolbar.setTitle(getString(R.string.nd_all_breaches));
             getSupportFragmentManager()
                     .beginTransaction()
                     .replace(R.id.fragment_container, myContentFragment)
