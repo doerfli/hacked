@@ -9,13 +9,9 @@ import android.support.v7.widget.CardView;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.Html;
-import android.text.method.LinkMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.TextView;
 
 import java.util.List;
@@ -25,6 +21,7 @@ import li.doerf.hacked.db.DatasetChangeListener;
 import li.doerf.hacked.db.HackedSQLiteHelper;
 import li.doerf.hacked.db.tables.Account;
 import li.doerf.hacked.db.tables.Breach;
+import li.doerf.hacked.ui.HibpInfo;
 import li.doerf.hacked.ui.adapters.BreachesAdapter;
 
 /**
@@ -73,52 +70,7 @@ public class BreachDetailsFragment extends Fragment implements DatasetChangeList
         breachesList.setLayoutManager(lm);
         breachesList.setAdapter(myBreachesAdapter);
 
-        final TextView hibpInfo = (TextView) view.findViewById(R.id.hibp_info);
-        String text = getString(R.string.data_provided_by) + " <a href=\"https://haveibeenpwned.com\">Have i been pwned?</a>";
-        hibpInfo.setMovementMethod(LinkMovementMethod.getInstance());
-        hibpInfo.setText(Html.fromHtml(text));
-
-        breachesList.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-                // show animation only once
-                if ( hibpInfo.getVisibility() == View.GONE ) {
-                    return;
-                }
-
-                // animation running ... ignore
-                if ( hibpInfo.getAnimation() != null ) {
-                    return;
-                }
-
-                // animate hipb info out of page
-                Animation a = AnimationUtils.loadAnimation(getContext(), R.anim.slide_out);
-                a.setAnimationListener(new Animation.AnimationListener() {
-                    @Override
-                    public void onAnimationStart(Animation animation) {
-
-                    }
-
-                    @Override
-                    public void onAnimationEnd(Animation animation) {
-                        hibpInfo.setVisibility(View.GONE);
-                    }
-
-                    @Override
-                    public void onAnimationRepeat(Animation animation) {
-
-                    }
-                });
-                hibpInfo.startAnimation(a);
-            }
-
-            @Override
-            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                super.onScrolled(recyclerView, dx, dy);
-
-
-            }
-        });
+        HibpInfo.prepare( getContext(), (TextView) view.findViewById(R.id.hibp_info), breachesList);
 
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(breachesList.getContext(),
                 lm.getOrientation());
