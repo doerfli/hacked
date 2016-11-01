@@ -6,4 +6,10 @@
         <item>Jeden dritten Tag</item>
         <item>Einmal pro Woche</item>
     </string-array>
+    <string-array name="pref_sync_interval_values">
+        <item>everyday</item>
+        <item>everytwodays</item>
+        <item>everythreedays</item>
+        <item>everyweek</item>
+    </string-array>
 </resources>
