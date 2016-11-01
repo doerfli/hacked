@@ -43,7 +43,7 @@
     <string name="pref_sync_interval_default">everyday</string>
     <string name="pref_key_sync_via_cellular">SYNC_VIA_CELLULAR</string>
     <string name="pref_title_sync_via_cellular">Check when not connected to Wifi</string>
-    <string name="pref_summary_sync_via_cellular">When enabled, the app will run checks for breaches when no Wifi is available using your mobile data connection (this might incur additional costs on your phone bill)</string>
+    <string name="pref_summary_sync_via_cellular">App will use mobile data connection when no Wifi is available (this might incur additional costs on your phone bill)</string>
     <string name="title_settings">Settings</string>
     <string name="PREF_KEY_LAST_SYNC_TIMESTAMP">LAST_SYNC_TIMESTAMP</string>
     <string name="toast_error_no_network">No network available. Please try again later.</string>
