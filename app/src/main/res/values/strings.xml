@@ -79,4 +79,5 @@
     <string name="error_download_data">Error while downloading data - please try again later</string>
     <string name="affected_sites">Sites: %1$s</string>
     <string name="unconfirmed">(unconfirmed)</string>
+    <string name="data_provided_by">Data provided by</string>
 </resources>
