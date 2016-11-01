@@ -16,6 +16,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import java.io.Serializable;
 
@@ -23,6 +24,7 @@ import li.doerf.hacked.R;
 import li.doerf.hacked.db.HackedSQLiteHelper;
 import li.doerf.hacked.db.tables.BreachedSite;
 import li.doerf.hacked.remote.haveibeenpwned.HIBPGetBreachedSitesAsyncTask;
+import li.doerf.hacked.ui.HibpInfo;
 import li.doerf.hacked.ui.adapters.BreachedSitesAdapter;
 
 /**
@@ -61,6 +63,8 @@ public class BreachedSitesListFragment extends Fragment {
         LinearLayoutManager lm = new LinearLayoutManager(getContext());
         breachedSites.setLayoutManager(lm);
         breachedSites.setAdapter(myBreachedSitesAdapter);
+
+        HibpInfo.prepare( getContext(), (TextView) view.findViewById(R.id.hibp_info), breachedSites);
 
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(breachedSites.getContext(),
                 lm.getOrientation());
