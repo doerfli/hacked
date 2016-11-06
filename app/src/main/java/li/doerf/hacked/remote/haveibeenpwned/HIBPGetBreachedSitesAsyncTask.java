@@ -109,12 +109,16 @@ public class HIBPGetBreachedSitesAsyncTask extends AsyncTask<Void,Void,Void> {
     @Override
     protected void onProgressUpdate(Void... values) {
         super.onProgressUpdate(values);
-        myUiFragment.refreshList();
+        if ( myUiFragment != null ) {
+            myUiFragment.refreshList();
+        }
     }
 
     @Override
     protected void onPostExecute(Void aVoid) {
-        myUiFragment.refreshList();
-        myUiFragment.refreshComplete();
+        if ( myUiFragment != null ) {
+            myUiFragment.refreshList();
+            myUiFragment.refreshComplete();
+        }
     }
 }

@@ -130,6 +130,11 @@ public class BreachedSitesListFragment extends Fragment {
     public void refreshList() {
         Log.d(LOGTAG, "refreshing list");
 
+        if ( myReadbableDb == null ) {
+            Log.w(LOGTAG, "refreshList: readable db null, nothing to refresh");
+            return;
+        }
+
         switch ( myBreachListType){
             case Top20:
                 myCursor = BreachedSite.listTop20(myReadbableDb);
