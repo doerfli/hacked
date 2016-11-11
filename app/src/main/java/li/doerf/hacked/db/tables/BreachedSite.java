@@ -191,7 +191,7 @@ public class BreachedSite extends TableBase implements Identifiable {
                 null,
                 null,
                 null,
-                "breach_date DESC",
+                "added_date DESC",
                 "20");
     }
 
