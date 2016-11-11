@@ -59,6 +59,8 @@ public class BreachDetailsFragment extends Fragment implements DatasetChangeList
         if ( myBreaches.size() == 0 ) {
             CardView noBreachFound = (CardView) view.findViewById(R.id.no_breach_found);
             noBreachFound.setVisibility(View.VISIBLE);
+            TextView hibpInfo = (TextView) view.findViewById(R.id.hibp_info);
+            hibpInfo.setVisibility(View.GONE);
             return view;
         }
 
