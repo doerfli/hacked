@@ -1,6 +1,7 @@
 package li.doerf.hacked.activities;
 
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
@@ -11,9 +12,14 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import li.doerf.hacked.R;
 import li.doerf.hacked.ui.fragments.AccountListFragment;
@@ -22,6 +28,7 @@ import li.doerf.hacked.ui.fragments.BreachedSitesListFragment;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+    private static final int IMPORT_ACCOUNTS = 321;
     private final String LOGTAG = getClass().getSimpleName();
 
     private Fragment myContentFragment;
@@ -96,15 +103,35 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
-//    @Override
-//    public boolean onOptionsItemSelected(MenuItem item) {
-//        // Handle action bar item clicks here. The action bar will
-//        // automatically handle clicks on the Home/Up button, so long
-//        // as you specify a parent activity in AndroidManifest.xml.
-//        int id = item.getItemId();
-//
-//        return super.onOptionsItemSelected(item);
-//    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        if ( id == R.id.action_import ) {
+
+            Intent intent = new Intent();
+            intent.setAction("li.doerf.hacked.searchaccounts");
+            // The intent does not have a URI, so declare the "text/plain" MIME type
+//            intent.setType("doerfli/hackedimport");
+            PackageManager packageManager = getPackageManager();
+            List activities = packageManager.queryIntentActivities(intent,
+                    PackageManager.MATCH_DEFAULT_ONLY);
+            boolean isIntentSafe = activities.size() > 0;
+            if ( ! isIntentSafe ) {
+                // TODO make this nicer
+                Toast.makeText(getApplicationContext(), "no application found", Toast.LENGTH_LONG).show();
+            } else {
+                startActivityForResult(intent, IMPORT_ACCOUNTS);
+            }
+
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -153,4 +180,16 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == IMPORT_ACCOUNTS) {
+            // Make sure the request was successful
+            if (resultCode == RESULT_OK) {
+                ArrayList<String> accounts = data.getStringArrayListExtra("accounts");
+                for ( String acc : accounts ) {
+                    Log.d(LOGTAG, "import account: " + acc);
+                }
+            }
+        }
+    }
 }
