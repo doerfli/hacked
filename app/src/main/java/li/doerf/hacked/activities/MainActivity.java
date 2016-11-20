@@ -14,6 +14,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -38,6 +39,7 @@ public class MainActivity extends AppCompatActivity
 
     private Fragment myContentFragment;
     private Toolbar myToolbar;
+    private DrawerLayout drawer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,7 +66,7 @@ public class MainActivity extends AppCompatActivity
             }
         });
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, myToolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
@@ -171,6 +173,7 @@ public class MainActivity extends AppCompatActivity
                 Toast.makeText(getApplicationContext(), "no application found", Toast.LENGTH_LONG).show();
             } else {
                 startActivityForResult(intent, IMPORT_ACCOUNTS);
+                drawer.closeDrawer(Gravity.LEFT);
             }
 
             return true;
