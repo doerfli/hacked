@@ -2,6 +2,7 @@ package li.doerf.hacked.activities;
 
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
@@ -22,9 +23,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import li.doerf.hacked.R;
+import li.doerf.hacked.db.HackedSQLiteHelper;
+import li.doerf.hacked.db.tables.Account;
+import li.doerf.hacked.remote.haveibeenpwned.HIBPCheckAccountAsyncTask;
 import li.doerf.hacked.ui.fragments.AccountListFragment;
 import li.doerf.hacked.ui.fragments.BreachListType;
 import li.doerf.hacked.ui.fragments.BreachedSitesListFragment;
+import li.doerf.hacked.utils.ConnectivityHelper;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -110,26 +115,6 @@ public class MainActivity extends AppCompatActivity
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        if ( id == R.id.action_import ) {
-
-            Intent intent = new Intent();
-            intent.setAction("li.doerf.hacked.searchaccounts");
-            // The intent does not have a URI, so declare the "text/plain" MIME type
-//            intent.setType("doerfli/hackedimport");
-            PackageManager packageManager = getPackageManager();
-            List activities = packageManager.queryIntentActivities(intent,
-                    PackageManager.MATCH_DEFAULT_ONLY);
-            boolean isIntentSafe = activities.size() > 0;
-            if ( ! isIntentSafe ) {
-                // TODO make this nicer
-                Toast.makeText(getApplicationContext(), "no application found", Toast.LENGTH_LONG).show();
-            } else {
-                startActivityForResult(intent, IMPORT_ACCOUNTS);
-            }
-
-            return true;
-        }
-
         return super.onOptionsItemSelected(item);
     }
 
@@ -173,7 +158,24 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.action_settings) {
             Intent settingsIntent = new Intent(this, SettingsActivity.class);
             startActivity(settingsIntent);
+        } else if ( id == R.id.action_import ) {
+            Intent intent = new Intent();
+            intent.setAction("li.doerf.hacked.searchaccounts");
+            PackageManager packageManager = getPackageManager();
+            List activities = packageManager.queryIntentActivities(intent,
+                    PackageManager.MATCH_DEFAULT_ONLY);
+            // check if search app is installed
+            boolean isIntentSafe = activities.size() > 0;
+            if ( ! isIntentSafe ) {
+                // TODO show dialog with link to play store to install app
+                Toast.makeText(getApplicationContext(), "no application found", Toast.LENGTH_LONG).show();
+            } else {
+                startActivityForResult(intent, IMPORT_ACCOUNTS);
+            }
+
+            return true;
         }
+
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
@@ -185,9 +187,28 @@ public class MainActivity extends AppCompatActivity
         if (requestCode == IMPORT_ACCOUNTS) {
             // Make sure the request was successful
             if (resultCode == RESULT_OK) {
+                SQLiteDatabase db = HackedSQLiteHelper.getInstance(getApplicationContext()).getWritableDatabase();
                 ArrayList<String> accounts = data.getStringArrayListExtra("accounts");
+
                 for ( String acc : accounts ) {
-                    Log.d(LOGTAG, "import account: " + acc);
+                    Account account = Account.create( acc.trim());
+
+                    if ( account.exists(db) ) {
+                        Log.w(LOGTAG, "account already exists. ignoring");
+                        continue;
+                    }
+
+                    db.beginTransaction();
+                    account.insert(db);
+                    db.setTransactionSuccessful();
+                    db.endTransaction();
+                    account.notifyObservers();
+
+                    if ( ConnectivityHelper.isConnected( getApplicationContext()) ) {
+                        new HIBPCheckAccountAsyncTask(getApplicationContext(), null).execute( account.getId());
+                    } else {
+                        Log.w(LOGTAG, "no network, cannot sync");
+                    }
                 }
             }
         }
