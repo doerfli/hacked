@@ -4,11 +4,13 @@ import android.app.Notification;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
 import android.os.Handler;
 import android.os.Looper;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.v7.app.NotificationCompat;
 import android.util.Log;
@@ -48,6 +50,7 @@ public class HIBPCheckAccountAsyncTask extends AsyncTask<Long,Account,List<Accou
     private static long noReqBefore = 0;
     private static boolean running;
     private final AccountListFragment myFragment;
+    private boolean updateLastCheckTimestamp = false;
 
     public HIBPCheckAccountAsyncTask(Context aContext, AccountListFragment aFragment) {
         myContext = aContext;
@@ -73,6 +76,7 @@ public class HIBPCheckAccountAsyncTask extends AsyncTask<Long,Account,List<Accou
                 result.addAll(doCheck(id));
             }
         } else {
+            updateLastCheckTimestamp = true;
             result.addAll(doCheck(null));
         }
 
@@ -97,6 +101,15 @@ public class HIBPCheckAccountAsyncTask extends AsyncTask<Long,Account,List<Accou
         }
         if ( accounts.size() > 0 ) {
             showNotification(accounts);
+        }
+
+        if ( updateLastCheckTimestamp ) {
+            SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(myContext);
+            SharedPreferences.Editor editor = settings.edit();
+            long ts = System.currentTimeMillis();
+            editor.putLong(myContext.getString(R.string.PREF_KEY_LAST_SYNC_TIMESTAMP), ts);
+            editor.apply();
+            Log.i(LOGTAG, "updated last checked timestamp: " + ts);
         }
     }
 
