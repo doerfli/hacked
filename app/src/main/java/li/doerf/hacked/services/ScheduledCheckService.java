@@ -49,10 +49,6 @@ public class ScheduledCheckService extends IntentService {
                          new HIBPCheckAccountAsyncTask(getApplicationContext(), null).executeOnExecutor(AsyncTask.SERIAL_EXECUTOR);
                      }
                  });
-
-        SharedPreferences.Editor editor = settings.edit();
-        editor.putLong(getString(R.string.PREF_KEY_LAST_SYNC_TIMESTAMP), System.currentTimeMillis());
-        editor.apply();
     }
 
     private int getCurrentInterval(SharedPreferences aSettings) {

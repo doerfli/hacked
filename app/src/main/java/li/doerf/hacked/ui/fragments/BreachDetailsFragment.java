@@ -49,6 +49,7 @@ public class BreachDetailsFragment extends Fragment implements DatasetChangeList
         myReadbableDb = HackedSQLiteHelper.getInstance(getContext()).getWritableDatabase();
         myAccount = Account.findById(myReadbableDb, myAccountId);
         myBreaches = Breach.findAllByAccount(myReadbableDb, myAccount);
+        myBreachesAdapter = new BreachesAdapter(getContext(), myBreaches);
     }
 
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -63,8 +64,6 @@ public class BreachDetailsFragment extends Fragment implements DatasetChangeList
             hibpInfo.setVisibility(View.GONE);
             return view;
         }
-
-        myBreachesAdapter = new BreachesAdapter(getContext(), myBreaches);
 
         RecyclerView breachesList = (RecyclerView) view.findViewById(R.id.breaches_list);
         breachesList.setHasFixedSize(true);
@@ -102,7 +101,8 @@ public class BreachDetailsFragment extends Fragment implements DatasetChangeList
     @Override
     public void datasetChanged() {
         myBreaches = Breach.findAllByAccount(myReadbableDb, myAccount);
-        myBreachesAdapter.changeList(myBreaches);
+        if ( myBreachesAdapter != null )
+            myBreachesAdapter.changeList(myBreaches);
     }
 
     public void setMyAccountId(long myAccountId) {
