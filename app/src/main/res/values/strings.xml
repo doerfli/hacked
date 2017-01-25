@@ -80,8 +80,4 @@
     <string name="affected_sites">Sites: %1$s</string>
     <string name="unconfirmed">(unconfirmed)</string>
     <string name="data_provided_by">Data provided by</string>
-    <string name="import_accounts">Search accounts</string>
-    <string name="accounts_imported">Account(s) imported</string>
-    <string name="app_search_not_found">Please install the app \"Hacked - Account search\" from the Play Store to search for existing accounts on your phone.</string>
-    <string name="open_play_store">Open Play Store</string>
 </resources>

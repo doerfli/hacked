@@ -18,10 +18,6 @@
 
     <group android:id="@+id/menu_2">
         <item
-            android:id="@+id/action_import"
-            android:title="@string/import_accounts"
-            />
-        <item
             android:id="@+id/action_settings"
             android:title="@string/action_settings" />
     </group>

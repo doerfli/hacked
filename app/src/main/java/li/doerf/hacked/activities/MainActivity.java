@@ -39,8 +39,7 @@ import li.doerf.hacked.utils.ConnectivityHelper;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
-    private static final int IMPORT_ACCOUNTS = 321;
-    private final String LOGTAG = getClass().getSimpleName();
+//    private final String LOGTAG = getClass().getSimpleName();
 
     private Fragment myContentFragment;
     private Toolbar myToolbar;
@@ -165,86 +164,11 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.action_settings) {
             Intent settingsIntent = new Intent(this, SettingsActivity.class);
             startActivity(settingsIntent);
-        } else if ( id == R.id.action_import ) {
-            Intent intent = new Intent();
-            intent.setAction("li.doerf.hacked.searchaccounts");
-            PackageManager packageManager = getPackageManager();
-            List activities = packageManager.queryIntentActivities(intent,
-                    PackageManager.MATCH_DEFAULT_ONLY);
-            // check if search app is installed
-            boolean isIntentSafe = activities.size() > 0;
-            if ( ! isIntentSafe ) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                builder.setTitle("App not found")
-                    .setMessage(getString(R.string.app_search_not_found))
-                    .setPositiveButton(R.string.open_play_store, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                            openPlayStoreHackedImporter();
-                        }
-                    })
-                    .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-
-                        }
-                    });
-                AlertDialog dialog = builder.create();
-                dialog.show();
-                ((TextView) dialog.findViewById(android.R.id.message)).setMovementMethod(LinkMovementMethod.getInstance());
-            } else {
-                startActivityForResult(intent, IMPORT_ACCOUNTS);
-            }
-            drawer.closeDrawer(Gravity.LEFT);
-
-            return true;
         }
-
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
 
-    private void openPlayStoreHackedImporter() {
-        Intent marketIntent = new Intent(
-                Intent.ACTION_VIEW,
-                Uri.parse("market://details?id=li.doerf.hackedimporter"));
-        marketIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        getApplicationContext().startActivity(marketIntent);
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == IMPORT_ACCOUNTS) {
-            // Make sure the request was successful
-            if (resultCode == RESULT_OK) {
-                SQLiteDatabase db = HackedSQLiteHelper.getInstance(getApplicationContext()).getWritableDatabase();
-                ArrayList<String> accounts = data.getStringArrayListExtra("accounts");
-
-                for ( String acc : accounts ) {
-                    Account account = Account.create( acc.trim());
-
-                    if ( account.exists(db) ) {
-                        Log.w(LOGTAG, "account already exists. ignoring");
-                        continue;
-                    }
-
-                    db.beginTransaction();
-                    account.insert(db);
-                    db.setTransactionSuccessful();
-                    db.endTransaction();
-                    account.notifyObservers();
-
-                    if ( ConnectivityHelper.isConnected( getApplicationContext()) ) {
-                        new HIBPCheckAccountAsyncTask(getApplicationContext(), null).execute( account.getId());
-                    } else {
-                        Log.w(LOGTAG, "no network, cannot sync");
-                    }
-                }
-
-                Snackbar.make(myToolbar, getString(R.string.accounts_imported), Snackbar.LENGTH_LONG).show();
-            }
-        }
-    }
 }
