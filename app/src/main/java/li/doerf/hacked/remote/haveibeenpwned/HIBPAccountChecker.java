@@ -1,6 +1,7 @@
 package li.doerf.hacked.remote.haveibeenpwned;
 
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Handler;
 import android.os.Looper;
@@ -17,6 +18,7 @@ import java.util.List;
 import java.util.Random;
 
 import li.doerf.hacked.R;
+import li.doerf.hacked.db.HackedSQLiteHelper;
 import li.doerf.hacked.db.tables.Account;
 import li.doerf.hacked.db.tables.Breach;
 import retrofit2.Call;
@@ -35,12 +37,88 @@ public class HIBPAccountChecker {
     private static long noReqBefore = 0;
 
     private final Context myContext;
+    private final IProgressUpdater myProgressUpdater;
 
-    public HIBPAccountChecker(Context aContext) {
+    public HIBPAccountChecker(Context aContext, IProgressUpdater aProgressUpdates) {
         myContext = aContext;
+        myProgressUpdater = aProgressUpdates;
+    }
+
+    public Boolean check(Long id) {
+        Log.d(LOGTAG, "starting check for breaches");
+        SQLiteDatabase db = HackedSQLiteHelper.getInstance(myContext).getWritableDatabase();
+        boolean newBreachFound = false;
+
+        Cursor c = null;
+
+        try {
+            if ( id == null ) {
+                Log.d(LOGTAG, "all ids");
+                c = Account.listAll(db);
+            } else {
+                Log.d(LOGTAG, "only id " + id);
+                c = Account.findCursorById(db, id);
+            }
+
+            while (c.moveToNext()) {
+                Account account = Account.create(db, c);
+                Log.d(LOGTAG, "Checking for account: " + account.getName());
+
+                try {
+                    List<BreachedAccount> breachedAccounts = doCheck(account.getName());
+                    newBreachFound |= processBreachedAccounts( db, account, breachedAccounts);
+                } finally {
+                    myProgressUpdater.updateProgress( account);
+                }
+            }
+        } finally {
+            Log.d(LOGTAG, "finished checking for breaches");
+            if ( c != null ) c.close();
+        }
+
+        return newBreachFound;
+    }
+
+    private boolean processBreachedAccounts(SQLiteDatabase db, Account account, List<BreachedAccount> breachedAccounts) {
+        boolean isNewBreachFound = false;
+
+        for (BreachedAccount ba : breachedAccounts) {
+            Breach existing = Breach.findByAccountAndName(db, account, ba.getName());
+
+            if (existing != null) {
+                Log.d(LOGTAG, "breach already existing: " + ba.getName());
+                continue;
+            }
+
+            Log.d(LOGTAG, "new breach: " + ba.getName());
+            Breach breach = Breach.create(
+                    account,
+                    ba.getName(),
+                    ba.getTitle(),
+                    ba.getDomain(),
+                    DateTime.parse(ba.getBreachDate()),
+                    DateTime.parse(ba.getAddedDate()),
+                    ba.getPwnCount(),
+                    ba.getDescription(),
+                    ba.getDataClasses(),
+                    ba.getIsVerified(),
+                    false
+            );
+            breach.insert(db);
+            Log.i(LOGTAG, "breach inserted into db");
+            isNewBreachFound |= true;
+        }
+
+        account.setLastChecked(DateTime.now());
+        if (isNewBreachFound && ! account.isHacked() ) {
+            account.setHacked(true);
+        }
+        account.update(db);
+
+        return isNewBreachFound;
     }
         
-    public List<BreachedAccount> check(String anAccount) {
+    private List<BreachedAccount> doCheck(String anAccount) {
         try {
             Response<List<BreachedAccount>> response = retrieveBreaches(anAccount);
 

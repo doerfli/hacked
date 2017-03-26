@@ -16,7 +16,8 @@
     <string name="status_no_breach_found">No breach found</string>
     <string name="status_breaches_found">%1$d breaches</string>
     <string name="status_breaches_found_acknowledged">%1$d breaches (%2$d acknowledged)</string>
-    <string name="notification_title_new_breaches_found">Found new breaches</string>
+    <string name="notification_title_new_breaches_found">Found new breached accounts</string>
+    <string name="notification_text_click_to_open">Tap here to see details</string>
     <string name="title_breach_details">Breach details</string>
     <string name="label_domain">Domain:</string>
     <string name="placeholder_domain">http://www.something.com</string>
