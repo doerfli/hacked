@@ -18,7 +18,6 @@ import li.doerf.hacked.utils.NotificationHelper;
 
 
 public class HIBPCheckAccountAsyncTask extends AsyncTask<Long,Account,Boolean> implements IProgressUpdater {
-    private final static String NOTIFICATION_GROUP_KEY_BREACHES = "group_key_breachs";
 
     private final String LOGTAG = getClass().getSimpleName();
     private final Context myContext;
@@ -75,9 +74,6 @@ public class HIBPCheckAccountAsyncTask extends AsyncTask<Long,Account,Boolean> i
         if ( myFragment != null ) {
             myFragment.refreshComplete();
         }
-        if ( aFoundNewBreach ) {
-            showNotification();
-        }
 
         if ( updateLastCheckTimestamp ) {
             SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(myContext);
@@ -87,35 +83,6 @@ public class HIBPCheckAccountAsyncTask extends AsyncTask<Long,Account,Boolean> i
             editor.apply();
             Log.i(LOGTAG, "updated last checked timestamp: " + ts);
         }
-    }
-
-    private void showNotification() {
-        if ( AccountListFragment.isFragmentShown() ) {
-            Log.d(LOGTAG, "AccountListFragment active, no notification shown");
-            return;
-        }
-
-        String title = myContext.getString(R.string.notification_title_new_breaches_found);
-        android.support.v4.app.NotificationCompat.Builder mBuilder =
-                new NotificationCompat.Builder(myContext)
-                        .setSmallIcon(android.R.drawable.ic_dialog_info)
-                        .setContentTitle(title)
-                        .setContentText(myContext.getString(R.string.notification_text_click_to_open))
-                        .setGroup(NOTIFICATION_GROUP_KEY_BREACHES);
-
-        Intent showBreachDetails = new Intent(myContext, MainActivity.class);
-        PendingIntent resultPendingIntent =
-                PendingIntent.getActivity(
-                        myContext,
-                        0,
-                        showBreachDetails,
-                        PendingIntent.FLAG_ONE_SHOT
-                );
-        mBuilder.setContentIntent(resultPendingIntent);
-
-        Notification notification = mBuilder.build();
-        notification.flags |= Notification.DEFAULT_LIGHTS | Notification.FLAG_AUTO_CANCEL;
-        NotificationHelper.notify(myContext, notification);
     }
 
     @Override
