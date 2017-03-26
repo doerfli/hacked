@@ -42,7 +42,7 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 
-public class HIBPCheckAccountAsyncTask extends AsyncTask<Long,Account,List<Account>> {
+public class HIBPCheckAccountAsyncTask extends AsyncTask<Long,Account,Boolean> {
     private final static String NOTIFICATION_GROUP_KEY_BREACHES = "group_key_breachs";
 
     private final String LOGTAG = getClass().getSimpleName();
@@ -68,39 +68,37 @@ public class HIBPCheckAccountAsyncTask extends AsyncTask<Long,Account,List<Accou
     }
 
     @Override
-    protected List<Account> doInBackground(Long... accountids) {
-        List<Account> result = Lists.newArrayList();
-
+    protected Boolean doInBackground(Long... accountids) {
+        boolean foundNewBreaches = false;
         if ( accountids.length > 0 ) {
             for (Long id : accountids) {
-                result.addAll(doCheck(id));
+                foundNewBreaches = doCheck(id);
             }
         } else {
             updateLastCheckTimestamp = true;
-            result.addAll(doCheck(null));
+            foundNewBreaches = doCheck(null);
         }
 
-        return result;
+        return foundNewBreaches;
     }
 
     @Override
     protected void onProgressUpdate(Account... accounts) {
         super.onProgressUpdate(accounts);
-        // db.endTransaction();
         if ( accounts.length > 0 ) {
             accounts[0].notifyObservers();
         }
     }
 
     @Override
-    protected void onPostExecute(List<Account> accounts) {
-        super.onPostExecute(accounts);
+    protected void onPostExecute(Boolean aFoundNewBreach) {
+        super.onPostExecute(aFoundNewBreach);
         running = false;
         if ( myFragment != null ) {
             myFragment.refreshComplete();
         }
-        if ( accounts.size() > 0 ) {
-            showNotification(accounts);
+        if ( aFoundNewBreach ) {
+            showNotification();
         }
 
         if ( updateLastCheckTimestamp ) {
@@ -113,12 +111,13 @@ public class HIBPCheckAccountAsyncTask extends AsyncTask<Long,Account,List<Accou
         }
     }
 
-    private List<Account> doCheck(Long id) {
+    private Boolean doCheck(Long id) {
         Log.d(LOGTAG, "starting check for breaches");
         SQLiteDatabase db = HackedSQLiteHelper.getInstance(myContext).getWritableDatabase();
+        HIBPAccountChecker checker = new HIBPAccountChecker( myContext);
+        boolean newBreachFound = false;
 
         Cursor c = null;
-        List<Account> newBreachedAccounts = new ArrayList<>();
 
         try {
             if ( id == null ) {
@@ -133,41 +132,9 @@ public class HIBPCheckAccountAsyncTask extends AsyncTask<Long,Account,List<Accou
                 Account account = Account.create(db, c);
                 Log.d(LOGTAG, "Checking for account: " + account.getName());
 
-                boolean isNewBreachFound = false;
-
                 try {
-                    // transactions are currently disabled as these lead to locking issues when
-                    // querying in parallel to inserts
-                    //  db.beginTransaction();
-                    Response<List<BreachedAccount>> response = retrieveBreaches(account);
-
-                    if (response.isSuccessful()) {
-                        List<BreachedAccount> breachedAccounts = response.body();
-                        isNewBreachFound = processBreachedAccounts(db, account, breachedAccounts);
-                    } else {
-                        if (response.code() == 404) {
-                            Log.i(LOGTAG, "no breach found: " + account.getName());
-                        } else {
-                            Log.w(LOGTAG, "unexpected response code: " + response.code());
-                        }
-                    }
-
-                    account.setLastChecked(DateTime.now());
-                    if (isNewBreachFound) {
-                        account.setHacked(true);
-                        newBreachedAccounts.add(account);
-                    }
-                    account.update(db);
-                    // db.setTransactionSuccessful();
-                } catch (IOException e) {
-                    Log.e(LOGTAG, "caughtIOException while contacting www.haveibeenpwned.com - " + e.getMessage(), e);
-                    new Handler(Looper.getMainLooper()).post(new Runnable() {
-                        @Override
-                        public void run() {
-                            Toast.makeText(myContext, myContext.getString(R.string.toast_error_error_during_check), Toast.LENGTH_LONG).show();
-                        }
-                    });
-                    break;
+                    List<BreachedAccount> breachedAccounts = checker.check(account.getName());
+                    newBreachFound |= processBreachedAccounts( db, account, breachedAccounts);
                 } finally {
                     publishProgress();
                 }
@@ -177,7 +144,7 @@ public class HIBPCheckAccountAsyncTask extends AsyncTask<Long,Account,List<Accou
             if ( c != null ) c.close();
         }
 
-        return newBreachedAccounts;
+        return newBreachFound;
     }
 
     private boolean processBreachedAccounts(SQLiteDatabase db, Account account, List<BreachedAccount> breachedAccounts) {
@@ -207,103 +174,30 @@ public class HIBPCheckAccountAsyncTask extends AsyncTask<Long,Account,List<Accou
             );
             breach.insert(db);
             Log.i(LOGTAG, "breach inserted into db");
-            isNewBreachFound = true;
+            isNewBreachFound |= true;
         }
+
+        account.setLastChecked(DateTime.now());
+        if (isNewBreachFound && ! account.isHacked() ) {
+            account.setHacked(true);
+        }
+        account.update(db);
 
         return isNewBreachFound;
     }
 
-    @NonNull
-    private Response<List<BreachedAccount>> retrieveBreaches(Account account) throws IOException {
-        Log.d(LOGTAG, "retrieving breaches: " + account.getName());
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("https://haveibeenpwned.com/")
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-
-        HaveIBeenPwned service = retrofit.create(HaveIBeenPwned.class);
-        Call<List<BreachedAccount>> breachedAccountsList = service.listBreachedAccounts(account.getName());
-        long timeDelta = noReqBefore - System.currentTimeMillis();
-
-        if (timeDelta > 0) {
-            try {
-                Log.d(LOGTAG, "waiting for " + timeDelta + "ms before next request");
-                Thread.sleep(timeDelta);
-            } catch (InterruptedException e) {
-                Log.e(LOGTAG, "caught InterruptedException while waiting for next request slot", e);
-            }
-        }
-
-        Response<List<BreachedAccount>> response = breachedAccountsList.execute();
-
-        // check next request timeout
-        String retryAfter = response.headers().get("Retry-After");
-        Random random = new Random();
-        if (retryAfter != null) {
-            noReqBefore = System.currentTimeMillis() + (Integer.parseInt(retryAfter) * 1000) + random.nextInt(100);
-        } else {
-            noReqBefore = System.currentTimeMillis() + (1500 + random.nextInt(100));
-        }
-
-        return response;
-    }
-
-    private void showNotification(List<Account> newBreachedAccounts) {
+    private void showNotification() {
         if ( AccountListFragment.isFragmentShown() ) {
             Log.d(LOGTAG, "AccountListFragment active, no notification shown");
             return;
         }
 
-        List<String> titles = Lists.newArrayList();
-        List<String> contents = Lists.newArrayList();
-
-        // one notification per breached account
-        for ( Account account : newBreachedAccounts ) {
-            List<Breach> breaches = Breach.findAllByAccount(HackedSQLiteHelper.getInstance(myContext).getReadableDatabase(), account);
-            List<String> names = FluentIterable.from(breaches).filter(new Predicate<Breach>() {
-                @Override
-                public boolean apply(Breach input) {
-                    return ! input.getIsAcknowledged();
-                }
-            }).transform(new Function<Breach,String>() {
-                @Override
-                public String apply(Breach input) {
-                    return input.getTitle();
-                }
-            }).toList();
-
-
-            String title = account.getName();
-            String text = myContext.getString(R.string.affected_sites, Joiner.on(", ").join(names));
-            android.support.v4.app.NotificationCompat.Builder mBuilder =
-                    new NotificationCompat.Builder(myContext)
-                            .setSmallIcon(android.R.drawable.ic_dialog_info)
-                            .setContentTitle(title)
-                            .setContentText(text)
-                            .setGroup(NOTIFICATION_GROUP_KEY_BREACHES);
-
-            titles.add(title);
-            contents.add(text);
-
-            Notification notification = mBuilder.build();
-            notification.flags |= Notification.DEFAULT_LIGHTS | Notification.FLAG_AUTO_CANCEL;
-            NotificationHelper.notify(myContext, notification);
-        }
-
-        // InboxStyle summary notification
-        android.support.v4.app.NotificationCompat.InboxStyle inboxStyle = new NotificationCompat.InboxStyle()
-                .setBigContentTitle(myContext.getString(R.string.notification_summary_found_breaches, newBreachedAccounts.size()))
-                .setSummaryText("Click to open Hacked?");
-
-        for ( int i = 0; i < titles.size(); i++) {
-            inboxStyle.addLine(titles.get(i) + " - " + contents.get(i));
-        }
-
-        android.support.v4.app.NotificationCompat.Builder summaryNotificationBuilder = new NotificationCompat.Builder(myContext)
-                .setSmallIcon(android.R.drawable.ic_dialog_info)
-                .setStyle(inboxStyle)
-                .setGroup(NOTIFICATION_GROUP_KEY_BREACHES)
-                .setGroupSummary(true);
+        String title = myContext.getString(R.string.notification_title_new_breaches_found);
+        android.support.v4.app.NotificationCompat.Builder mBuilder =
+                new NotificationCompat.Builder(myContext)
+                        .setSmallIcon(android.R.drawable.ic_dialog_info)
+                        .setContentTitle(title)
+                        .setGroup(NOTIFICATION_GROUP_KEY_BREACHES);
 
         Intent showBreachDetails = new Intent(myContext, MainActivity.class);
         PendingIntent resultPendingIntent =
@@ -313,10 +207,10 @@ public class HIBPCheckAccountAsyncTask extends AsyncTask<Long,Account,List<Accou
                         showBreachDetails,
                         PendingIntent.FLAG_ONE_SHOT
                 );
-        summaryNotificationBuilder.setContentIntent(resultPendingIntent);
+        mBuilder.setContentIntent(resultPendingIntent);
 
-        Notification notification = summaryNotificationBuilder.build();
-        notification.flags |= Notification.FLAG_GROUP_SUMMARY | Notification.FLAG_AUTO_CANCEL;
+        Notification notification = mBuilder.build();
+        notification.flags |= Notification.DEFAULT_LIGHTS | Notification.FLAG_AUTO_CANCEL;
         NotificationHelper.notify(myContext, notification);
     }
 }

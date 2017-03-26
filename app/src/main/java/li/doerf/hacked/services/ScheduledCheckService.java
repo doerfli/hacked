@@ -56,8 +56,8 @@ public class ScheduledCheckService extends IntentService {
 
         switch ( intervalString) {
             case "everyday":
-                return 1000 * 60 * 60 * 24;
-//                return 1000 * 30; // for testing
+//                return 1000 * 60 * 60 * 24;
+                return 1000 * 30; // for testing
 
             case "everytwodays":
                 return 1000 * 60 * 60 * 24 * 2;
