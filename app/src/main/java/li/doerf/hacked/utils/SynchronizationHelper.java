@@ -1,15 +1,11 @@
 package li.doerf.hacked.utils;
 
-import android.app.AlarmManager;
-import android.app.PendingIntent;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
 import li.doerf.hacked.R;
-import li.doerf.hacked.services.ScheduledCheckService;
 
 /**
  * Created by moo on 08/09/16.
@@ -26,26 +22,27 @@ public class SynchronizationHelper {
     }
 
     private static void enableSync(Context aContext) {
+        Log.i(LOGTAG, "scheduling synchronization");
 //        long interval = AlarmManager.INTERVAL_HALF_HOUR;
         long interval = 15000; // testing
-        PendingIntent checkerService = getPendingIntent(aContext);
 
-        AlarmManager alarmManager = (AlarmManager) aContext.getSystemService(Context.ALARM_SERVICE);
-        alarmManager.setInexactRepeating(AlarmManager.ELAPSED_REALTIME,
-                0,
-                interval,
-                checkerService);
-        Log.i(LOGTAG, "scheduled service to run every " + interval + " ms");
-    }
-
-    private static PendingIntent getPendingIntent(Context aContext) {
-        Intent i = new Intent(aContext, ScheduledCheckService.class);
-        return PendingIntent.getService(aContext, 0, i, 0);
+        if ( android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP ) {
+            IScheduler scheduler = new LollipopScheduler(aContext);
+            scheduler.scheduleCheckService(interval);
+        } else{
+            IScheduler scheduler = new JellyBeanScheduler(aContext);
+            scheduler.scheduleCheckService(interval);
+        }
     }
 
     private static void disableSync(Context aContext) {
-        AlarmManager alarmManager = (AlarmManager) aContext.getSystemService(Context.ALARM_SERVICE);
-        alarmManager.cancel(getPendingIntent(aContext));
-        Log.i(LOGTAG, "cancelled pending intent");
+        Log.i(LOGTAG, "unscheduling synchronization");
+        if ( android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP ) {
+            IScheduler scheduler = new LollipopScheduler(aContext);
+            scheduler.cancelCheckService();
+        } else{
+            IScheduler scheduler = new JellyBeanScheduler(aContext);
+            scheduler.cancelCheckService();
+        }
     }
 }
