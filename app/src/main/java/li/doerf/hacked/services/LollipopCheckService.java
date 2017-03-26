@@ -28,25 +28,21 @@ import li.doerf.hacked.utils.NotificationHelper;
 public class LollipopCheckService extends JobService {
     private static final String LOGTAG = "LollipopCheckService";
     private final static String NOTIFICATION_GROUP_KEY_BREACHES = "group_key_breachs";
-    private final CheckServiceHelper myHelper;
     private JobParameters myParams;
     HIBPAccountChecker checker;
-
-    public LollipopCheckService() {
-        myHelper = new CheckServiceHelper(getApplicationContext());
-    }
 
     @Override
     public boolean onStartJob(JobParameters jobParameters) {
         Log.d(LOGTAG, "onStartJob");
         myParams = jobParameters;
+        final CheckServiceHelper helper = new CheckServiceHelper(getApplicationContext());
 
         new Thread( new Runnable() {
             @Override
             public void run() {
                 SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
                 long lastSync = settings.getLong(getString(R.string.PREF_KEY_LAST_SYNC_TIMESTAMP), 0);
-                int currentInterval = myHelper.getCurrentInterval(settings);
+                int currentInterval = helper.getCurrentInterval(settings);
 
                 // check if time has come to run the service
                 if ( System.currentTimeMillis() < lastSync + currentInterval ) {
@@ -76,7 +72,7 @@ public class LollipopCheckService extends JobService {
                 Log.i(LOGTAG, "updated last checked timestamp: " + ts);
 
                 if ( foundNewBreaches ) {
-                    myHelper.showNotification();
+                    helper.showNotification();
                 }
 
                 jobFinished(myParams, false);
