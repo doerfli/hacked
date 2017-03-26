@@ -28,7 +28,13 @@ import li.doerf.hacked.utils.NotificationHelper;
 public class LollipopCheckService extends JobService {
     private static final String LOGTAG = "LollipopCheckService";
     private final static String NOTIFICATION_GROUP_KEY_BREACHES = "group_key_breachs";
+    private final CheckServiceHelper myHelper;
     private JobParameters myParams;
+    HIBPAccountChecker checker;
+
+    public LollipopCheckService() {
+        myHelper = new CheckServiceHelper(getApplicationContext());
+    }
 
     @Override
     public boolean onStartJob(JobParameters jobParameters) {
@@ -40,7 +46,7 @@ public class LollipopCheckService extends JobService {
             public void run() {
                 SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
                 long lastSync = settings.getLong(getString(R.string.PREF_KEY_LAST_SYNC_TIMESTAMP), 0);
-                int currentInterval = getCurrentInterval(settings);
+                int currentInterval = myHelper.getCurrentInterval(settings);
 
                 // check if time has come to run the service
                 if ( System.currentTimeMillis() < lastSync + currentInterval ) {
@@ -70,7 +76,7 @@ public class LollipopCheckService extends JobService {
                 Log.i(LOGTAG, "updated last checked timestamp: " + ts);
 
                 if ( foundNewBreaches ) {
-                    showNotification();
+                    myHelper.showNotification();
                 }
 
                 jobFinished(myParams, false);
@@ -83,58 +89,9 @@ public class LollipopCheckService extends JobService {
     @Override
     public boolean onStopJob(JobParameters jobParameters) {
         Log.i(LOGTAG, "onStopJob");
+        if ( checker != null ) {
+            checker.abort();
+        }
         return false;
-    }
-
-    // TODO duplicate code with JellyBeanCheckService
-    private void showNotification() {
-        if ( AccountListFragment.isFragmentShown() ) {
-            Log.d(LOGTAG, "AccountListFragment active, no notification shown");
-            return;
-        }
-
-        String title = getApplicationContext().getString(R.string.notification_title_new_breaches_found);
-        android.support.v4.app.NotificationCompat.Builder mBuilder =
-                new NotificationCompat.Builder(getApplicationContext())
-                        .setSmallIcon(android.R.drawable.ic_dialog_info)
-                        .setContentTitle(title)
-                        .setContentText(getApplicationContext().getString(R.string.notification_text_click_to_open))
-                        .setGroup(NOTIFICATION_GROUP_KEY_BREACHES);
-
-        Intent showBreachDetails = new Intent(getApplicationContext(), MainActivity.class);
-        PendingIntent resultPendingIntent =
-                PendingIntent.getActivity(
-                        getApplicationContext(),
-                        0,
-                        showBreachDetails,
-                        PendingIntent.FLAG_ONE_SHOT
-                );
-        mBuilder.setContentIntent(resultPendingIntent);
-
-        Notification notification = mBuilder.build();
-        notification.flags |= Notification.DEFAULT_LIGHTS | Notification.FLAG_AUTO_CANCEL;
-        NotificationHelper.notify(getApplicationContext(), notification);
-    }
-
-    private int getCurrentInterval(SharedPreferences aSettings) {
-        String intervalString = aSettings.getString(getString(R.string.pref_key_sync_interval), "everyday");
-
-        switch ( intervalString) {
-            case "everyday":
-//                return 1000 * 60 * 60 * 24;
-                return 1000 * 30; // for testing
-
-            case "everytwodays":
-                return 1000 * 60 * 60 * 24 * 2;
-
-            case "everythreedays":
-                return 1000 * 60 * 60 * 24 * 3;
-
-            case "everyweek":
-                return 1000 * 60 * 60 * 24 * 7;
-
-            default:
-                return 1000 * 60 * 60 * 24;
-        }
     }
 }

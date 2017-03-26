@@ -1,5 +1,6 @@
 package li.doerf.hacked.utils;
 
+import android.app.AlarmManager;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
@@ -23,8 +24,8 @@ public class SynchronizationHelper {
 
     private static void enableSync(Context aContext) {
         Log.i(LOGTAG, "scheduling synchronization");
-//        long interval = AlarmManager.INTERVAL_HALF_HOUR;
-        long interval = 15000; // testing
+        long interval = AlarmManager.INTERVAL_HALF_HOUR;
+//        long interval = 15000; // testing
 
         if ( android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP ) {
             IScheduler scheduler = new LollipopScheduler(aContext);

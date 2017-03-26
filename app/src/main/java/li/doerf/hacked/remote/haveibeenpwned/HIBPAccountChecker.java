@@ -38,6 +38,7 @@ public class HIBPAccountChecker {
 
     private final Context myContext;
     private final IProgressUpdater myProgressUpdater;
+    private boolean abort = false;
 
     public HIBPAccountChecker(Context aContext, IProgressUpdater aProgressUpdates) {
         myContext = aContext;
@@ -48,6 +49,7 @@ public class HIBPAccountChecker {
         Log.d(LOGTAG, "starting check for breaches");
         SQLiteDatabase db = HackedSQLiteHelper.getInstance(myContext).getWritableDatabase();
         boolean newBreachFound = false;
+        abort = false;
 
         Cursor c = null;
 
@@ -60,7 +62,7 @@ public class HIBPAccountChecker {
                 c = Account.findCursorById(db, id);
             }
 
-            while (c.moveToNext()) {
+            while (c.moveToNext() && ! abort) {
                 Account account = Account.create(db, c);
                 Log.d(LOGTAG, "Checking for account: " + account.getName());
 
@@ -180,5 +182,8 @@ public class HIBPAccountChecker {
 
         return response;
     }
-    
+
+    public void abort() {
+        abort = true;
+    }
 }
