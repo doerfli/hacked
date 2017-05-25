@@ -30,10 +30,15 @@ import li.doerf.hacked.utils.NotificationHelper;
 @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
 public class JellyBeanCheckService extends IntentService {
     private final String LOGTAG = getClass().getSimpleName();
-    private final CheckServiceHelper myHelper;
+    private CheckServiceHelper myHelper;
 
     public JellyBeanCheckService() {
         super("JellyBeanCheckService");
+    }
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
         myHelper = new CheckServiceHelper(getApplicationContext());
     }
 
