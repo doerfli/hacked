@@ -48,7 +48,19 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
         if ( getString(R.string.pref_key_sync_enable).equals( key) ||
                 getString( R.string.pref_key_sync_interval).equals( key)
                 ) {
-            SynchronizationHelper.scheduleSync(getActivity().getApplicationContext());
+            boolean enabled = SynchronizationHelper.scheduleSync(getActivity().getApplicationContext());
+
+            if ( enabled) {
+                myTracker.send(new HitBuilders.EventBuilder()
+                        .setCategory("Action")
+                        .setAction("BackgroundSyncEnable")
+                        .build());
+            } else {
+                myTracker.send(new HitBuilders.EventBuilder()
+                        .setCategory("Action")
+                        .setAction("BackgroundSyncDisable")
+                        .build());
+            }
         }
     }
 

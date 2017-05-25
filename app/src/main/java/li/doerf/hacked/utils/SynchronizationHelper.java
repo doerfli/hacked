@@ -14,12 +14,17 @@ import li.doerf.hacked.R;
 public class SynchronizationHelper {
     private static final String LOGTAG = "SynchronizationHelper";
 
-    public static void scheduleSync(Context aContext) {
+    public static boolean scheduleSync(Context aContext) {
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(aContext);
         disableSync(aContext);
+        boolean enabled = false;
+
         if (settings.getBoolean(aContext.getString(R.string.pref_key_sync_enable), false)) {
             enableSync(aContext);
+            enabled = true;
         }
+
+        return enabled;
     }
 
     private static void enableSync(Context aContext) {
