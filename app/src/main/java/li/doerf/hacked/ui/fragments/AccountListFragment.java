@@ -27,6 +27,10 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
+
+import li.doerf.hacked.HackedApplication;
 import li.doerf.hacked.R;
 import li.doerf.hacked.db.DatasetChangeListener;
 import li.doerf.hacked.db.HackedSQLiteHelper;
@@ -48,9 +52,12 @@ public class AccountListFragment extends Fragment implements DatasetChangeListen
     private View myFragmentRootView;
     private static boolean isFragmentShown = false;
     private SwipeRefreshLayout mySwipeRefreshLayout;
+    private Tracker myTracker;
 
-    public static AccountListFragment create() {
-        return new AccountListFragment();
+    public static AccountListFragment create(Tracker aTracker) {
+        AccountListFragment f = new AccountListFragment();
+        f.myTracker = aTracker;
+        return f;
     }
 
     public AccountListFragment() {
@@ -85,6 +92,10 @@ public class AccountListFragment extends Fragment implements DatasetChangeListen
             @Override
             public void onRefresh() {
                 checkForBreaches(null);
+                myTracker.send(new HitBuilders.EventBuilder()
+                        .setCategory("Action")
+                        .setAction("CheckForBreaches")
+                        .build());
             }
         });
 
@@ -101,6 +112,9 @@ public class AccountListFragment extends Fragment implements DatasetChangeListen
         refreshList();
         Account.registerDatasetChangedListener(this, Account.class);
         isFragmentShown = true;
+
+        myTracker.setScreenName("Fragment~AccountList");
+        myTracker.send(new HitBuilders.ScreenViewBuilder().build());
     }
 
     @Override
@@ -137,6 +151,7 @@ public class AccountListFragment extends Fragment implements DatasetChangeListen
 
         if (id == R.id.action_add_account) {
             AddAccountDialogFragment newFragment = new AddAccountDialogFragment();
+            newFragment.setTracker(myTracker);
             newFragment.show(getFragmentManager(), "addaccount");
             return true;
         }
@@ -156,6 +171,11 @@ public class AccountListFragment extends Fragment implements DatasetChangeListen
                 public void onClick(View v) {
                     EditText accountET = (EditText) aRootView.findViewById(R.id.account);
                     String accountName = accountET.getText().toString().trim();
+
+                    myTracker.send(new HitBuilders.EventBuilder()
+                            .setCategory("Action")
+                            .setAction("AddInitialAccount")
+                            .build());
 
                     if ( accountName.equals("") ) {
                         Toast.makeText(getContext(), getString(R.string.toast_please_enter_account), Toast.LENGTH_LONG).show();
@@ -207,6 +227,11 @@ public class AccountListFragment extends Fragment implements DatasetChangeListen
                     SharedPreferences.Editor editor = settings.edit();
                     editor.putBoolean(getString(R.string.pref_initial_setup_check_done), true);
                     editor.apply();
+
+                    myTracker.send(new HitBuilders.EventBuilder()
+                            .setCategory("Action")
+                            .setAction("InitialSyncDisable")
+                            .build());
                 }
             });
 
@@ -220,6 +245,11 @@ public class AccountListFragment extends Fragment implements DatasetChangeListen
                     editor.putBoolean(getString(R.string.pref_key_sync_enable), true);
                     editor.putBoolean(getString(R.string.pref_initial_setup_check_done), true);
                     editor.apply();
+
+                    myTracker.send(new HitBuilders.EventBuilder()
+                            .setCategory("Action")
+                            .setAction("InitialSyncEnable")
+                            .build());
 
                     SynchronizationHelper.scheduleSync(getContext());
                     Toast.makeText(getContext(), getString(R.string.toast_check_enabled), Toast.LENGTH_LONG).show();
@@ -244,6 +274,11 @@ public class AccountListFragment extends Fragment implements DatasetChangeListen
                     SharedPreferences.Editor editor = settings.edit();
                     editor.putBoolean(getString(R.string.pref_initial_help_dismissed), true);
                     editor.apply();
+
+                    myTracker.send(new HitBuilders.EventBuilder()
+                            .setCategory("Action")
+                            .setAction("InitialHelpDismiss")
+                            .build());
                 }
             });
         }

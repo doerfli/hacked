@@ -14,6 +14,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
+
 import java.util.List;
 
 import li.doerf.hacked.R;
@@ -34,11 +37,13 @@ public class BreachDetailsFragment extends Fragment implements DatasetChangeList
     private List<Breach> myBreaches;
     private BreachesAdapter myBreachesAdapter;
     private long myAccountId;
+    private Tracker myTracker;
 
 
-    public static BreachDetailsFragment create(long accountId) {
+    public static BreachDetailsFragment create(long accountId, Tracker aTracker) {
         BreachDetailsFragment fragment = new BreachDetailsFragment();
         fragment.setMyAccountId(accountId);
+        fragment.myTracker = aTracker;
         return fragment;
     }
 
@@ -50,6 +55,7 @@ public class BreachDetailsFragment extends Fragment implements DatasetChangeList
         myAccount = Account.findById(myReadbableDb, myAccountId);
         myBreaches = Breach.findAllByAccount(myReadbableDb, myAccount);
         myBreachesAdapter = new BreachesAdapter(getContext(), myBreaches);
+        myBreachesAdapter.setTracker(myTracker);
     }
 
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -84,6 +90,9 @@ public class BreachDetailsFragment extends Fragment implements DatasetChangeList
     public void onResume() {
         super.onResume();
         Breach.registerDatasetChangedListener(this, Breach.class);
+
+        myTracker.setScreenName("Fragment~BreachDetails");
+        myTracker.send(new HitBuilders.ScreenViewBuilder().build());
     }
 
     @Override

@@ -30,4 +30,5 @@ dependencies {
     compile 'com.squareup.retrofit2:converter-gson:2.1.0'
     compile 'com.google.guava:guava:20.0'                         // https://github.com/google/guava
     compile 'joda-time:joda-time:2.9.4'                           // http://www.joda.org/joda-time/
+    compile 'com.google.android.gms:play-services-analytics:10.2.6'
 }

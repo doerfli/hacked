@@ -6,6 +6,9 @@ import android.os.Bundle;
 import android.preference.PreferenceFragment;
 import android.util.Log;
 
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
+
 import li.doerf.hacked.R;
 import li.doerf.hacked.utils.SynchronizationHelper;
 
@@ -15,6 +18,7 @@ import li.doerf.hacked.utils.SynchronizationHelper;
  */
 public class SettingsFragment extends PreferenceFragment implements SharedPreferences.OnSharedPreferenceChangeListener {
     private final String LOGTAG = getClass().getSimpleName();
+    private Tracker myTracker;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -28,6 +32,8 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
     public void onResume() {
         super.onResume();
         getPreferenceScreen().getSharedPreferences().registerOnSharedPreferenceChangeListener(this);
+        myTracker.setScreenName("Fragment~Settings");
+        myTracker.send(new HitBuilders.ScreenViewBuilder().build());
     }
 
     @Override
@@ -44,5 +50,9 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
                 ) {
             SynchronizationHelper.scheduleSync(getActivity().getApplicationContext());
         }
+    }
+
+    public void setTracker(Tracker myTracker) {
+        this.myTracker = myTracker;
     }
 }

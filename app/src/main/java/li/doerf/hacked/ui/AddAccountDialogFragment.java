@@ -14,6 +14,9 @@ import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
+
 import li.doerf.hacked.R;
 import li.doerf.hacked.db.HackedSQLiteHelper;
 import li.doerf.hacked.db.tables.Account;
@@ -28,6 +31,7 @@ import li.doerf.hacked.utils.ConnectivityHelper;
 public class AddAccountDialogFragment extends DialogFragment {
     private final String LOGTAG = getClass().getSimpleName();
     private String myName;
+    private Tracker myTracker;
 
     @NonNull
     @Override
@@ -84,11 +88,20 @@ public class AddAccountDialogFragment extends DialogFragment {
         db.endTransaction();
         account.notifyObservers();
 
+        myTracker.send(new HitBuilders.EventBuilder()
+                .setCategory("Action")
+                .setAction("AddAccount")
+                .build());
+
         if ( ! ConnectivityHelper.isConnected( getContext()) ) {
             Log.i(LOGTAG, "no network");
             return;
         }
 
         new HIBPCheckAccountAsyncTask(getContext(), null).execute( account.getId());
+    }
+
+    public void setTracker(Tracker aTracker) {
+        myTracker = aTracker;
     }
 }

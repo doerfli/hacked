@@ -11,6 +11,9 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
+
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
@@ -26,6 +29,7 @@ import li.doerf.hacked.db.tables.Breach;
  */
 public class BreachesAdapter extends RecyclerViewListAdapter<RecyclerViewHolder, Breach> {
     private final String LOGTAG = getClass().getSimpleName();
+    private Tracker myTracker;
 
     public BreachesAdapter(Context aContext, List<Breach> aList) {
         super(aContext, aList);
@@ -79,6 +83,10 @@ public class BreachesAdapter extends RecyclerViewListAdapter<RecyclerViewHolder,
                     breach.update(db);
                     db.setTransactionSuccessful();
                     db.endTransaction();
+                    myTracker.send(new HitBuilders.EventBuilder()
+                            .setCategory("Action")
+                            .setAction("BreachAcknowledged")
+                            .build());
                     Snackbar.make(cardView, getContext().getString(R.string.breach_acknowledged), Snackbar.LENGTH_SHORT).show();
                     breach.notifyObservers();
 
@@ -96,4 +104,7 @@ public class BreachesAdapter extends RecyclerViewListAdapter<RecyclerViewHolder,
         }
     }
 
+    public void setTracker(Tracker aTracker) {
+        myTracker = aTracker;
+    }
 }

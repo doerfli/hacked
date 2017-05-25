@@ -25,9 +25,13 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
+
 import java.util.ArrayList;
 import java.util.List;
 
+import li.doerf.hacked.HackedApplication;
 import li.doerf.hacked.R;
 import li.doerf.hacked.db.HackedSQLiteHelper;
 import li.doerf.hacked.db.tables.Account;
@@ -44,6 +48,7 @@ public class MainActivity extends AppCompatActivity
     private Fragment myContentFragment;
     private Toolbar myToolbar;
     private DrawerLayout drawer;
+    private Tracker myTracker;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,7 +57,10 @@ public class MainActivity extends AppCompatActivity
         myToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(myToolbar);
 
-        myContentFragment = AccountListFragment.create();
+        HackedApplication application = (HackedApplication) getApplication();
+        myTracker = application.getDefaultTracker();
+
+        myContentFragment = AccountListFragment.create( myTracker);
         getSupportFragmentManager()
                 .beginTransaction()
                 .replace(R.id.fragment_container, myContentFragment)
@@ -64,8 +72,16 @@ public class MainActivity extends AppCompatActivity
             public void onClick(View view) {
                 if ( myContentFragment instanceof AccountListFragment ) {
                     ((AccountListFragment) myContentFragment).checkForBreaches(null);
+                    myTracker.send(new HitBuilders.EventBuilder()
+                            .setCategory("Action")
+                            .setAction("CheckForBreaches")
+                            .build());
                 } else if ( myContentFragment instanceof BreachedSitesListFragment ) {
                     ((BreachedSitesListFragment)myContentFragment).reloadBreachedSites();
+                    myTracker.send(new HitBuilders.EventBuilder()
+                            .setCategory("Action")
+                            .setAction("ReloadBreachedSites")
+                            .build());
                 }
             }
         });
@@ -82,10 +98,12 @@ public class MainActivity extends AppCompatActivity
         setTitle(getString(R.string.nd_accounts));
     }
 
-//    @Override
-//    protected void onResume() {
-//        super.onResume();
-//    }
+    @Override
+    protected void onResume() {
+        super.onResume();
+//        myTracker.setScreenName("Activity~Main");
+//        myTracker.send(new HitBuilders.ScreenViewBuilder().build());
+    }
 
 //    @Override
 //    protected void onPause() {
@@ -130,7 +148,7 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.action_accounts_list) {
-            myContentFragment = AccountListFragment.create();
+            myContentFragment = AccountListFragment.create(myTracker);
             myToolbar.setTitle(getString(R.string.nd_accounts));
             getSupportFragmentManager()
                     .beginTransaction()
@@ -138,7 +156,7 @@ public class MainActivity extends AppCompatActivity
                     .addToBackStack("account_list")
                     .commit();
         } else if (id == R.id.action_top_breached_sites) {
-            myContentFragment = BreachedSitesListFragment.create(BreachListType.Top20);
+            myContentFragment = BreachedSitesListFragment.create(BreachListType.Top20, myTracker);
             myToolbar.setTitle(getString(R.string.nd_top_20_breached_websites));
             getSupportFragmentManager()
                     .beginTransaction()
@@ -146,7 +164,7 @@ public class MainActivity extends AppCompatActivity
                     .addToBackStack("top20_breached_sites")
                     .commit();
         } else if (id == R.id.action_most_recent_breaches) {
-            myContentFragment = BreachedSitesListFragment.create(BreachListType.MostRecent);
+            myContentFragment = BreachedSitesListFragment.create(BreachListType.MostRecent, myTracker);
             myToolbar.setTitle(getString(R.string.nd_most_recent_breaches));
             getSupportFragmentManager()
                     .beginTransaction()
@@ -154,7 +172,7 @@ public class MainActivity extends AppCompatActivity
                     .addToBackStack("most_recent_breached_sites")
                     .commit();
         } else if (id == R.id.action_all_breaches) {
-            myContentFragment = BreachedSitesListFragment.create(BreachListType.All);
+            myContentFragment = BreachedSitesListFragment.create(BreachListType.All, myTracker);
             myToolbar.setTitle(getString(R.string.nd_all_breaches));
             getSupportFragmentManager()
                     .beginTransaction()
