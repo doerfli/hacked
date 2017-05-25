@@ -145,7 +145,7 @@ public class HIBPAccountChecker {
                 }
             });
         }
-        return null;
+        return Lists.newArrayList();
     }
 
     @NonNull
