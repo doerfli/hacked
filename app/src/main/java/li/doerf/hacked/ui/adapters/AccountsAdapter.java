@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.CardView;
 import android.view.LayoutInflater;
@@ -12,8 +13,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.google.android.gms.analytics.Tracker;
-import com.google.common.base.Predicate;
-import com.google.common.collect.FluentIterable;
+import com.google.common.collect.Collections2;
 
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
@@ -53,9 +53,10 @@ public class AccountsAdapter extends RecyclerViewCursorAdapter<RecyclerViewHolde
         final Account account = Account.create(db, aCursor);
         final Collection<Breach> breaches = Breach.findAllByAccount(db, account);
         int numBreaches = breaches.size();
-        int numAcknowledgedBreaches = FluentIterable.from(breaches).filter(new Predicate<Breach>() {
+        int numAcknowledgedBreaches = Collections2.filter(breaches, new com.google.common.base.Predicate<Breach>() {
             @Override
-            public boolean apply(Breach input) {
+            public boolean apply(@Nullable Breach input) {
+                if ( input == null ) { return false; }
                 return input.getIsAcknowledged();
             }
         }).size();
