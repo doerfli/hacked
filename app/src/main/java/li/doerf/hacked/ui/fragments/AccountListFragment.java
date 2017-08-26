@@ -68,7 +68,7 @@ public class AccountListFragment extends Fragment implements DatasetChangeListen
     public void onAttach(Context context) {
         super.onAttach(context);
         myReadbableDb = HackedSQLiteHelper.getInstance(getContext()).getReadableDatabase();
-        myAccountsAdapter = new AccountsAdapter(getContext(), null, getFragmentManager());
+        myAccountsAdapter = new AccountsAdapter(getContext(), null, getFragmentManager(), myTracker);
         setHasOptionsMenu(true);
     }
 

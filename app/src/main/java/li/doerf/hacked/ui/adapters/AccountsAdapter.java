@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.google.android.gms.analytics.Tracker;
 import com.google.common.base.Predicate;
 import com.google.common.collect.FluentIterable;
 
@@ -29,10 +30,12 @@ import li.doerf.hacked.ui.DeleteAccountDialogFragment;
 public class AccountsAdapter extends RecyclerViewCursorAdapter<RecyclerViewHolder> {
     private final String LOGTAG = getClass().getSimpleName();
     private final FragmentManager mySupportFragmentManager;
+    private final Tracker myTracker;
 
-    public AccountsAdapter(Context aContext, Cursor aCursor, FragmentManager supportFragmentManager){
+    public AccountsAdapter(Context aContext, Cursor aCursor, FragmentManager supportFragmentManager, Tracker aTracker){
         super(aContext, aCursor);
         mySupportFragmentManager = supportFragmentManager;
+        myTracker = aTracker;
     }
 
     @Override
@@ -110,6 +113,7 @@ public class AccountsAdapter extends RecyclerViewCursorAdapter<RecyclerViewHolde
             public boolean onLongClick(View v) {
                 DeleteAccountDialogFragment d = new DeleteAccountDialogFragment();
                 d.setAccount(account);
+                d.setTracker(myTracker);
                 d.show(mySupportFragmentManager, "deleteAccount");
                 return true;
             }
