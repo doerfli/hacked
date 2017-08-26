@@ -1,15 +1,18 @@
 package li.doerf.hacked.remote.haveibeenpwned;
 
+import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.gson.JsonElement;
 
 import java.io.IOException;
 
+import li.doerf.hacked.R;
 import retrofit2.Call;
 import retrofit2.Response;
 import retrofit2.Retrofit;
@@ -24,11 +27,14 @@ public class HIBPPasswordAsyncTask extends AsyncTask<String,Void,Boolean> {
     private ProgressBar progressBar;
     private TextView passwordOk;
     private TextView passwordPwned;
+    private Exception exception;
+    private Context myContext;
     
-    public HIBPPasswordAsyncTask(ProgressBar aProgressBar, TextView aPasswordOk, TextView aPasswordPwned) {
+    public HIBPPasswordAsyncTask(Context context, ProgressBar aProgressBar, TextView aPasswordOk, TextView aPasswordPwned) {
         progressBar = aProgressBar;
         passwordOk = aPasswordOk;
         passwordPwned = aPasswordPwned;
+        myContext = context;
     }
 
     @Override
@@ -70,7 +76,7 @@ public class HIBPPasswordAsyncTask extends AsyncTask<String,Void,Boolean> {
             }
         } catch (IOException e) {
             Log.e(TAG, "caught IOException while checking password", e);
-            // TODO handle this
+            exception = e;
         }
 
         return pwned;
@@ -80,12 +86,19 @@ public class HIBPPasswordAsyncTask extends AsyncTask<String,Void,Boolean> {
     protected void onPostExecute(Boolean pwned) {
         progressBar.setVisibility(View.GONE);
 
-        if ( ! pwned ) {
+        if ( exception != null ) {
+            Toast.makeText(myContext, myContext.getString(R.string.error_download_data), Toast.LENGTH_SHORT).show();
+        } else if ( ! pwned ) {
             passwordOk.setVisibility(View.VISIBLE);
         } else {
             passwordPwned.setVisibility(View.VISIBLE);
         }
 
         super.onPostExecute(pwned);
+    }
+
+    @Override
+    protected void onCancelled() {
+        super.onCancelled();
     }
 }

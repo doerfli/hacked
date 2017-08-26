@@ -20,10 +20,6 @@ import li.doerf.hacked.remote.haveibeenpwned.HIBPPasswordAsyncTask;
 import li.doerf.hacked.ui.HibpInfo;
 
 /**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link PasswordFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
  * Use the {@link PasswordFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
@@ -44,7 +40,6 @@ public class PasswordFragment extends Fragment {
      *
      * @return A new instance of fragment PasswordFragment.
      */
-    // TODO: Rename and change types and number of parameters
     public static PasswordFragment newInstance() {
         PasswordFragment fragment = new PasswordFragment();
         Bundle args = new Bundle();
@@ -90,7 +85,7 @@ public class PasswordFragment extends Fragment {
 
     private void checkPassword() {
         String password = passwordEditText.getText().toString();
-        HIBPPasswordAsyncTask passwordCheck = new HIBPPasswordAsyncTask(progressBar, passwordOk, passwordPwned);
+        HIBPPasswordAsyncTask passwordCheck = new HIBPPasswordAsyncTask(getContext(), progressBar, passwordOk, passwordPwned);
         passwordCheck.execute(password);
     }
 }
