@@ -1,45 +1,29 @@
 package li.doerf.hacked.activities;
 
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.database.sqlite.SQLiteDatabase;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.text.method.LinkMovementMethod;
-import android.util.Log;
-import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.TextView;
 
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import li.doerf.hacked.HackedApplication;
 import li.doerf.hacked.R;
-import li.doerf.hacked.db.HackedSQLiteHelper;
-import li.doerf.hacked.db.tables.Account;
-import li.doerf.hacked.remote.haveibeenpwned.HIBPCheckAccountAsyncTask;
 import li.doerf.hacked.ui.fragments.AccountListFragment;
 import li.doerf.hacked.ui.fragments.BreachListType;
 import li.doerf.hacked.ui.fragments.BreachedSitesListFragment;
-import li.doerf.hacked.utils.ConnectivityHelper;
+import li.doerf.hacked.ui.fragments.PasswordFragment;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -178,6 +162,14 @@ public class MainActivity extends AppCompatActivity
                     .beginTransaction()
                     .replace(R.id.fragment_container, myContentFragment)
                     .addToBackStack("all_breached_sites")
+                    .commit();
+        } else if (id == R.id.action_pwned_password) {
+            myContentFragment = PasswordFragment.newInstance();
+            myToolbar.setTitle(getString(R.string.nd_pwned_passwords));
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.fragment_container, myContentFragment)
+                    .addToBackStack("pwned_passwords")
                     .commit();
         } else if (id == R.id.action_settings) {
             Intent settingsIntent = new Intent(this, SettingsActivity.class);

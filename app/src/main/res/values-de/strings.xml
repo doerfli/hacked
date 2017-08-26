@@ -82,4 +82,10 @@
     <string name="affected_sites">Seiten: %1$s</string>
     <string name="unconfirmed">(unbestätigt)</string>
     <string name="data_provided_by">Daten bereitgestellt von</string>
+    <string name="pwned">Pwned?</string>
+    <string name="password">Passwort</string>
+    <string name="nd_pwned_passwords">Pwned Passwords</string>
+    <string name="password_ok">Dieses Password scheint ok zu sein.</string>
+    <string name="password_pwned">Dieses Passwort wurde in einem Datenleck gefunden und sollte nicht mehr benutzt werden. Wenn dieses Passwort bereits irgendwo benutzt wird, dann sollte es umgehend geändert werden.</string>
+    <string name="password_info">Geben Sie ein Passwort ein um es in exponierten Datenlecks zu suchen. Achtung: <b>Senden Sie niemals aktive Passwörter</b> an jemanden den Sie nicht kennen!</string>
 </resources>

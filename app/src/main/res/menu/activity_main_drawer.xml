@@ -16,6 +16,12 @@
             android:title="@string/nd_all_breaches" />
     </group>
 
+    <group android:id="@+id/menu_3">
+        <item
+            android:id="@+id/action_pwned_password"
+            android:title="@string/nd_pwned_passwords" />
+    </group>
+
     <group android:id="@+id/menu_2">
         <item
             android:id="@+id/action_settings"
