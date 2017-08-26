@@ -43,7 +43,7 @@ public class HIBPPasswordAsyncTask extends AsyncTask<String,Void,Boolean> {
     protected Boolean doInBackground(String... strings) {
         String password = strings[0];
 
-        Log.d(TAG, "checking password: " + password); // TODO remove
+        Log.d(TAG, "checking password: ");
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("https://haveibeenpwned.com/")
                 .addConverterFactory(GsonConverterFactory.create())
