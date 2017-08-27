@@ -164,7 +164,7 @@ public class MainActivity extends AppCompatActivity
                     .addToBackStack("all_breached_sites")
                     .commit();
         } else if (id == R.id.action_pwned_password) {
-            myContentFragment = PasswordFragment.newInstance();
+            myContentFragment = PasswordFragment.newInstance( myTracker);
             myToolbar.setTitle(getString(R.string.nd_pwned_passwords));
             getSupportFragmentManager()
                     .beginTransaction()
