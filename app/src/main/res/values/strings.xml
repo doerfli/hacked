@@ -88,4 +88,5 @@
     <string name="password_ok">This password looks ok.</string>
     <string name="password_pwned">This password was exposed in a known data breach and should never be used. If you have used it anywhere, change it immediately!</string>
     <string name="password_info">Enter password below to check if it was exposed in data breaches.\nA word of caution: <b>Never send your active passwords</b> to someone you don\'t know!</string>
+    <string name="channel_name">Hacked?</string>
 </resources>

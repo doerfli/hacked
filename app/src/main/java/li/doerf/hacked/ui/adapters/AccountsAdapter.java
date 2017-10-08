@@ -26,6 +26,7 @@ import li.doerf.hacked.db.HackedSQLiteHelper;
 import li.doerf.hacked.db.tables.Account;
 import li.doerf.hacked.db.tables.Breach;
 import li.doerf.hacked.ui.DeleteAccountDialogFragment;
+import li.doerf.hacked.utils.NotificationHelper;
 
 public class AccountsAdapter extends RecyclerViewCursorAdapter<RecyclerViewHolder> {
     private final String LOGTAG = getClass().getSimpleName();
@@ -106,6 +107,7 @@ public class AccountsAdapter extends RecyclerViewCursorAdapter<RecyclerViewHolde
                 Intent showBreachDetails = new Intent(getContext(), BreachDetailsActivity.class);
                 showBreachDetails.putExtra(BreachDetailsActivity.EXTRA_ACCOUNT_ID, account.getId());
                 getContext().startActivity(showBreachDetails);
+                NotificationHelper.cancelAll(getContext());
             }
         });
 

@@ -1,20 +1,15 @@
 package li.doerf.hacked.remote.haveibeenpwned;
 
-import android.app.Notification;
-import android.app.PendingIntent;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.preference.PreferenceManager;
-import android.support.v7.app.NotificationCompat;
 import android.util.Log;
 
 import li.doerf.hacked.R;
-import li.doerf.hacked.activities.MainActivity;
 import li.doerf.hacked.db.tables.Account;
+import li.doerf.hacked.services.CheckServiceHelper;
 import li.doerf.hacked.ui.fragments.AccountListFragment;
-import li.doerf.hacked.utils.NotificationHelper;
 
 
 public class HIBPCheckAccountAsyncTask extends AsyncTask<Long,Account,Boolean> implements IProgressUpdater {
@@ -82,6 +77,11 @@ public class HIBPCheckAccountAsyncTask extends AsyncTask<Long,Account,Boolean> i
             editor.putLong(myContext.getString(R.string.PREF_KEY_LAST_SYNC_TIMESTAMP), ts);
             editor.apply();
             Log.i(LOGTAG, "updated last checked timestamp: " + ts);
+        }
+
+        if ( aFoundNewBreach) {
+            CheckServiceHelper h = new CheckServiceHelper(myContext);
+            h.showNotification();
         }
     }
 

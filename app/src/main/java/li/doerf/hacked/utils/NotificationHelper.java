@@ -1,7 +1,6 @@
 package li.doerf.hacked.utils;
 
 import android.app.Notification;
-import android.app.NotificationManager;
 import android.content.Context;
 import android.support.v4.app.NotificationManagerCompat;
 import android.util.Log;
@@ -34,5 +33,10 @@ public class NotificationHelper {
         notificationManager.notify(aNotificationId, aNotification);
         Log.d(LOGTAG, "notification build and issued: " + aNotificationId);
         return aNotificationId;
+    }
+
+    public static void cancelAll(Context aContext) {
+        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(aContext);
+        notificationManager.cancelAll();
     }
 }
