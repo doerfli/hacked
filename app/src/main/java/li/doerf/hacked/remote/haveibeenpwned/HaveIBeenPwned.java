@@ -1,7 +1,5 @@
 package li.doerf.hacked.remote.haveibeenpwned;
 
-import com.google.gson.JsonElement;
-
 import java.util.List;
 
 import retrofit2.Call;
@@ -21,7 +19,7 @@ public interface HaveIBeenPwned {
             "Accept: application/vnd.haveibeenpwned.v2+json",
             "User-Agent: Hacked_Android_Client"
     })
-    @GET("/api/v2/breachedaccount/{account}")
+    @GET("/api/v2/breachedaccount/{account}?includeUnverified=true")
     Call<List<BreachedAccount>> listBreachedAccounts(@Path("account") String account);
 
     @Headers({
