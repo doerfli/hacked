@@ -2,7 +2,7 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 26
-    buildToolsVersion "26.0.1"
+    buildToolsVersion '26.0.2'
 
     defaultConfig {
         applicationId "li.doerf.hacked"
@@ -35,6 +35,6 @@ dependencies {
     compile 'com.squareup.retrofit2:converter-gson:2.3.0'
     compile 'com.google.guava:guava:20.0'
     compile 'joda-time:joda-time:2.9.9'
-    compile 'com.google.android.gms:play-services-analytics:11.0.4'
+    compile 'com.google.android.gms:play-services-analytics:11.6.2'
     testCompile 'junit:junit:4.12'
 }
