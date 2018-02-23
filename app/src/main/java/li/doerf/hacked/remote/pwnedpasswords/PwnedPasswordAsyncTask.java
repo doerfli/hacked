@@ -99,6 +99,7 @@ public class PwnedPasswordAsyncTask extends AsyncTask<String,Void,String> {
             passwordOk.setVisibility(View.VISIBLE);
         } else {
             passwordPwned.setVisibility(View.VISIBLE);
+            passwordPwned.setText(myContext.getString(R.string.password_pwned, pwned));
         }
 
         super.onPostExecute(pwned);
