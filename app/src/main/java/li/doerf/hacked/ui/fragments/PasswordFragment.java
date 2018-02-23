@@ -1,12 +1,7 @@
 package li.doerf.hacked.ui.fragments;
 
-import android.content.Context;
-import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.AsyncTaskLoader;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,7 +14,7 @@ import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 
 import li.doerf.hacked.R;
-import li.doerf.hacked.remote.haveibeenpwned.HIBPPasswordAsyncTask;
+import li.doerf.hacked.remote.pwnedpasswords.PwnedPasswordAsyncTask;
 import li.doerf.hacked.ui.HibpInfo;
 
 /**
@@ -89,7 +84,7 @@ public class PasswordFragment extends Fragment {
 
     private void checkPassword() {
         String password = passwordEditText.getText().toString();
-        HIBPPasswordAsyncTask passwordCheck = new HIBPPasswordAsyncTask(getContext(), progressBar, passwordOk, passwordPwned);
+        PwnedPasswordAsyncTask passwordCheck = new PwnedPasswordAsyncTask(getContext(), progressBar, passwordOk, passwordPwned);
         passwordCheck.execute(password);
         myTracker.send(new HitBuilders.EventBuilder()
                 .setCategory("Action")
