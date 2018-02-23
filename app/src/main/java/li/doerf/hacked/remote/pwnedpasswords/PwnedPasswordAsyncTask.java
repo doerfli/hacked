@@ -15,6 +15,7 @@ import java.io.IOException;
 import java.util.HashMap;
 
 import li.doerf.hacked.R;
+import li.doerf.hacked.utils.StringHelper;
 import retrofit2.Call;
 import retrofit2.Response;
 import retrofit2.Retrofit;
@@ -99,7 +100,8 @@ public class PwnedPasswordAsyncTask extends AsyncTask<String,Void,String> {
             passwordOk.setVisibility(View.VISIBLE);
         } else {
             passwordPwned.setVisibility(View.VISIBLE);
-            passwordPwned.setText(myContext.getString(R.string.password_pwned, pwned));
+            String t = myContext.getString(R.string.password_pwned, StringHelper.addDigitSeperator(pwned));
+            passwordPwned.setText(t);
         }
 
         super.onPostExecute(pwned);
@@ -109,4 +111,6 @@ public class PwnedPasswordAsyncTask extends AsyncTask<String,Void,String> {
     protected void onCancelled() {
         super.onCancelled();
     }
+
+
 }
