@@ -87,7 +87,7 @@
     <string name="nd_pwned_passwords">Pwned Passwords</string>
     <string name="password_ok">Dieses Password scheint ok zu sein.</string>
     <string name="password_pwned">Dieses Passwort wurde in %1$s Datenlecks gefunden und sollte nicht mehr benutzt werden. Wenn dieses Passwort bereits irgendwo benutzt wird, dann sollte es umgehend geändert werden.</string>
-    <string name="password_info">Geben Sie ein Passwort ein um es in exponierten Datenlecks zu suchen. Achtung: <b>Senden Sie niemals aktive Passwörter</b> an jemanden den Sie nicht kennen!</string>
+    <string name="password_info">Geben Sie ein Passwort ein um es in bekannten Datenlecks zu finden</string>
     <string name="channel_name">Hacked?</string>
     <string name="unverified">(unbestätigt)</string>
 </resources>
