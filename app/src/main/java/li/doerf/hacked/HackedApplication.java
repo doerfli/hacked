@@ -54,7 +54,7 @@ public class HackedApplication extends Application {
 
     private boolean runsInTestlab() {
         String testLabSetting = Settings.System.getString(getContentResolver(), "firebase.test.lab");
-        return "true" == testLabSetting;
+        return "true".equals(testLabSetting);
     }
 
 }
