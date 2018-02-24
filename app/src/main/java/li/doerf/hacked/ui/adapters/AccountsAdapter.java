@@ -12,7 +12,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.google.android.gms.analytics.Tracker;
 import com.google.common.collect.Collections2;
 
 import org.joda.time.format.DateTimeFormat;
@@ -31,12 +30,10 @@ import li.doerf.hacked.utils.NotificationHelper;
 public class AccountsAdapter extends RecyclerViewCursorAdapter<RecyclerViewHolder> {
     private final String LOGTAG = getClass().getSimpleName();
     private final FragmentManager mySupportFragmentManager;
-    private final Tracker myTracker;
 
-    public AccountsAdapter(Context aContext, Cursor aCursor, FragmentManager supportFragmentManager, Tracker aTracker){
+    public AccountsAdapter(Context aContext, Cursor aCursor, FragmentManager supportFragmentManager){
         super(aContext, aCursor);
         mySupportFragmentManager = supportFragmentManager;
-        myTracker = aTracker;
     }
 
     @Override
@@ -61,9 +58,9 @@ public class AccountsAdapter extends RecyclerViewCursorAdapter<RecyclerViewHolde
                 return input.getIsAcknowledged();
             }
         }).size();
-
         TextView nameView = (TextView) cardView.findViewById(R.id.name);
         nameView.setText(account.getName());
+
 
         TextView lastCheckedView = (TextView) cardView.findViewById(R.id.last_checked);
         if ( account.getLastChecked() != null ) {
@@ -116,7 +113,6 @@ public class AccountsAdapter extends RecyclerViewCursorAdapter<RecyclerViewHolde
             public boolean onLongClick(View v) {
                 DeleteAccountDialogFragment d = new DeleteAccountDialogFragment();
                 d.setAccount(account);
-                d.setTracker(myTracker);
                 d.show(mySupportFragmentManager, "deleteAccount");
                 return true;
             }

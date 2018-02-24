@@ -18,11 +18,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.google.android.gms.analytics.HitBuilders;
-import com.google.android.gms.analytics.Tracker;
-
 import java.io.Serializable;
 
+import li.doerf.hacked.HackedApplication;
 import li.doerf.hacked.R;
 import li.doerf.hacked.db.HackedSQLiteHelper;
 import li.doerf.hacked.db.tables.BreachedSite;
@@ -41,13 +39,11 @@ public class BreachedSitesListFragment extends Fragment {
     private Cursor myCursor;
     private BreachListType myBreachListType;
     private SwipeRefreshLayout mySwipeRefreshLayout;
-    private Tracker myTracker;
 
 
-    public static BreachedSitesListFragment create(BreachListType aType, Tracker aTracker) {
+    public static BreachedSitesListFragment create(BreachListType aType) {
         BreachedSitesListFragment fragment = new BreachedSitesListFragment();
         fragment.setMyBreachListType(aType);
-        fragment.myTracker = aTracker;
         return fragment;
     }
 
@@ -109,8 +105,7 @@ public class BreachedSitesListFragment extends Fragment {
             myBreachListType = BreachListType.MostRecent;
         }
 
-        myTracker.setScreenName("Fragment~BreachedSites" + myBreachListType.name());
-        myTracker.send(new HitBuilders.ScreenViewBuilder().build());
+        ((HackedApplication) getActivity().getApplication()).trackView("Fragment~BreachedSites" + myBreachListType.name());
     }
 
     @Override

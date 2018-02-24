@@ -6,9 +6,7 @@ import android.os.Bundle;
 import android.preference.PreferenceFragment;
 import android.util.Log;
 
-import com.google.android.gms.analytics.HitBuilders;
-import com.google.android.gms.analytics.Tracker;
-
+import li.doerf.hacked.HackedApplication;
 import li.doerf.hacked.R;
 import li.doerf.hacked.utils.SynchronizationHelper;
 
@@ -18,7 +16,6 @@ import li.doerf.hacked.utils.SynchronizationHelper;
  */
 public class SettingsFragment extends PreferenceFragment implements SharedPreferences.OnSharedPreferenceChangeListener {
     private final String LOGTAG = getClass().getSimpleName();
-    private Tracker myTracker;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -32,8 +29,7 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
     public void onResume() {
         super.onResume();
         getPreferenceScreen().getSharedPreferences().registerOnSharedPreferenceChangeListener(this);
-        myTracker.setScreenName("Fragment~Settings");
-        myTracker.send(new HitBuilders.ScreenViewBuilder().build());
+        ((HackedApplication) getActivity().getApplication()).trackView("Fragment~Settings");
     }
 
     @Override
@@ -51,20 +47,11 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
             boolean enabled = SynchronizationHelper.scheduleSync(getActivity().getApplicationContext());
 
             if ( enabled) {
-                myTracker.send(new HitBuilders.EventBuilder()
-                        .setCategory("Action")
-                        .setAction("BackgroundSyncEnable")
-                        .build());
+                ((HackedApplication) getActivity().getApplication()).trackEvent("BackgroundSyncEnable");
             } else {
-                myTracker.send(new HitBuilders.EventBuilder()
-                        .setCategory("Action")
-                        .setAction("BackgroundSyncDisable")
-                        .build());
+                ((HackedApplication) getActivity().getApplication()).trackEvent("BackgroundSyncDisable");
             }
         }
     }
 
-    public void setTracker(Tracker myTracker) {
-        this.myTracker = myTracker;
-    }
 }

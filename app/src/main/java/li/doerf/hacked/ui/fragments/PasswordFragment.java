@@ -10,9 +10,7 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.google.android.gms.analytics.HitBuilders;
-import com.google.android.gms.analytics.Tracker;
-
+import li.doerf.hacked.HackedApplication;
 import li.doerf.hacked.R;
 import li.doerf.hacked.remote.pwnedpasswords.PwnedPasswordAsyncTask;
 import li.doerf.hacked.ui.HibpInfo;
@@ -27,7 +25,6 @@ public class PasswordFragment extends Fragment {
     private ProgressBar progressBar;
     private TextView passwordOk;
     private TextView passwordPwned;
-    private Tracker myTracker;
 
     public PasswordFragment() {
         // Required empty public constructor
@@ -39,13 +36,12 @@ public class PasswordFragment extends Fragment {
      *
      * @return A new instance of fragment PasswordFragment.
      */
-    public static PasswordFragment newInstance(Tracker aTracker) {
+    public static PasswordFragment newInstance() {
         PasswordFragment fragment = new PasswordFragment();
         Bundle args = new Bundle();
 //        args.putString(ARG_PARAM1, param1);
 //        args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
-        fragment.myTracker = aTracker;
         return fragment;
     }
 
@@ -78,17 +74,13 @@ public class PasswordFragment extends Fragment {
     public void onResume() {
         super.onResume();
 
-        myTracker.setScreenName("Fragment~Password");
-        myTracker.send(new HitBuilders.ScreenViewBuilder().build());
+        ((HackedApplication) getActivity().getApplication()).trackView("Fragment~Password");
     }
 
     private void checkPassword() {
         String password = passwordEditText.getText().toString();
         PwnedPasswordAsyncTask passwordCheck = new PwnedPasswordAsyncTask(getContext(), progressBar, passwordOk, passwordPwned);
         passwordCheck.execute(password);
-        myTracker.send(new HitBuilders.EventBuilder()
-                .setCategory("Action")
-                .setAction("CheckPasswordPwned")
-                .build());
+        ((HackedApplication) getActivity().getApplication()).trackEvent("CheckPasswordPwned");
     }
 }

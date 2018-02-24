@@ -8,11 +8,9 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
 
-import com.google.android.gms.analytics.HitBuilders;
-import com.google.android.gms.analytics.Tracker;
-
 import java.util.Collection;
 
+import li.doerf.hacked.HackedApplication;
 import li.doerf.hacked.R;
 import li.doerf.hacked.db.HackedSQLiteHelper;
 import li.doerf.hacked.db.tables.Account;
@@ -25,7 +23,6 @@ public class DeleteAccountDialogFragment extends DialogFragment {
     private final String LOGTAG = getClass().getSimpleName();
     private Account myAccount;
     private SQLiteDatabase myDb;
-    private Tracker myTracker;
 
     public void setAccount(Account account) {
         myAccount = account;
@@ -51,10 +48,7 @@ public class DeleteAccountDialogFragment extends DialogFragment {
                         } finally {
                             myDb.endTransaction();
                             myAccount.notifyObservers();
-                            myTracker.send(new HitBuilders.EventBuilder()
-                                    .setCategory("Action")
-                                    .setAction("DeleteAccount")
-                                    .build());
+                            ((HackedApplication) getActivity().getApplication()).trackEvent("DeleteAccount");
                         }
                     }
                 })
@@ -65,9 +59,5 @@ public class DeleteAccountDialogFragment extends DialogFragment {
                 });
         // Create the AlertDialog object and return it
         return builder.create();
-    }
-
-    public void setTracker(Tracker aTracker) {
-        myTracker = aTracker;
     }
 }
