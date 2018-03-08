@@ -33,22 +33,13 @@
             android:label="@string/title_settings"
             android:parentActivityName=".activities.MainActivity" />
 
-        <service android:name=".services.JellyBeanCheckService"
-            android:permission="android.permission.BIND_JOB_SERVICE"
-            android:exported="false"/>
-        <service android:name=".services.LollipopCheckService"
-            android:permission="android.permission.BIND_JOB_SERVICE"
-            android:exported="false"/>
-
-        <receiver android:name=".receiver.BootupCompleteReceiver">
+        <service
+            android:exported="false"
+            android:name=".services.BackgroundCheckService">
             <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="com.firebase.jobdispatcher.ACTION_EXECUTE"/>
             </intent-filter>
-            <intent-filter>
-                <action android:name="android.intent.action.PACKAGE_REPLACED" />
-                <data android:scheme="package" />
-            </intent-filter>
-        </receiver>
+        </service>
 
         <meta-data android:name="android.max_aspect" android:value="2.1"/>
     </application>

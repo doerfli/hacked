@@ -42,7 +42,8 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
         Log.d(LOGTAG, "preference changed: " + key);
         if ( getString(R.string.pref_key_sync_enable).equals( key) ||
-                getString( R.string.pref_key_sync_interval).equals( key)
+                getString( R.string.pref_key_sync_interval).equals( key) ||
+                getString(R.string.pref_key_sync_via_cellular).equals(key)
                 ) {
             boolean enabled = SynchronizationHelper.scheduleSync(getActivity().getApplicationContext());
 

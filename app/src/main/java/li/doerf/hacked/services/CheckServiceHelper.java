@@ -4,7 +4,6 @@ import android.app.Notification;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Build;
 import android.support.v4.app.NotificationCompat;
 
@@ -54,27 +53,5 @@ public class CheckServiceHelper {
         Notification notification = mBuilder.build();
         notification.flags |= Notification.DEFAULT_LIGHTS | Notification.FLAG_AUTO_CANCEL;
         NotificationHelper.notify(myContext, notification);
-    }
-
-    int getCurrentInterval(SharedPreferences aSettings) {
-        String intervalString = aSettings.getString(myContext.getString(R.string.pref_key_sync_interval), "everyday");
-
-        switch ( intervalString) {
-            case "everyday":
-                return 1000 * 60 * 60 * 24;
-//                return 1000 * 30; // for testing
-
-            case "everytwodays":
-                return 1000 * 60 * 60 * 24 * 2;
-
-            case "everythreedays":
-                return 1000 * 60 * 60 * 24 * 3;
-
-            case "everyweek":
-                return 1000 * 60 * 60 * 24 * 7;
-
-            default:
-                return 1000 * 60 * 60 * 24;
-        }
     }
 }
