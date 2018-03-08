@@ -1,18 +1,24 @@
 package li.doerf.hacked;
 
 import android.app.Application;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.provider.Settings;
+import android.util.Log;
 
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
+
+import li.doerf.hacked.utils.SynchronizationHelper;
 
 /**
  * Created by moo on 25.05.17.
  */
 
 public class HackedApplication extends Application {
-
+    private static final String TAG = "HackedApplication";
+    private static final String PREF_KEY_MIGRATE_BACKGROUND_SERVICE_TO_FIREBASE_SCHEDULER_DONE = "PREF_KEY_MIGRATE_BACKGROUND_SERVICE_TO_FIREBASE_SCHEDULER_DONE";
     private static GoogleAnalytics sAnalytics;
     private static Tracker sTracker;
 
@@ -21,6 +27,7 @@ public class HackedApplication extends Application {
         super.onCreate();
 
         sAnalytics = GoogleAnalytics.getInstance(this);
+        migrateBackgroundCheckService();
     }
 
     /**
@@ -55,6 +62,25 @@ public class HackedApplication extends Application {
     private boolean runsInTestlab() {
         String testLabSetting = Settings.System.getString(getContentResolver(), "firebase.test.lab");
         return "true".equals(testLabSetting);
+    }
+
+    private void migrateBackgroundCheckService() {
+        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        boolean done = settings.getBoolean(PREF_KEY_MIGRATE_BACKGROUND_SERVICE_TO_FIREBASE_SCHEDULER_DONE, false);
+
+        if (done) {
+            return;
+        }
+
+        Log.i(TAG, "migrating background check service to firebase");
+
+        SynchronizationHelper.scheduleSync(getApplicationContext());
+
+        // update preference
+        SharedPreferences.Editor editor = settings.edit();
+        editor.putBoolean(PREF_KEY_MIGRATE_BACKGROUND_SERVICE_TO_FIREBASE_SCHEDULER_DONE, true);
+        editor.apply();
+        Log.d(TAG, "done");
     }
 
 }
