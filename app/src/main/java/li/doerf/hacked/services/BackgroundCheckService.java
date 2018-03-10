@@ -17,22 +17,35 @@ public class BackgroundCheckService extends JobService {
     private static final String TAG = "BackgroundCheckService";
 
     @Override
-    public boolean onStartJob(JobParameters job) {
-        HIBPAccountChecker checker = new HIBPAccountChecker(getApplicationContext(), new IProgressUpdater() {
+    public boolean onStartJob(final JobParameters job) {
+        Log.d(TAG, "bg job start");
+
+
+        Runnable runnable = new Runnable() {
             @Override
-            public void updateProgress(Account account) {
-            Log.d(TAG, "checked account " + account.getName());
-            // nothing to update when running in background
+            public void run() {
+                try {
+                    HIBPAccountChecker checker = new HIBPAccountChecker(getApplicationContext(), new IProgressUpdater() {
+                        @Override
+                        public void updateProgress(Account account) {
+                            Log.d(TAG, "checked account " + account.getName());
+                            // nothing to update when running in background
+                        }
+                    });
+
+                    Boolean foundNewBreaches = checker.check(null);
+                    if (foundNewBreaches) {
+                        CheckServiceHelper helper = new CheckServiceHelper(getApplicationContext());
+                        helper.showNotification();
+                    }
+                } finally {
+                    jobFinished(job, false);
+                }
             }
-        });
+        };
+        new Thread(runnable).start();
 
-        Boolean foundNewBreaches = checker.check(null);
-        if ( foundNewBreaches ) {
-            CheckServiceHelper helper = new CheckServiceHelper(getApplicationContext());
-            helper.showNotification();
-        }
-
-        return false;
+        return true;
     }
 
     @Override

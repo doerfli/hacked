@@ -50,7 +50,7 @@ public class SynchronizationHelper {
                 .setTag(JOB_TAG)
                 .setRecurring(true)
                 .setLifetime(Lifetime.FOREVER)
-                .setTrigger(Trigger.executionWindow(currentInterval - 60 * 60, currentInterval + 60 * 60))
+                .setTrigger(Trigger.executionWindow(currentInterval, currentInterval + 60 * 60))
                 .setReplaceCurrent(true)
                 .setRetryStrategy(RetryStrategy.DEFAULT_EXPONENTIAL);
 
