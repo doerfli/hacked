@@ -64,7 +64,7 @@ public class HackedApplication extends Application {
         return "true".equals(testLabSetting);
     }
 
-    private void migrateBackgroundCheckService() {
+    public void migrateBackgroundCheckService() {
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         boolean done = settings.getBoolean(PREF_KEY_MIGRATE_BACKGROUND_SERVICE_TO_FIREBASE_SCHEDULER_DONE, false);
 
