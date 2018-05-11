@@ -9,9 +9,6 @@ import retrofit2.http.Path;
  */
 public interface PwnedPasswords {
 
-    @GET("/pwnedpassword/{password}")
-    Call<Void> getPwnedPassword(@Path("password") String password);
-
     @GET("/range/{sha5c}")
     Call<String> getRange(@Path("sha5c") String firstFiveCharsOfSha1);
 }
