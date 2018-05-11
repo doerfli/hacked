@@ -29,9 +29,9 @@ dependencies {
     implementation "com.android.support:cardview-v7:27.1.1"
     implementation "com.android.support:recyclerview-v7:27.1.1"
     implementation "com.android.support:support-v4:27.1.1"
-    implementation 'com.squareup.retrofit2:retrofit:2.3.0'
-    implementation 'com.squareup.retrofit2:converter-gson:2.3.0'
-    implementation 'com.squareup.retrofit2:converter-scalars:2.3.0'
+    implementation 'com.squareup.retrofit2:retrofit:2.4.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.4.0'
+    implementation 'com.squareup.retrofit2:converter-scalars:2.4.0'
     implementation 'com.google.guava:guava:25.0-android'
     implementation 'joda-time:joda-time:2.9.9'
     implementation 'com.google.android.gms:play-services-analytics:15.0.2'
