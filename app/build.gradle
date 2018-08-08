@@ -1,15 +1,15 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 27
-    buildToolsVersion '27.0.3'
+    compileSdkVersion 28
+    buildToolsVersion '28.0.2'
 
     defaultConfig {
         applicationId "li.doerf.hacked"
         minSdkVersion 16
-        targetSdkVersion 27
-        versionCode 33
-        versionName "1.8.2.2"
+        targetSdkVersion 28
+        versionCode 34
+        versionName "1.8.3.0"
     }
     buildTypes {
         release {
@@ -20,21 +20,23 @@ android {
 }
 
 dependencies {
+    def support_lib_version = "28.0.0-rc01"
+
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     // http://square.github.io/retrofit/
     // https://github.com/google/guava
     // http://www.joda.org/joda-time/
-    implementation "com.android.support:appcompat-v7:27.1.1"
-    implementation "com.android.support:design:27.1.1"
-    implementation "com.android.support:cardview-v7:27.1.1"
-    implementation "com.android.support:recyclerview-v7:27.1.1"
-    implementation "com.android.support:support-v4:27.1.1"
+    implementation "com.android.support:appcompat-v7:$support_lib_version"
+    implementation "com.android.support:design:$support_lib_version"
+    implementation "com.android.support:cardview-v7:$support_lib_version"
+    implementation "com.android.support:recyclerview-v7:$support_lib_version"
+    implementation "com.android.support:support-v4:$support_lib_version"
     implementation 'com.squareup.retrofit2:retrofit:2.4.0'
     implementation 'com.squareup.retrofit2:converter-gson:2.4.0'
     implementation 'com.squareup.retrofit2:converter-scalars:2.4.0'
     implementation 'com.google.guava:guava:25.0-android'
     implementation 'joda-time:joda-time:2.9.9'
-    implementation 'com.google.android.gms:play-services-analytics:15.0.2'
+    implementation 'com.google.android.gms:play-services-analytics:16.0.1'
     implementation 'commons-codec:commons-codec:1.11'
     implementation 'com.firebase:firebase-jobdispatcher:0.8.5'
     testImplementation 'junit:junit:4.12'
