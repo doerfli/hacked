@@ -46,7 +46,7 @@
             android:layout_height="20dp"
             android:layout_alignParentRight="true"
             android:layout_below="@id/site_name"
-            android:src="@drawable/ic_action_hardware_keyboard_arrow_down"
+            android:src="@drawable/ic_drop_down"
             />
 
         <ImageView
@@ -56,7 +56,7 @@
             android:layout_alignParentRight="true"
             android:layout_below="@id/site_name"
             android:visibility="gone"
-            android:src="@drawable/ic_action_hardware_keyboard_arrow_up"
+            android:src="@drawable/ic_drop_up"
             />
 
         <RelativeLayout
