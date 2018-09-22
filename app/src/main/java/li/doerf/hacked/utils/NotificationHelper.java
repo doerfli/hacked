@@ -2,10 +2,11 @@ package li.doerf.hacked.utils;
 
 import android.app.Notification;
 import android.content.Context;
-import android.support.v4.app.NotificationManagerCompat;
 import android.util.Log;
 
 import java.util.concurrent.atomic.AtomicInteger;
+
+import androidx.core.app.NotificationManagerCompat;
 
 /**
  * Created by moo on 04/12/15.

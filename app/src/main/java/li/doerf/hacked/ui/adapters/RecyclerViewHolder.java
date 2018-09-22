@@ -1,7 +1,8 @@
 package li.doerf.hacked.ui.adapters;
 
-import android.support.v7.widget.RecyclerView;
 import android.view.View;
+
+import androidx.recyclerview.widget.RecyclerView;
 
 /**
  * Created by moo on 31/01/15.

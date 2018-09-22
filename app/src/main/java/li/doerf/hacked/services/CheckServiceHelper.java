@@ -5,8 +5,8 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
-import android.support.v4.app.NotificationCompat;
 
+import androidx.core.app.NotificationCompat;
 import li.doerf.hacked.R;
 import li.doerf.hacked.activities.MainActivity;
 import li.doerf.hacked.utils.NotificationHelper;
@@ -32,7 +32,7 @@ public class CheckServiceHelper {
         }
 
         String title = myContext.getString(R.string.notification_title_new_breaches_found);
-        android.support.v4.app.NotificationCompat.Builder mBuilder =
+        androidx.core.app.NotificationCompat.Builder mBuilder =
                 new NotificationCompat.Builder(myContext)
                         .setSmallIcon(android.R.drawable.ic_dialog_info)
                         .setContentTitle(title)

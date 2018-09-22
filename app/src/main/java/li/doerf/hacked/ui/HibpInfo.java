@@ -1,7 +1,6 @@
 package li.doerf.hacked.ui;
 
 import android.content.Context;
-import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
 import android.view.View;
@@ -9,6 +8,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.TextView;
 
+import androidx.recyclerview.widget.RecyclerView;
 import li.doerf.hacked.R;
 
 /**

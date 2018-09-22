@@ -5,8 +5,9 @@ import android.database.Cursor;
 import android.database.DataSetObserver;
 import android.os.Handler;
 import android.os.Looper;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+
+import androidx.recyclerview.widget.RecyclerView;
 
 /**
  * Created by moo on 31/01/15.
