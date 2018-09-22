@@ -20,7 +20,7 @@ android {
 }
 
 dependencies {
-    def support_lib_version = "28.0.0-rc01"
+    def support_lib_version = "28.0.0"
 
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     // http://square.github.io/retrofit/
@@ -36,7 +36,7 @@ dependencies {
     implementation 'com.squareup.retrofit2:converter-scalars:2.4.0'
     implementation 'com.google.guava:guava:25.0-android'
     implementation 'joda-time:joda-time:2.9.9'
-    implementation 'com.google.android.gms:play-services-analytics:16.0.1'
+    implementation 'com.google.android.gms:play-services-analytics:16.0.3'
     implementation 'commons-codec:commons-codec:1.11'
     implementation 'com.firebase:firebase-jobdispatcher:0.8.5'
     testImplementation 'junit:junit:4.12'
