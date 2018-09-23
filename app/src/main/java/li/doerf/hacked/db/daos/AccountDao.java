@@ -35,6 +35,6 @@ public interface AccountDao {
     Account findByName(String aName);
 
     @Query("SELECT count(*) FROM accounts where name=:aName")
-    Integer coundByName(String aName);
+    Integer countByName(String aName);
 
 }

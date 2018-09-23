@@ -1,9 +1,9 @@
 package li.doerf.hacked.ui;
 
+import android.annotation.SuppressLint;
 import android.app.Application;
 import android.app.Dialog;
 import android.content.DialogInterface;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -15,12 +15,17 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.DialogFragment;
+import io.reactivex.Single;
+import io.reactivex.schedulers.Schedulers;
 import li.doerf.hacked.HackedApplication;
 import li.doerf.hacked.R;
+import li.doerf.hacked.db.AppDatabase;
+import li.doerf.hacked.db.daos.AccountDao;
 import li.doerf.hacked.db.entities.Account;
 import li.doerf.hacked.remote.haveibeenpwned.HIBPCheckAccountAsyncTask;
-import li.doerf.hacked.utils.AccountHelper;
 import li.doerf.hacked.utils.ConnectivityHelper;
+
+import static android.content.ContentValues.TAG;
 
 /**
  * The fragment used to add new numbers.
@@ -64,6 +69,7 @@ public class AddAccountDialogFragment extends DialogFragment {
     }
 
 
+    @SuppressLint("CheckResult")
     private void addAccount(String aName) {
         if (aName == null || aName.trim().equals("")) {
             Toast.makeText(getContext(), getString(R.string.toast_enter_valid_name), Toast.LENGTH_LONG).show();
@@ -73,39 +79,39 @@ public class AddAccountDialogFragment extends DialogFragment {
 
         final String name = aName.trim();
 
-        new AddAcountAsyncTask(getActivity().getApplication()).execute(name);
+        final AccountDao accountDao = AppDatabase.get(getContext()).getAccountDao();
 
+        getAccountCount(name, accountDao)
+                .subscribe( count -> {
+                    if (count > 0 ) {
+                        return;
+                    }
+
+                    final Account account = new Account();
+                    account.setName(name);
+                    insertAccount(accountDao, account, getActivity().getApplication());
+                });
     }
 
-    static class AddAcountAsyncTask extends AsyncTask<String, Void, Account> {
+    private Single<Integer> getAccountCount(String name, AccountDao accountDao) {
+        return Single.fromCallable(() -> accountDao.countByName(name))
+                .subscribeOn(Schedulers.io());
+    }
 
-        private final Application myContext;
+    @SuppressLint("CheckResult")
+    private void insertAccount(AccountDao accountDao, Account account, Application application) {
+        Single.fromCallable(() -> accountDao.insert(account))
+                .subscribeOn(Schedulers.io())
+                .subscribe(ids -> {
+                    ((HackedApplication) application).trackEvent("AddAccount");
 
-        AddAcountAsyncTask(Application application) {
-            myContext = application;
-        }
+                    if ( ! ConnectivityHelper.isConnected( application) ) {
+                        Log.i("AddAcountAsyncTask", "no network");
+                        return;
+                    }
 
-        @Override
-        protected Account doInBackground(String... name) {
-            Account account = AccountHelper.createAccount(myContext, name[0]);
-            if (account == null) {
-                return null;
-            }
-
-            return account;
-        }
-
-        @Override
-        protected void onPostExecute(Account account) {
-            ((HackedApplication) myContext).trackEvent("AddAccount");
-
-            if ( ! ConnectivityHelper.isConnected( myContext) ) {
-                Log.i("AddAcountAsyncTask", "no network");
-                return;
-            }
-
-            new HIBPCheckAccountAsyncTask(myContext, null).execute(account.getId());
-        }
+                    new HIBPCheckAccountAsyncTask(application, null).execute(ids.get(0));
+                } ,throwable -> Log.e(TAG, "Error msg", throwable));
     }
 
 

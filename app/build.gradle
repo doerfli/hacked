@@ -22,6 +22,10 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    compileOptions {
+        sourceCompatibility = '1.8'
+        targetCompatibility = '1.8'
+    }
 
 }
 
@@ -50,6 +54,8 @@ dependencies {
 
     implementation "android.arch.persistence.room:runtime:$room_version"
     implementation "android.arch.persistence.room:guava:$room_version"
+    implementation "android.arch.persistence.room:rxjava2:$room_version"
+    implementation 'io.reactivex.rxjava2:rxandroid:2.1.0'
     implementation "android.arch.lifecycle:livedata:$lifecycle_version"
     implementation "android.arch.lifecycle:extensions:$lifecycle_version"
     annotationProcessor "android.arch.persistence.room:compiler:$room_version"

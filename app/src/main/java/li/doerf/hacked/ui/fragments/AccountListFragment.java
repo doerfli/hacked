@@ -1,5 +1,6 @@
 package li.doerf.hacked.ui.fragments;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
@@ -31,14 +32,18 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+import io.reactivex.Single;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 import li.doerf.hacked.HackedApplication;
 import li.doerf.hacked.R;
+import li.doerf.hacked.db.AppDatabase;
+import li.doerf.hacked.db.daos.AccountDao;
 import li.doerf.hacked.db.entities.Account;
 import li.doerf.hacked.remote.haveibeenpwned.HIBPCheckAccountAsyncTask;
 import li.doerf.hacked.ui.AddAccountDialogFragment;
 import li.doerf.hacked.ui.adapters.AccountsAdapter;
 import li.doerf.hacked.ui.viewmodels.AccountViewModel;
-import li.doerf.hacked.utils.AccountHelper;
 import li.doerf.hacked.utils.ConnectivityHelper;
 import li.doerf.hacked.utils.SynchronizationHelper;
 
@@ -158,19 +163,32 @@ public class AccountListFragment extends Fragment {
                         return;
                     }
 
-                    Account account = AccountHelper.createAccount(getContext(), accountName);
+                    AccountDao accountDao = AppDatabase.get(getContext()).getAccountDao();
+                    Account newAcc = new Account();
+                    newAcc.setName(accountName);
+                    insertFirstAccount(accountET, accountDao, newAcc, initialAccount, settings);
+                }
+            });
+        }
+    }
 
+    @SuppressLint("CheckResult")
+    private void insertFirstAccount(EditText accountET, AccountDao accountDao, Account newAcc, CardView initialAccount, SharedPreferences settings) {
+        //noinspection ResultOfMethodCallIgnored
+        Single.fromCallable(() -> accountDao.insert(newAcc))
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(ids -> {
+                    newAcc.setId(ids.get(0));
                     initialAccount.setVisibility(View.GONE);
                     Toast.makeText(getContext(), getString(R.string.toast_account_added), Toast.LENGTH_LONG).show();
-                    checkForBreaches(account);
+                    checkForBreaches(newAcc);
                     SharedPreferences.Editor editor = settings.edit();
                     editor.putBoolean(getString(R.string.pref_initial_setup_account_done), true);
                     editor.apply();
                     InputMethodManager mgr = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
                     mgr.hideSoftInputFromWindow(accountET.getWindowToken(), 0);
-                }
-            });
-        }
+                });
     }
 
     private void showInitialSetupCheck(View aRootView) {

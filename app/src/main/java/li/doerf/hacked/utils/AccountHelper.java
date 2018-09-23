@@ -18,7 +18,7 @@ public class AccountHelper {
     public static Account createAccount(Context context, String name) {
         AccountDao accountDao = AppDatabase.get(context).getAccountDao();
 
-        if (accountDao.coundByName(name) > 0) {
+        if (accountDao.countByName(name) > 0) {
             Toast.makeText(context, context.getString(R.string.toast_account_exists), Toast.LENGTH_LONG).show();
             Log.w(LOGTAG, "account already exists");
             return null;
