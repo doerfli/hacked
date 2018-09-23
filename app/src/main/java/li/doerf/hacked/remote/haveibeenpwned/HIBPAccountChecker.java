@@ -1,7 +1,6 @@
 package li.doerf.hacked.remote.haveibeenpwned;
 
 import android.content.Context;
-import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Handler;
 import android.os.Looper;
@@ -13,13 +12,16 @@ import com.google.common.collect.Lists;
 import org.joda.time.DateTime;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
 import androidx.annotation.NonNull;
 import li.doerf.hacked.R;
+import li.doerf.hacked.db.AppDatabase;
 import li.doerf.hacked.db.HackedSQLiteHelper;
-import li.doerf.hacked.db.tables.Account;
+import li.doerf.hacked.db.daos.AccountDao;
+import li.doerf.hacked.db.entities.Account;
 import li.doerf.hacked.db.tables.Breach;
 import retrofit2.Call;
 import retrofit2.Response;
@@ -38,11 +40,13 @@ public class HIBPAccountChecker {
 
     private final Context myContext;
     private final IProgressUpdater myProgressUpdater;
+    private final AccountDao myAccountDao;
     private boolean abort = false;
 
     public HIBPAccountChecker(Context aContext, IProgressUpdater aProgressUpdates) {
         myContext = aContext;
         myProgressUpdater = aProgressUpdates;
+        myAccountDao = AppDatabase.get(aContext).getAccountDao();
     }
 
     public Boolean check(Long id) {
@@ -51,32 +55,27 @@ public class HIBPAccountChecker {
         boolean newBreachFound = false;
         abort = false;
 
-        Cursor c = null;
+        List<Account> accountsToCheck = new ArrayList<>();
 
-        try {
-            if ( id == null ) {
-                Log.d(LOGTAG, "all ids");
-                c = Account.listAll(db);
-            } else {
-                Log.d(LOGTAG, "only id " + id);
-                c = Account.findCursorById(db, id);
-            }
-
-            while (c.moveToNext() && ! abort) {
-                Account account = Account.create(db, c);
-                Log.d(LOGTAG, "Checking for account: " + account.getName());
-
-                try {
-                    List<BreachedAccount> breachedAccounts = doCheck(account.getName());
-                    newBreachFound |= processBreachedAccounts( db, account, breachedAccounts);
-                } finally {
-                    myProgressUpdater.updateProgress( account);
-                }
-            }
-        } finally {
-            Log.d(LOGTAG, "finished checking for breaches");
-            if ( c != null ) c.close();
+        if ( id == null ) {
+            accountsToCheck.addAll(myAccountDao.getAll());
+        } else {
+            Log.d(LOGTAG, "only id " + id);
+            accountsToCheck.add(myAccountDao.findById(id));
         }
+
+        for (Account account : accountsToCheck) {
+            Log.d(LOGTAG, "Checking for account: " + account.getName());
+
+            try {
+                List<BreachedAccount> breachedAccounts = doCheck(account.getName());
+                newBreachFound |= processBreachedAccounts( db, account, breachedAccounts);
+            } finally {
+                myProgressUpdater.updateProgress( account);
+            }
+        }
+
+        Log.d(LOGTAG, "finished checking for breaches");
 
         return newBreachFound;
     }
@@ -112,10 +111,10 @@ public class HIBPAccountChecker {
         }
 
         account.setLastChecked(DateTime.now());
-        if (isNewBreachFound && ! account.isHacked() ) {
+        if (isNewBreachFound && ! account.getHacked() ) {
             account.setHacked(true);
         }
-        account.update(db);
+        myAccountDao.update(account);
 
         return isNewBreachFound;
     }

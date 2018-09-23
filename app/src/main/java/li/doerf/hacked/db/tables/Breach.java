@@ -10,17 +10,17 @@ import com.google.common.collect.Lists;
 import org.joda.time.DateTime;
 
 import java.lang.reflect.Field;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import li.doerf.hacked.db.annotations.Column;
 import li.doerf.hacked.db.annotations.Table;
+import li.doerf.hacked.db.entities.Account;
 import li.doerf.hacked.utils.Identifiable;
 
 @Table(name = "breaches")
 public class Breach extends TableBase implements Identifiable {
-    private static Map<Long, Account> accountCache = new HashMap<>();
+//    private static Map<Long, Account> accountCache = new HashMap<>();
 
     @Column(name = "_id", type = "INTEGER", isPrimaryKey = true, isAutoincrement = true)
     private Long id;
@@ -176,27 +176,27 @@ public class Breach extends TableBase implements Identifiable {
     protected TableBase getReference(SQLiteDatabase db, String aReferenceName, Long anId) {
         Cursor c = null;
         try {
-            if ("account".equals(aReferenceName)) {
-                Account item = accountCache.get(anId);
-                if (item != null) {
-                    return item;
-                }
-                item = new Account();
-                c = db.query(
-                        item.getTableName(),
-                        item.getColumnNames(),
-                        "_id = ?",
-                        new String[]{anId.toString()},
-                        null,
-                        null,
-                        "_id");
-
-                if (c.moveToFirst()) {
-                    item = Account.create(db, c);
-                    accountCache.put(anId, item);
-                    return item;
-                }
-            }
+//            if ("account".equals(aReferenceName)) {
+//                Account item = accountCache.get(anId);
+//                if (item != null) {
+//                    return item;
+//                }
+//                item = new Account();
+//                c = db.query(
+//                        item.getTableName(),
+//                        item.getColumnNames(),
+//                        "_id = ?",
+//                        new String[]{anId.toString()},
+//                        null,
+//                        null,
+//                        "_id");
+//
+//                if (c.moveToFirst()) {
+//                    item = Account.create(db, c);
+//                    accountCache.put(anId, item);
+//                    return item;
+//                }
+//            }
             return null;
         } finally {
             if ( c != null ) {

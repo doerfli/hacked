@@ -7,7 +7,7 @@ import android.preference.PreferenceManager;
 import android.util.Log;
 
 import li.doerf.hacked.R;
-import li.doerf.hacked.db.tables.Account;
+import li.doerf.hacked.db.entities.Account;
 import li.doerf.hacked.services.CheckServiceHelper;
 import li.doerf.hacked.ui.fragments.AccountListFragment;
 
@@ -52,14 +52,6 @@ public class HIBPCheckAccountAsyncTask extends AsyncTask<Long,Account,Boolean> i
         }
 
         return foundNewBreaches;
-    }
-
-    @Override
-    protected void onProgressUpdate(Account... accounts) {
-        super.onProgressUpdate(accounts);
-        if ( accounts.length > 0 ) {
-            accounts[0].notifyObservers();
-        }
     }
 
     @Override

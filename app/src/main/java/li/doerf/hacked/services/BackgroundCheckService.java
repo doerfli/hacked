@@ -5,7 +5,7 @@ import android.util.Log;
 import com.firebase.jobdispatcher.JobParameters;
 import com.firebase.jobdispatcher.JobService;
 
-import li.doerf.hacked.db.tables.Account;
+import li.doerf.hacked.db.entities.Account;
 import li.doerf.hacked.remote.haveibeenpwned.HIBPAccountChecker;
 import li.doerf.hacked.remote.haveibeenpwned.IProgressUpdater;
 

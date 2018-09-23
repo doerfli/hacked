@@ -8,7 +8,6 @@ import com.google.common.base.Joiner;
 import org.joda.time.DateTime;
 
 import java.lang.reflect.Field;
-import java.util.HashMap;
 import java.util.Map;
 
 import li.doerf.hacked.db.annotations.Column;
@@ -20,7 +19,7 @@ import li.doerf.hacked.utils.Identifiable;
  */
 @Table(name = "breached_sites")
 public class BreachedSite extends TableBase implements Identifiable {
-    private static Map<Long, Account> accountCache = new HashMap<>();
+//    private static Map<Long, Account> accountCache = new HashMap<>();
 
     @Column(name = "_id", type = "INTEGER", isPrimaryKey = true, isAutoincrement = true)
     private Long id;

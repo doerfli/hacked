@@ -19,8 +19,10 @@ import java.util.List;
 import androidx.cardview.widget.CardView;
 import li.doerf.hacked.HackedApplication;
 import li.doerf.hacked.R;
+import li.doerf.hacked.db.AppDatabase;
 import li.doerf.hacked.db.HackedSQLiteHelper;
-import li.doerf.hacked.db.tables.Account;
+import li.doerf.hacked.db.daos.AccountDao;
+import li.doerf.hacked.db.entities.Account;
 import li.doerf.hacked.db.tables.Breach;
 
 /**
@@ -85,11 +87,8 @@ public class BreachesAdapter extends RecyclerViewListAdapter<RecyclerViewHolder,
                     Snackbar.make(cardView, getContext().getString(R.string.breach_acknowledged), Snackbar.LENGTH_SHORT).show();
                     breach.notifyObservers();
 
-                    Account account = Account.findById(db, breach.getAccount().getId());
-                    if ( account == null ) {
-                        return;
-                    }
-                    account.updateIsHacked(db);
+                    updateAccountIsHacked(db, breach.getAccount().getId());
+
                     notifyDataSetChanged();
                 }
             });
@@ -105,6 +104,22 @@ public class BreachesAdapter extends RecyclerViewListAdapter<RecyclerViewHolder,
         } else {
             unverified.setVisibility(View.VISIBLE);
         }
+    }
+
+    private void updateAccountIsHacked(SQLiteDatabase db, Long id) {
+        AccountDao accountDao = AppDatabase.get(getContext()).getAccountDao();
+        Account account = accountDao.findById(id);
+
+        if ( ! account.getHacked() ) {
+            return;
+        }
+
+        if ( Breach.countUnacknowledged( db, account) > 0 ) {
+            return;
+        }
+
+        account.setHacked(false);
+        accountDao.update(account);
     }
 
 }

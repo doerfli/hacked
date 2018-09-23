@@ -18,9 +18,11 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import li.doerf.hacked.HackedApplication;
 import li.doerf.hacked.R;
+import li.doerf.hacked.db.AppDatabase;
 import li.doerf.hacked.db.DatasetChangeListener;
 import li.doerf.hacked.db.HackedSQLiteHelper;
-import li.doerf.hacked.db.tables.Account;
+import li.doerf.hacked.db.daos.AccountDao;
+import li.doerf.hacked.db.entities.Account;
 import li.doerf.hacked.db.tables.Breach;
 import li.doerf.hacked.ui.HibpInfo;
 import li.doerf.hacked.ui.adapters.BreachesAdapter;
@@ -47,7 +49,8 @@ public class BreachDetailsFragment extends Fragment implements DatasetChangeList
     public void onAttach(Context context) {
         super.onAttach(context);
         myReadbableDb = HackedSQLiteHelper.getInstance(getContext()).getWritableDatabase();
-        myAccount = Account.findById(myReadbableDb, myAccountId);
+        AccountDao accountDao = AppDatabase.get(context).getAccountDao();
+        myAccount = accountDao.findById(myAccountId);
         myBreaches = Breach.findAllByAccount(myReadbableDb, myAccount);
         myBreachesAdapter = new BreachesAdapter(getContext(), myBreaches);
     }

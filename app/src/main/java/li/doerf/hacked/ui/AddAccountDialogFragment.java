@@ -2,7 +2,7 @@ package li.doerf.hacked.ui;
 
 import android.app.Dialog;
 import android.content.DialogInterface;
-import android.database.sqlite.SQLiteDatabase;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -16,9 +16,9 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.DialogFragment;
 import li.doerf.hacked.HackedApplication;
 import li.doerf.hacked.R;
-import li.doerf.hacked.db.HackedSQLiteHelper;
-import li.doerf.hacked.db.tables.Account;
+import li.doerf.hacked.db.entities.Account;
 import li.doerf.hacked.remote.haveibeenpwned.HIBPCheckAccountAsyncTask;
+import li.doerf.hacked.utils.AccountHelper;
 import li.doerf.hacked.utils.ConnectivityHelper;
 
 /**
@@ -63,36 +63,42 @@ public class AddAccountDialogFragment extends DialogFragment {
     }
 
 
-    private void addAccount(String name) {
-        if (name == null || name.trim().equals("")) {
+    private void addAccount(String aName) {
+        if (aName == null || aName.trim().equals("")) {
             Toast.makeText(getContext(), getString(R.string.toast_enter_valid_name), Toast.LENGTH_LONG).show();
             Log.w(LOGTAG, "account name not valid");
             return;
         }
 
-        Account account = Account.create( name.trim());
-        SQLiteDatabase db = HackedSQLiteHelper.getInstance(getContext()).getWritableDatabase();
+        final String name = aName.trim();
 
-        if ( account.exists(db) ) {
-            Toast.makeText(getContext(), getString(R.string.toast_account_exists), Toast.LENGTH_LONG).show();
-            Log.w(LOGTAG, "account already exists");
-            return;
-        }
+        // TODO use some other construct here
+        new AsyncTask<Void, Void, Account>() {
 
-        db.beginTransaction();
-        account.insert(db);
-        db.setTransactionSuccessful();
-        db.endTransaction();
-        account.notifyObservers();
+            @Override
+            protected Account doInBackground(Void... voids) {
+                Account account = AccountHelper.createAccount(getContext(), name);
+                if (account == null) {
+                    return null;
+                }
 
-        ((HackedApplication) getActivity().getApplication()).trackEvent("AddAccount");
+                return account;
+            }
 
-        if ( ! ConnectivityHelper.isConnected( getContext()) ) {
-            Log.i(LOGTAG, "no network");
-            return;
-        }
+            @Override
+            protected void onPostExecute(Account account) {
+                ((HackedApplication) getActivity().getApplication()).trackEvent("AddAccount");
 
-        new HIBPCheckAccountAsyncTask(getContext(), null).execute( account.getId());
+                if ( ! ConnectivityHelper.isConnected( getContext()) ) {
+                    Log.i(LOGTAG, "no network");
+                    return;
+                }
+
+                new HIBPCheckAccountAsyncTask(getContext(), null).execute(account.getId());
+            }
+        }.execute();
+
     }
+
 
 }

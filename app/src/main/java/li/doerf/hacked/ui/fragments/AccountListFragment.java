@@ -2,8 +2,6 @@ package li.doerf.hacked.ui.fragments;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -21,35 +19,38 @@ import android.widget.Toast;
 
 import com.google.android.material.snackbar.Snackbar;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import androidx.annotation.Nullable;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import li.doerf.hacked.HackedApplication;
 import li.doerf.hacked.R;
-import li.doerf.hacked.db.DatasetChangeListener;
-import li.doerf.hacked.db.HackedSQLiteHelper;
-import li.doerf.hacked.db.tables.Account;
+import li.doerf.hacked.db.entities.Account;
 import li.doerf.hacked.remote.haveibeenpwned.HIBPCheckAccountAsyncTask;
 import li.doerf.hacked.ui.AddAccountDialogFragment;
 import li.doerf.hacked.ui.adapters.AccountsAdapter;
+import li.doerf.hacked.ui.viewmodels.AccountViewModel;
+import li.doerf.hacked.utils.AccountHelper;
 import li.doerf.hacked.utils.ConnectivityHelper;
 import li.doerf.hacked.utils.SynchronizationHelper;
 
 /**
  * Created by moo on 05/10/16.
  */
-public class AccountListFragment extends Fragment implements DatasetChangeListener {
+public class AccountListFragment extends Fragment {
     private final String LOGTAG = getClass().getSimpleName();
-    private SQLiteDatabase myReadbableDb;
     private AccountsAdapter myAccountsAdapter;
-    private Cursor myCursor;
     private View myFragmentRootView;
-    private static boolean isFragmentShown = false;
     private SwipeRefreshLayout mySwipeRefreshLayout;
+    private AccountViewModel myViewModel;
 
     public static AccountListFragment create() {
         AccountListFragment f = new AccountListFragment();
@@ -63,9 +64,16 @@ public class AccountListFragment extends Fragment implements DatasetChangeListen
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        myReadbableDb = HackedSQLiteHelper.getInstance(getContext()).getReadableDatabase();
-        myAccountsAdapter = new AccountsAdapter(getContext(), null, getFragmentManager());
+        myAccountsAdapter = new AccountsAdapter(getContext(), new ArrayList<Account>(), getFragmentManager());
         setHasOptionsMenu(true);
+
+        myViewModel = ViewModelProviders.of(this).get(AccountViewModel.class);
+        myViewModel.getAccountList().observe(AccountListFragment.this, new Observer<List<Account>>() {
+            @Override
+            public void onChanged(List<Account> accounts) {
+                myAccountsAdapter.addItems(accounts);
+            }
+        });
     }
 
     @Nullable
@@ -102,28 +110,7 @@ public class AccountListFragment extends Fragment implements DatasetChangeListen
     @Override
     public void onResume() {
         super.onResume();
-        refreshList();
-        Account.registerDatasetChangedListener(this, Account.class);
-        isFragmentShown = true;
-
         ((HackedApplication) getActivity().getApplication()).trackView("Fragment~AccountList");
-    }
-
-    @Override
-    public void onPause() {
-        Account.unregisterDatasetChangedListener(this, Account.class);
-        isFragmentShown = false;
-        super.onPause();
-    }
-
-    @Override
-    public void onDetach() {
-        if ( myCursor != null ) {
-            myCursor.close();
-        }
-        myReadbableDb = null;
-
-        super.onDetach();
     }
 
     @Override
@@ -171,20 +158,7 @@ public class AccountListFragment extends Fragment implements DatasetChangeListen
                         return;
                     }
 
-                    Account account = Account.create( accountName);
-                    SQLiteDatabase db = HackedSQLiteHelper.getInstance(getContext()).getWritableDatabase();
-
-                    if ( account.exists(db) ) {
-                        Log.w(LOGTAG, "account already exists");
-                        Toast.makeText(getContext(), getString(R.string.toast_account_exists), Toast.LENGTH_LONG).show();
-                        return;
-                    }
-
-                    db.beginTransaction();
-                    account.insert(db);
-                    db.setTransactionSuccessful();
-                    db.endTransaction();
-                    account.notifyObservers();
+                    Account account = AccountHelper.createAccount(getContext(), accountName);
 
                     initialAccount.setVisibility(View.GONE);
                     Toast.makeText(getContext(), getString(R.string.toast_account_added), Toast.LENGTH_LONG).show();
@@ -264,29 +238,6 @@ public class AccountListFragment extends Fragment implements DatasetChangeListen
         }
     }
 
-    public void refreshList() {
-        myCursor = Account.listAll(myReadbableDb);
-        if ( ! myCursor.isClosed() ) {
-            Cursor old = null;
-            try {
-                old = myAccountsAdapter.swapCursor(myCursor);
-            } finally {
-                if ( old != null ) {
-                    old.close();
-                }
-            }
-        } else {
-            Log.w(LOGTAG, "cursor closed");
-            myAccountsAdapter.swapCursor(null);
-        }
-
-    }
-
-    @Override
-    public void datasetChanged() {
-        refreshList();
-    }
-
     public void checkForBreaches(Account account) {
         if ( ! ConnectivityHelper.isConnected( getContext()) ) {
             Log.i(LOGTAG, "no network");
@@ -321,7 +272,4 @@ public class AccountListFragment extends Fragment implements DatasetChangeListen
         mySwipeRefreshLayout.setRefreshing(false);
     }
 
-    public static boolean isFragmentShown() {
-        return isFragmentShown;
-    }
 }

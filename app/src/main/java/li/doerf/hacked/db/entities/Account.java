@@ -17,7 +17,7 @@ public class Account {
     @ColumnInfo(name="last_checked")
     private Long lastChecked;
     @ColumnInfo(name="is_hacked")
-    private Boolean isHacked;
+    private Boolean isHacked = false;
 
 
     public Long getId() {

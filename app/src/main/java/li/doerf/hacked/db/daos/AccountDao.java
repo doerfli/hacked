@@ -2,6 +2,7 @@ package li.doerf.hacked.db.daos;
 
 import java.util.List;
 
+import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
@@ -16,13 +17,16 @@ public interface AccountDao {
     List<Long> insert(Account... entities);
 
     @Update
-    Long update(Account entity);
+    int update(Account entity);
 
     @Delete
-    Long delete(Account entity);
+    int delete(Account entity);
 
     @Query("SELECT * FROM accounts")
     List<Account> getAll();
+
+    @Query("SELECT * FROM accounts")
+    LiveData<List<Account>> getAllLD();
 
     @Query("SELECT * FROM accounts where _id=:anId")
     Account findById(Long anId);

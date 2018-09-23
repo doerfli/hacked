@@ -12,8 +12,10 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.DialogFragment;
 import li.doerf.hacked.HackedApplication;
 import li.doerf.hacked.R;
+import li.doerf.hacked.db.AppDatabase;
 import li.doerf.hacked.db.HackedSQLiteHelper;
-import li.doerf.hacked.db.tables.Account;
+import li.doerf.hacked.db.daos.AccountDao;
+import li.doerf.hacked.db.entities.Account;
 import li.doerf.hacked.db.tables.Breach;
 
 /**
@@ -37,17 +39,17 @@ public class DeleteAccountDialogFragment extends DialogFragment {
         builder.setMessage(getString(R.string.dialog_account_delete_msg, myAccount.getName()))
                 .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
+                        AccountDao accountDao = AppDatabase.get(getContext()).getAccountDao();
                         Collection<Breach> breaches = Breach.findAllByAccount(myDb, myAccount);
                         try {
                             myDb.beginTransaction();
                             for (Breach b : breaches) {
                                 b.delete(myDb);
                             }
-                            myAccount.delete(myDb);
+                            accountDao.delete(myAccount);
                             myDb.setTransactionSuccessful();
                         } finally {
                             myDb.endTransaction();
-                            myAccount.notifyObservers();
                             ((HackedApplication) getActivity().getApplication()).trackEvent("DeleteAccount");
                         }
                     }

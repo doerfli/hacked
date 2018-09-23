@@ -2,10 +2,10 @@
   "formatVersion": 1,
   "database": {
     "version": 4,
-    "identityHash": "6e02ac786ceecc3f46cedf8843eb077e",
+    "identityHash": "0d39dc2e093d6dc1cd67429cbd00ac51",
     "entities": [
       {
-        "tableName": "Account",
+        "tableName": "accounts",
         "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`_id` INTEGER, `name` TEXT, `last_checked` INTEGER, `is_hacked` INTEGER, PRIMARY KEY(`_id`))",
         "fields": [
           {
@@ -45,7 +45,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"6e02ac786ceecc3f46cedf8843eb077e\")"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"0d39dc2e093d6dc1cd67429cbd00ac51\")"
     ]
   }
 }
