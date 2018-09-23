@@ -1,5 +1,6 @@
 package li.doerf.hacked.ui;
 
+import android.app.Application;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.AsyncTask;
@@ -72,32 +73,39 @@ public class AddAccountDialogFragment extends DialogFragment {
 
         final String name = aName.trim();
 
-        // TODO use some other construct here
-        new AsyncTask<Void, Void, Account>() {
+        new AddAcountAsyncTask(getActivity().getApplication()).execute(name);
 
-            @Override
-            protected Account doInBackground(Void... voids) {
-                Account account = AccountHelper.createAccount(getContext(), name);
-                if (account == null) {
-                    return null;
-                }
+    }
 
-                return account;
+    static class AddAcountAsyncTask extends AsyncTask<String, Void, Account> {
+
+        private final Application myContext;
+
+        AddAcountAsyncTask(Application application) {
+            myContext = application;
+        }
+
+        @Override
+        protected Account doInBackground(String... name) {
+            Account account = AccountHelper.createAccount(myContext, name[0]);
+            if (account == null) {
+                return null;
             }
 
-            @Override
-            protected void onPostExecute(Account account) {
-                ((HackedApplication) getActivity().getApplication()).trackEvent("AddAccount");
+            return account;
+        }
 
-                if ( ! ConnectivityHelper.isConnected( getContext()) ) {
-                    Log.i(LOGTAG, "no network");
-                    return;
-                }
+        @Override
+        protected void onPostExecute(Account account) {
+            ((HackedApplication) myContext).trackEvent("AddAccount");
 
-                new HIBPCheckAccountAsyncTask(getContext(), null).execute(account.getId());
+            if ( ! ConnectivityHelper.isConnected( myContext) ) {
+                Log.i("AddAcountAsyncTask", "no network");
+                return;
             }
-        }.execute();
 
+            new HIBPCheckAccountAsyncTask(myContext, null).execute(account.getId());
+        }
     }
 
 
