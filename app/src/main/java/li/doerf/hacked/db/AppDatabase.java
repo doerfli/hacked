@@ -8,9 +8,11 @@ import androidx.room.RoomDatabase;
 import androidx.room.migration.Migration;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 import li.doerf.hacked.db.daos.AccountDao;
+import li.doerf.hacked.db.daos.BreachDao;
 import li.doerf.hacked.db.entities.Account;
+import li.doerf.hacked.db.entities.Breach;
 
-@Database(entities = {Account.class}, version = 4)
+@Database(entities = {Account.class, Breach.class}, version = 4)
 public abstract class AppDatabase extends RoomDatabase {
 
     private static AppDatabase instance;
@@ -38,4 +40,6 @@ public abstract class AppDatabase extends RoomDatabase {
     }
 
     public abstract AccountDao getAccountDao();
+
+    public abstract BreachDao getBreachDao();
 }

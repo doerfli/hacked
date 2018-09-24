@@ -10,6 +10,7 @@ android {
         targetSdkVersion 28
         versionCode 36
         versionName "1.8.3.2"
+        multiDexEnabled true
         javaCompileOptions {
             annotationProcessorOptions {
                 arguments = ["room.schemaLocation": "$projectDir/schemas".toString()]
@@ -51,6 +52,7 @@ dependencies {
     implementation 'com.google.android.gms:play-services-analytics:16.0.3'
     implementation 'commons-codec:commons-codec:1.11'
     implementation 'com.firebase:firebase-jobdispatcher:0.8.5'
+    implementation 'com.android.support:multidex:1.0.3'
 
     implementation "android.arch.persistence.room:runtime:$room_version"
     implementation "android.arch.persistence.room:guava:$room_version"

@@ -10,13 +10,14 @@ import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 
+import androidx.multidex.MultiDexApplication;
 import li.doerf.hacked.utils.SynchronizationHelper;
 
 /**
  * Created by moo on 25.05.17.
  */
 
-public class HackedApplication extends Application {
+public class HackedApplication extends MultiDexApplication {
     private static final String TAG = "HackedApplication";
     private static final String PREF_KEY_MIGRATE_BACKGROUND_SERVICE_TO_FIREBASE_SCHEDULER_DONE = "PREF_KEY_MIGRATE_BACKGROUND_SERVICE_TO_FIREBASE_SCHEDULER_DONE";
     private static GoogleAnalytics sAnalytics;
