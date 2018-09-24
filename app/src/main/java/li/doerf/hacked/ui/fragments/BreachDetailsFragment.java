@@ -1,72 +1,81 @@
 package li.doerf.hacked.ui.fragments;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import java.util.List;
+import java.util.ArrayList;
 
 import androidx.annotation.Nullable;
-import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import io.reactivex.Single;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 import li.doerf.hacked.HackedApplication;
 import li.doerf.hacked.R;
 import li.doerf.hacked.db.AppDatabase;
-import li.doerf.hacked.db.DatasetChangeListener;
-import li.doerf.hacked.db.HackedSQLiteHelper;
 import li.doerf.hacked.db.daos.AccountDao;
 import li.doerf.hacked.db.entities.Account;
-import li.doerf.hacked.db.tables.Breach;
 import li.doerf.hacked.ui.HibpInfo;
 import li.doerf.hacked.ui.adapters.BreachesAdapter;
+import li.doerf.hacked.ui.viewmodels.BreachViewModel;
 
 /**
  * Created by moo on 06/10/16.
  */
-public class BreachDetailsFragment extends Fragment implements DatasetChangeListener {
+public class BreachDetailsFragment extends Fragment {
     private final String LOGTAG = getClass().getSimpleName();
-    private SQLiteDatabase myReadbableDb;
     private Account myAccount;
-    private List<Breach> myBreaches;
     private BreachesAdapter myBreachesAdapter;
     private long myAccountId;
+    private BreachViewModel myViewModel;
 
     public static BreachDetailsFragment create(long accountId) {
         BreachDetailsFragment fragment = new BreachDetailsFragment();
-        fragment.setMyAccountId(accountId);
+        fragment.myAccountId = accountId;
         return fragment;
     }
 
 
+    @SuppressLint("CheckResult")
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        myReadbableDb = HackedSQLiteHelper.getInstance(getContext()).getWritableDatabase();
         AccountDao accountDao = AppDatabase.get(context).getAccountDao();
-        myAccount = accountDao.findById(myAccountId);
-        myBreaches = Breach.findAllByAccount(myReadbableDb, myAccount);
-        myBreachesAdapter = new BreachesAdapter(getContext(), myBreaches);
+        myViewModel = ViewModelProviders.of(this).get(BreachViewModel.class);
+        myBreachesAdapter = new BreachesAdapter(getContext(), new ArrayList<>());
+
+        Single.fromCallable(() -> accountDao.findById(myAccountId))
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe((account) -> {
+                    myAccount = account;
+                    getActivity().setTitle(myAccount.getName());
+                    myViewModel.getBreachList(
+                            myAccount.getId()).observe(
+                                    BreachDetailsFragment.this, accounts -> myBreachesAdapter.addItems(accounts));
+                });
     }
 
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_breach_details, container, false);
 
-        getActivity().setTitle(myAccount.getName());
-
-        if ( myBreaches.size() == 0 ) {
-            CardView noBreachFound = (CardView) view.findViewById(R.id.no_breach_found);
-            noBreachFound.setVisibility(View.VISIBLE);
-            TextView hibpInfo = (TextView) view.findViewById(R.id.hibp_info);
-            hibpInfo.setVisibility(View.GONE);
-            return view;
-        }
+        // TODO do something about this
+//        if ( myBreachesAdapter.getItemCount() == 0 ) {
+//            CardView noBreachFound = (CardView) view.findViewById(R.id.no_breach_found);
+//            noBreachFound.setVisibility(View.VISIBLE);
+//            TextView hibpInfo = (TextView) view.findViewById(R.id.hibp_info);
+//            hibpInfo.setVisibility(View.GONE);
+//            return view;
+//        }
 
         RecyclerView breachesList = (RecyclerView) view.findViewById(R.id.breaches_list);
         breachesList.setHasFixedSize(true);
@@ -86,31 +95,7 @@ public class BreachDetailsFragment extends Fragment implements DatasetChangeList
     @Override
     public void onResume() {
         super.onResume();
-        Breach.registerDatasetChangedListener(this, Breach.class);
-
         ((HackedApplication) getActivity().getApplication()).trackView("Fragment~BreachDetails");
     }
 
-    @Override
-    public void onPause() {
-        Breach.unregisterDatasetChangedListener(this, Breach.class);
-        super.onPause();
-    }
-
-    @Override
-    public void onDetach() {
-        myReadbableDb = null;
-        super.onDetach();
-    }
-
-    @Override
-    public void datasetChanged() {
-        myBreaches = Breach.findAllByAccount(myReadbableDb, myAccount);
-        if ( myBreachesAdapter != null )
-            myBreachesAdapter.changeList(myBreaches);
-    }
-
-    public void setMyAccountId(long myAccountId) {
-        this.myAccountId = myAccountId;
-    }
 }

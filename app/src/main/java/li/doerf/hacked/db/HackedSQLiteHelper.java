@@ -5,7 +5,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
-import li.doerf.hacked.db.tables.Breach;
 import li.doerf.hacked.db.tables.BreachedSite;
 
 /**
@@ -32,7 +31,7 @@ public class HackedSQLiteHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         Log.i(LOGTAG, "Initializing Database: " + DATABASE_NAME);
 //        new Account().createTable(db);
-        new Breach().createTable(db);
+//        new Breach().createTable(db);
         new BreachedSite().createTable(db);
     }
 

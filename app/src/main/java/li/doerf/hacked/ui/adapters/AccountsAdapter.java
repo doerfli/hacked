@@ -2,7 +2,6 @@ package li.doerf.hacked.ui.adapters;
 
 import android.content.Context;
 import android.content.Intent;
-import android.database.sqlite.SQLiteDatabase;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,21 +16,25 @@ import java.util.Collection;
 import java.util.List;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
+import io.reactivex.Single;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 import li.doerf.hacked.R;
 import li.doerf.hacked.activities.BreachDetailsActivity;
-import li.doerf.hacked.db.HackedSQLiteHelper;
+import li.doerf.hacked.db.AppDatabase;
+import li.doerf.hacked.db.daos.BreachDao;
 import li.doerf.hacked.db.entities.Account;
-import li.doerf.hacked.db.tables.Breach;
+import li.doerf.hacked.db.entities.Breach;
 import li.doerf.hacked.ui.DeleteAccountDialogFragment;
 import li.doerf.hacked.utils.NotificationHelper;
 
 public class AccountsAdapter extends RecyclerView.Adapter<RecyclerViewHolder> {
     private final String LOGTAG = getClass().getSimpleName();
     private final FragmentManager mySupportFragmentManager;
+    private final BreachDao myBreachDao;
     private List<Account> myAccountList;
 
     private final Context myContext;
@@ -40,6 +43,7 @@ public class AccountsAdapter extends RecyclerView.Adapter<RecyclerViewHolder> {
         mySupportFragmentManager = supportFragmentManager;
         myAccountList = accountList;
         myContext = aContext;
+        myBreachDao = AppDatabase.get(aContext).getBreachDao();
     }
 
     @Override
@@ -53,16 +57,24 @@ public class AccountsAdapter extends RecyclerView.Adapter<RecyclerViewHolder> {
     public void onBindViewHolder(@NonNull RecyclerViewHolder holder, int position) {
         CardView cardView = (CardView) holder.getView();
 
-        final SQLiteDatabase db = HackedSQLiteHelper.getInstance(getContext()).getReadableDatabase();
         final Account account = myAccountList.get(position);
-        final Collection<Breach> breaches = Breach.findAllByAccount(db, account);
+
+        Single.fromCallable(() -> myBreachDao.findByAccount(account.getId()))
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe((breaches) -> {
+                    bindView(cardView, account, breaches);
+                });
+
+//        final Collection<Breach> breaches = myBreachDao.findByAccount(account.getId());
+
+    }
+
+    private void bindView(CardView cardView, Account account, Collection<Breach> breaches) {
         int numBreaches = breaches.size();
-        int numAcknowledgedBreaches = Collections2.filter(breaches, new com.google.common.base.Predicate<Breach>() {
-            @Override
-            public boolean apply(@Nullable Breach input) {
-                if ( input == null ) { return false; }
-                return input.getIsAcknowledged();
-            }
+        int numAcknowledgedBreaches = Collections2.filter(breaches, input -> {
+            if ( input == null ) { return false; }
+            return input.getAcknowledged();
         }).size();
         TextView nameView = (TextView) cardView.findViewById(R.id.name);
         nameView.setText(account.getName());

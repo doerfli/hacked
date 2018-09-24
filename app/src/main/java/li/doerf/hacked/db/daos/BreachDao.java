@@ -2,6 +2,7 @@ package li.doerf.hacked.db.daos;
 
 import java.util.List;
 
+import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
@@ -20,11 +21,11 @@ public interface BreachDao {
     @Delete
     int delete(Breach entity);
 
-    @Query("SELECT * FROM breaches")
-    List<Breach> getAll();
-
-    @Query("SELECT * FROM breaches ORDER BY is_acknowledged, breach_date")
-    List<Breach> getAllOrderByAcknowledged();
+//    @Query("SELECT * FROM breaches")
+//    List<Breach> getAll();
+//
+//    @Query("SELECT * FROM breaches ORDER BY is_acknowledged, breach_date")
+//    List<Breach> getAllOrderByAcknowledged();
 
     @Query("SELECT COUNT(*) FROM breaches WHERE account=:account")
     Long countUnacknowledged(Long account);
@@ -34,6 +35,9 @@ public interface BreachDao {
 
     @Query("SELECT * FROM breaches WHERE account=:accountId ORDER BY is_acknowledged, breach_date DESC")
     List<Breach> findByAccount(Long accountId);
+
+    @Query("SELECT * FROM breaches WHERE account=:accountId ORDER BY is_acknowledged, breach_date DESC")
+    LiveData<List<Breach>> findByAccountLD(Long accountId);
 
     @Query("SELECT * FROM breaches WHERE account=:accountId AND name=:aName ORDER BY name")
     Breach findByAccountAndName(Long accountId, String aName);

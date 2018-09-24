@@ -1,7 +1,6 @@
 package li.doerf.hacked.remote.haveibeenpwned;
 
 import android.content.Context;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
@@ -19,10 +18,10 @@ import java.util.Random;
 import androidx.annotation.NonNull;
 import li.doerf.hacked.R;
 import li.doerf.hacked.db.AppDatabase;
-import li.doerf.hacked.db.HackedSQLiteHelper;
 import li.doerf.hacked.db.daos.AccountDao;
+import li.doerf.hacked.db.daos.BreachDao;
 import li.doerf.hacked.db.entities.Account;
-import li.doerf.hacked.db.tables.Breach;
+import li.doerf.hacked.db.entities.Breach;
 import retrofit2.Call;
 import retrofit2.Response;
 import retrofit2.Retrofit;
@@ -41,17 +40,19 @@ public class HIBPAccountChecker {
     private final Context myContext;
     private final IProgressUpdater myProgressUpdater;
     private final AccountDao myAccountDao;
+    private final BreachDao myBreachDao;
+    // TODO what about this?
     private boolean abort = false;
 
     public HIBPAccountChecker(Context aContext, IProgressUpdater aProgressUpdates) {
         myContext = aContext;
         myProgressUpdater = aProgressUpdates;
         myAccountDao = AppDatabase.get(aContext).getAccountDao();
+        myBreachDao = AppDatabase.get(aContext).getBreachDao();
     }
 
     public Boolean check(Long id) {
         Log.d(LOGTAG, "starting check for breaches");
-        SQLiteDatabase db = HackedSQLiteHelper.getInstance(myContext).getWritableDatabase();
         boolean newBreachFound = false;
         abort = false;
 
@@ -69,7 +70,7 @@ public class HIBPAccountChecker {
 
             try {
                 List<BreachedAccount> breachedAccounts = doCheck(account.getName());
-                newBreachFound |= processBreachedAccounts( db, account, breachedAccounts);
+                newBreachFound |= processBreachedAccounts( account, breachedAccounts);
             } finally {
                 myProgressUpdater.updateProgress( account);
             }
@@ -80,11 +81,11 @@ public class HIBPAccountChecker {
         return newBreachFound;
     }
 
-    private boolean processBreachedAccounts(SQLiteDatabase db, Account account, List<BreachedAccount> breachedAccounts) {
+    private boolean processBreachedAccounts(Account account, List<BreachedAccount> breachedAccounts) {
         boolean isNewBreachFound = false;
 
         for (BreachedAccount ba : breachedAccounts) {
-            Breach existing = Breach.findByAccountAndName(db, account, ba.getName());
+            Breach existing = myBreachDao.findByAccountAndName(account.getId(), ba.getName());
 
             if (existing != null) {
                 Log.d(LOGTAG, "breach already existing: " + ba.getName());
@@ -92,20 +93,20 @@ public class HIBPAccountChecker {
             }
 
             Log.d(LOGTAG, "new breach: " + ba.getName());
-            Breach breach = Breach.create(
-                    account,
-                    ba.getName(),
-                    ba.getTitle(),
-                    ba.getDomain(),
-                    DateTime.parse(ba.getBreachDate()),
-                    DateTime.parse(ba.getAddedDate()),
-                    ba.getPwnCount(),
-                    ba.getDescription(),
-                    ba.getDataClasses(),
-                    ba.getIsVerified(),
-                    false
-            );
-            breach.insert(db);
+            Breach newBreach = new Breach();
+            newBreach.setAccount(account.getId());
+            newBreach.setName(ba.getName());
+            newBreach.setTitle(ba.getTitle());
+            newBreach.setDomain(ba.getDomain());
+            newBreach.setBreachDate(DateTime.parse(ba.getBreachDate()).getMillis());
+            newBreach.setAddedDate(DateTime.parse(ba.getAddedDate()).getMillis());
+            newBreach.setPwnCount(ba.getPwnCount());
+            newBreach.setDescription(ba.getDescription());
+            newBreach.setDataClasses(ba.getAddedDate());
+            newBreach.setVerified(ba.getIsVerified());
+            newBreach.setAcknowledged(false);
+            // TODO process in other thread?
+            myBreachDao.insert(newBreach);
             Log.i(LOGTAG, "breach inserted into db");
             isNewBreachFound |= true;
         }

@@ -1,11 +1,10 @@
 package li.doerf.hacked.ui;
 
 import android.app.Dialog;
-import android.content.DialogInterface;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 
-import java.util.Collection;
+import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
@@ -15,8 +14,9 @@ import li.doerf.hacked.R;
 import li.doerf.hacked.db.AppDatabase;
 import li.doerf.hacked.db.HackedSQLiteHelper;
 import li.doerf.hacked.db.daos.AccountDao;
+import li.doerf.hacked.db.daos.BreachDao;
 import li.doerf.hacked.db.entities.Account;
-import li.doerf.hacked.db.tables.Breach;
+import li.doerf.hacked.db.entities.Breach;
 
 /**
  * Created by moo on 06/09/16.
@@ -37,28 +37,24 @@ public class DeleteAccountDialogFragment extends DialogFragment {
         // Use the Builder class for convenient dialog construction
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setMessage(getString(R.string.dialog_account_delete_msg, myAccount.getName()))
-                .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        AccountDao accountDao = AppDatabase.get(getContext()).getAccountDao();
-                        Collection<Breach> breaches = Breach.findAllByAccount(myDb, myAccount);
-                        try {
-                            myDb.beginTransaction();
-                            for (Breach b : breaches) {
-                                b.delete(myDb);
-                            }
-                            accountDao.delete(myAccount);
-                            myDb.setTransactionSuccessful();
-                        } finally {
-                            myDb.endTransaction();
-                            ((HackedApplication) getActivity().getApplication()).trackEvent("DeleteAccount");
+                .setPositiveButton(R.string.ok, (dialog, id) -> {
+                    // TODO this probably needs to go into another thread
+                    AccountDao accountDao = AppDatabase.get(getContext()).getAccountDao();
+                    BreachDao breachDao = AppDatabase.get(getContext()).getBreachDao();
+                    List<Breach> breaches = breachDao.findByAccount(myAccount.getId());
+                    try {
+                        myDb.beginTransaction();
+                        for (Breach b : breaches) {
+                            breachDao.delete(b);
                         }
+                        accountDao.delete(myAccount);
+                        myDb.setTransactionSuccessful();
+                    } finally {
+                        myDb.endTransaction();
+                        ((HackedApplication) getActivity().getApplication()).trackEvent("DeleteAccount");
                     }
                 })
-                .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        DeleteAccountDialogFragment.this.getDialog().cancel();
-                    }
-                });
+                .setNegativeButton(R.string.cancel, (dialog, id) -> DeleteAccountDialogFragment.this.getDialog().cancel());
         // Create the AlertDialog object and return it
         return builder.create();
     }
