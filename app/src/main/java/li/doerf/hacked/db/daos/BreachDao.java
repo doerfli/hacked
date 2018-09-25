@@ -21,12 +21,6 @@ public interface BreachDao {
     @Delete
     int delete(Breach entity);
 
-//    @Query("SELECT * FROM breaches")
-//    List<Breach> getAll();
-//
-//    @Query("SELECT * FROM breaches ORDER BY is_acknowledged, breach_date")
-//    List<Breach> getAllOrderByAcknowledged();
-
     @Query("SELECT COUNT(*) FROM breaches WHERE account=:account")
     Long countUnacknowledged(Long account);
 
