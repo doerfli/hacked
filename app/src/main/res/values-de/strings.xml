@@ -1,4 +1,5 @@
 <resources>
+    <!-- ä ö ü -->
     <string name="app_name">Hacked?</string>
     <string name="action_settings">Einstellungen</string>
     <string name="action_check">Synchronisieren</string>
@@ -90,4 +91,5 @@
     <string name="password_info">Geben Sie ein Passwort ein um es in bekannten Datenlecks zu finden</string>
     <string name="channel_name">Hacked?</string>
     <string name="unverified">(unbestätigt)</string>
+    <string name="account_deleted">Konto gelöscht</string>
 </resources>

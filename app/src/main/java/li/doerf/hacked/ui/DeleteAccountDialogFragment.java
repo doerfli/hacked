@@ -1,5 +1,6 @@
 package li.doerf.hacked.ui;
 
+import android.app.Application;
 import android.app.Dialog;
 import android.os.Bundle;
 
@@ -15,6 +16,7 @@ import li.doerf.hacked.db.daos.AccountDao;
 import li.doerf.hacked.db.daos.BreachDao;
 import li.doerf.hacked.db.entities.Account;
 import li.doerf.hacked.db.entities.Breach;
+import li.doerf.hacked.utils.BackgroundTaskHelper;
 
 /**
  * Created by moo on 06/09/16.
@@ -22,6 +24,7 @@ import li.doerf.hacked.db.entities.Breach;
 public class DeleteAccountDialogFragment extends DialogFragment {
 //    private final String LOGTAG = getClass().getSimpleName();
     private Account myAccount;
+    private Application myApplication;
 
     public void setAccount(Account account) {
         myAccount = account;
@@ -30,11 +33,22 @@ public class DeleteAccountDialogFragment extends DialogFragment {
     @Override
     @NonNull
     public Dialog onCreateDialog(Bundle savedInstanceState) {
+        myApplication = getActivity().getApplication();
         // Use the Builder class for convenient dialog construction
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setMessage(getString(R.string.dialog_account_delete_msg, myAccount.getName()))
                 .setPositiveButton(R.string.ok, (dialog, id) -> {
-                    // TODO this probably needs to go into another thread
+                    handleDeleteAccount();
+
+                })
+                .setNegativeButton(R.string.cancel, (dialog, id) -> DeleteAccountDialogFragment.this.getDialog().cancel());
+        // Create the AlertDialog object and return it
+        return builder.create();
+    }
+
+    private void handleDeleteAccount() {
+        new BackgroundTaskHelper<Boolean>().runInBackgroundAndConsumeOnMain(
+                () -> {
                     AccountDao accountDao = AppDatabase.get(getContext()).getAccountDao();
                     BreachDao breachDao = AppDatabase.get(getContext()).getBreachDao();
                     List<Breach> breaches = breachDao.findByAccount(myAccount.getId());
@@ -44,11 +58,15 @@ public class DeleteAccountDialogFragment extends DialogFragment {
                         }
                         accountDao.delete(myAccount);
                     } finally {
-                        ((HackedApplication) getActivity().getApplication()).trackEvent("DeleteAccount");
+                        ((HackedApplication) myApplication).trackEvent("DeleteAccount");
                     }
-                })
-                .setNegativeButton(R.string.cancel, (dialog, id) -> DeleteAccountDialogFragment.this.getDialog().cancel());
-        // Create the AlertDialog object and return it
-        return builder.create();
+                    return true;
+                },
+                (res) -> doNothing()
+        );
+    }
+
+    private void doNothing() {
+
     }
 }

@@ -90,4 +90,5 @@
     <string name="password_info">Enter password below to check if it was exposed in data breaches</string>
     <string name="channel_name">Hacked?</string>
     <string name="unverified">(unverified)</string>
+    <string name="account_deleted">Account deleted</string>
 </resources>
