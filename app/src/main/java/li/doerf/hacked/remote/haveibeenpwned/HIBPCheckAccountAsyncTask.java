@@ -11,7 +11,9 @@ import li.doerf.hacked.db.entities.Account;
 import li.doerf.hacked.services.CheckServiceHelper;
 import li.doerf.hacked.ui.fragments.AccountListFragment;
 
-
+/**
+ * TODO move to JobIntentService
+ */
 public class HIBPCheckAccountAsyncTask extends AsyncTask<Long,Account,Boolean> implements IProgressUpdater {
 
     private final String LOGTAG = getClass().getSimpleName();
