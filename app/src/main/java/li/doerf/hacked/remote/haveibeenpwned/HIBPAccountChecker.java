@@ -6,6 +6,7 @@ import android.os.Looper;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.google.common.base.Joiner;
 import com.google.common.collect.Lists;
 
 import org.joda.time.DateTime;
@@ -102,7 +103,7 @@ public class HIBPAccountChecker {
             newBreach.setAddedDate(DateTime.parse(ba.getAddedDate()).getMillis());
             newBreach.setPwnCount(ba.getPwnCount());
             newBreach.setDescription(ba.getDescription());
-            newBreach.setDataClasses(ba.getAddedDate());
+            newBreach.setDataClasses(ba.getDataClasses() != null ? Joiner.on(", ").join(ba.getDataClasses()) : "");
             newBreach.setVerified(ba.getIsVerified());
             newBreach.setAcknowledged(false);
             // TODO process in other thread?

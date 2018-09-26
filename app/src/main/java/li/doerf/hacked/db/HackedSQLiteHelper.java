@@ -5,9 +5,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
-import li.doerf.hacked.db.tables.BreachedSite;
-
 /**
+ * TODO delete this class
  * Created by moo on 29/01/15.
  */
 public class HackedSQLiteHelper extends SQLiteOpenHelper {
@@ -32,7 +31,7 @@ public class HackedSQLiteHelper extends SQLiteOpenHelper {
         Log.i(LOGTAG, "Initializing Database: " + DATABASE_NAME);
 //        new Account().createTable(db);
 //        new Breach().createTable(db);
-        new BreachedSite().createTable(db);
+//        new BreachedSite().createTable(db);
     }
 
     @Override
@@ -41,7 +40,7 @@ public class HackedSQLiteHelper extends SQLiteOpenHelper {
 
         if ( oldVersion < 3 && newVersion >= 3 ) {
             Log.i(LOGTAG, "Creating table for db version 3+");
-            new BreachedSite().createTable(db);
+//            new BreachedSite().createTable(db);
         }
     }
 }

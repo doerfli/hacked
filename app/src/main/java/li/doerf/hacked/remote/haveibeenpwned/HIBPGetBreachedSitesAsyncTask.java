@@ -10,14 +10,18 @@ import android.preference.PreferenceManager;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.google.common.base.Joiner;
+
 import org.joda.time.DateTime;
 
 import java.io.IOException;
 import java.util.List;
 
 import li.doerf.hacked.R;
+import li.doerf.hacked.db.AppDatabase;
 import li.doerf.hacked.db.HackedSQLiteHelper;
-import li.doerf.hacked.db.tables.BreachedSite;
+import li.doerf.hacked.db.daos.BreachedSiteDao;
+import li.doerf.hacked.db.entities.BreachedSite;
 import li.doerf.hacked.ui.fragments.BreachedSitesListFragment;
 import li.doerf.hacked.utils.ConnectivityHelper;
 import retrofit2.Call;
@@ -32,10 +36,12 @@ public class HIBPGetBreachedSitesAsyncTask extends AsyncTask<Void,Void,Void> {
     private final String LOGTAG = getClass().getSimpleName();
     private final Context myContext;
     private final BreachedSitesListFragment myUiFragment;
+    private final BreachedSiteDao myBreachedSiteDao;
 
     public HIBPGetBreachedSitesAsyncTask(BreachedSitesListFragment uiFragment) {
         myContext = uiFragment.getContext();
         myUiFragment = uiFragment;
+        myBreachedSiteDao = AppDatabase.get(uiFragment.getContext()).getBrachedSiteDao();
     }
 
     @Override
@@ -53,7 +59,11 @@ public class HIBPGetBreachedSitesAsyncTask extends AsyncTask<Void,Void,Void> {
             return null;
         }
 
-        BreachedSite.deleteAll(db);
+        List<BreachedSite> allOldSites = myBreachedSiteDao.getAll();
+        if (!allOldSites.isEmpty()) {
+            Log.d(LOGTAG, "deleting old sites");
+            myBreachedSiteDao.delete(allOldSites.toArray(new BreachedSite[0]));
+        }
 
         Log.d(LOGTAG, "retrieving breached sites");
         Retrofit retrofit = new Retrofit.Builder()
@@ -72,22 +82,19 @@ public class HIBPGetBreachedSitesAsyncTask extends AsyncTask<Void,Void,Void> {
 
             for (BreachedAccount ba : breachedSites) {
                 Log.d(LOGTAG, "breached site: " + ba.getName());
-                BreachedSite site = BreachedSite.create(
-                        ba.getName(),
-                        ba.getTitle(),
-                        ba.getDomain(),
-                        DateTime.parse(ba.getBreachDate()),
-                        DateTime.parse(ba.getAddedDate()),
-                        ba.getPwnCount(),
-                        ba.getDescription(),
-                        ba.getDataClasses(),
-                        ba.getIsVerified()
-                );
-                site.insert(db);
 
-                if ( i++ % 10 == 0 ) {
-                    publishProgress();
-                }
+                BreachedSite site = new BreachedSite();
+                site.setName(ba.getName());
+                site.setTitle(ba.getTitle());
+                site.setDomain(ba.getDomain());
+                site.setBreachDate(DateTime.parse(ba.getBreachDate()).getMillis());
+                site.setAddedDate(DateTime.parse(ba.getAddedDate()).getMillis());
+                site.setPwnCount(ba.getPwnCount());
+                site.setDescription(ba.getDescription());
+                site.setDataClasses(ba.getDataClasses() != null ? Joiner.on(", ").join(ba.getDataClasses()) : "");
+                site.setVerified(ba.getIsVerified());
+
+                myBreachedSiteDao.insert(site);
             }
 
         } catch ( IOException e) {
@@ -107,18 +114,8 @@ public class HIBPGetBreachedSitesAsyncTask extends AsyncTask<Void,Void,Void> {
     }
 
     @Override
-    protected void onProgressUpdate(Void... values) {
-        super.onProgressUpdate(values);
-        if ( myUiFragment != null ) {
-            myUiFragment.refreshList();
-        }
-    }
-
-    @Override
     protected void onPostExecute(Void aVoid) {
-        if ( myUiFragment != null ) {
-            myUiFragment.refreshList();
-            myUiFragment.refreshComplete();
-        }
+        super.onPostExecute(aVoid);
+        myUiFragment.refreshComplete();
     }
 }

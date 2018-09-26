@@ -1,8 +1,6 @@
 package li.doerf.hacked.ui.adapters;
 
 import android.content.Context;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,16 +12,22 @@ import android.widget.TextView;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
+import java.util.List;
+
+import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
+import androidx.recyclerview.widget.RecyclerView;
 import li.doerf.hacked.R;
-import li.doerf.hacked.db.HackedSQLiteHelper;
-import li.doerf.hacked.db.tables.BreachedSite;
+import li.doerf.hacked.db.entities.BreachedSite;
 
-public class BreachedSitesAdapter extends RecyclerViewCursorAdapter<RecyclerViewHolder> {
+public class BreachedSitesAdapter extends RecyclerView.Adapter<RecyclerViewHolder> {
     private final String LOGTAG = getClass().getSimpleName();
+    private final Context myContext;
+    private List<BreachedSite> myBreachedSites;
 
-    public BreachedSitesAdapter(Context aContext, Cursor aCursor){
-        super(aContext, aCursor);
+    public BreachedSitesAdapter(Context aContext, List<BreachedSite> breachedSites){
+        myBreachedSites = breachedSites;
+        myContext = aContext;
     }
 
     @Override
@@ -34,18 +38,17 @@ public class BreachedSitesAdapter extends RecyclerViewCursorAdapter<RecyclerView
     }
 
     @Override
-    public void onBindViewHolder(final RecyclerViewHolder holder, Cursor aCursor) {
-        final CardView cardView = (CardView) holder.getView();
+    public void onBindViewHolder(@NonNull RecyclerViewHolder holder, int position) {
+        final BreachedSite site = myBreachedSites.get(position);
 
-        final SQLiteDatabase db = HackedSQLiteHelper.getInstance(getContext()).getReadableDatabase();
-        final BreachedSite site = BreachedSite.create(db, aCursor);
+        final CardView cardView = (CardView) holder.getView();
 
         TextView nameView = (TextView) cardView.findViewById(R.id.site_name);
         nameView.setText(site.getName());
 
         TextView unconfirmed = (TextView) cardView.findViewById(R.id.unconfirmed);
 
-        if ( site.getIsVerified()) {
+        if ( site.getVerified()) {
             nameView.setTextColor(getContext().getResources().getColor(android.R.color.primary_text_light));
             unconfirmed.setVisibility(View.GONE);
         } else {
@@ -84,9 +87,22 @@ public class BreachedSitesAdapter extends RecyclerViewCursorAdapter<RecyclerView
 
                     TextView description = (TextView) cardView.findViewById(R.id.description);
                     description.setText(Html.fromHtml(site.getDescription()).toString());
-
                 }
             }
         });
+    }
+
+    @Override
+    public int getItemCount() {
+        return myBreachedSites.size();
+    }
+
+    public void addItems(List<BreachedSite> list) {
+        myBreachedSites = list;
+        notifyDataSetChanged();
+    }
+
+    public Context getContext() {
+        return myContext;
     }
 }

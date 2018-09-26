@@ -2,31 +2,29 @@ package li.doerf.hacked.ui.fragments;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import li.doerf.hacked.HackedApplication;
 import li.doerf.hacked.R;
-import li.doerf.hacked.db.HackedSQLiteHelper;
-import li.doerf.hacked.db.tables.BreachedSite;
 import li.doerf.hacked.remote.haveibeenpwned.HIBPGetBreachedSitesAsyncTask;
 import li.doerf.hacked.ui.HibpInfo;
 import li.doerf.hacked.ui.adapters.BreachedSitesAdapter;
+import li.doerf.hacked.ui.viewmodels.BreachedSitesViewModel;
 
 /**
  * Created by moo on 09/10/16.
@@ -34,11 +32,10 @@ import li.doerf.hacked.ui.adapters.BreachedSitesAdapter;
 public class BreachedSitesListFragment extends Fragment {
     private static final String KEY_BREACH_LIST_TYPE = "BreachListType";
     private final String LOGTAG = getClass().getSimpleName();
-    private SQLiteDatabase myReadbableDb;
-    private BreachedSitesAdapter myBreachedSitesAdapter;
-    private Cursor myCursor;
     private BreachListType myBreachListType;
+    private BreachedSitesAdapter myBreachedSitesAdapter;
     private SwipeRefreshLayout mySwipeRefreshLayout;
+    private BreachedSitesViewModel myViewModel;
 
 
     public static BreachedSitesListFragment create(BreachListType aType) {
@@ -50,9 +47,21 @@ public class BreachedSitesListFragment extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        myReadbableDb = HackedSQLiteHelper.getInstance(getContext()).getReadableDatabase();
-        myBreachedSitesAdapter = new BreachedSitesAdapter(getContext(), null);
+        myBreachedSitesAdapter = new BreachedSitesAdapter(getContext(), new ArrayList<>());
         setHasOptionsMenu(true);
+
+        myViewModel = ViewModelProviders.of(this).get(BreachedSitesViewModel.class);
+        switch ( myBreachListType){
+            case Top20:
+                myViewModel.getBreachesSitesTop20().observe(BreachedSitesListFragment.this, sites -> myBreachedSitesAdapter.addItems(sites));
+                break;
+            case MostRecent:
+                myViewModel.getBreachesSitesMostRecent().observe(BreachedSitesListFragment.this, sites -> myBreachedSitesAdapter.addItems(sites));
+                break;
+            case All:
+            default:
+                myViewModel.getBreachesSites().observe(BreachedSitesListFragment.this, sites -> myBreachedSitesAdapter.addItems(sites));
+        }
     }
 
     @Nullable
@@ -97,8 +106,7 @@ public class BreachedSitesListFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        refreshList();
-        if ( myBreachedSitesAdapter.getCursor().getCount() == 0 || lastUpdateBeforeOneHour()) {
+        if ( myBreachedSitesAdapter.getItemCount() == 0 || lastUpdateBeforeOneHour()) {
             reloadBreachedSites();
         }
         if ( myBreachListType == null ) {
@@ -121,53 +129,7 @@ public class BreachedSitesListFragment extends Fragment {
         return lastsync < ( now - 60 * 60 * 1000 );
     }
 
-    @Override
-    public void onDetach() {
-        if ( myCursor != null ) {
-            myCursor.close();
-        }
-        myReadbableDb = null;
-
-        super.onDetach();
-    }
-
-    public void refreshList() {
-        Log.d(LOGTAG, "refreshing list");
-
-        if ( myReadbableDb == null ) {
-            Log.w(LOGTAG, "refreshList: readable db null, nothing to refresh");
-            return;
-        }
-
-        switch ( myBreachListType){
-            case Top20:
-                myCursor = BreachedSite.listTop20(myReadbableDb);
-            break;
-
-            case MostRecent:
-                myCursor = BreachedSite.listMostRecent(myReadbableDb);
-            break;
-
-            case All:
-            default:
-                myCursor = BreachedSite.listAll(myReadbableDb);
-        }
-        if ( ! myCursor.isClosed() ) {
-            Cursor old = null;
-            try {
-                old = myBreachedSitesAdapter.swapCursor(myCursor);
-            } finally {
-                if ( old != null ) {
-                    old.close();
-                }
-            }
-        } else {
-            Log.w(LOGTAG, "cursor closed");
-            myBreachedSitesAdapter.swapCursor(null);
-        }
-    }
-
-    public void setMyBreachListType(BreachListType myBreachListType) {
+    private void setMyBreachListType(BreachListType myBreachListType) {
         this.myBreachListType = myBreachListType;
     }
 

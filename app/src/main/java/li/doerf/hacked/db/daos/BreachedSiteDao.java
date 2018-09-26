@@ -2,6 +2,7 @@ package li.doerf.hacked.db.daos;
 
 import java.util.List;
 
+import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
@@ -24,9 +25,12 @@ public interface BreachedSiteDao {
     @Query("SELECT * FROM breached_sites ORDER BY name")
     List<BreachedSite> getAll();
 
+    @Query("SELECT * FROM breached_sites ORDER BY name")
+    LiveData<List<BreachedSite>> getAllLD();
+
     @Query("SELECT * FROM breached_sites ORDER BY pwn_count DESC LIMIT 20")
-    List<BreachedSite> listTop20();
+    LiveData<List<BreachedSite>> listTop20();
 
     @Query("SELECT * FROM breached_sites ORDER BY added_date DESC LIMIT 20")
-    List<BreachedSite> listMostRecent();
+    LiveData<List<BreachedSite>> listMostRecent();
 }
