@@ -32,9 +32,6 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-import io.reactivex.Single;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.schedulers.Schedulers;
 import li.doerf.hacked.HackedApplication;
 import li.doerf.hacked.R;
 import li.doerf.hacked.db.AppDatabase;
@@ -44,6 +41,7 @@ import li.doerf.hacked.remote.haveibeenpwned.HIBPCheckAccountAsyncTask;
 import li.doerf.hacked.ui.AddAccountDialogFragment;
 import li.doerf.hacked.ui.adapters.AccountsAdapter;
 import li.doerf.hacked.ui.viewmodels.AccountViewModel;
+import li.doerf.hacked.utils.BackgroundTaskHelper;
 import li.doerf.hacked.utils.ConnectivityHelper;
 import li.doerf.hacked.utils.SynchronizationHelper;
 
@@ -175,10 +173,9 @@ public class AccountListFragment extends Fragment {
     @SuppressLint("CheckResult")
     private void insertFirstAccount(EditText accountET, AccountDao accountDao, Account newAcc, CardView initialAccount, SharedPreferences settings) {
         //noinspection ResultOfMethodCallIgnored
-        Single.fromCallable(() -> accountDao.insert(newAcc))
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(ids -> {
+        new BackgroundTaskHelper<List<Long>>().runInBackgroundAndConsumeOnMain(
+                () -> accountDao.insert(newAcc),
+                ids -> {
                     newAcc.setId(ids.get(0));
                     initialAccount.setVisibility(View.GONE);
                     Toast.makeText(getContext(), getString(R.string.toast_account_added), Toast.LENGTH_LONG).show();
@@ -188,7 +185,8 @@ public class AccountListFragment extends Fragment {
                     editor.apply();
                     InputMethodManager mgr = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
                     mgr.hideSoftInputFromWindow(accountET.getWindowToken(), 0);
-                });
+                }
+        );
     }
 
     private void showInitialSetupCheck(View aRootView) {

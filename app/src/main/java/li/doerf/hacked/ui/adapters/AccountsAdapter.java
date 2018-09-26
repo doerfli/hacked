@@ -19,9 +19,6 @@ import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
-import io.reactivex.Single;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.schedulers.Schedulers;
 import li.doerf.hacked.R;
 import li.doerf.hacked.activities.BreachDetailsActivity;
 import li.doerf.hacked.db.AppDatabase;
@@ -29,6 +26,7 @@ import li.doerf.hacked.db.daos.BreachDao;
 import li.doerf.hacked.db.entities.Account;
 import li.doerf.hacked.db.entities.Breach;
 import li.doerf.hacked.ui.DeleteAccountDialogFragment;
+import li.doerf.hacked.utils.BackgroundTaskHelper;
 import li.doerf.hacked.utils.NotificationHelper;
 
 public class AccountsAdapter extends RecyclerView.Adapter<RecyclerViewHolder> {
@@ -59,15 +57,9 @@ public class AccountsAdapter extends RecyclerView.Adapter<RecyclerViewHolder> {
 
         final Account account = myAccountList.get(position);
 
-        Single.fromCallable(() -> myBreachDao.findByAccount(account.getId()))
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe((breaches) -> {
-                    bindView(cardView, account, breaches);
-                });
-
-//        final Collection<Breach> breaches = myBreachDao.findByAccount(account.getId());
-
+        new BackgroundTaskHelper<List<Breach>>().runInBackgroundAndConsumeOnMain(
+                () -> myBreachDao.findByAccount(account.getId()),
+                breaches -> bindView(cardView, account, breaches));
     }
 
     private void bindView(CardView cardView, Account account, Collection<Breach> breaches) {
