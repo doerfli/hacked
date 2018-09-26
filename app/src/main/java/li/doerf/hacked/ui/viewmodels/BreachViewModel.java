@@ -1,10 +1,9 @@
 package li.doerf.hacked.ui.viewmodels;
 
 import android.app.Application;
+import android.util.LongSparseArray;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
@@ -16,7 +15,7 @@ import li.doerf.hacked.db.entities.Breach;
 public class BreachViewModel extends AndroidViewModel {
 
     private final BreachDao myBreachDao;
-    private Map<Long, LiveData<List<Breach>>> breachListMap = new HashMap<>();
+    private LongSparseArray<LiveData<List<Breach>>> breachListMap = new LongSparseArray<>();
 
     public BreachViewModel(@NonNull Application application) {
         super(application);
@@ -24,7 +23,7 @@ public class BreachViewModel extends AndroidViewModel {
     }
 
     public LiveData<List<Breach>> getBreachList(Long accountId) {
-        if (!breachListMap.containsKey(accountId)) {
+        if (breachListMap.indexOfKey(accountId) < 0) {
             breachListMap.put(accountId, myBreachDao.findByAccountLD(accountId));
         }
 

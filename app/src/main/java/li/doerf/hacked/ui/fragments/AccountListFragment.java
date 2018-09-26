@@ -26,7 +26,6 @@ import java.util.List;
 import androidx.annotation.Nullable;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -53,11 +52,9 @@ public class AccountListFragment extends Fragment {
     private AccountsAdapter myAccountsAdapter;
     private View myFragmentRootView;
     private SwipeRefreshLayout mySwipeRefreshLayout;
-    private AccountViewModel myViewModel;
 
     public static AccountListFragment create() {
-        AccountListFragment f = new AccountListFragment();
-        return f;
+        return new AccountListFragment();
     }
 
     public AccountListFragment() {
@@ -67,16 +64,11 @@ public class AccountListFragment extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        myAccountsAdapter = new AccountsAdapter(getContext(), new ArrayList<Account>(), getFragmentManager());
+        myAccountsAdapter = new AccountsAdapter(getContext(), new ArrayList<>(), getFragmentManager());
         setHasOptionsMenu(true);
 
-        myViewModel = ViewModelProviders.of(this).get(AccountViewModel.class);
-        myViewModel.getAccountList().observe(AccountListFragment.this, new Observer<List<Account>>() {
-            @Override
-            public void onChanged(List<Account> accounts) {
-                myAccountsAdapter.addItems(accounts);
-            }
-        });
+        AccountViewModel myViewModel = ViewModelProviders.of(this).get(AccountViewModel.class);
+        myViewModel.getAccountList().observe(AccountListFragment.this, accounts -> myAccountsAdapter.addItems(accounts));
     }
 
     @Nullable
@@ -84,7 +76,7 @@ public class AccountListFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         myFragmentRootView =  inflater.inflate(R.layout.fragment_account_list, container, false);
 
-        RecyclerView accountsList = (RecyclerView) myFragmentRootView.findViewById(R.id.accounts_list);
+        RecyclerView accountsList = myFragmentRootView.findViewById(R.id.accounts_list);
         accountsList.setHasFixedSize(true);
         LinearLayoutManager lm = new LinearLayoutManager(getContext());
         accountsList.setLayoutManager(lm);
@@ -94,13 +86,10 @@ public class AccountListFragment extends Fragment {
                 lm.getOrientation());
         accountsList.addItemDecoration(dividerItemDecoration);
 
-        mySwipeRefreshLayout = (SwipeRefreshLayout) myFragmentRootView.findViewById(R.id.swipe_refresh_layout);
-        mySwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                checkForBreaches(null);
-                ((HackedApplication) getActivity().getApplication()).trackEvent("CheckForBreaches");
-            }
+        mySwipeRefreshLayout = myFragmentRootView.findViewById(R.id.swipe_refresh_layout);
+        mySwipeRefreshLayout.setOnRefreshListener(() -> {
+            checkForBreaches(null);
+            ((HackedApplication) getActivity().getApplication()).trackEvent("CheckForBreaches");
         });
 
         showInitialSetupAccount(myFragmentRootView);
@@ -145,27 +134,24 @@ public class AccountListFragment extends Fragment {
         final SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getContext());
         boolean initialSetupAccountDone = settings.getBoolean(getString(R.string.pref_initial_setup_account_done), false);
         if ( ! initialSetupAccountDone ) {
-            final CardView initialAccount = (CardView) aRootView.findViewById(R.id.initial_account);
+            final CardView initialAccount = aRootView.findViewById(R.id.initial_account);
             initialAccount.setVisibility(View.VISIBLE);
-            Button addB = (Button) aRootView.findViewById(R.id.button_add_initial_account);
-            addB.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    EditText accountET = (EditText) aRootView.findViewById(R.id.account);
-                    String accountName = accountET.getText().toString().trim();
+            Button addB = aRootView.findViewById(R.id.button_add_initial_account);
+            addB.setOnClickListener(v -> {
+                EditText accountET = aRootView.findViewById(R.id.account);
+                String accountName = accountET.getText().toString().trim();
 
-                    ((HackedApplication) getActivity().getApplication()).trackEvent("AddInitialAccount");
+                ((HackedApplication) getActivity().getApplication()).trackEvent("AddInitialAccount");
 
-                    if ( accountName.equals("") ) {
-                        Toast.makeText(getContext(), getString(R.string.toast_please_enter_account), Toast.LENGTH_LONG).show();
-                        return;
-                    }
-
-                    AccountDao accountDao = AppDatabase.get(getContext()).getAccountDao();
-                    Account newAcc = new Account();
-                    newAcc.setName(accountName);
-                    insertFirstAccount(accountET, accountDao, newAcc, initialAccount, settings);
+                if ( accountName.equals("") ) {
+                    Toast.makeText(getContext(), getString(R.string.toast_please_enter_account), Toast.LENGTH_LONG).show();
+                    return;
                 }
+
+                AccountDao accountDao = AppDatabase.get(getContext()).getAccountDao();
+                Account newAcc = new Account();
+                newAcc.setName(accountName);
+                insertFirstAccount(accountET, accountDao, newAcc, initialAccount, settings);
             });
         }
     }
@@ -184,7 +170,9 @@ public class AccountListFragment extends Fragment {
                     editor.putBoolean(getString(R.string.pref_initial_setup_account_done), true);
                     editor.apply();
                     InputMethodManager mgr = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-                    mgr.hideSoftInputFromWindow(accountET.getWindowToken(), 0);
+                    if (mgr != null) {
+                        mgr.hideSoftInputFromWindow(accountET.getWindowToken(), 0);
+                    }
                 }
         );
     }
@@ -193,40 +181,34 @@ public class AccountListFragment extends Fragment {
         final SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getContext());
         boolean initialSetupCheckDone = settings.getBoolean(getString(R.string.pref_initial_setup_check_done), false);
         if ( ! initialSetupCheckDone ) {
-            final CardView initialSetupCheck = (CardView) aRootView.findViewById(R.id.initial_setup_check);
+            final CardView initialSetupCheck = aRootView.findViewById(R.id.initial_setup_check);
             initialSetupCheck.setVisibility(View.VISIBLE);
 
-            Button noB = (Button) aRootView.findViewById(R.id.initial_setup_check_no);
-            noB.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    initialSetupCheck.setVisibility(View.GONE);
-                    Toast.makeText(getContext(), getString(R.string.toast_check_not_enabled), Toast.LENGTH_LONG).show();
+            Button noB = aRootView.findViewById(R.id.initial_setup_check_no);
+            noB.setOnClickListener(v -> {
+                initialSetupCheck.setVisibility(View.GONE);
+                Toast.makeText(getContext(), getString(R.string.toast_check_not_enabled), Toast.LENGTH_LONG).show();
 
-                    SharedPreferences.Editor editor = settings.edit();
-                    editor.putBoolean(getString(R.string.pref_initial_setup_check_done), true);
-                    editor.apply();
+                SharedPreferences.Editor editor = settings.edit();
+                editor.putBoolean(getString(R.string.pref_initial_setup_check_done), true);
+                editor.apply();
 
-                    ((HackedApplication) getActivity().getApplication()).trackEvent("InitialSyncDisable");
-                }
+                ((HackedApplication) getActivity().getApplication()).trackEvent("InitialSyncDisable");
             });
 
-            Button yesB = (Button) aRootView.findViewById(R.id.initial_setup_check_yes);
-            yesB.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    initialSetupCheck.setVisibility(View.GONE);
+            Button yesB = aRootView.findViewById(R.id.initial_setup_check_yes);
+            yesB.setOnClickListener(v -> {
+                initialSetupCheck.setVisibility(View.GONE);
 
-                    SharedPreferences.Editor editor = settings.edit();
-                    editor.putBoolean(getString(R.string.pref_key_sync_enable), true);
-                    editor.putBoolean(getString(R.string.pref_initial_setup_check_done), true);
-                    editor.apply();
+                SharedPreferences.Editor editor = settings.edit();
+                editor.putBoolean(getString(R.string.pref_key_sync_enable), true);
+                editor.putBoolean(getString(R.string.pref_initial_setup_check_done), true);
+                editor.apply();
 
-                    ((HackedApplication) getActivity().getApplication()).trackEvent("InitialSyncEnable");
+                ((HackedApplication) getActivity().getApplication()).trackEvent("InitialSyncEnable");
 
-                    SynchronizationHelper.scheduleSync(getContext());
-                    Toast.makeText(getContext(), getString(R.string.toast_check_enabled), Toast.LENGTH_LONG).show();
-                }
+                SynchronizationHelper.scheduleSync(getContext());
+                Toast.makeText(getContext(), getString(R.string.toast_check_enabled), Toast.LENGTH_LONG).show();
             });
         }
     }
@@ -235,21 +217,18 @@ public class AccountListFragment extends Fragment {
         final SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getContext());
         boolean initialHelpDismissed = settings.getBoolean(getString(R.string.pref_initial_help_dismissed), false);
         if ( ! initialHelpDismissed ) {
-            final CardView initialHelp = (CardView) aRootView.findViewById(R.id.initial_help);
+            final CardView initialHelp = aRootView.findViewById(R.id.initial_help);
             initialHelp.setVisibility(View.VISIBLE);
-            Button dismissB = (Button) aRootView.findViewById(R.id.button_dismiss_help);
-            dismissB.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    initialHelp.setVisibility(View.GONE);
-                    Toast.makeText(getContext(), getString(R.string.toast_dont_show_initial_help_again), Toast.LENGTH_SHORT).show();
+            Button dismissB = aRootView.findViewById(R.id.button_dismiss_help);
+            dismissB.setOnClickListener(v -> {
+                initialHelp.setVisibility(View.GONE);
+                Toast.makeText(getContext(), getString(R.string.toast_dont_show_initial_help_again), Toast.LENGTH_SHORT).show();
 
-                    SharedPreferences.Editor editor = settings.edit();
-                    editor.putBoolean(getString(R.string.pref_initial_help_dismissed), true);
-                    editor.apply();
+                SharedPreferences.Editor editor = settings.edit();
+                editor.putBoolean(getString(R.string.pref_initial_help_dismissed), true);
+                editor.apply();
 
-                    ((HackedApplication) getActivity().getApplication()).trackEvent("InitialHelpDismiss");
-                }
+                ((HackedApplication) getActivity().getApplication()).trackEvent("InitialHelpDismiss");
             });
         }
     }

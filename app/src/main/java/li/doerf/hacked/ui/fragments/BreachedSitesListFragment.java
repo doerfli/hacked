@@ -7,7 +7,6 @@ import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -31,11 +30,10 @@ import li.doerf.hacked.ui.viewmodels.BreachedSitesViewModel;
  */
 public class BreachedSitesListFragment extends Fragment {
     private static final String KEY_BREACH_LIST_TYPE = "BreachListType";
-    private final String LOGTAG = getClass().getSimpleName();
+//    private final String LOGTAG = getClass().getSimpleName();
     private BreachListType myBreachListType;
     private BreachedSitesAdapter myBreachedSitesAdapter;
     private SwipeRefreshLayout mySwipeRefreshLayout;
-    private BreachedSitesViewModel myViewModel;
 
 
     public static BreachedSitesListFragment create(BreachListType aType) {
@@ -50,7 +48,7 @@ public class BreachedSitesListFragment extends Fragment {
         myBreachedSitesAdapter = new BreachedSitesAdapter(getContext(), new ArrayList<>());
         setHasOptionsMenu(true);
 
-        myViewModel = ViewModelProviders.of(this).get(BreachedSitesViewModel.class);
+        BreachedSitesViewModel myViewModel = ViewModelProviders.of(this).get(BreachedSitesViewModel.class);
         switch ( myBreachListType){
             case Top20:
                 myViewModel.getBreachesSitesTop20().observe(BreachedSitesListFragment.this, sites -> myBreachedSitesAdapter.addItems(sites));
@@ -69,25 +67,20 @@ public class BreachedSitesListFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_breached_sites_list, container, false);
 
-        RecyclerView breachedSites = (RecyclerView) view.findViewById(R.id.breached_sites_list);
+        RecyclerView breachedSites = view.findViewById(R.id.breached_sites_list);
         breachedSites.setHasFixedSize(true);
         LinearLayoutManager lm = new LinearLayoutManager(getContext());
         breachedSites.setLayoutManager(lm);
         breachedSites.setAdapter(myBreachedSitesAdapter);
 
-        HibpInfo.prepare( getContext(), (TextView) view.findViewById(R.id.hibp_info), breachedSites);
+        HibpInfo.prepare( getContext(), view.findViewById(R.id.hibp_info), breachedSites);
 
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(breachedSites.getContext(),
                 lm.getOrientation());
         breachedSites.addItemDecoration(dividerItemDecoration);
 
-        mySwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_refresh_layout);
-        mySwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                reloadBreachedSites();
-            }
-        });
+        mySwipeRefreshLayout = view.findViewById(R.id.swipe_refresh_layout);
+        mySwipeRefreshLayout.setOnRefreshListener(() -> reloadBreachedSites());
 
         return view;
     }

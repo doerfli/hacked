@@ -27,6 +27,7 @@ import retrofit2.converter.scalars.ScalarsConverterFactory;
 
 public class PwnedPasswordAsyncTask extends AsyncTask<String,Void,String> {
     private static final String TAG = "PwnedPasswordAsyncTask";
+    // TODO do something about those leaks, e.g. use broadcast to communicate result back to view
     private ProgressBar progressBar;
     private TextView passwordOk;
     private TextView passwordPwned;
@@ -61,16 +62,21 @@ public class PwnedPasswordAsyncTask extends AsyncTask<String,Void,String> {
                 .build();
         PwnedPasswords service = retrofit.create(PwnedPasswords.class);
         Call<String> call = service.getRange(pwdHashHead);
-        boolean pwned = false;
 
         try {
             Response<String> response = call.execute();
             int code = response.code();
             Log.d(TAG, "response code: " + code);
-            Log.d(TAG, response.body());
+            String body = response.body();
+            Log.d(TAG, body);
+
+            if (body == null) {
+                Log.w(TAG, "body was null");
+                return null;
+            }
 
             HashMap<String, String> hashes = new HashMap<>();
-            for ( String l : response.body().split("\r\n")) {
+            for ( String l : body.split("\r\n")) {
                 String[] t = l.split(":");
                 hashes.put(pwdHashHead + t[0], t[1]);
                 Log.d(TAG, pwdHashHead + t[0] + "   " + t[1]);

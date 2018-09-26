@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
@@ -29,16 +28,13 @@ public class MainActivity extends AppCompatActivity
 
     private Fragment myContentFragment;
     private Toolbar myToolbar;
-    private DrawerLayout drawer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        myToolbar = (Toolbar) findViewById(R.id.toolbar);
+        myToolbar = findViewById(R.id.toolbar);
         setSupportActionBar(myToolbar);
-
-        HackedApplication application = (HackedApplication) getApplication();
 
         myContentFragment = AccountListFragment.create();
         getSupportFragmentManager()
@@ -46,52 +42,40 @@ public class MainActivity extends AppCompatActivity
                 .replace(R.id.fragment_container, myContentFragment)
                 .commit();
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if ( myContentFragment instanceof AccountListFragment ) {
-                    ((AccountListFragment) myContentFragment).checkForBreaches(null);
-                    ((HackedApplication) getApplication()).trackEvent("CheckForBreaches");
-                } else if ( myContentFragment instanceof BreachedSitesListFragment ) {
-                    ((BreachedSitesListFragment)myContentFragment).reloadBreachedSites();
-                    ((HackedApplication) getApplication()).trackEvent("ReloadBreachedSites");
-                }
+        FloatingActionButton fab = findViewById(R.id.fab);
+        fab.setOnClickListener(view -> {
+            if ( myContentFragment instanceof AccountListFragment ) {
+                ((AccountListFragment) myContentFragment).checkForBreaches(null);
+                ((HackedApplication) getApplication()).trackEvent("CheckForBreaches");
+            } else if ( myContentFragment instanceof BreachedSitesListFragment ) {
+                ((BreachedSitesListFragment)myContentFragment).reloadBreachedSites();
+                ((HackedApplication) getApplication()).trackEvent("ReloadBreachedSites");
             }
         });
 
-        drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, myToolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.setDrawerListener(toggle);
+        drawer.addDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
         setTitle(getString(R.string.nd_accounts));
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
+//    @Override
+//    protected void onResume() {
+//        super.onResume();
 //        myTracker.setScreenName("Activity~Main");
 //        myTracker.send(new HitBuilders.ScreenViewBuilder().build());
-    }
-
-//    @Override
-//    protected void onPause() {
-//        super.onPause();
 //    }
 
-//    @Override
-//    public void onDestroy() {
-//        super.onDestroy();
-//    }
 
     @Override
     public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
@@ -106,15 +90,15 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        return super.onOptionsItemSelected(item);
-    }
+//    @Override
+//    public boolean onOptionsItemSelected(MenuItem item) {
+//        // Handle action bar item clicks here. The action bar will
+//        // automatically handle clicks on the Home/Up button, so long
+//        // as you specify a parent activity in AndroidManifest.xml.
+////        int id = item.getItemId();
+//
+//        return super.onOptionsItemSelected(item);
+//    }
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -166,7 +150,7 @@ public class MainActivity extends AppCompatActivity
             startActivity(settingsIntent);
         }
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
