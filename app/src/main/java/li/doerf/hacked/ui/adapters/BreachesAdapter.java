@@ -2,6 +2,7 @@ package li.doerf.hacked.ui.adapters;
 
 import android.content.Context;
 import android.text.Html;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,6 +26,7 @@ import li.doerf.hacked.db.daos.AccountDao;
 import li.doerf.hacked.db.daos.BreachDao;
 import li.doerf.hacked.db.entities.Account;
 import li.doerf.hacked.db.entities.Breach;
+import li.doerf.hacked.utils.BackgroundTaskHelper;
 
 /**
  * Created by moo on 07/09/16.
@@ -33,16 +35,20 @@ public class BreachesAdapter extends RecyclerView.Adapter<RecyclerViewHolder> {
     private final String LOGTAG = getClass().getSimpleName();
     private final Context myContext;
     private final BreachDao myBreachDao;
+    private final AccountDao myAccountDao;
     private List<Breach> myBreachList;
+    private ViewGroup myParentView;
 
     public BreachesAdapter(Context aContext, List<Breach> aList) {
         myContext = aContext;
         myBreachList = aList;
         myBreachDao = AppDatabase.get(aContext).getBreachDao();
+        myAccountDao = AppDatabase.get(aContext).getAccountDao();
     }
 
     @Override
     public RecyclerViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        myParentView = parent;
         CardView itemLayout = (CardView) LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.card_breach, parent, false);
         return new RecyclerViewHolder(itemLayout);
@@ -54,48 +60,29 @@ public class BreachesAdapter extends RecyclerView.Adapter<RecyclerViewHolder> {
         final CardView cardView = (CardView) holder.getView();
         final long breachId = breach.getId();
 
-        TextView title = (TextView) cardView.findViewById(R.id.title);
+        TextView title = cardView.findViewById(R.id.title);
         title.setText(breach.getTitle());
 
-        TextView domain = (TextView) cardView.findViewById(R.id.domain);
+        TextView domain = cardView.findViewById(R.id.domain);
         domain.setText(breach.getDomain());
 
         DateTimeFormatter dtfOut = DateTimeFormat.forPattern("yyyy/MM/dd");
-        TextView breachDate = (TextView) cardView.findViewById(R.id.breach_date);
+        TextView breachDate = cardView.findViewById(R.id.breach_date);
         breachDate.setText(dtfOut.print(breach.getBreachDate()));
 
-        TextView compromisedData = (TextView) cardView.findViewById(R.id.compromised_data);
+        TextView compromisedData = cardView.findViewById(R.id.compromised_data);
         compromisedData.setText(breach.getDataClasses());
 
-        TextView description = (TextView) cardView.findViewById(R.id.description);
+        TextView description = cardView.findViewById(R.id.description);
         description.setText(Html.fromHtml(breach.getDescription()).toString());
 
         View statusIndicator = cardView.findViewById(R.id.status_indicator);
-        Button acknowledge = (Button) cardView.findViewById(R.id.acknowledge);
+        Button acknowledge = cardView.findViewById(R.id.acknowledge);
 
         if ( ! breach.getAcknowledged() ) {
             statusIndicator.setBackgroundColor(getContext().getResources().getColor(R.color.account_status_breached));
             acknowledge.setVisibility(View.VISIBLE);
-            acknowledge.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Breach breach = myBreachDao.findById(breachId);
-                    if ( breach == null ) {
-                        return;
-                    }
-
-                    breach.setAcknowledged(true);
-                    // TODO process in own thread
-                    myBreachDao.update(breach);
-
-                    ((HackedApplication) getContext().getApplicationContext()).trackEvent("BreachAcknowledged");
-                    Snackbar.make(cardView, getContext().getString(R.string.breach_acknowledged), Snackbar.LENGTH_SHORT).show();
-
-                    updateAccountIsHacked(breach.getAccount());
-
-                    notifyDataSetChanged();
-                }
-            });
+            acknowledge.setOnClickListener(v -> handleAcknowledgeClicked(breachId));
         } else {
             statusIndicator.setBackgroundColor(getContext().getResources().getColor(R.color.account_status_only_acknowledged));
             acknowledge.setVisibility(View.GONE);
@@ -110,27 +97,54 @@ public class BreachesAdapter extends RecyclerView.Adapter<RecyclerViewHolder> {
         }
     }
 
+    private void handleAcknowledgeClicked(long breachId) {
+        new BackgroundTaskHelper<Boolean>().runInBackgroundAndConsumeOnMain(
+                () -> {
+                    Breach breach = myBreachDao.findById(breachId);
+                    if ( breach == null ) {
+                        Log.w(LOGTAG, "no breack found with id " + breachId);
+                        return false;
+                    }
+
+                    setBreachAcknowledged(breach);
+                    updateAccountIsHacked(breach.getAccount());
+                    return true;
+                },
+                (result) -> {
+                    notifyDataSetChanged();
+                    if (!result) return;
+                    Snackbar.make(myParentView, getContext().getString(R.string.breach_acknowledged), Snackbar.LENGTH_SHORT).show();
+                }
+        );
+    }
+
+    private void setBreachAcknowledged(Breach breach) {
+        breach.setAcknowledged(true);
+        myBreachDao.update(breach);
+        Log.d(LOGTAG, "breach updated - acknowledge = true");
+        ((HackedApplication) getContext().getApplicationContext()).trackEvent("BreachAcknowledged");
+    }
+
     @Override
     public int getItemCount() {
         return myBreachList.size();
     }
 
-    // TODO move to other class
     private void updateAccountIsHacked(Long accountId) {
-        AccountDao accountDao = AppDatabase.get(getContext()).getAccountDao();
-        Account account = accountDao.findById(accountId);
+        Account account = myAccountDao.findById(accountId);
 
         if ( ! account.getHacked() ) {
             return;
         }
 
         if ( myBreachDao.countUnacknowledged(accountId) > 0 ) {
+            Log.d(LOGTAG, "account still has unacknowledged breaches");
             return;
         }
 
         account.setHacked(false);
-        // TODO process in own thread
-        accountDao.update(account);
+        myAccountDao.update(account);
+        Log.d(LOGTAG, "account updated - hacked = false");
     }
 
     public void addItems(List<Breach> list) {
