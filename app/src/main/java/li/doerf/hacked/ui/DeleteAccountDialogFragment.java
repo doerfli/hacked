@@ -1,7 +1,6 @@
 package li.doerf.hacked.ui;
 
 import android.app.Dialog;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 
 import java.util.List;
@@ -12,7 +11,6 @@ import androidx.fragment.app.DialogFragment;
 import li.doerf.hacked.HackedApplication;
 import li.doerf.hacked.R;
 import li.doerf.hacked.db.AppDatabase;
-import li.doerf.hacked.db.HackedSQLiteHelper;
 import li.doerf.hacked.db.daos.AccountDao;
 import li.doerf.hacked.db.daos.BreachDao;
 import li.doerf.hacked.db.entities.Account;
@@ -22,13 +20,11 @@ import li.doerf.hacked.db.entities.Breach;
  * Created by moo on 06/09/16.
  */
 public class DeleteAccountDialogFragment extends DialogFragment {
-    private final String LOGTAG = getClass().getSimpleName();
+//    private final String LOGTAG = getClass().getSimpleName();
     private Account myAccount;
-    private SQLiteDatabase myDb;
 
     public void setAccount(Account account) {
         myAccount = account;
-        myDb = HackedSQLiteHelper.getInstance(getContext()).getWritableDatabase();
     }
 
     @Override
@@ -43,14 +39,11 @@ public class DeleteAccountDialogFragment extends DialogFragment {
                     BreachDao breachDao = AppDatabase.get(getContext()).getBreachDao();
                     List<Breach> breaches = breachDao.findByAccount(myAccount.getId());
                     try {
-                        myDb.beginTransaction();
                         for (Breach b : breaches) {
                             breachDao.delete(b);
                         }
                         accountDao.delete(myAccount);
-                        myDb.setTransactionSuccessful();
                     } finally {
-                        myDb.endTransaction();
                         ((HackedApplication) getActivity().getApplication()).trackEvent("DeleteAccount");
                     }
                 })
