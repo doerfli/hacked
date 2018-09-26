@@ -42,8 +42,6 @@ public class HIBPAccountChecker {
     private final IProgressUpdater myProgressUpdater;
     private final AccountDao myAccountDao;
     private final BreachDao myBreachDao;
-    // TODO what about this?
-    private boolean abort = false;
 
     public HIBPAccountChecker(Context aContext, IProgressUpdater aProgressUpdates) {
         myContext = aContext;
@@ -55,7 +53,6 @@ public class HIBPAccountChecker {
     public Boolean check(Long id) {
         Log.d(LOGTAG, "starting check for breaches");
         boolean newBreachFound = false;
-        abort = false;
 
         List<Account> accountsToCheck = new ArrayList<>();
 
@@ -106,10 +103,9 @@ public class HIBPAccountChecker {
             newBreach.setDataClasses(ba.getDataClasses() != null ? Joiner.on(", ").join(ba.getDataClasses()) : "");
             newBreach.setVerified(ba.getIsVerified());
             newBreach.setAcknowledged(false);
-            // TODO process in other thread?
             myBreachDao.insert(newBreach);
             Log.i(LOGTAG, "breach inserted into db");
-            isNewBreachFound |= true;
+            isNewBreachFound = true;
         }
 
         account.setLastChecked(DateTime.now());
@@ -126,8 +122,7 @@ public class HIBPAccountChecker {
             Response<List<BreachedAccount>> response = retrieveBreaches(anAccount);
 
             if (response.isSuccessful()) {
-                List<BreachedAccount> breachedAccounts = response.body();
-                return breachedAccounts;
+                return response.body();
             } else {
                 if (response.code() == 404) {
                     Log.i(LOGTAG, "no breach found: " + account);
@@ -139,12 +134,7 @@ public class HIBPAccountChecker {
 
         } catch (IOException e) {
             Log.e(LOGTAG, "caughtIOException while contacting www.haveibeenpwned.com - " + e.getMessage(), e);
-            new Handler(Looper.getMainLooper()).post(new Runnable() {
-                @Override
-                public void run() {
-                    Toast.makeText(myContext, myContext.getString(R.string.toast_error_error_during_check), Toast.LENGTH_LONG).show();
-                }
-            });
+            new Handler(Looper.getMainLooper()).post(() -> Toast.makeText(myContext, myContext.getString(R.string.toast_error_error_during_check), Toast.LENGTH_LONG).show());
         }
         return Lists.newArrayList();
     }
@@ -182,9 +172,5 @@ public class HIBPAccountChecker {
         }
 
         return response;
-    }
-
-    public void abort() {
-        abort = true;
     }
 }
