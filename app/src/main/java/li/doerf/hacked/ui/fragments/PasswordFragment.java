@@ -48,8 +48,6 @@ public class PasswordFragment extends Fragment {
     public static PasswordFragment newInstance() {
         PasswordFragment fragment = new PasswordFragment();
         Bundle args = new Bundle();
-//        args.putString(ARG_PARAM1, param1);
-//        args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
     }
@@ -63,18 +61,13 @@ public class PasswordFragment extends Fragment {
         passwordEditText = view.findViewById(R.id.password);
         
         Button button = view.findViewById(R.id.check_pwned);
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                checkPassword();
-            }
-        });
+        button.setOnClickListener(view1 -> checkPassword());
         
         progressBar = view.findViewById(R.id.progressbar);
         passwordOk = view.findViewById(R.id.result_ok);
         passwordPwned = view.findViewById(R.id.result_pwned);
 
-        HibpInfo.prepare( getContext(), (TextView) view.findViewById(R.id.hibp_info), null);
+        HibpInfo.prepare( getContext(), view.findViewById(R.id.hibp_info), null);
 
         return view;
     }

@@ -3,7 +3,6 @@ package li.doerf.hacked.ui;
 import android.annotation.SuppressLint;
 import android.app.Application;
 import android.app.Dialog;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -45,26 +44,24 @@ public class AddAccountDialogFragment extends DialogFragment {
 
         // Inflate and set the layout for the dialog
         // Pass null as the parent view because its going in the dialog layout
+        @SuppressLint("InflateParams")
         final View view = inflater.inflate(R.layout.dialog_add_account, null);
 
         builder.setView(view)
                 // Add action buttons
-                .setPositiveButton(R.string.add, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int id) {
-                        myName = ((EditText) view.findViewById(R.id.account)).getText().toString();
-                        addAccount(myName);
-                    }
+                .setPositiveButton(R.string.add, (dialog, id) -> {
+                    myName = ((EditText) view.findViewById(R.id.account)).getText().toString();
+                    addAccount(myName);
                 })
-                .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        myName = null;
-                        AddAccountDialogFragment.this.getDialog().cancel();
-                    }
+                .setNegativeButton(R.string.cancel, (dialog, id) -> {
+                    myName = null;
+                    AddAccountDialogFragment.this.getDialog().cancel();
                 });
 
         AlertDialog dialog = builder.create();
-        dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
+        if (dialog.getWindow() != null) {
+            dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
+        }
         return dialog;
     }
 
@@ -81,6 +78,7 @@ public class AddAccountDialogFragment extends DialogFragment {
 
         final AccountDao accountDao = AppDatabase.get(getContext()).getAccountDao();
 
+        //noinspection ResultOfMethodCallIgnored
         getAccountCount(name, accountDao)
                 .subscribe( count -> {
                     if (count > 0 ) {
@@ -100,6 +98,7 @@ public class AddAccountDialogFragment extends DialogFragment {
 
     @SuppressLint("CheckResult")
     private void insertAccount(AccountDao accountDao, Account account, Application application) {
+        //noinspection ResultOfMethodCallIgnored
         Single.fromCallable(() -> accountDao.insert(account))
                 .subscribeOn(Schedulers.io())
                 .subscribe(ids -> {
