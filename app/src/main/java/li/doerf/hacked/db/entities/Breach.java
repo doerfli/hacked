@@ -18,7 +18,6 @@ public class Breach {
     @PrimaryKey
     @ColumnInfo(name="_id")
     private Long id;
-    // TODO create index for this column
     @ColumnInfo(name = "account")
     private Long account;
     @ColumnInfo(name = "name")
