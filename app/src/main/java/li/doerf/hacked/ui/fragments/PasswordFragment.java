@@ -1,6 +1,11 @@
 package li.doerf.hacked.ui.fragments;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,12 +13,15 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import li.doerf.hacked.HackedApplication;
 import li.doerf.hacked.R;
 import li.doerf.hacked.remote.pwnedpasswords.PwnedPasswordAsyncTask;
 import li.doerf.hacked.ui.HibpInfo;
+import li.doerf.hacked.utils.StringHelper;
 
 /**
  * Use the {@link PasswordFragment#newInstance} factory method to
@@ -25,6 +33,7 @@ public class PasswordFragment extends Fragment {
     private ProgressBar progressBar;
     private TextView passwordOk;
     private TextView passwordPwned;
+    private LocalBroadcastReceiver myBroadcastReceiver;
 
     public PasswordFragment() {
         // Required empty public constructor
@@ -73,14 +82,59 @@ public class PasswordFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-
+        registerReceiver();
         ((HackedApplication) getActivity().getApplication()).trackView("Fragment~Password");
+    }
+
+    @Override
+    public void onPause() {
+        unregisterReceiver();
+        super.onPause();
     }
 
     private void checkPassword() {
         String password = passwordEditText.getText().toString();
-        PwnedPasswordAsyncTask passwordCheck = new PwnedPasswordAsyncTask(getContext(), progressBar, passwordOk, passwordPwned);
+        passwordOk.setVisibility(View.GONE);
+        passwordPwned.setVisibility(View.GONE);
+        progressBar.setVisibility(View.VISIBLE);
+        PwnedPasswordAsyncTask passwordCheck = new PwnedPasswordAsyncTask(getContext());
         passwordCheck.execute(password);
         ((HackedApplication) getActivity().getApplication()).trackEvent("CheckPasswordPwned");
+    }
+
+    private void registerReceiver() {
+        IntentFilter intentFilter = new IntentFilter(PwnedPasswordAsyncTask.BROADCAST_ACTION_PASSWORD_PWNED);
+        myBroadcastReceiver = new LocalBroadcastReceiver();
+        LocalBroadcastManager.getInstance(getContext()).registerReceiver(myBroadcastReceiver, intentFilter);
+    }
+
+    private void unregisterReceiver() {
+        LocalBroadcastManager.getInstance(getContext()).unregisterReceiver(myBroadcastReceiver);
+        myBroadcastReceiver = null;
+    }
+
+    private void handleResult(String pwned, boolean exception) {
+        progressBar.setVisibility(View.GONE);
+
+        if ( exception ) {
+            Toast.makeText(getContext(), getString(R.string.error_download_data), Toast.LENGTH_SHORT).show();
+        } else if ( pwned == null ) {
+            passwordOk.setVisibility(View.VISIBLE);
+        } else {
+            passwordPwned.setVisibility(View.VISIBLE);
+            String t = getString(R.string.password_pwned, StringHelper.addDigitSeperator(pwned));
+            passwordPwned.setText(t);
+        }
+    }
+
+    private class LocalBroadcastReceiver extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Log.d(TAG, "received local broadcast message");
+            handleResult(
+                    intent.getStringExtra(PwnedPasswordAsyncTask.EXTRA_PASSWORD_PWNED),
+                    intent.getBooleanExtra(PwnedPasswordAsyncTask.EXTRA_EXCEPTION, false));
+        }
+
     }
 }

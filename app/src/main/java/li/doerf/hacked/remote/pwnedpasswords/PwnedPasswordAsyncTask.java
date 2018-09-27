@@ -1,21 +1,18 @@
 package li.doerf.hacked.remote.pwnedpasswords;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.util.Log;
-import android.view.View;
-import android.widget.ProgressBar;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import org.apache.commons.codec.binary.Hex;
 import org.apache.commons.codec.digest.DigestUtils;
 
 import java.io.IOException;
+import java.lang.ref.WeakReference;
 import java.util.HashMap;
 
-import li.doerf.hacked.R;
-import li.doerf.hacked.utils.StringHelper;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import retrofit2.Call;
 import retrofit2.Response;
 import retrofit2.Retrofit;
@@ -26,27 +23,15 @@ import retrofit2.converter.scalars.ScalarsConverterFactory;
  */
 
 public class PwnedPasswordAsyncTask extends AsyncTask<String,Void,String> {
+    public static final String BROADCAST_ACTION_PASSWORD_PWNED = "li.doerf.hacked.BROADCAST_ACTION_PASSWORD_PWNED";
+    public static final String EXTRA_PASSWORD_PWNED = "ExtraPwned";
+    public static final String EXTRA_EXCEPTION = "ExtraException";
     private static final String TAG = "PwnedPasswordAsyncTask";
-    // TODO do something about those leaks, e.g. use broadcast to communicate result back to view
-    private ProgressBar progressBar;
-    private TextView passwordOk;
-    private TextView passwordPwned;
     private Exception exception;
-    private Context myContext;
+    private WeakReference<Context> myContext;
 
-    public PwnedPasswordAsyncTask(Context context, ProgressBar aProgressBar, TextView aPasswordOk, TextView aPasswordPwned) {
-        progressBar = aProgressBar;
-        passwordOk = aPasswordOk;
-        passwordPwned = aPasswordPwned;
-        myContext = context;
-    }
-
-    @Override
-    protected void onPreExecute() {
-        passwordOk.setVisibility(View.GONE);
-        passwordPwned.setVisibility(View.GONE);
-        progressBar.setVisibility(View.VISIBLE);
-        super.onPreExecute();
+    public PwnedPasswordAsyncTask(Context context) {
+        myContext = new WeakReference<>(context);
     }
 
     @Override
@@ -98,17 +83,15 @@ public class PwnedPasswordAsyncTask extends AsyncTask<String,Void,String> {
 
     @Override
     protected void onPostExecute(String pwned) {
-        progressBar.setVisibility(View.GONE);
+        Intent localIntent = new Intent(BROADCAST_ACTION_PASSWORD_PWNED);
+        localIntent.putExtra(EXTRA_PASSWORD_PWNED, pwned);
 
-        if ( exception != null ) {
-            Toast.makeText(myContext, myContext.getString(R.string.error_download_data), Toast.LENGTH_SHORT).show();
-        } else if ( pwned == null ) {
-            passwordOk.setVisibility(View.VISIBLE);
-        } else {
-            passwordPwned.setVisibility(View.VISIBLE);
-            String t = myContext.getString(R.string.password_pwned, StringHelper.addDigitSeperator(pwned));
-            passwordPwned.setText(t);
+        if(exception != null) {
+            localIntent.putExtra(EXTRA_EXCEPTION, true);
         }
+
+        LocalBroadcastManager.getInstance(myContext.get()).sendBroadcast(localIntent);
+        Log.d(TAG, "broadcast finish sent");
 
         super.onPostExecute(pwned);
     }
