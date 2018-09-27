@@ -15,17 +15,17 @@ public class NotificationHelper {
     private final static String LOGTAG = "NotificationHelper";
     private final static AtomicInteger notifyId = new AtomicInteger();
 
-    public static int getNotificationId() {
+    private static int getNotificationId() {
         return notifyId.incrementAndGet();
     }
 
-    public static int notify(Context aContext, Notification aNotification) {
+    public static void notify(Context aContext, Notification aNotification) {
         // Sets an ID for the notification
         int notificationId = NotificationHelper.getNotificationId();
-        return notify(aContext, aNotification, notificationId);
+        notify(aContext, aNotification, notificationId);
     }
 
-    public static int notify(Context aContext, Notification aNotification, int aNotificationId) {
+    private static void notify(Context aContext, Notification aNotification, int aNotificationId) {
         // Gets an instance of the NotificationManager service
 //        NotificationManager notificationManager =
 //                (NotificationManager) aContext.getSystemService(Context.NOTIFICATION_SERVICE);
@@ -33,7 +33,6 @@ public class NotificationHelper {
         // Builds the notification and issues it.
         notificationManager.notify(aNotificationId, aNotification);
         Log.d(LOGTAG, "notification build and issued: " + aNotificationId);
-        return aNotificationId;
     }
 
     public static void cancelAll(Context aContext) {

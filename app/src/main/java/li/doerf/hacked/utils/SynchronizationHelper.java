@@ -21,7 +21,7 @@ import li.doerf.hacked.services.BackgroundCheckService;
  */
 public class SynchronizationHelper {
     private static final String LOGTAG = "SynchronizationHelper";
-    public static final String JOB_TAG = "hacked-background-check-job";
+    private static final String JOB_TAG = "hacked-background-check-job";
 
     public static boolean scheduleSync(Context aContext) {
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(aContext);

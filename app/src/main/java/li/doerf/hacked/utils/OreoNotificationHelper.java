@@ -37,6 +37,7 @@ public class OreoNotificationHelper {
 // Sets the notification light color for notifications posted to this
 // channel, if the device supports this feature.
         mChannel.setLightColor(Color.RED);
+        if (mNotificationManager == null ) { return; }
         mNotificationManager.createNotificationChannel(mChannel);
     }
 }
