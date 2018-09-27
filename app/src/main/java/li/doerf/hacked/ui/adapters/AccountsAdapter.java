@@ -30,7 +30,7 @@ import li.doerf.hacked.utils.BackgroundTaskHelper;
 import li.doerf.hacked.utils.NotificationHelper;
 
 public class AccountsAdapter extends RecyclerView.Adapter<RecyclerViewHolder> {
-    private final String LOGTAG = getClass().getSimpleName();
+//    private final String LOGTAG = getClass().getSimpleName();
     private final FragmentManager mySupportFragmentManager;
     private final BreachDao myBreachDao;
     private List<Account> myAccountList;
@@ -64,15 +64,12 @@ public class AccountsAdapter extends RecyclerView.Adapter<RecyclerViewHolder> {
 
     private void bindView(CardView cardView, Account account, Collection<Breach> breaches) {
         int numBreaches = breaches.size();
-        int numAcknowledgedBreaches = Collections2.filter(breaches, input -> {
-            if ( input == null ) { return false; }
-            return input.getAcknowledged();
-        }).size();
-        TextView nameView = (TextView) cardView.findViewById(R.id.name);
+        int numAcknowledgedBreaches = Collections2.filter(breaches, Breach::getAcknowledged).size();
+        TextView nameView = cardView.findViewById(R.id.name);
         nameView.setText(account.getName());
 
 
-        TextView lastCheckedView = (TextView) cardView.findViewById(R.id.last_checked);
+        TextView lastCheckedView = cardView.findViewById(R.id.last_checked);
         if ( account.getLastChecked() != null ) {
             DateTimeFormatter dtfOut = DateTimeFormat.forPattern("yyyy/MM/dd HH:mm");
             lastCheckedView.setText(dtfOut.print(account.getLastChecked()));
@@ -81,7 +78,7 @@ public class AccountsAdapter extends RecyclerView.Adapter<RecyclerViewHolder> {
         }
 
         // set breach status text
-        TextView breachStatus = (TextView) cardView.findViewById(R.id.breach_state);
+        TextView breachStatus = cardView.findViewById(R.id.breach_state);
         if ( account.getLastChecked() == null ) {
             breachStatus.setText("-");
         } else if ( numBreaches == 0 ) {
@@ -108,24 +105,18 @@ public class AccountsAdapter extends RecyclerView.Adapter<RecyclerViewHolder> {
             }
         }
 
-        cardView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent showBreachDetails = new Intent(getContext(), BreachDetailsActivity.class);
-                showBreachDetails.putExtra(BreachDetailsActivity.EXTRA_ACCOUNT_ID, account.getId());
-                getContext().startActivity(showBreachDetails);
-                NotificationHelper.cancelAll(getContext());
-            }
+        cardView.setOnClickListener(v -> {
+            Intent showBreachDetails = new Intent(getContext(), BreachDetailsActivity.class);
+            showBreachDetails.putExtra(BreachDetailsActivity.EXTRA_ACCOUNT_ID, account.getId());
+            getContext().startActivity(showBreachDetails);
+            NotificationHelper.cancelAll(getContext());
         });
 
-        cardView.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                DeleteAccountDialogFragment d = new DeleteAccountDialogFragment();
-                d.setAccount(account);
-                d.show(mySupportFragmentManager, "deleteAccount");
-                return true;
-            }
+        cardView.setOnLongClickListener(v -> {
+            DeleteAccountDialogFragment d = new DeleteAccountDialogFragment();
+            d.setAccount(account);
+            d.show(mySupportFragmentManager, "deleteAccount");
+            return true;
         });
     }
 

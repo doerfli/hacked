@@ -37,10 +37,7 @@ public class DeleteAccountDialogFragment extends DialogFragment {
         // Use the Builder class for convenient dialog construction
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setMessage(getString(R.string.dialog_account_delete_msg, myAccount.getName()))
-                .setPositiveButton(R.string.ok, (dialog, id) -> {
-                    handleDeleteAccount();
-
-                })
+                .setPositiveButton(R.string.ok, (dialog, id) -> handleDeleteAccount())
                 .setNegativeButton(R.string.cancel, (dialog, id) -> DeleteAccountDialogFragment.this.getDialog().cancel());
         // Create the AlertDialog object and return it
         return builder.create();

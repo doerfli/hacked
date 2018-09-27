@@ -21,7 +21,7 @@ import li.doerf.hacked.R;
 import li.doerf.hacked.db.entities.BreachedSite;
 
 public class BreachedSitesAdapter extends RecyclerView.Adapter<RecyclerViewHolder> {
-    private final String LOGTAG = getClass().getSimpleName();
+//    private final String LOGTAG = getClass().getSimpleName();
     private final Context myContext;
     private List<BreachedSite> myBreachedSites;
 
@@ -43,10 +43,10 @@ public class BreachedSitesAdapter extends RecyclerView.Adapter<RecyclerViewHolde
 
         final CardView cardView = (CardView) holder.getView();
 
-        TextView nameView = (TextView) cardView.findViewById(R.id.site_name);
+        TextView nameView = cardView.findViewById(R.id.site_name);
         nameView.setText(site.getName());
 
-        TextView unconfirmed = (TextView) cardView.findViewById(R.id.unconfirmed);
+        TextView unconfirmed = cardView.findViewById(R.id.unconfirmed);
 
         if ( site.getVerified()) {
             nameView.setTextColor(getContext().getResources().getColor(android.R.color.primary_text_light));
@@ -56,38 +56,35 @@ public class BreachedSitesAdapter extends RecyclerView.Adapter<RecyclerViewHolde
             unconfirmed.setVisibility(View.VISIBLE);
         }
 
-        TextView pwnCountView = (TextView) cardView.findViewById(R.id.pwn_count);
+        TextView pwnCountView = cardView.findViewById(R.id.pwn_count);
         pwnCountView.setText( String.format(getContext().getResources().getConfiguration().locale, "%,d %s", site.getPwnCount(), getContext().getString(R.string.accounts)));
 
-        final RelativeLayout details = (RelativeLayout) cardView.findViewById(R.id.breach_details);
-        final ImageView arrowDown = (ImageView) cardView.findViewById(R.id.arrow_down);
-        final ImageView arrowUp = (ImageView) cardView.findViewById(R.id.arrow_up);
+        final RelativeLayout details = cardView.findViewById(R.id.breach_details);
+        final ImageView arrowDown = cardView.findViewById(R.id.arrow_down);
+        final ImageView arrowUp = cardView.findViewById(R.id.arrow_up);
 
-        cardView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if ( details.getVisibility() == View.VISIBLE ) {
-                    details.setVisibility(View.GONE);
-                    arrowDown.setVisibility(View.VISIBLE);
-                    arrowUp.setVisibility(View.GONE);
-                } else {
-                    details.setVisibility(View.VISIBLE);
-                    arrowDown.setVisibility(View.GONE);
-                    arrowUp.setVisibility(View.VISIBLE);
+        cardView.setOnClickListener(view -> {
+            if ( details.getVisibility() == View.VISIBLE ) {
+                details.setVisibility(View.GONE);
+                arrowDown.setVisibility(View.VISIBLE);
+                arrowUp.setVisibility(View.GONE);
+            } else {
+                details.setVisibility(View.VISIBLE);
+                arrowDown.setVisibility(View.GONE);
+                arrowUp.setVisibility(View.VISIBLE);
 
-                    TextView domain = (TextView) cardView.findViewById(R.id.domain);
-                    domain.setText(site.getDomain());
+                TextView domain = cardView.findViewById(R.id.domain);
+                domain.setText(site.getDomain());
 
-                    DateTimeFormatter dtfOut = DateTimeFormat.forPattern("yyyy/MM/dd");
-                    TextView breachDate = (TextView) cardView.findViewById(R.id.breach_date);
-                    breachDate.setText(dtfOut.print(site.getBreachDate()));
+                DateTimeFormatter dtfOut = DateTimeFormat.forPattern("yyyy/MM/dd");
+                TextView breachDate = cardView.findViewById(R.id.breach_date);
+                breachDate.setText(dtfOut.print(site.getBreachDate()));
 
-                    TextView compromisedData = (TextView) cardView.findViewById(R.id.compromised_data);
-                    compromisedData.setText(site.getDataClasses());
+                TextView compromisedData = cardView.findViewById(R.id.compromised_data);
+                compromisedData.setText(site.getDataClasses());
 
-                    TextView description = (TextView) cardView.findViewById(R.id.description);
-                    description.setText(Html.fromHtml(site.getDescription()).toString());
-                }
+                TextView description = cardView.findViewById(R.id.description);
+                description.setText(Html.fromHtml(site.getDescription()).toString());
             }
         });
     }

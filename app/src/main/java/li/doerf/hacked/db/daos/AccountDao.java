@@ -31,8 +31,8 @@ public interface AccountDao {
     @Query("SELECT * FROM accounts where _id=:anId")
     Account findById(Long anId);
 
-    @Query("SELECT * FROM accounts where name=:aName")
-    Account findByName(String aName);
+//    @Query("SELECT * FROM accounts where name=:aName")
+//    Account findByName(String aName);
 
     @Query("SELECT count(*) FROM accounts where name=:aName")
     Integer countByName(String aName);

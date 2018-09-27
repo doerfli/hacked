@@ -18,7 +18,7 @@ public class PackageReplacedReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        if (intent.getAction().equals(Intent.ACTION_PACKAGE_REPLACED)) {
+        if (intent.getAction() != null && intent.getAction().equals(Intent.ACTION_PACKAGE_REPLACED)) {
             Log.d(LOGTAG, "checking app status after ACTION_PACKAGE_REPLACED");
             ((HackedApplication) context.getApplicationContext()).migrateBackgroundCheckService();
             Log.d(LOGTAG, "blubb");

@@ -5,9 +5,7 @@ import android.util.Log;
 import com.firebase.jobdispatcher.JobParameters;
 import com.firebase.jobdispatcher.JobService;
 
-import li.doerf.hacked.db.entities.Account;
 import li.doerf.hacked.remote.haveibeenpwned.HIBPAccountChecker;
-import li.doerf.hacked.remote.haveibeenpwned.IProgressUpdater;
 
 /**
  * Created by moo on 08.03.18.
@@ -25,12 +23,9 @@ public class BackgroundCheckService extends JobService {
             @Override
             public void run() {
                 try {
-                    HIBPAccountChecker checker = new HIBPAccountChecker(getApplicationContext(), new IProgressUpdater() {
-                        @Override
-                        public void updateProgress(Account account) {
-                            Log.d(TAG, "checked account " + account.getName());
-                            // nothing to update when running in background
-                        }
+                    HIBPAccountChecker checker = new HIBPAccountChecker(getApplicationContext(), account -> {
+                        Log.d(TAG, "checked account " + account.getName());
+                        // nothing to update when running in background
                     });
 
                     Boolean foundNewBreaches = checker.check(null);

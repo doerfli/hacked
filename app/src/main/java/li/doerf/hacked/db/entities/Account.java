@@ -40,10 +40,6 @@ public class Account {
         return lastChecked;
     }
 
-    public DateTime getLastCheckedDateTime() {
-        return lastChecked <= 0 ? null : new DateTime(lastChecked);
-    }
-
     public void setLastChecked(DateTime lastChecked) {
         this.lastChecked = lastChecked != null ? lastChecked.getMillis() : null;
     }
