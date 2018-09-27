@@ -1,9 +1,13 @@
 package li.doerf.hacked.ui.fragments;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +18,7 @@ import java.util.ArrayList;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -30,10 +35,11 @@ import li.doerf.hacked.ui.viewmodels.BreachedSitesViewModel;
  */
 public class BreachedSitesListFragment extends Fragment {
     private static final String KEY_BREACH_LIST_TYPE = "BreachListType";
-//    private final String LOGTAG = getClass().getSimpleName();
+    private final String LOGTAG = getClass().getSimpleName();
     private BreachListType myBreachListType;
     private BreachedSitesAdapter myBreachedSitesAdapter;
     private SwipeRefreshLayout mySwipeRefreshLayout;
+    private LocalBroadcastReceiver myBroadcastReceiver;
 
 
     public static BreachedSitesListFragment create(BreachListType aType) {
@@ -80,7 +86,7 @@ public class BreachedSitesListFragment extends Fragment {
         breachedSites.addItemDecoration(dividerItemDecoration);
 
         mySwipeRefreshLayout = view.findViewById(R.id.swipe_refresh_layout);
-        mySwipeRefreshLayout.setOnRefreshListener(() -> reloadBreachedSites());
+        mySwipeRefreshLayout.setOnRefreshListener(this::reloadBreachedSites);
 
         return view;
     }
@@ -105,8 +111,25 @@ public class BreachedSitesListFragment extends Fragment {
         if ( myBreachListType == null ) {
             myBreachListType = BreachListType.MostRecent;
         }
-
+        registerReceiver();
         ((HackedApplication) getActivity().getApplication()).trackView("Fragment~BreachedSites" + myBreachListType.name());
+    }
+
+    @Override
+    public void onPause() {
+        unregisterReceiver();
+        super.onPause();
+    }
+
+    private void registerReceiver() {
+        IntentFilter intentFilter = new IntentFilter(HIBPGetBreachedSitesAsyncTask.BROADCAST_ACTION_GET_BREACHED_SITES_FINISHED);
+        myBroadcastReceiver = new LocalBroadcastReceiver();
+        LocalBroadcastManager.getInstance(getContext()).registerReceiver(myBroadcastReceiver, intentFilter);
+    }
+
+    private void unregisterReceiver() {
+        LocalBroadcastManager.getInstance(getContext()).unregisterReceiver(myBroadcastReceiver);
+        myBroadcastReceiver = null;
     }
 
     @Override
@@ -130,13 +153,21 @@ public class BreachedSitesListFragment extends Fragment {
         if ( ! mySwipeRefreshLayout.isRefreshing() ) {
             mySwipeRefreshLayout.setRefreshing(true);
         }
-        new HIBPGetBreachedSitesAsyncTask(this).execute();
+        new HIBPGetBreachedSitesAsyncTask(getContext()).execute();
     }
 
     /**
      * Indicate that the refresh is complete to stop refresh animation.
      */
-    public void refreshComplete() {
+    private void refreshComplete() {
         mySwipeRefreshLayout.setRefreshing(false);
+    }
+
+    private class LocalBroadcastReceiver extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Log.d(LOGTAG, "received local broadcast message");
+            refreshComplete();
+        }
     }
 }

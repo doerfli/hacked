@@ -56,7 +56,7 @@ public class AccountListFragment extends Fragment {
     private AccountsAdapter myAccountsAdapter;
     private View myFragmentRootView;
     private SwipeRefreshLayout mySwipeRefreshLayout;
-    private LocalBroadcastReceiver myResponseReceiver;
+    private LocalBroadcastReceiver myBroadcastReceiver;
 
     public static AccountListFragment create() {
         return new AccountListFragment();
@@ -275,19 +275,19 @@ public class AccountListFragment extends Fragment {
     /**
      * Indicate that the refresh is complete to stop refresh animation.
      */
-    public void refreshComplete() {
+    private void refreshComplete() {
         mySwipeRefreshLayout.setRefreshing(false);
     }
 
     private void registerReceiver() {
         IntentFilter intentFilter = new IntentFilter(HIBPCheckAccountAsyncTask.BROADCAST_ACTION_ACCOUNT_CHECK_FINISHED);
-        myResponseReceiver = new LocalBroadcastReceiver();
-        LocalBroadcastManager.getInstance(getContext()).registerReceiver(myResponseReceiver, intentFilter);
+        myBroadcastReceiver = new LocalBroadcastReceiver();
+        LocalBroadcastManager.getInstance(getContext()).registerReceiver(myBroadcastReceiver, intentFilter);
     }
 
     private void unregisterReceiver() {
-        LocalBroadcastManager.getInstance(getContext()).unregisterReceiver(myResponseReceiver);
-        myResponseReceiver = null;
+        LocalBroadcastManager.getInstance(getContext()).unregisterReceiver(myBroadcastReceiver);
+        myBroadcastReceiver = null;
     }
 
     private class LocalBroadcastReceiver extends BroadcastReceiver {

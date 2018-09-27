@@ -1,6 +1,7 @@
 package li.doerf.hacked.remote.haveibeenpwned;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Handler;
@@ -17,31 +18,26 @@ import java.io.IOException;
 import java.lang.ref.WeakReference;
 import java.util.List;
 
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import li.doerf.hacked.R;
 import li.doerf.hacked.db.AppDatabase;
 import li.doerf.hacked.db.daos.BreachedSiteDao;
 import li.doerf.hacked.db.entities.BreachedSite;
-import li.doerf.hacked.ui.fragments.BreachedSitesListFragment;
 import li.doerf.hacked.utils.ConnectivityHelper;
 import retrofit2.Call;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-/**
- * TODO move to JobIntentService
- * Created by moo on 09/10/16.
- */
 public class HIBPGetBreachedSitesAsyncTask extends AsyncTask<Void,Void,Void> {
+    public static final String BROADCAST_ACTION_GET_BREACHED_SITES_FINISHED = "li.doerf.hacked.BROADCAST_ACTION_GET_BREACHED_SITES_FINISHED";
     private final String LOGTAG = getClass().getSimpleName();
     private final WeakReference<Context> myContext;
-    private final BreachedSitesListFragment myUiFragment;
     private final BreachedSiteDao myBreachedSiteDao;
 
-    public HIBPGetBreachedSitesAsyncTask(BreachedSitesListFragment uiFragment) {
-        myContext = new WeakReference<>(uiFragment.getContext());
-        myUiFragment = uiFragment;
-        myBreachedSiteDao = AppDatabase.get(uiFragment.getContext()).getBrachedSiteDao();
+    public HIBPGetBreachedSitesAsyncTask(Context aContext) {
+        myContext = new WeakReference<>(aContext);
+        myBreachedSiteDao = AppDatabase.get(aContext).getBrachedSiteDao();
     }
 
     @Override
@@ -112,6 +108,8 @@ public class HIBPGetBreachedSitesAsyncTask extends AsyncTask<Void,Void,Void> {
     @Override
     protected void onPostExecute(Void aVoid) {
         super.onPostExecute(aVoid);
-        myUiFragment.refreshComplete();
+        Intent localIntent = new Intent(BROADCAST_ACTION_GET_BREACHED_SITES_FINISHED);
+        LocalBroadcastManager.getInstance(myContext.get()).sendBroadcast(localIntent);
+        Log.d(LOGTAG, "broadcast finish sent");
     }
 }
