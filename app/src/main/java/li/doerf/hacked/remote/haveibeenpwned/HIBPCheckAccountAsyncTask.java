@@ -1,6 +1,7 @@
 package li.doerf.hacked.remote.haveibeenpwned;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.preference.PreferenceManager;
@@ -8,25 +9,21 @@ import android.util.Log;
 
 import java.lang.ref.WeakReference;
 
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import li.doerf.hacked.R;
 import li.doerf.hacked.db.entities.Account;
 import li.doerf.hacked.services.CheckServiceHelper;
-import li.doerf.hacked.ui.fragments.AccountListFragment;
 
-/**
- * TODO move to JobIntentService
- */
 public class HIBPCheckAccountAsyncTask extends AsyncTask<Long,Account,Boolean> implements IProgressUpdater {
 
+    public static final String BROADCAST_ACTION_ACCOUNT_CHECK_FINISHED = "li.doerf.hacked.BROADCAST_ACTION_ACCOUNT_CHECK_FINISHED";
     private final String LOGTAG = getClass().getSimpleName();
     private final WeakReference<Context> myContext;
     private static boolean running;
-    private final AccountListFragment myFragment;
     private boolean updateLastCheckTimestamp = false;
 
-    public HIBPCheckAccountAsyncTask(Context aContext, AccountListFragment aFragment) {
+    public HIBPCheckAccountAsyncTask(Context aContext) {
         myContext = new WeakReference<>(aContext);
-        myFragment = aFragment;
     }
 
     public static boolean isRunning() {
@@ -61,9 +58,10 @@ public class HIBPCheckAccountAsyncTask extends AsyncTask<Long,Account,Boolean> i
     protected void onPostExecute(Boolean aFoundNewBreach) {
         super.onPostExecute(aFoundNewBreach);
         running = false;
-        if ( myFragment != null ) {
-            myFragment.refreshComplete();
-        }
+
+        Intent localIntent = new Intent(BROADCAST_ACTION_ACCOUNT_CHECK_FINISHED);
+        LocalBroadcastManager.getInstance(myContext.get()).sendBroadcast(localIntent);
+        Log.d(LOGTAG, "broadcast finish sent");
 
         if ( updateLastCheckTimestamp ) {
             SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(myContext.get());

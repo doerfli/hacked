@@ -1,7 +1,10 @@
 package li.doerf.hacked.ui.fragments;
 
 import android.annotation.SuppressLint;
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -27,6 +30,7 @@ import androidx.annotation.Nullable;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -52,6 +56,7 @@ public class AccountListFragment extends Fragment {
     private AccountsAdapter myAccountsAdapter;
     private View myFragmentRootView;
     private SwipeRefreshLayout mySwipeRefreshLayout;
+    private LocalBroadcastReceiver myResponseReceiver;
 
     public static AccountListFragment create() {
         return new AccountListFragment();
@@ -103,6 +108,13 @@ public class AccountListFragment extends Fragment {
     public void onResume() {
         super.onResume();
         ((HackedApplication) getActivity().getApplication()).trackView("Fragment~AccountList");
+        registerReceiver();
+    }
+
+    @Override
+    public void onPause() {
+        unregisterReceiver();
+        super.onPause();
     }
 
     @Override
@@ -249,7 +261,7 @@ public class AccountListFragment extends Fragment {
             return;
         }
 
-        new HIBPCheckAccountAsyncTask(getContext(), this).executeOnExecutor(AsyncTask.SERIAL_EXECUTOR, account != null ? account.getId() : null );
+        new HIBPCheckAccountAsyncTask(getContext()).executeOnExecutor(AsyncTask.SERIAL_EXECUTOR, account != null ? account.getId() : null );
 
         mySwipeRefreshLayout.setRefreshing(true);
 
@@ -267,4 +279,22 @@ public class AccountListFragment extends Fragment {
         mySwipeRefreshLayout.setRefreshing(false);
     }
 
+    private void registerReceiver() {
+        IntentFilter intentFilter = new IntentFilter(HIBPCheckAccountAsyncTask.BROADCAST_ACTION_ACCOUNT_CHECK_FINISHED);
+        myResponseReceiver = new LocalBroadcastReceiver();
+        LocalBroadcastManager.getInstance(getContext()).registerReceiver(myResponseReceiver, intentFilter);
+    }
+
+    private void unregisterReceiver() {
+        LocalBroadcastManager.getInstance(getContext()).unregisterReceiver(myResponseReceiver);
+        myResponseReceiver = null;
+    }
+
+    private class LocalBroadcastReceiver extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Log.d(LOGTAG, "received local broadcast message");
+            refreshComplete();
+        }
+    }
 }

@@ -110,7 +110,7 @@ public class AddAccountDialogFragment extends DialogFragment {
                         return;
                     }
 
-                    new HIBPCheckAccountAsyncTask(application, null).execute(ids.get(0));
+                    new HIBPCheckAccountAsyncTask(application).execute(ids.get(0));
                 } ,throwable -> Log.e(TAG, "Error msg", throwable));
     }
 
