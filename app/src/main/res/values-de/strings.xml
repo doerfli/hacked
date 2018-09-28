@@ -30,6 +30,7 @@
     <string name="initial_account_text">Bitte geben Sie unten einen Benutzernamen oder E-mAil Adresse ein und drücken Sie Hinzufügen.</string>
     <string name="initial_help_title">Was gibt es sonst noch?</string>
     <string name="initial_help_text_2">Drücken Sie das Plus Symbol um einen weiteren Benutzernamen oder eine Email Adresse hinzuzufügen.\nDrücken Sie den Sync Knopf um <i>Hacked?</i> Datenlecks für die angegebenen Konten finden zu lassen.\nWählen Sie ein Konto aus um eine detailliertee Beschreibung des Lecks zu sehen.\nLöschen eines Kontos durch langes drücken.</string>
+    <string name="initial_help_text_3">Überprüfen Sie, ob Ihr Passwort in einem Leck offengelegt wurde, indem Sie im Menü den Punkt <i>Pwned Passwords</i> auswählen.</string>
     <string name="dismiss">Verwerfen</string>
     <string name="toast_dont_show_initial_help_again">Sie haben die Anleitung geschlossen. Diese wird in Zukunft nicht mehr angezeigt.</string>
     <string name="acknowledge">Zur Kenntnis nehmen</string>
