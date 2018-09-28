@@ -130,7 +130,7 @@ public class AccountsAdapter extends RecyclerView.Adapter<RecyclerViewHolder> {
         notifyDataSetChanged();
     }
 
-    public Context getContext() {
+    private Context getContext() {
         return myContext;
     }
 }

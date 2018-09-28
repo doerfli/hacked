@@ -15,7 +15,7 @@ import li.doerf.hacked.db.entities.Breach;
 public class BreachViewModel extends AndroidViewModel {
 
     private final BreachDao myBreachDao;
-    private LongSparseArray<LiveData<List<Breach>>> breachListMap = new LongSparseArray<>();
+    private final LongSparseArray<LiveData<List<Breach>>> breachListMap = new LongSparseArray<>();
 
     public BreachViewModel(@NonNull Application application) {
         super(application);

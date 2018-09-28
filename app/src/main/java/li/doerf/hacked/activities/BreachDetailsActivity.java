@@ -22,9 +22,5 @@ public class BreachDetailsActivity extends AppCompatActivity {
                 .add(R.id.fragment_container, myContentFragment)
                 .commit();
     }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-    }
+    
 }

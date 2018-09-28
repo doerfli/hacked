@@ -27,8 +27,8 @@ public class PwnedPasswordAsyncTask extends AsyncTask<String,Void,String> {
     public static final String EXTRA_PASSWORD_PWNED = "ExtraPwned";
     public static final String EXTRA_EXCEPTION = "ExtraException";
     private static final String TAG = "PwnedPasswordAsyncTask";
+    private final WeakReference<Context> myContext;
     private Exception exception;
-    private WeakReference<Context> myContext;
 
     public PwnedPasswordAsyncTask(Context context) {
         myContext = new WeakReference<>(context);
@@ -95,11 +95,5 @@ public class PwnedPasswordAsyncTask extends AsyncTask<String,Void,String> {
 
         super.onPostExecute(pwned);
     }
-
-    @Override
-    protected void onCancelled() {
-        super.onCancelled();
-    }
-
 
 }

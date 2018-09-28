@@ -19,23 +19,20 @@ public class BackgroundCheckService extends JobService {
         Log.d(TAG, "bg job start");
 
 
-        Runnable runnable = new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    HIBPAccountChecker checker = new HIBPAccountChecker(getApplicationContext(), account -> {
-                        Log.d(TAG, "checked account " + account.getName());
-                        // nothing to update when running in background
-                    });
+        Runnable runnable = () -> {
+            try {
+                HIBPAccountChecker checker = new HIBPAccountChecker(getApplicationContext(), account -> {
+                    Log.d(TAG, "checked account " + account.getName());
+                    // nothing to update when running in background
+                });
 
-                    Boolean foundNewBreaches = checker.check(null);
-                    if (foundNewBreaches) {
-                        CheckServiceHelper helper = new CheckServiceHelper(getApplicationContext());
-                        helper.showNotification();
-                    }
-                } finally {
-                    jobFinished(job, false);
+                Boolean foundNewBreaches = checker.check(null);
+                if (foundNewBreaches) {
+                    CheckServiceHelper helper = new CheckServiceHelper(getApplicationContext());
+                    helper.showNotification();
                 }
+            } finally {
+                jobFinished(job, false);
             }
         };
         new Thread(runnable).start();
