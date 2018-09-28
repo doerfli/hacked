@@ -33,7 +33,7 @@ public class CheckServiceHelper {
 
         String title = myContext.getString(R.string.notification_title_new_breaches_found);
         androidx.core.app.NotificationCompat.Builder mBuilder =
-                new NotificationCompat.Builder(myContext)
+                new NotificationCompat.Builder(myContext, OreoNotificationHelper.CHANNEL_ID)
                         .setSmallIcon(android.R.drawable.ic_dialog_info)
                         .setContentTitle(title)
                         .setContentText(myContext.getString(R.string.notification_text_click_to_open))
