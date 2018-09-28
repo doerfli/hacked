@@ -2,18 +2,9 @@ package li.doerf.hacked.db.entities;
 
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
-import androidx.room.ForeignKey;
 import androidx.room.PrimaryKey;
 
-import static androidx.room.ForeignKey.CASCADE;
-
-@Entity(tableName = "breaches",
-        foreignKeys = @ForeignKey(
-                entity = Account.class,
-                parentColumns = "_id",
-                childColumns = "account",
-                onDelete = CASCADE)
-)
+@Entity(tableName = "breaches")
 public class Breach {
     @PrimaryKey
     @ColumnInfo(name="_id")

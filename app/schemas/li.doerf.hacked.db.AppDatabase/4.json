@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 4,
-    "identityHash": "e3bb8524f1dc4d64ffd37348b6c3c007",
+    "identityHash": "5db47c4a04f602d8d6f3b7cf2539d509",
     "entities": [
       {
         "tableName": "accounts",
@@ -44,7 +44,7 @@
       },
       {
         "tableName": "breaches",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`_id` INTEGER, `account` INTEGER, `name` TEXT, `title` TEXT, `domain` TEXT, `breach_date` INTEGER, `added_date` INTEGER, `pwn_count` INTEGER, `description` TEXT, `data_classes` TEXT, `is_verified` INTEGER, `is_acknowledged` INTEGER, PRIMARY KEY(`_id`), FOREIGN KEY(`account`) REFERENCES `accounts`(`_id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`_id` INTEGER, `account` INTEGER, `name` TEXT, `title` TEXT, `domain` TEXT, `breach_date` INTEGER, `added_date` INTEGER, `pwn_count` INTEGER, `description` TEXT, `data_classes` TEXT, `is_verified` INTEGER, `is_acknowledged` INTEGER, PRIMARY KEY(`_id`))",
         "fields": [
           {
             "fieldPath": "id",
@@ -126,19 +126,7 @@
           "autoGenerate": false
         },
         "indices": [],
-        "foreignKeys": [
-          {
-            "table": "accounts",
-            "onDelete": "CASCADE",
-            "onUpdate": "NO ACTION",
-            "columns": [
-              "account"
-            ],
-            "referencedColumns": [
-              "_id"
-            ]
-          }
-        ]
+        "foreignKeys": []
       },
       {
         "tableName": "breached_sites",
@@ -199,7 +187,7 @@
             "notNull": false
           },
           {
-            "fieldPath": "isVerifid",
+            "fieldPath": "isVerified",
             "columnName": "is_verified",
             "affinity": "INTEGER",
             "notNull": false
@@ -217,7 +205,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"e3bb8524f1dc4d64ffd37348b6c3c007\")"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"5db47c4a04f602d8d6f3b7cf2539d509\")"
     ]
   }
 }
