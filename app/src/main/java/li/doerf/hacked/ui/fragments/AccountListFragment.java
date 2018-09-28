@@ -46,7 +46,6 @@ import li.doerf.hacked.ui.adapters.AccountsAdapter;
 import li.doerf.hacked.ui.viewmodels.AccountViewModel;
 import li.doerf.hacked.utils.BackgroundTaskHelper;
 import li.doerf.hacked.utils.ConnectivityHelper;
-import li.doerf.hacked.utils.SynchronizationHelper;
 
 /**
  * Created by moo on 05/10/16.
@@ -98,7 +97,6 @@ public class AccountListFragment extends Fragment {
         });
 
         showInitialSetupAccount(myFragmentRootView);
-        showInitialSetupCheck(myFragmentRootView);
         showInitialHelp(myFragmentRootView);
 
         return myFragmentRootView;
@@ -187,42 +185,6 @@ public class AccountListFragment extends Fragment {
                     }
                 }
         );
-    }
-
-    private void showInitialSetupCheck(View aRootView) {
-        final SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getContext());
-        boolean initialSetupCheckDone = settings.getBoolean(getString(R.string.pref_initial_setup_check_done), false);
-        if ( ! initialSetupCheckDone ) {
-            final CardView initialSetupCheck = aRootView.findViewById(R.id.initial_setup_check);
-            initialSetupCheck.setVisibility(View.VISIBLE);
-
-            Button noB = aRootView.findViewById(R.id.initial_setup_check_no);
-            noB.setOnClickListener(v -> {
-                initialSetupCheck.setVisibility(View.GONE);
-                Toast.makeText(getContext(), getString(R.string.toast_check_not_enabled), Toast.LENGTH_LONG).show();
-
-                SharedPreferences.Editor editor = settings.edit();
-                editor.putBoolean(getString(R.string.pref_initial_setup_check_done), true);
-                editor.apply();
-
-                ((HackedApplication) getActivity().getApplication()).trackEvent("InitialSyncDisable");
-            });
-
-            Button yesB = aRootView.findViewById(R.id.initial_setup_check_yes);
-            yesB.setOnClickListener(v -> {
-                initialSetupCheck.setVisibility(View.GONE);
-
-                SharedPreferences.Editor editor = settings.edit();
-                editor.putBoolean(getString(R.string.pref_key_sync_enable), true);
-                editor.putBoolean(getString(R.string.pref_initial_setup_check_done), true);
-                editor.apply();
-
-                ((HackedApplication) getActivity().getApplication()).trackEvent("InitialSyncEnable");
-
-                SynchronizationHelper.scheduleSync(getContext());
-                Toast.makeText(getContext(), getString(R.string.toast_check_enabled), Toast.LENGTH_LONG).show();
-            });
-        }
     }
 
     private void showInitialHelp(View aRootView) {

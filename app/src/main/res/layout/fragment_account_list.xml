@@ -53,59 +53,6 @@
     </androidx.cardview.widget.CardView>
 
     <androidx.cardview.widget.CardView
-        android:id="@+id/initial_setup_check"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/card_margin"
-        android:visibility="gone"
-        >
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/card_margin"
-            android:padding="@dimen/card_padding"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/initial_setup_check_title"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textColor="@android:color/black"
-                android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"
-                android:text="@string/initial_setup_check_title"/>
-
-            <TextView
-                android:id="@+id/initial_setup_check_text"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/initial_setup_check_title"
-                android:textColor="@android:color/black"
-                android:text="@string/initial_setup_check_text"/>
-
-            <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/initial_setup_check_no"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/initial_setup_check_text"
-                android:layout_toLeftOf="@+id/initial_setup_check_yes"
-                android:text="@string/no"
-                style="@style/Widget.AppCompat.Button.Borderless.Colored"
-                />
-
-            <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/initial_setup_check_yes"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/initial_setup_check_text"
-                android:layout_alignParentRight="true"
-                android:text="@string/yes"
-                style="@style/Widget.AppCompat.Button.Borderless.Colored"
-                />
-
-        </RelativeLayout>
-    </androidx.cardview.widget.CardView>
-
-    <androidx.cardview.widget.CardView
         android:id="@+id/initial_help"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

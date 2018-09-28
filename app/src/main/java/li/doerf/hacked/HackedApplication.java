@@ -73,12 +73,15 @@ public class HackedApplication extends MultiDexApplication {
             return;
         }
 
+        SharedPreferences.Editor editor = settings.edit();
+        editor.putBoolean(getString(R.string.pref_key_sync_enable), true);
+        editor.apply();
+
         Log.i(TAG, "migrating background check service to firebase");
 
         SynchronizationHelper.scheduleSync(getApplicationContext());
 
         // update preference
-        SharedPreferences.Editor editor = settings.edit();
         editor.putBoolean(PREF_KEY_MIGRATE_BACKGROUND_SERVICE_TO_FIREBASE_SCHEDULER_DONE, true);
         editor.apply();
         Log.d(TAG, "done");
