@@ -9,6 +9,7 @@
     <string name="dialog_account_delete_msg">Wollen Sie das Konto \'%1$s\' löschen?</string>
     <string name="ok">OK</string>
     <string name="action_add_account">Konto hinzufügen</string>
+    <string name="action_rateus">Jetzt bewerten</string>
     <string name="snackbar_checking_account">Konten werden überprüft - dieser Vorgang wird vorraussichtlich %1$d Sekunden dauern.\n</string>
     <string name="last_checked">Letzte Prüfung:</string>
     <string name="placeholder_date">dd/mm/yyyy hh:mm</string>
@@ -93,4 +94,9 @@
     <string name="channel_name">Hacked?</string>
     <string name="unverified">(unbestätigt)</string>
     <string name="account_deleted">Konto gelöscht</string>
+    <string name="rating_dialog_title">Gefällt Ihnen die \'Hacked?\' App?</string>
+    <string name="rating_dialog_message">Bitte hinterlassen Sie Ihre Meinung im Google Play Store</string>
+    <string name="rating_dialog_positive">Jetzt bewerten</string>
+    <string name="rating_dialog_neutral">Später</string>
+    <string name="rating_dialog_negative">Nie</string>
 </resources>

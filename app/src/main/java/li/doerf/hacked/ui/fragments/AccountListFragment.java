@@ -46,6 +46,7 @@ import li.doerf.hacked.ui.adapters.AccountsAdapter;
 import li.doerf.hacked.ui.viewmodels.AccountViewModel;
 import li.doerf.hacked.utils.BackgroundTaskHelper;
 import li.doerf.hacked.utils.ConnectivityHelper;
+import li.doerf.hacked.utils.RatingHelper;
 
 /**
  * Created by moo on 05/10/16.
@@ -107,6 +108,7 @@ public class AccountListFragment extends Fragment {
         super.onResume();
         ((HackedApplication) getActivity().getApplication()).trackView("Fragment~AccountList");
         registerReceiver();
+        new RatingHelper(getContext()).showRateUsDialogDelayed();
     }
 
     @Override
@@ -134,6 +136,11 @@ public class AccountListFragment extends Fragment {
             AddAccountDialogFragment newFragment = new AddAccountDialogFragment();
             newFragment.show(getFragmentManager(), "addaccount");
 
+            return true;
+        }
+
+        if (id == R.id.action_rateus) {
+            new RatingHelper(getContext()).showRateUsDialog();
             return true;
         }
 

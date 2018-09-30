@@ -65,14 +65,6 @@ public class MainActivity extends AppCompatActivity
         setTitle(getString(R.string.nd_accounts));
     }
 
-//    @Override
-//    protected void onResume() {
-//        super.onResume();
-//        myTracker.setScreenName("Activity~Main");
-//        myTracker.send(new HitBuilders.ScreenViewBuilder().build());
-//    }
-
-
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = findViewById(R.id.drawer_layout);

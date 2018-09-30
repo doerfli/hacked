@@ -27,6 +27,7 @@ import li.doerf.hacked.db.daos.BreachDao;
 import li.doerf.hacked.db.entities.Account;
 import li.doerf.hacked.db.entities.Breach;
 import li.doerf.hacked.utils.BackgroundTaskHelper;
+import li.doerf.hacked.utils.RatingHelper;
 
 /**
  * Created by moo on 07/09/16.
@@ -114,6 +115,7 @@ public class BreachesAdapter extends RecyclerView.Adapter<RecyclerViewHolder> {
                     notifyDataSetChanged();
                     if (!result) return;
                     Snackbar.make(myParentView, getContext().getString(R.string.breach_acknowledged), Snackbar.LENGTH_SHORT).show();
+                    new RatingHelper(getContext()).setRatingCounterBelowthreshold();
                 }
         );
     }
