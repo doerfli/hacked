@@ -8,8 +8,8 @@ android {
         applicationId "li.doerf.hacked"
         minSdkVersion 16
         targetSdkVersion 28
-        versionCode 38
-        versionName "1.9.1.0"
+        versionCode 39
+        versionName "1.9.2.0"
         multiDexEnabled true
         javaCompileOptions {
             annotationProcessorOptions {
@@ -40,7 +40,7 @@ dependencies {
     implementation 'androidx.recyclerview:recyclerview:1.0.0'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'com.google.android.material:material:1.0.0'
-    implementation 'com.google.android.gms:play-services-analytics:16.0.3'
+    implementation 'com.google.android.gms:play-services-analytics:16.0.4'
     implementation 'com.firebase:firebase-jobdispatcher:0.8.5'
 
     implementation "android.arch.persistence.room:runtime:$room_version"

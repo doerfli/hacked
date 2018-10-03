@@ -11,6 +11,7 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.DialogFragment;
+import li.doerf.hacked.HackedApplication;
 import li.doerf.hacked.R;
 import li.doerf.hacked.utils.RatingHelper;
 
@@ -44,6 +45,7 @@ public class RateUsDialogFragment extends DialogFragment {
         SharedPreferences.Editor editor = settings.edit();
         editor.putBoolean(RatingHelper.PREF_KEY_HAS_RATED_US, true);
         editor.apply();
+        ((HackedApplication) getActivity().getApplication()).trackEvent("RateNow");
         Log.i(LOGTAG, "setting: rated us - true");
     }
 
@@ -53,6 +55,7 @@ public class RateUsDialogFragment extends DialogFragment {
         editor.putInt(RatingHelper.PREF_KEY_RATING_COUNTER, 0);
         editor.apply();
         Log.i(LOGTAG, "setting: reset rating counter");
+        ((HackedApplication) getActivity().getApplication()).trackEvent("RateLater");
     }
 
     private void handleClickNegative() {
@@ -61,5 +64,6 @@ public class RateUsDialogFragment extends DialogFragment {
         editor.putBoolean(RatingHelper.PREF_KEY_RATING_NEVER, true);
         editor.apply();
         Log.i(LOGTAG, "setting: never rate");
+        ((HackedApplication) getActivity().getApplication()).trackEvent("RateNever");
     }
 }
