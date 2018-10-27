@@ -14,7 +14,7 @@ import li.doerf.hacked.db.entities.Account;
 import li.doerf.hacked.db.entities.Breach;
 import li.doerf.hacked.db.entities.BreachedSite;
 
-@Database(entities = {Account.class, Breach.class, BreachedSite.class}, version = 4)
+@Database(entities = {Account.class, Breach.class, BreachedSite.class}, version = 5)
 public abstract class AppDatabase extends RoomDatabase {
 
     private static AppDatabase instance;
@@ -28,6 +28,15 @@ public abstract class AppDatabase extends RoomDatabase {
         }
     };
 
+    private static final Migration MIGRATION_4_5 = new Migration(4, 5) {
+        @Override
+        public void migrate(
+                SupportSQLiteDatabase database) {
+            database.execSQL("ALTER TABLE `account` ADD COLUMN `num_breaches` INTEGER;");
+            database.execSQL("ALTER TABLE `account` ADD COLUMN `num_acknowledged_breaches` INTEGER;");
+        }
+    };
+
     public static AppDatabase get(Context context) {
         synchronized (AppDatabase.class) {
             if (instance != null) {
@@ -35,7 +44,7 @@ public abstract class AppDatabase extends RoomDatabase {
             }
 
             instance = Room.databaseBuilder(context, AppDatabase.class, "hacked.db")
-                .addMigrations(MIGRATION_3_4)
+                .addMigrations(MIGRATION_3_4, MIGRATION_4_5)
                     .build();
             return instance;
         }

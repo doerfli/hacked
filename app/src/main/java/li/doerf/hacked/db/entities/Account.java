@@ -18,6 +18,10 @@ public class Account {
     private Long lastChecked;
     @ColumnInfo(name="is_hacked")
     private Boolean isHacked = false;
+    @ColumnInfo(name="num_breaches")
+    private Integer numBreaches;
+    @ColumnInfo(name="num_acknowledged_breaches")
+    private Integer numAcknowledgedBreaches;
 
 
     public Long getId() {
@@ -55,5 +59,19 @@ public class Account {
         isHacked = hacked;
     }
 
+    public Integer getNumBreaches() {
+        return numBreaches;
+    }
 
+    public void setNumBreaches(Integer numBreaches) {
+        this.numBreaches = numBreaches;
+    }
+
+    public Integer getNumAcknowledgedBreaches() {
+        return numAcknowledgedBreaches;
+    }
+
+    public void setNumAcknowledgedBreaches(Integer numAcknowledgedBreaches) {
+        this.numAcknowledgedBreaches = numAcknowledgedBreaches;
+    }
 }

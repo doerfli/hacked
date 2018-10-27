@@ -7,12 +7,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.google.common.collect.Collections2;
-
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
-import java.util.Collection;
 import java.util.List;
 
 import androidx.annotation.NonNull;
@@ -24,9 +21,7 @@ import li.doerf.hacked.activities.BreachDetailsActivity;
 import li.doerf.hacked.db.AppDatabase;
 import li.doerf.hacked.db.daos.BreachDao;
 import li.doerf.hacked.db.entities.Account;
-import li.doerf.hacked.db.entities.Breach;
 import li.doerf.hacked.ui.DeleteAccountDialogFragment;
-import li.doerf.hacked.utils.BackgroundTaskHelper;
 import li.doerf.hacked.utils.NotificationHelper;
 
 public class AccountsAdapter extends RecyclerView.Adapter<RecyclerViewHolder> {
@@ -57,14 +52,10 @@ public class AccountsAdapter extends RecyclerView.Adapter<RecyclerViewHolder> {
 
         final Account account = myAccountList.get(position);
 
-        new BackgroundTaskHelper<List<Breach>>().runInBackgroundAndConsumeOnMain(
-                () -> myBreachDao.findByAccount(account.getId()),
-                breaches -> bindView(cardView, account, breaches));
+        bindView(cardView, account);
     }
 
-    private void bindView(CardView cardView, Account account, Collection<Breach> breaches) {
-        int numBreaches = breaches.size();
-        int numAcknowledgedBreaches = Collections2.filter(breaches, Breach::getAcknowledged).size();
+    private void bindView(CardView cardView, Account account) {
         TextView nameView = cardView.findViewById(R.id.name);
         nameView.setText(account.getName());
 
@@ -81,13 +72,13 @@ public class AccountsAdapter extends RecyclerView.Adapter<RecyclerViewHolder> {
         TextView breachStatus = cardView.findViewById(R.id.breach_state);
         if ( account.getLastChecked() == null ) {
             breachStatus.setText("-");
-        } else if ( numBreaches == 0 ) {
+        } else if ( account.getNumBreaches() == 0 ) {
             breachStatus.setText(getContext().getString(R.string.status_no_breach_found));
         } else {
-            if ( numAcknowledgedBreaches == 0 ) {
-                breachStatus.setText(getContext().getString(R.string.status_breaches_found, numBreaches));
+            if ( account.getNumAcknowledgedBreaches() == 0 ) {
+                breachStatus.setText(getContext().getString(R.string.status_breaches_found, account.getNumBreaches()));
             } else {
-                breachStatus.setText(getContext().getString(R.string.status_breaches_found_acknowledged, numBreaches, numAcknowledgedBreaches));
+                breachStatus.setText(getContext().getString(R.string.status_breaches_found_acknowledged, account.getNumBreaches(), account.getNumAcknowledgedBreaches()));
             }
         }
 
@@ -98,7 +89,7 @@ public class AccountsAdapter extends RecyclerView.Adapter<RecyclerViewHolder> {
         } else if ( ! account.getHacked() && account.getLastChecked() == null ) {
             statusIndicator.setBackgroundColor(getContext().getResources().getColor(R.color.account_status_unknown));
         } else {
-            if ( numBreaches == 0 ) {
+            if ( account.getNumBreaches() == 0 ) {
                 statusIndicator.setBackgroundColor(getContext().getResources().getColor(R.color.account_status_ok));
             } else {
                 statusIndicator.setBackgroundColor(getContext().getResources().getColor(R.color.account_status_only_acknowledged));

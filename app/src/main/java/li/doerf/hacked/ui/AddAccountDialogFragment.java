@@ -87,6 +87,8 @@ public class AddAccountDialogFragment extends DialogFragment {
 
                     final Account account = new Account();
                     account.setName(name);
+                    account.setNumBreaches(0);
+                    account.setNumAcknowledgedBreaches(0);
                     insertAccount(accountDao, account, getActivity().getApplication());
                 });
     }

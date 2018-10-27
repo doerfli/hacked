@@ -23,6 +23,7 @@ import li.doerf.hacked.db.daos.AccountDao;
 import li.doerf.hacked.db.daos.BreachDao;
 import li.doerf.hacked.db.entities.Account;
 import li.doerf.hacked.db.entities.Breach;
+import li.doerf.hacked.utils.AccountHelper;
 import retrofit2.Call;
 import retrofit2.Response;
 import retrofit2.Retrofit;
@@ -111,6 +112,9 @@ public class HIBPAccountChecker {
         account.setLastChecked(DateTime.now());
         if (isNewBreachFound && ! account.getHacked() ) {
             account.setHacked(true);
+        }
+        if (isNewBreachFound) {
+            new AccountHelper(myContext).updateBreachCounts(account);
         }
         myAccountDao.update(account);
 

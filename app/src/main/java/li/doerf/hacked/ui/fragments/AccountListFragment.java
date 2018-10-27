@@ -168,6 +168,8 @@ public class AccountListFragment extends Fragment {
                 AccountDao accountDao = AppDatabase.get(getContext()).getAccountDao();
                 Account newAcc = new Account();
                 newAcc.setName(accountName);
+                newAcc.setNumBreaches(0);
+                newAcc.setNumAcknowledgedBreaches(0);
                 insertFirstAccount(accountET, accountDao, newAcc, initialAccount, settings);
             });
         }

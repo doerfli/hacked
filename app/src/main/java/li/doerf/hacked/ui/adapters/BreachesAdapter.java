@@ -26,6 +26,7 @@ import li.doerf.hacked.db.daos.AccountDao;
 import li.doerf.hacked.db.daos.BreachDao;
 import li.doerf.hacked.db.entities.Account;
 import li.doerf.hacked.db.entities.Breach;
+import li.doerf.hacked.utils.AccountHelper;
 import li.doerf.hacked.utils.BackgroundTaskHelper;
 import li.doerf.hacked.utils.RatingHelper;
 
@@ -139,14 +140,15 @@ public class BreachesAdapter extends RecyclerView.Adapter<RecyclerViewHolder> {
             return;
         }
 
-        if ( myBreachDao.countUnacknowledged(accountId) > 0 ) {
-            Log.d(LOGTAG, "account still has unacknowledged breaches");
-            return;
+        new AccountHelper(myContext).updateBreachCounts(account);
+
+        if ( myBreachDao.countUnacknowledged(accountId) == 0 ) {
+            Log.d(LOGTAG, "account has only acknowledged breaches");
+            account.setHacked(false);
         }
 
-        account.setHacked(false);
         myAccountDao.update(account);
-        Log.d(LOGTAG, "account updated - hacked = false");
+        Log.d(LOGTAG, "account updated - hacked = " + account.getHacked() + " numBreaches = " + account.getNumBreaches() + " numAcknowledgedBreaches = " + account.getNumAcknowledgedBreaches());
     }
 
     public void addItems(List<Breach> list) {
