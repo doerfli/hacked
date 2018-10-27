@@ -25,7 +25,7 @@ public interface AccountDao {
     @Query("SELECT * FROM accounts")
     List<Account> getAll();
 
-    @Query("SELECT * FROM accounts")
+    @Query("SELECT * FROM accounts ORDER BY is_hacked DESC, name")
     LiveData<List<Account>> getAllLD();
 
     @Query("SELECT * FROM accounts where _id=:anId")
