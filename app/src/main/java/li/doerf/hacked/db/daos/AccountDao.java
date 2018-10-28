@@ -37,4 +37,6 @@ public interface AccountDao {
     @Query("SELECT count(*) FROM accounts where name=:aName")
     Integer countByName(String aName);
 
+    @Query("SELECT * from accounts WHERE num_breaches IS NULL OR num_acknowledged_breaches IS NULL")
+    List<Account> getAllWithNumBreachesNull();
 }

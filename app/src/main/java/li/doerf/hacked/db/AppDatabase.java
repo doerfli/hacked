@@ -32,8 +32,8 @@ public abstract class AppDatabase extends RoomDatabase {
         @Override
         public void migrate(
                 SupportSQLiteDatabase database) {
-            database.execSQL("ALTER TABLE `account` ADD COLUMN `num_breaches` INTEGER;");
-            database.execSQL("ALTER TABLE `account` ADD COLUMN `num_acknowledged_breaches` INTEGER;");
+            database.execSQL("ALTER TABLE `accounts` ADD COLUMN `num_breaches` INTEGER;");
+            database.execSQL("ALTER TABLE `accounts` ADD COLUMN `num_acknowledged_breaches` INTEGER;");
         }
     };
 
