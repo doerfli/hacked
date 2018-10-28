@@ -9,7 +9,7 @@ android {
         minSdkVersion 16
         targetSdkVersion 28
         versionCode 39
-        versionName "1.9.2.0"
+        versionName "1.9.3.0"
         multiDexEnabled true
         javaCompileOptions {
             annotationProcessorOptions {
@@ -60,7 +60,7 @@ dependencies {
     // https://github.com/google/guava
     implementation 'com.google.guava:guava:26.0-android'
     // http://www.joda.org/joda-time/
-    implementation 'joda-time:joda-time:2.10'
+    implementation 'joda-time:joda-time:2.10.1'
 
     testImplementation 'junit:junit:4.12'
 }
