@@ -33,6 +33,7 @@ android {
 dependencies {
     def room_version = "1.1.1"
     def lifecycle_version = "1.1.1"
+    def work_version = "1.0.0-alpha10"
 
     implementation 'com.android.support:multidex:1.0.3'
     implementation 'androidx.appcompat:appcompat:1.0.0'
@@ -42,6 +43,12 @@ dependencies {
     implementation 'com.google.android.material:material:1.0.0'
     implementation 'com.google.android.gms:play-services-analytics:16.0.4'
     implementation 'com.firebase:firebase-jobdispatcher:0.8.5'
+    implementation ("android.arch.work:work-runtime:$work_version") {
+        exclude group: 'com.google.guava', module: 'listenablefuture'
+    }
+    implementation ("android.arch.work:work-firebase:$work_version")  {
+        exclude group: 'com.google.guava', module: 'listenablefuture'
+    }
 
     implementation "android.arch.persistence.room:runtime:$room_version"
     implementation "android.arch.persistence.room:guava:$room_version"
@@ -63,4 +70,6 @@ dependencies {
     implementation 'joda-time:joda-time:2.10.1'
 
     testImplementation 'junit:junit:4.12'
+
+    androidTestImplementation "android.arch.work:work-testing:$work_version"
 }
