@@ -53,6 +53,7 @@ public class HackedApplication extends MultiDexApplication {
         return sTracker;
     }
 
+
     public synchronized void trackView(String name) {
         if ( runsInTestlab() ) return;
 //        Log.i(LOGTAG, "Tracking view: " + name);
