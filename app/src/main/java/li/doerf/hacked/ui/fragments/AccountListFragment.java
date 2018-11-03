@@ -6,7 +6,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
@@ -35,17 +34,18 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+import androidx.work.OneTimeWorkRequest;
+import androidx.work.WorkManager;
 import li.doerf.hacked.HackedApplication;
 import li.doerf.hacked.R;
 import li.doerf.hacked.db.AppDatabase;
 import li.doerf.hacked.db.daos.AccountDao;
 import li.doerf.hacked.db.entities.Account;
-import li.doerf.hacked.remote.haveibeenpwned.HIBPCheckAccountAsyncTask;
+import li.doerf.hacked.remote.haveibeenpwned.HIBPAccountCheckerWorker;
 import li.doerf.hacked.ui.AddAccountDialogFragment;
 import li.doerf.hacked.ui.adapters.AccountsAdapter;
 import li.doerf.hacked.ui.viewmodels.AccountViewModel;
 import li.doerf.hacked.utils.BackgroundTaskHelper;
-import li.doerf.hacked.utils.ConnectivityHelper;
 import li.doerf.hacked.utils.RatingHelper;
 
 /**
@@ -217,22 +217,27 @@ public class AccountListFragment extends Fragment {
     }
 
     public void checkForBreaches(Account account) {
-        if ( ! ConnectivityHelper.isConnected( getContext()) ) {
-            Log.i(LOGTAG, "no network");
-            Toast.makeText(getContext(), getString(R.string.toast_error_no_network), Toast.LENGTH_SHORT).show();
-            refreshComplete();
-            return;
-        }
+//        if ( ! ConnectivityHelper.isConnected( getContext()) ) {
+//            Log.i(LOGTAG, "no network");
+//            Toast.makeText(getContext(), getString(R.string.toast_error_no_network), Toast.LENGTH_SHORT).show();
+//            refreshComplete();
+//            return;
+//        }
+//
+//        // only do this when checking more than one account (possible timing issue)
+//        if ( account == null && HIBPCheckAccountAsyncTask.isRunning()) {
+//            Log.i(LOGTAG, "check already in progress");
+//            Toast.makeText(getContext(), getString(R.string.toast_check_in_progress), Toast.LENGTH_SHORT).show();
+//            refreshComplete();
+//            return;
+//        }
+//
+//        new HIBPCheckAccountAsyncTask(getContext()).executeOnExecutor(AsyncTask.SERIAL_EXECUTOR, account != null ? account.getId() : null );
 
-        // only do this when checking more than one account (possible timing issue)
-        if ( account == null && HIBPCheckAccountAsyncTask.isRunning()) {
-            Log.i(LOGTAG, "check already in progress");
-            Toast.makeText(getContext(), getString(R.string.toast_check_in_progress), Toast.LENGTH_SHORT).show();
-            refreshComplete();
-            return;
-        }
-
-        new HIBPCheckAccountAsyncTask(getContext()).executeOnExecutor(AsyncTask.SERIAL_EXECUTOR, account != null ? account.getId() : null );
+        OneTimeWorkRequest checker =
+                new OneTimeWorkRequest.Builder(HIBPAccountCheckerWorker.class)
+                        .build();
+        WorkManager.getInstance().enqueue(checker);
 
         mySwipeRefreshLayout.setRefreshing(true);
 
@@ -251,7 +256,7 @@ public class AccountListFragment extends Fragment {
     }
 
     private void registerReceiver() {
-        IntentFilter intentFilter = new IntentFilter(HIBPCheckAccountAsyncTask.BROADCAST_ACTION_ACCOUNT_CHECK_FINISHED);
+        IntentFilter intentFilter = new IntentFilter(HIBPAccountCheckerWorker.BROADCAST_ACTION_ACCOUNT_CHECK_FINISHED);
         myBroadcastReceiver = new LocalBroadcastReceiver();
         LocalBroadcastManager.getInstance(getContext()).registerReceiver(myBroadcastReceiver, intentFilter);
     }

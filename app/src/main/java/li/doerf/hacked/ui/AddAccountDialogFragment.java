@@ -14,6 +14,9 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.DialogFragment;
+import androidx.work.Data;
+import androidx.work.OneTimeWorkRequest;
+import androidx.work.WorkManager;
 import io.reactivex.Single;
 import io.reactivex.schedulers.Schedulers;
 import li.doerf.hacked.HackedApplication;
@@ -21,7 +24,7 @@ import li.doerf.hacked.R;
 import li.doerf.hacked.db.AppDatabase;
 import li.doerf.hacked.db.daos.AccountDao;
 import li.doerf.hacked.db.entities.Account;
-import li.doerf.hacked.remote.haveibeenpwned.HIBPCheckAccountAsyncTask;
+import li.doerf.hacked.remote.haveibeenpwned.HIBPAccountCheckerWorker;
 import li.doerf.hacked.utils.ConnectivityHelper;
 
 import static android.content.ContentValues.TAG;
@@ -111,7 +114,14 @@ public class AddAccountDialogFragment extends DialogFragment {
                         return;
                     }
 
-                    new HIBPCheckAccountAsyncTask(application).execute(ids.get(0));
+                    Data inputData = new Data.Builder()
+                            .putLong(HIBPAccountCheckerWorker.KEY_ID, ids.get(0))
+                            .build();
+                    OneTimeWorkRequest checker =
+                            new OneTimeWorkRequest.Builder(HIBPAccountCheckerWorker.class)
+                                    .setInputData(inputData)
+                                    .build();
+                    WorkManager.getInstance().enqueue(checker);
                 } ,throwable -> Log.e(TAG, "Error msg", throwable));
     }
 

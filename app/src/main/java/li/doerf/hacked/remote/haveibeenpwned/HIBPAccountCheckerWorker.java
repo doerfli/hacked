@@ -1,8 +1,11 @@
 package li.doerf.hacked.remote.haveibeenpwned;
 
 import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Handler;
 import android.os.Looper;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -12,17 +15,22 @@ import com.google.common.collect.Lists;
 import org.joda.time.DateTime;
 
 import java.io.IOException;
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
 import androidx.annotation.NonNull;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
+import androidx.work.Worker;
+import androidx.work.WorkerParameters;
 import li.doerf.hacked.R;
 import li.doerf.hacked.db.AppDatabase;
 import li.doerf.hacked.db.daos.AccountDao;
 import li.doerf.hacked.db.daos.BreachDao;
 import li.doerf.hacked.db.entities.Account;
 import li.doerf.hacked.db.entities.Breach;
+import li.doerf.hacked.services.CheckServiceHelper;
 import li.doerf.hacked.utils.AccountHelper;
 import retrofit2.Call;
 import retrofit2.Response;
@@ -35,20 +43,34 @@ import static li.doerf.hacked.R.id.account;
  * Created by moo on 26.03.17.
  */
 
-public class HIBPAccountChecker {
+public class HIBPAccountCheckerWorker extends Worker {
+    public static final String BROADCAST_ACTION_ACCOUNT_CHECK_FINISHED = "li.doerf.hacked.BROADCAST_ACTION_ACCOUNT_CHECK_FINISHED";
+    public static final String KEY_ID = "ID";
     private final String LOGTAG = getClass().getSimpleName();
     private static long noReqBefore = 0;
 
-    private final Context myContext;
-    private final IProgressUpdater myProgressUpdater;
+    private final WeakReference<Context> myContext;
     private final AccountDao myAccountDao;
     private final BreachDao myBreachDao;
+    private boolean updateLastCheckTimestamp;
 
-    public HIBPAccountChecker(Context aContext, IProgressUpdater aProgressUpdates) {
-        myContext = aContext;
-        myProgressUpdater = aProgressUpdates;
+    public HIBPAccountCheckerWorker(@NonNull Context aContext, @NonNull WorkerParameters params) {
+        super(aContext, params);
+        myContext = new WeakReference<>(aContext);
         myAccountDao = AppDatabase.get(aContext).getAccountDao();
         myBreachDao = AppDatabase.get(aContext).getBreachDao();
+    }
+
+    @NonNull
+    @Override
+    public Result doWork() {
+        Log.i(LOGTAG, "doWork");
+        Long id = getInputData().getLong(KEY_ID, -1);
+        updateLastCheckTimestamp = id < 0;
+        Boolean foundNewBreach = check(id);
+        doPostCheckActions(foundNewBreach);
+
+        return Result.SUCCESS;
     }
 
     public Boolean check(Long id) {
@@ -57,7 +79,7 @@ public class HIBPAccountChecker {
 
         List<Account> accountsToCheck = new ArrayList<>();
 
-        if ( id == null ) {
+        if ( id < 0) {
             accountsToCheck.addAll(myAccountDao.getAll());
         } else {
             Log.d(LOGTAG, "only id " + id);
@@ -66,13 +88,8 @@ public class HIBPAccountChecker {
 
         for (Account account : accountsToCheck) {
             Log.d(LOGTAG, "Checking for account: " + account.getName());
-
-            try {
-                List<BreachedAccount> breachedAccounts = doCheck(account.getName());
-                newBreachFound |= processBreachedAccounts( account, breachedAccounts);
-            } finally {
-                myProgressUpdater.updateProgress( account);
-            }
+            List<BreachedAccount> breachedAccounts = doCheck(account.getName());
+            newBreachFound |= processBreachedAccounts( account, breachedAccounts);
         }
 
         Log.d(LOGTAG, "finished checking for breaches");
@@ -114,13 +131,13 @@ public class HIBPAccountChecker {
             account.setHacked(true);
         }
         if (isNewBreachFound) {
-            new AccountHelper(myContext).updateBreachCounts(account);
+            new AccountHelper(myContext.get()).updateBreachCounts(account);
         }
         myAccountDao.update(account);
 
         return isNewBreachFound;
     }
-        
+
     private List<BreachedAccount> doCheck(String anAccount) {
         try {
             Response<List<BreachedAccount>> response = retrieveBreaches(anAccount);
@@ -138,7 +155,7 @@ public class HIBPAccountChecker {
 
         } catch (IOException e) {
             Log.e(LOGTAG, "caughtIOException while contacting www.haveibeenpwned.com - " + e.getMessage(), e);
-            new Handler(Looper.getMainLooper()).post(() -> Toast.makeText(myContext, myContext.getString(R.string.toast_error_error_during_check), Toast.LENGTH_LONG).show());
+            new Handler(Looper.getMainLooper()).post(() -> Toast.makeText(myContext.get(), myContext.get().getString(R.string.toast_error_error_during_check), Toast.LENGTH_LONG).show());
         }
         return Lists.newArrayList();
     }
@@ -176,5 +193,25 @@ public class HIBPAccountChecker {
         }
 
         return response;
+    }
+
+    private void doPostCheckActions(Boolean foundNewBreach) {
+        Intent localIntent = new Intent(BROADCAST_ACTION_ACCOUNT_CHECK_FINISHED);
+        LocalBroadcastManager.getInstance(myContext.get()).sendBroadcast(localIntent);
+        Log.d(LOGTAG, "broadcast finish sent");
+
+        if ( updateLastCheckTimestamp ) {
+            SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(myContext.get());
+            SharedPreferences.Editor editor = settings.edit();
+            long ts = System.currentTimeMillis();
+            editor.putLong(myContext.get().getString(R.string.PREF_KEY_LAST_SYNC_TIMESTAMP), ts);
+            editor.apply();
+            Log.i(LOGTAG, "updated last checked timestamp: " + ts);
+        }
+
+        if ( foundNewBreach) {
+            CheckServiceHelper h = new CheckServiceHelper(myContext.get());
+            h.showNotification();
+        }
     }
 }
