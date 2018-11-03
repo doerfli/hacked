@@ -16,3 +16,7 @@ steps:
     contents: '**/*.apk'
     targetFolder: '$(build.artifactStagingDirectory)'
 - task: PublishBuildArtifacts@1
+
+trigger:
+- master
+- feature/*
