@@ -23,9 +23,11 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+import androidx.work.OneTimeWorkRequest;
+import androidx.work.WorkManager;
 import li.doerf.hacked.HackedApplication;
 import li.doerf.hacked.R;
-import li.doerf.hacked.remote.haveibeenpwned.HIBPGetBreachedSitesAsyncTask;
+import li.doerf.hacked.remote.haveibeenpwned.HIBPGetBreachedSitesWorker;
 import li.doerf.hacked.ui.HibpInfo;
 import li.doerf.hacked.ui.adapters.BreachedSitesAdapter;
 import li.doerf.hacked.ui.viewmodels.BreachedSitesViewModel;
@@ -122,7 +124,7 @@ public class BreachedSitesListFragment extends Fragment {
     }
 
     private void registerReceiver() {
-        IntentFilter intentFilter = new IntentFilter(HIBPGetBreachedSitesAsyncTask.BROADCAST_ACTION_GET_BREACHED_SITES_FINISHED);
+        IntentFilter intentFilter = new IntentFilter(HIBPGetBreachedSitesWorker.BROADCAST_ACTION_GET_BREACHED_SITES_FINISHED);
         myBroadcastReceiver = new LocalBroadcastReceiver();
         LocalBroadcastManager.getInstance(getContext()).registerReceiver(myBroadcastReceiver, intentFilter);
     }
@@ -153,7 +155,12 @@ public class BreachedSitesListFragment extends Fragment {
         if ( ! mySwipeRefreshLayout.isRefreshing() ) {
             mySwipeRefreshLayout.setRefreshing(true);
         }
-        new HIBPGetBreachedSitesAsyncTask(getContext()).execute();
+
+        OneTimeWorkRequest checker =
+                new OneTimeWorkRequest.Builder(HIBPGetBreachedSitesWorker.class)
+                        .build();
+        WorkManager.getInstance().enqueue(checker);
+
     }
 
     /**

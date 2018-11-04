@@ -217,23 +217,6 @@ public class AccountListFragment extends Fragment {
     }
 
     public void checkForBreaches(Account account) {
-//        if ( ! ConnectivityHelper.isConnected( getContext()) ) {
-//            Log.i(LOGTAG, "no network");
-//            Toast.makeText(getContext(), getString(R.string.toast_error_no_network), Toast.LENGTH_SHORT).show();
-//            refreshComplete();
-//            return;
-//        }
-//
-//        // only do this when checking more than one account (possible timing issue)
-//        if ( account == null && HIBPCheckAccountAsyncTask.isRunning()) {
-//            Log.i(LOGTAG, "check already in progress");
-//            Toast.makeText(getContext(), getString(R.string.toast_check_in_progress), Toast.LENGTH_SHORT).show();
-//            refreshComplete();
-//            return;
-//        }
-//
-//        new HIBPCheckAccountAsyncTask(getContext()).executeOnExecutor(AsyncTask.SERIAL_EXECUTOR, account != null ? account.getId() : null );
-
         OneTimeWorkRequest checker =
                 new OneTimeWorkRequest.Builder(HIBPAccountCheckerWorker.class)
                         .build();
