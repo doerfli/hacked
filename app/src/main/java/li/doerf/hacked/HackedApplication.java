@@ -27,7 +27,7 @@ import li.doerf.hacked.utils.SynchronizationHelper;
 
 public class HackedApplication extends MultiDexApplication {
     private static final String TAG = "HackedApplication";
-    private static final String PREF_KEY_MIGRATE_BACKGROUND_SERVICE_TO_FIREBASE_SCHEDULER_DONE = "PREF_KEY_MIGRATE_BACKGROUND_SERVICE_TO_FIREBASE_SCHEDULER_DONE";
+    private static final String PREF_KEY_MIGRATE_BACKGROUND_SERVICE_TO_WORKMANAGER_DONE = "PREF_KEY_MIGRATE_BACKGROUND_SERVICE_TO_WORKMANAGER_DONE";
     private static GoogleAnalytics sAnalytics;
     private static Tracker sTracker;
 
@@ -76,7 +76,7 @@ public class HackedApplication extends MultiDexApplication {
 
     public void migrateBackgroundCheckService() {
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        boolean done = settings.getBoolean(PREF_KEY_MIGRATE_BACKGROUND_SERVICE_TO_FIREBASE_SCHEDULER_DONE, false);
+        boolean done = settings.getBoolean(PREF_KEY_MIGRATE_BACKGROUND_SERVICE_TO_WORKMANAGER_DONE, false);
 
         if (done) {
             return;
@@ -86,12 +86,12 @@ public class HackedApplication extends MultiDexApplication {
         editor.putBoolean(getString(R.string.pref_key_sync_enable), true);
         editor.apply();
 
-        Log.i(TAG, "migrating background check service to firebase");
+        Log.i(TAG, "migrating background check service to workmanager");
 
         SynchronizationHelper.scheduleSync(getApplicationContext());
 
         // update preference
-        editor.putBoolean(PREF_KEY_MIGRATE_BACKGROUND_SERVICE_TO_FIREBASE_SCHEDULER_DONE, true);
+        editor.putBoolean(PREF_KEY_MIGRATE_BACKGROUND_SERVICE_TO_WORKMANAGER_DONE, true);
         editor.apply();
         Log.d(TAG, "done");
     }

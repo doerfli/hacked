@@ -1,8 +1,11 @@
 package li.doerf.hacked.remote.haveibeenpwned;
 
+import android.app.Notification;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
 import android.preference.PreferenceManager;
@@ -21,17 +24,20 @@ import java.util.List;
 import java.util.Random;
 
 import androidx.annotation.NonNull;
+import androidx.core.app.NotificationCompat;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.work.Worker;
 import androidx.work.WorkerParameters;
 import li.doerf.hacked.R;
+import li.doerf.hacked.activities.MainActivity;
 import li.doerf.hacked.db.AppDatabase;
 import li.doerf.hacked.db.daos.AccountDao;
 import li.doerf.hacked.db.daos.BreachDao;
 import li.doerf.hacked.db.entities.Account;
 import li.doerf.hacked.db.entities.Breach;
-import li.doerf.hacked.services.CheckServiceHelper;
 import li.doerf.hacked.utils.AccountHelper;
+import li.doerf.hacked.utils.NotificationHelper;
+import li.doerf.hacked.utils.OreoNotificationHelper;
 import retrofit2.Call;
 import retrofit2.Response;
 import retrofit2.Retrofit;
@@ -46,8 +52,9 @@ import static li.doerf.hacked.R.id.account;
 public class HIBPAccountCheckerWorker extends Worker {
     public static final String BROADCAST_ACTION_ACCOUNT_CHECK_FINISHED = "li.doerf.hacked.BROADCAST_ACTION_ACCOUNT_CHECK_FINISHED";
     public static final String KEY_ID = "ID";
-    private final String LOGTAG = getClass().getSimpleName();
+    private static final String NOTIFICATION_GROUP_KEY_BREACHES = "group_key_breachs";
     private static long noReqBefore = 0;
+    private final String LOGTAG = getClass().getSimpleName();
 
     private final WeakReference<Context> myContext;
     private final AccountDao myAccountDao;
@@ -210,8 +217,38 @@ public class HIBPAccountCheckerWorker extends Worker {
         }
 
         if ( foundNewBreach) {
-            CheckServiceHelper h = new CheckServiceHelper(myContext.get());
-            h.showNotification();
+            showNotification();
         }
     }
+
+    private void showNotification() {
+        if ( android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.O ) {
+            OreoNotificationHelper onh = new OreoNotificationHelper(myContext.get());
+            onh.createNotificationChannel();
+        }
+
+        String title = myContext.get().getString(R.string.notification_title_new_breaches_found);
+        androidx.core.app.NotificationCompat.Builder mBuilder =
+                new NotificationCompat.Builder(myContext.get(), OreoNotificationHelper.CHANNEL_ID)
+                        .setSmallIcon(android.R.drawable.ic_dialog_info)
+                        .setContentTitle(title)
+                        .setContentText(myContext.get().getString(R.string.notification_text_click_to_open))
+                        .setChannelId(OreoNotificationHelper.CHANNEL_ID)
+                        .setGroup(NOTIFICATION_GROUP_KEY_BREACHES);
+
+        Intent showBreachDetails = new Intent(myContext.get(), MainActivity.class);
+        PendingIntent resultPendingIntent =
+                PendingIntent.getActivity(
+                        myContext.get(),
+                        0,
+                        showBreachDetails,
+                        PendingIntent.FLAG_ONE_SHOT
+                );
+        mBuilder.setContentIntent(resultPendingIntent);
+
+        Notification notification = mBuilder.build();
+        notification.flags |= Notification.DEFAULT_LIGHTS | Notification.FLAG_AUTO_CANCEL;
+        NotificationHelper.notify(myContext.get(), notification);
+    }
+
 }

@@ -33,14 +33,6 @@
             android:label="@string/title_settings"
             android:parentActivityName=".activities.MainActivity" />
 
-        <service
-            android:exported="false"
-            android:name=".services.BackgroundCheckService">
-            <intent-filter>
-                <action android:name="com.firebase.jobdispatcher.ACTION_EXECUTE"/>
-            </intent-filter>
-        </service>
-
         <receiver android:name=".receiver.PackageReplacedReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.PACKAGE_REPLACED" />

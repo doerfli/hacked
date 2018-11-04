@@ -41,8 +41,7 @@ dependencies {
     implementation 'androidx.recyclerview:recyclerview:1.0.0'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'com.google.android.material:material:1.0.0'
-    implementation 'com.google.android.gms:play-services-analytics:16.0.4'
-    implementation 'com.firebase:firebase-jobdispatcher:0.8.5'
+    implementation 'com.google.android.gms:play-services-analytics:16.0.5'
     implementation ("android.arch.work:work-runtime:$work_version") {
         exclude group: 'com.google.guava', module: 'listenablefuture'
     }

@@ -5,16 +5,14 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
-import com.firebase.jobdispatcher.Constraint;
-import com.firebase.jobdispatcher.FirebaseJobDispatcher;
-import com.firebase.jobdispatcher.GooglePlayDriver;
-import com.firebase.jobdispatcher.Job;
-import com.firebase.jobdispatcher.Lifetime;
-import com.firebase.jobdispatcher.RetryStrategy;
-import com.firebase.jobdispatcher.Trigger;
+import java.util.concurrent.TimeUnit;
 
+import androidx.work.Constraints;
+import androidx.work.NetworkType;
+import androidx.work.PeriodicWorkRequest;
+import androidx.work.WorkManager;
 import li.doerf.hacked.R;
-import li.doerf.hacked.services.BackgroundCheckService;
+import li.doerf.hacked.remote.haveibeenpwned.HIBPAccountCheckerWorker;
 
 /**
  * Created by moo on 08/09/16.
@@ -25,7 +23,7 @@ public class SynchronizationHelper {
 
     public static boolean scheduleSync(Context aContext) {
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(aContext);
-        disableSync(aContext);
+        disableSync();
         boolean enabled = false;
 
         if (settings.getBoolean(aContext.getString(R.string.pref_key_sync_enable), false)) {
@@ -39,65 +37,58 @@ public class SynchronizationHelper {
     private static void enableSync(Context aContext) {
         Log.d(LOGTAG, "scheduling synchronization");
 
+        int currentIntervalHours = getCurrentIntervalHours(aContext);
+
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(aContext);
-        int currentInterval = getCurrentInterval(aContext, settings);
-
-        // Create a new dispatcher using the Google Play driver.
-        FirebaseJobDispatcher dispatcher = new FirebaseJobDispatcher(new GooglePlayDriver(aContext));
-
-        Job.Builder jb = dispatcher.newJobBuilder()
-                .setService(BackgroundCheckService.class)
-                .setTag(JOB_TAG)
-                .setRecurring(true)
-                .setLifetime(Lifetime.FOREVER)
-                .setTrigger(Trigger.executionWindow(currentInterval, currentInterval + 60 * 60))
-                .setReplaceCurrent(true)
-                .setRetryStrategy(RetryStrategy.DEFAULT_EXPONENTIAL);
-
         boolean runCheckOnCellular = settings.getBoolean(aContext.getString(R.string.pref_key_sync_via_cellular), false);
+        NetworkType networkType = runCheckOnCellular ? NetworkType.METERED : NetworkType.UNMETERED;
 
-        if ( runCheckOnCellular ) {
-            Log.d(LOGTAG, "schedule for any network availability");
-            jb = jb.setConstraints(Constraint.ON_ANY_NETWORK);
-        } else {
-            Log.d(LOGTAG, "schedule for unmetered network availability");
-            jb = jb.setConstraints(Constraint.ON_UNMETERED_NETWORK);
-        }
+        Constraints constraints = new Constraints.Builder()
+                .setRequiredNetworkType(networkType)
+                .build();
 
-        Job myJob = jb.build();
+        PeriodicWorkRequest.Builder checkWorker =
+                new PeriodicWorkRequest.Builder(HIBPAccountCheckerWorker.class, currentIntervalHours,
+                        TimeUnit.HOURS)
+                .addTag(JOB_TAG)
+                .setConstraints(constraints);
 
-        dispatcher.mustSchedule(myJob);
+        PeriodicWorkRequest photoCheckWork = checkWorker.build();
+        WorkManager.getInstance().enqueue(photoCheckWork);
+
         Log.i(LOGTAG, "scheduled job");
     }
 
-    private static void disableSync(Context aContext) {
+    private static void disableSync() {
         Log.d(LOGTAG, "unscheduling synchronization");
-
-        // Create a new dispatcher using the Google Play driver.
-        FirebaseJobDispatcher dispatcher = new FirebaseJobDispatcher(new GooglePlayDriver(aContext));
-        dispatcher.cancel(JOB_TAG);
+        WorkManager.getInstance().cancelAllWorkByTag(JOB_TAG);
         Log.i(LOGTAG, "unscheduled sync job");
     }
 
-    private static int getCurrentInterval(Context aContext, SharedPreferences aSettings) {
-        String intervalString = aSettings.getString(aContext.getString(R.string.pref_key_sync_interval), "everyday");
+    /**
+     * Get the current check interval in hours
+     * @param aContext the context
+     * @return the current check interval in hours
+     */
+    private static int getCurrentIntervalHours(Context aContext) {
+        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(aContext);
+        String intervalString = settings.getString(aContext.getString(R.string.pref_key_sync_interval), "everyday");
 
         switch ( intervalString) {
             case "everyday":
-                return 60 * 60 * 24;
-//                return 1000 * 30; // for testing
+                return 24;
 
             case "everytwodays":
-                return 60 * 60 * 24 * 2;
+                return 24 * 2;
 
             case "everythreedays":
-                return 60 * 60 * 24 * 3;
+                return 24 * 3;
 
             case "everyweek":
-                return 60 * 60 * 24 * 7;
+                return 24 * 7;
 
             default:
-                return 60 * 60 * 24;
+                return 24;
         }
     }
 
