@@ -25,7 +25,6 @@ import li.doerf.hacked.R;
 import li.doerf.hacked.db.AppDatabase;
 import li.doerf.hacked.db.daos.BreachedSiteDao;
 import li.doerf.hacked.db.entities.BreachedSite;
-import li.doerf.hacked.utils.ConnectivityHelper;
 import retrofit2.Call;
 import retrofit2.Response;
 import retrofit2.Retrofit;
@@ -46,12 +45,6 @@ public class HIBPGetBreachedSitesWorker extends Worker {
     @NonNull
     @Override
     public Result doWork() {
-        if ( ! ConnectivityHelper.isConnected(myContext.get()) ) {
-            Log.w(LOGTAG, "no network available");
-            new Handler(Looper.getMainLooper()).post(() -> Toast.makeText(myContext.get(), myContext.get().getString(R.string.toast_error_no_network), Toast.LENGTH_LONG).show());
-            return Result.RETRY;
-        }
-
         List<BreachedSite> allOldSites = myBreachedSiteDao.getAll();
         if (!allOldSites.isEmpty()) {
             Log.d(LOGTAG, "deleting old sites");

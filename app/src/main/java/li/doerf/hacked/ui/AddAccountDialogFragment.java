@@ -14,7 +14,9 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.DialogFragment;
+import androidx.work.Constraints;
 import androidx.work.Data;
+import androidx.work.NetworkType;
 import androidx.work.OneTimeWorkRequest;
 import androidx.work.WorkManager;
 import io.reactivex.Single;
@@ -25,7 +27,6 @@ import li.doerf.hacked.db.AppDatabase;
 import li.doerf.hacked.db.daos.AccountDao;
 import li.doerf.hacked.db.entities.Account;
 import li.doerf.hacked.remote.haveibeenpwned.HIBPAccountCheckerWorker;
-import li.doerf.hacked.utils.ConnectivityHelper;
 
 import static android.content.ContentValues.TAG;
 
@@ -109,17 +110,17 @@ public class AddAccountDialogFragment extends DialogFragment {
                 .subscribe(ids -> {
                     ((HackedApplication) application).trackEvent("AddAccount");
 
-                    if ( ! ConnectivityHelper.isConnected( application) ) {
-                        Log.i("AddAcountAsyncTask", "no network");
-                        return;
-                    }
-
                     Data inputData = new Data.Builder()
                             .putLong(HIBPAccountCheckerWorker.KEY_ID, ids.get(0))
                             .build();
+                    Constraints constraints = new Constraints.Builder()
+                            .setRequiredNetworkType(NetworkType.UNMETERED)
+                            .build();
+
                     OneTimeWorkRequest checker =
                             new OneTimeWorkRequest.Builder(HIBPAccountCheckerWorker.class)
                                     .setInputData(inputData)
+                                    .setConstraints(constraints)
                                     .build();
                     WorkManager.getInstance().enqueue(checker);
                 } ,throwable -> Log.e(TAG, "Error msg", throwable));

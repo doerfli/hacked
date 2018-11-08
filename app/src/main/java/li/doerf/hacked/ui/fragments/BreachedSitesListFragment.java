@@ -23,6 +23,8 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+import androidx.work.Constraints;
+import androidx.work.NetworkType;
 import androidx.work.OneTimeWorkRequest;
 import androidx.work.WorkManager;
 import li.doerf.hacked.HackedApplication;
@@ -156,8 +158,13 @@ public class BreachedSitesListFragment extends Fragment {
             mySwipeRefreshLayout.setRefreshing(true);
         }
 
+        Constraints constraints = new Constraints.Builder()
+                .setRequiredNetworkType(NetworkType.UNMETERED)
+                .build();
+
         OneTimeWorkRequest checker =
                 new OneTimeWorkRequest.Builder(HIBPGetBreachedSitesWorker.class)
+                        .setConstraints(constraints)
                         .build();
         WorkManager.getInstance().enqueue(checker);
 
