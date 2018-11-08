@@ -33,10 +33,10 @@ android {
 dependencies {
     def room_version = "1.1.1"
     def lifecycle_version = "1.1.1"
-    def work_version = "1.0.0-alpha10"
+    def work_version = "1.0.0-alpha11"
 
     implementation 'com.android.support:multidex:1.0.3'
-    implementation 'androidx.appcompat:appcompat:1.0.0'
+    implementation 'androidx.appcompat:appcompat:1.0.2'
     implementation 'androidx.cardview:cardview:1.0.0'
     implementation 'androidx.recyclerview:recyclerview:1.0.0'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
