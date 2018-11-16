@@ -1,12 +1,19 @@
 package li.doerf.hacked;
 
 import android.content.SharedPreferences;
+import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.util.Log;
 
+import com.google.firebase.analytics.FirebaseAnalytics;
+
 import java.util.List;
 
+import androidx.lifecycle.Lifecycle;
+import androidx.lifecycle.LifecycleObserver;
+import androidx.lifecycle.OnLifecycleEvent;
+import androidx.lifecycle.ProcessLifecycleOwner;
 import androidx.multidex.MultiDexApplication;
 import li.doerf.hacked.db.AppDatabase;
 import li.doerf.hacked.db.daos.AccountDao;
@@ -20,50 +27,34 @@ import li.doerf.hacked.utils.SynchronizationHelper;
  * Created by moo on 25.05.17.
  */
 
-public class HackedApplication extends MultiDexApplication {
+public class HackedApplication extends MultiDexApplication implements LifecycleObserver {
     private static final String TAG = "HackedApplication";
     private static final String PREF_KEY_MIGRATE_BACKGROUND_SERVICE_TO_WORKMANAGER_DONE = "PREF_KEY_MIGRATE_BACKGROUND_SERVICE_TO_WORKMANAGER_DONE";
-//    private static GoogleAnalytics sAnalytics;
-//    private static Tracker sTracker;
+    private FirebaseAnalytics firebaseAnalytics;
 
     @Override
     public void onCreate() {
         super.onCreate();
-
-//        sAnalytics = GoogleAnalytics.getInstance(this);
+        ProcessLifecycleOwner.get().getLifecycle().addObserver(this);
+        firebaseAnalytics = FirebaseAnalytics.getInstance(this);
         migrateBackgroundCheckService();
         migrateNumBreaches();
     }
 
-//    /**
-//     * Gets the default {@link Tracker} for this {@link Application}.
-//     * @return tracker
-//     */
-//    private synchronized Tracker getDefaultTracker() {
-//        // To enable debug logging use: adb shell setprop log.tag.GAv4 DEBUG
-//        if (sTracker == null) {
-//            sTracker = sAnalytics.newTracker(R.xml.global_tracker);
-//        }
-//
-//        return sTracker;
-//    }
-
     public synchronized void trackView(String name) {
         if ( runsInTestlab() ) return;
-        // TODO
-//        Log.i(LOGTAG, "Tracking view: " + name);
-//        getDefaultTracker().setScreenName(name);
-//        getDefaultTracker().send(new HitBuilders.ScreenViewBuilder().build());
+        Bundle bundle = new Bundle();
+        bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, name);
+        bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "View");
+        firebaseAnalytics.logEvent(FirebaseAnalytics.Event.VIEW_ITEM, bundle);
     }
 
     public synchronized void trackEvent(String name) {
         if ( runsInTestlab() ) return;
-        // TODO
-//        Log.i(, "Tracking event: " + name);
-//        getDefaultTracker().send(new HitBuilders.EventBuilder()
-//                .setCategory("Action")
-//                .setAction(name)
-//                .build());
+        Bundle bundle = new Bundle();
+        bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, name);
+        bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "Function");
+        firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
     }
 
     private boolean runsInTestlab() {
@@ -118,6 +109,13 @@ public class HackedApplication extends MultiDexApplication {
                 (b) -> {
                     // do nothing
                 });
+    }
+
+    @OnLifecycleEvent(Lifecycle.Event.ON_START)
+    public void onAppForegrounded() {
+        Log.d(TAG, "application opened");
+        Bundle bundle = new Bundle();
+        firebaseAnalytics.logEvent(FirebaseAnalytics.Event.APP_OPEN, bundle);
     }
 
 }
