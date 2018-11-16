@@ -57,9 +57,15 @@ public class BreachedSitesListFragment extends Fragment {
         super.onAttach(context);
         myBreachedSitesAdapter = new BreachedSitesAdapter(getContext(), new ArrayList<>());
         setHasOptionsMenu(true);
+        initViewModel();
+    }
 
+    private void initViewModel() {
         BreachedSitesViewModel myViewModel = ViewModelProviders.of(this).get(BreachedSitesViewModel.class);
-        switch ( myBreachListType){
+        if ( myBreachListType == null ) {
+            myBreachListType = BreachListType.MostRecent;
+        }
+        switch ( myBreachListType) {
             case Top20:
                 myViewModel.getBreachesSitesTop20().observe(BreachedSitesListFragment.this, sites -> myBreachedSitesAdapter.addItems(sites));
                 break;
@@ -111,9 +117,6 @@ public class BreachedSitesListFragment extends Fragment {
         super.onResume();
         if ( myBreachedSitesAdapter.getItemCount() == 0 || lastUpdateBeforeOneHour()) {
             reloadBreachedSites();
-        }
-        if ( myBreachListType == null ) {
-            myBreachListType = BreachListType.MostRecent;
         }
         registerReceiver();
         ((HackedApplication) getActivity().getApplication()).trackView("Fragment~BreachedSites" + myBreachListType.name());
