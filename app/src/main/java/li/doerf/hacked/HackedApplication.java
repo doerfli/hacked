@@ -1,14 +1,9 @@
 package li.doerf.hacked;
 
-import android.app.Application;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.util.Log;
-
-import com.google.android.gms.analytics.GoogleAnalytics;
-import com.google.android.gms.analytics.HitBuilders;
-import com.google.android.gms.analytics.Tracker;
 
 import java.util.List;
 
@@ -28,45 +23,47 @@ import li.doerf.hacked.utils.SynchronizationHelper;
 public class HackedApplication extends MultiDexApplication {
     private static final String TAG = "HackedApplication";
     private static final String PREF_KEY_MIGRATE_BACKGROUND_SERVICE_TO_WORKMANAGER_DONE = "PREF_KEY_MIGRATE_BACKGROUND_SERVICE_TO_WORKMANAGER_DONE";
-    private static GoogleAnalytics sAnalytics;
-    private static Tracker sTracker;
+//    private static GoogleAnalytics sAnalytics;
+//    private static Tracker sTracker;
 
     @Override
     public void onCreate() {
         super.onCreate();
 
-        sAnalytics = GoogleAnalytics.getInstance(this);
+//        sAnalytics = GoogleAnalytics.getInstance(this);
         migrateBackgroundCheckService();
         migrateNumBreaches();
     }
 
-    /**
-     * Gets the default {@link Tracker} for this {@link Application}.
-     * @return tracker
-     */
-    private synchronized Tracker getDefaultTracker() {
-        // To enable debug logging use: adb shell setprop log.tag.GAv4 DEBUG
-        if (sTracker == null) {
-            sTracker = sAnalytics.newTracker(R.xml.global_tracker);
-        }
-
-        return sTracker;
-    }
+//    /**
+//     * Gets the default {@link Tracker} for this {@link Application}.
+//     * @return tracker
+//     */
+//    private synchronized Tracker getDefaultTracker() {
+//        // To enable debug logging use: adb shell setprop log.tag.GAv4 DEBUG
+//        if (sTracker == null) {
+//            sTracker = sAnalytics.newTracker(R.xml.global_tracker);
+//        }
+//
+//        return sTracker;
+//    }
 
     public synchronized void trackView(String name) {
         if ( runsInTestlab() ) return;
+        // TODO
 //        Log.i(LOGTAG, "Tracking view: " + name);
-        getDefaultTracker().setScreenName(name);
-        getDefaultTracker().send(new HitBuilders.ScreenViewBuilder().build());
+//        getDefaultTracker().setScreenName(name);
+//        getDefaultTracker().send(new HitBuilders.ScreenViewBuilder().build());
     }
 
     public synchronized void trackEvent(String name) {
         if ( runsInTestlab() ) return;
+        // TODO
 //        Log.i(, "Tracking event: " + name);
-        getDefaultTracker().send(new HitBuilders.EventBuilder()
-                .setCategory("Action")
-                .setAction(name)
-                .build());
+//        getDefaultTracker().send(new HitBuilders.EventBuilder()
+//                .setCategory("Action")
+//                .setAction(name)
+//                .build());
     }
 
     private boolean runsInTestlab() {

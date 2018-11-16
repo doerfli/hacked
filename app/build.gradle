@@ -1,5 +1,7 @@
 apply plugin: 'com.android.application'
 
+apply plugin: 'com.google.gms.google-services'
+
 android {
     compileSdkVersion 28
     buildToolsVersion '28.0.3'
@@ -41,7 +43,6 @@ dependencies {
     implementation 'androidx.recyclerview:recyclerview:1.0.0'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'com.google.android.material:material:1.0.0'
-    implementation 'com.google.android.gms:play-services-analytics:16.0.5'
     implementation ("android.arch.work:work-runtime:$work_version") {
         exclude group: 'com.google.guava', module: 'listenablefuture'
     }
@@ -57,6 +58,8 @@ dependencies {
     implementation "android.arch.lifecycle:extensions:$lifecycle_version"
     annotationProcessor "android.arch.persistence.room:compiler:$room_version"
     annotationProcessor "android.arch.lifecycle:compiler:$lifecycle_version"
+
+    implementation 'com.google.firebase:firebase-core:16.0.5'
 
     // http://square.github.io/retrofit/
     implementation 'com.squareup.retrofit2:retrofit:2.4.0'
