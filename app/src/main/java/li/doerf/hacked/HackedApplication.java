@@ -44,7 +44,7 @@ public class HackedApplication extends MultiDexApplication implements LifecycleO
     public synchronized void trackView(String name) {
         if ( runsInTestlab() ) return;
         Bundle bundle = new Bundle();
-        bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, name);
+        bundle.putString(FirebaseAnalytics.Param.ITEM_ID, name);
         bundle.putString(FirebaseAnalytics.Param.ITEM_CATEGORY, "View");
         firebaseAnalytics.logEvent(FirebaseAnalytics.Event.VIEW_ITEM, bundle);
     }
