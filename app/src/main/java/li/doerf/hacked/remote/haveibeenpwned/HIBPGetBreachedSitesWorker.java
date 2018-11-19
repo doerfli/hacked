@@ -12,6 +12,7 @@ import android.widget.Toast;
 import com.google.common.base.Joiner;
 
 import org.joda.time.DateTime;
+import org.joda.time.IllegalInstantException;
 
 import java.io.IOException;
 import java.lang.ref.WeakReference;
@@ -45,6 +46,7 @@ public class HIBPGetBreachedSitesWorker extends Worker {
     @NonNull
     @Override
     public Result doWork() {
+        Log.d(LOGTAG, "doWork");
         List<BreachedSite> allOldSites = myBreachedSiteDao.getAll();
         if (!allOldSites.isEmpty()) {
             Log.d(LOGTAG, "deleting old sites");
@@ -81,8 +83,12 @@ public class HIBPGetBreachedSitesWorker extends Worker {
                 site.setName(ba.getName());
                 site.setTitle(ba.getTitle());
                 site.setDomain(ba.getDomain());
-                site.setBreachDate(DateTime.parse(ba.getBreachDate()).getMillis());
-                site.setAddedDate(DateTime.parse(ba.getAddedDate()).getMillis());
+                try {
+                    site.setBreachDate(DateTime.parse(ba.getBreachDate()).getMillis());
+                    site.setAddedDate(DateTime.parse(ba.getAddedDate()).getMillis());
+                } catch (IllegalInstantException e) {
+                    throw new IllegalArgumentException("caught IllegalInstantException - breachdate: " + ba.getBreachDate() + " addeddate: " + ba.getAddedDate(), e);
+                }
                 site.setPwnCount(ba.getPwnCount());
                 site.setDescription(ba.getDescription());
                 site.setDataClasses(ba.getDataClasses() != null ? Joiner.on(", ").join(ba.getDataClasses()) : "");
