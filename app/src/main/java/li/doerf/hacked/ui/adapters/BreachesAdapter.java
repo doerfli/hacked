@@ -134,21 +134,23 @@ public class BreachesAdapter extends RecyclerView.Adapter<RecyclerViewHolder> {
     }
 
     private void updateAccountIsHacked(Long accountId) {
-        Account account = myAccountDao.findById(accountId);
+        List<Account> accounts = myAccountDao.findById(accountId);
 
-        if ( ! account.getHacked() ) {
-            return;
+        for (Account account : accounts) {
+            if (!account.getHacked()) {
+                return;
+            }
+
+            new AccountHelper(myContext).updateBreachCounts(account);
+
+            if (myBreachDao.countUnacknowledged(accountId) == 0) {
+                Log.d(LOGTAG, "account has only acknowledged breaches");
+                account.setHacked(false);
+            }
+
+            myAccountDao.update(account);
+            Log.d(LOGTAG, "account updated - hacked = " + account.getHacked() + " numBreaches = " + account.getNumBreaches() + " numAcknowledgedBreaches = " + account.getNumAcknowledgedBreaches());
         }
-
-        new AccountHelper(myContext).updateBreachCounts(account);
-
-        if ( myBreachDao.countUnacknowledged(accountId) == 0 ) {
-            Log.d(LOGTAG, "account has only acknowledged breaches");
-            account.setHacked(false);
-        }
-
-        myAccountDao.update(account);
-        Log.d(LOGTAG, "account updated - hacked = " + account.getHacked() + " numBreaches = " + account.getNumBreaches() + " numAcknowledgedBreaches = " + account.getNumAcknowledgedBreaches());
     }
 
     public void addItems(List<Breach> list) {

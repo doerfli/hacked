@@ -62,9 +62,9 @@ dependencies {
     implementation 'com.google.firebase:firebase-core:16.0.5'
 
     // http://square.github.io/retrofit/
-    implementation 'com.squareup.retrofit2:retrofit:2.4.0'
-    implementation 'com.squareup.retrofit2:converter-gson:2.4.0'
-    implementation 'com.squareup.retrofit2:converter-scalars:2.4.0'
+    implementation 'com.squareup.retrofit2:retrofit:2.5.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.5.0'
+    implementation 'com.squareup.retrofit2:converter-scalars:2.5.0'
     implementation 'commons-codec:commons-codec:1.11'
     // https://github.com/google/guava
     implementation 'com.google.guava:guava:26.0-android'

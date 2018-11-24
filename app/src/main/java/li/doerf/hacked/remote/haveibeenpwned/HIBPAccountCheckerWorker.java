@@ -90,7 +90,7 @@ public class HIBPAccountCheckerWorker extends Worker {
             accountsToCheck.addAll(myAccountDao.getAll());
         } else {
             Log.d(LOGTAG, "only id " + id);
-            accountsToCheck.add(myAccountDao.findById(id));
+            accountsToCheck.addAll(myAccountDao.findById(id));
         }
 
         for (Account account : accountsToCheck) {

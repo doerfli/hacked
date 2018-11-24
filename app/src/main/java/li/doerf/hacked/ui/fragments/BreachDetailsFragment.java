@@ -8,7 +8,9 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import java.util.ArrayList;
+import java.util.List;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
@@ -49,23 +51,25 @@ public class BreachDetailsFragment extends Fragment {
         myBreachesAdapter = new BreachesAdapter(getContext(), new ArrayList<>());
     }
 
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NonNull  LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_breach_details, container, false);
         CardView noBreachFound = view.findViewById(R.id.no_breach_found);
 
         AccountDao accountDao = AppDatabase.get(getContext()).getAccountDao();
-        new BackgroundTaskHelper<Account>().runInBackgroundAndConsumeOnMain(() -> accountDao.findById(myAccountId), account -> {
-            getActivity().setTitle(account.getName());
-            myViewModel.getBreachList(
-                    account.getId()).observe(
-                    BreachDetailsFragment.this, accounts -> {
-                        myBreachesAdapter.addItems(accounts);
-                        if ( myBreachesAdapter.getItemCount() == 0 ) {
-                            noBreachFound.setVisibility(View.VISIBLE);
-                        } else {
-                            noBreachFound.setVisibility(View.GONE);
-                        }
-                    });
+        new BackgroundTaskHelper<List<Account>>().runInBackgroundAndConsumeOnMain(() -> accountDao.findById(myAccountId), accounts -> {
+            for(Account account : accounts) {
+                getActivity().setTitle(account.getName());
+                myViewModel.getBreachList(
+                        account.getId()).observe(
+                        BreachDetailsFragment.this, breaches -> {
+                            myBreachesAdapter.addItems(breaches);
+                            if (myBreachesAdapter.getItemCount() == 0) {
+                                noBreachFound.setVisibility(View.VISIBLE);
+                            } else {
+                                noBreachFound.setVisibility(View.GONE);
+                            }
+                        });
+            }
         });
 
         RecyclerView breachesList = view.findViewById(R.id.breaches_list);

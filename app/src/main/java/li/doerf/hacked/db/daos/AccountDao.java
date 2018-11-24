@@ -29,7 +29,7 @@ public interface AccountDao {
     LiveData<List<Account>> getAllLD();
 
     @Query("SELECT * FROM accounts where _id=:anId")
-    Account findById(Long anId);
+    List<Account> findById(Long anId);
 
 //    @Query("SELECT * FROM accounts where name=:aName")
 //    Account findByName(String aName);
