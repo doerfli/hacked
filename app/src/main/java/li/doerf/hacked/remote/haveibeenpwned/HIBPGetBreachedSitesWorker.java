@@ -1,5 +1,6 @@
 package li.doerf.hacked.remote.haveibeenpwned;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -11,11 +12,12 @@ import android.widget.Toast;
 
 import com.google.common.base.Joiner;
 
-import org.joda.time.DateTime;
 import org.joda.time.IllegalInstantException;
 
 import java.io.IOException;
 import java.lang.ref.WeakReference;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 import androidx.annotation.NonNull;
@@ -76,6 +78,9 @@ public class HIBPGetBreachedSitesWorker extends Worker {
                 return Result.FAILURE;
             }
 
+            @SuppressLint("SimpleDateFormat") SimpleDateFormat date = new SimpleDateFormat("yyyy-MM-dd");
+            @SuppressLint("SimpleDateFormat") SimpleDateFormat datetime = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+
             for (BreachedAccount ba : breachedSites) {
                 Log.d(LOGTAG, "breached site: " + ba.getName());
 
@@ -84,10 +89,12 @@ public class HIBPGetBreachedSitesWorker extends Worker {
                 site.setTitle(ba.getTitle());
                 site.setDomain(ba.getDomain());
                 try {
-                    site.setBreachDate(DateTime.parse(ba.getBreachDate()).getMillis());
-                    site.setAddedDate(DateTime.parse(ba.getAddedDate()).getMillis());
+                    site.setBreachDate(date.parse(ba.getBreachDate()).getTime());
+                    site.setAddedDate(datetime.parse(ba.getAddedDate()).getTime());
                 } catch (IllegalInstantException e) {
                     throw new IllegalArgumentException("caught IllegalInstantException - breachdate: " + ba.getBreachDate() + " addeddate: " + ba.getAddedDate(), e);
+                } catch (ParseException e) {
+                    throw new IllegalArgumentException("caught ParseException - breachdate: " + ba.getBreachDate() + " addeddate: " + ba.getAddedDate(), e);
                 }
                 site.setPwnCount(ba.getPwnCount());
                 site.setDescription(ba.getDescription());
