@@ -77,7 +77,7 @@ public class HIBPAccountCheckerWorker extends Worker {
         Boolean foundNewBreach = check(id);
         doPostCheckActions(foundNewBreach);
 
-        return Result.SUCCESS;
+        return Result.success();
     }
 
     public Boolean check(Long id) {

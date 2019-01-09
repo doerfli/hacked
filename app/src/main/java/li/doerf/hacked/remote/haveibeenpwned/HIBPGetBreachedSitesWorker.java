@@ -68,14 +68,14 @@ public class HIBPGetBreachedSitesWorker extends Worker {
 
             if (!response.isSuccessful()) {
                 Log.w(LOGTAG, "request was not successful");
-                return Result.FAILURE;
+                return Result.failure();
             }
 
             List<BreachedAccount> breachedSites = response.body();
 
             if (breachedSites == null) {
                 Log.e(LOGTAG, "body of response was empty");
-                return Result.FAILURE;
+                return Result.failure();
             }
 
             @SuppressLint("SimpleDateFormat") SimpleDateFormat date = new SimpleDateFormat("yyyy-MM-dd");
@@ -115,6 +115,6 @@ public class HIBPGetBreachedSitesWorker extends Worker {
             Log.d(LOGTAG, "broadcast finish sent");
         }
 
-        return Result.SUCCESS;
+        return Result.success();
     }
 }
