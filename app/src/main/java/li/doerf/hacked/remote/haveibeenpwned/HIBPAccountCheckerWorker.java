@@ -74,7 +74,7 @@ public class HIBPAccountCheckerWorker extends Worker {
     @Override
     public Result doWork() {
         Log.i(LOGTAG, "doWork");
-        Long id = getInputData().getLong(KEY_ID, -1);
+        long id = getInputData().getLong(KEY_ID, -1);
         updateLastCheckTimestamp = id < 0;
         Boolean foundNewBreach = check(id);
         doPostCheckActions(foundNewBreach);
@@ -82,7 +82,7 @@ public class HIBPAccountCheckerWorker extends Worker {
         return Result.success();
     }
 
-    public Boolean check(Long id) {
+    private synchronized Boolean check(Long id) {
         Log.d(LOGTAG, "starting check for breaches");
         boolean newBreachFound = false;
 
@@ -173,12 +173,7 @@ public class HIBPAccountCheckerWorker extends Worker {
     private synchronized Response<List<BreachedAccount>> retrieveBreaches(String account) throws IOException {
         Log.d(LOGTAG, "retrieving breaches: " + account);
 
-        HttpLoggingInterceptor logging = new HttpLoggingInterceptor(new HttpLoggingInterceptor.Logger() {
-            @Override
-            public void log(String message) {
-                Log.v("OkHttp", message);
-            }
-        });
+        HttpLoggingInterceptor logging = new HttpLoggingInterceptor(message -> Log.v("OkHttp", message));
         // set your desired log level
         logging.setLevel(HttpLoggingInterceptor.Level.BODY);
         OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
