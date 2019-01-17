@@ -38,6 +38,8 @@ import li.doerf.hacked.db.entities.Breach;
 import li.doerf.hacked.utils.AccountHelper;
 import li.doerf.hacked.utils.NotificationHelper;
 import li.doerf.hacked.utils.OreoNotificationHelper;
+import okhttp3.OkHttpClient;
+import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Call;
 import retrofit2.Response;
 import retrofit2.Retrofit;
@@ -170,9 +172,22 @@ public class HIBPAccountCheckerWorker extends Worker {
     @NonNull
     private synchronized Response<List<BreachedAccount>> retrieveBreaches(String account) throws IOException {
         Log.d(LOGTAG, "retrieving breaches: " + account);
+
+        HttpLoggingInterceptor logging = new HttpLoggingInterceptor(new HttpLoggingInterceptor.Logger() {
+            @Override
+            public void log(String message) {
+                Log.v("OkHttp", message);
+            }
+        });
+        // set your desired log level
+        logging.setLevel(HttpLoggingInterceptor.Level.BODY);
+        OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
+        httpClient.addInterceptor(logging);
+
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("https://haveibeenpwned.com/")
                 .addConverterFactory(GsonConverterFactory.create())
+                .client(httpClient.build())
                 .build();
 
         HaveIBeenPwned service = retrofit.create(HaveIBeenPwned.class);
