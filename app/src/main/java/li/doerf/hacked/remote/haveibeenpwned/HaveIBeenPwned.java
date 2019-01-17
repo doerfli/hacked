@@ -14,14 +14,14 @@ public interface HaveIBeenPwned {
 
     @Headers({
             "Accept: application/vnd.haveibeenpwned.v2+json",
-            "User-Agent: Hacked_Android_Client"
+            "User-Agent: Hacked_Android_App"
     })
     @GET("/api/v2/breachedaccount/{account}?includeUnverified=true")
     Call<List<BreachedAccount>> listBreachedAccounts(@Path("account") String account);
 
     @Headers({
             "Accept: application/vnd.haveibeenpwned.v2+json",
-            "User-Agent: Hacked_Android_Client"
+            "User-Agent: Hacked_Android_App"
     })
     @GET("/api/v2/breaches")
     Call<List<BreachedAccount>> getBreachedSites();
