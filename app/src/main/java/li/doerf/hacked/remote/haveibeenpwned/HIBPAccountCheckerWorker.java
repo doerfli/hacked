@@ -244,6 +244,7 @@ public class HIBPAccountCheckerWorker extends Worker {
                         .setContentTitle(title)
                         .setContentText(myContext.get().getString(R.string.notification_text_click_to_open))
                         .setChannelId(OreoNotificationHelper.CHANNEL_ID)
+                        .setOnlyAlertOnce(true)
                         .setGroup(NOTIFICATION_GROUP_KEY_BREACHES);
 
         Intent showBreachDetails = new Intent(myContext.get(), MainActivity.class);
@@ -257,7 +258,7 @@ public class HIBPAccountCheckerWorker extends Worker {
         mBuilder.setContentIntent(resultPendingIntent);
 
         Notification notification = mBuilder.build();
-        notification.flags |= Notification.DEFAULT_LIGHTS | Notification.FLAG_AUTO_CANCEL;
+        notification.flags |= Notification.DEFAULT_ALL | Notification.FLAG_AUTO_CANCEL;
         NotificationHelper.notify(myContext.get(), notification);
     }
 
