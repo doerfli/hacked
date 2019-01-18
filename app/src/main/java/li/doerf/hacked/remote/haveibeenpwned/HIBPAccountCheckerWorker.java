@@ -258,7 +258,6 @@ public class HIBPAccountCheckerWorker extends Worker {
         mBuilder.setContentIntent(resultPendingIntent);
 
         Notification notification = mBuilder.build();
-        notification.flags |= Notification.DEFAULT_ALL | Notification.FLAG_AUTO_CANCEL;
         NotificationHelper.notify(myContext.get(), notification);
     }
 
