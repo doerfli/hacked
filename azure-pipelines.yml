@@ -14,9 +14,9 @@ steps:
     contents: '**/*.apk'
     targetFolder: '$(build.artifactStagingDirectory)'
 - task: Bash@3
-    inputs:
-      targetType: 'filePath'
-      filePath: './startEmulator.sh'
+  inputs:
+    targetType: 'filePath'
+    filePath: './startEmulator.sh'
 - task: Gradle@2
   inputs:
     workingDirectory: ''
