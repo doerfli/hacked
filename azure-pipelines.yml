@@ -1,6 +1,6 @@
 # https://docs.microsoft.com/azure/devops/pipelines/languages/android
 pool:
-  vmImage: 'macOS 10.13'
+  vmImage: 'macOS 10.14'
 
 steps:
 - task: Gradle@2
@@ -8,14 +8,25 @@ steps:
     workingDirectory: ''
     gradleWrapperFile: 'gradlew'
     gradleOptions: '-Xmx3072m'
-    publishJUnitResults: false
-    testResultsFiles: '**/TEST-*.xml'
     tasks: 'assembleDebug'
 - task: CopyFiles@2
   inputs:
     contents: '**/*.apk'
     targetFolder: '$(build.artifactStagingDirectory)'
+- task: Bash@3
+    inputs:
+      targetType: 'filePath'
+      filePath: './startEmulator.sh'
+- task: Gradle@2
+  inputs:
+    workingDirectory: ''
+    gradleWrapperFile: 'gradlew'
+    gradleOptions: '-Xmx3072m'
+    publishJUnitResults: true
+    testResultsFiles: '**/TEST-*.xml'
+    tasks: 'connectedCheck'
 - task: PublishBuildArtifacts@1
+
 
 trigger:
 - master
