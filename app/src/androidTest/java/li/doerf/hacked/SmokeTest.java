@@ -39,7 +39,6 @@ public class SmokeTest {
         onView(withId(R.id.action_add_account)).perform(click());
         onView(withId(R.id.account)).perform(typeText(ACCOUNT_NAME));
         onView(withText("Add")).perform(click());
-        onView(withId(R.id.last_checked)).check(matches(withText("-")));
         try {
             Thread.sleep(10000);
         } catch (InterruptedException e) {
