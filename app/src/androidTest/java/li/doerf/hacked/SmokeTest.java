@@ -41,7 +41,7 @@ public class SmokeTest {
         onView(withText("Add")).perform(click());
         onView(withId(R.id.last_checked)).check(matches(withText("-")));
         try {
-            Thread.sleep(3000);
+            Thread.sleep(10000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
