@@ -13,18 +13,18 @@ steps:
   inputs:
     contents: '**/*.apk'
     targetFolder: '$(build.artifactStagingDirectory)'
-- task: Bash@3
-  inputs:
-    targetType: 'filePath'
-    filePath: './startEmulator.sh'
-- task: Gradle@2
-  inputs:
-    workingDirectory: ''
-    gradleWrapperFile: 'gradlew'
-    gradleOptions: '-Xmx3072m'
-    publishJUnitResults: true
-    testResultsFiles: '**/TEST-*.xml'
-    tasks: 'connectedCheck'
+#- task: Bash@3
+#  inputs:
+#    targetType: 'filePath'
+#    filePath: './startEmulator.sh'
+#- task: Gradle@2
+#  inputs:
+#    workingDirectory: ''
+#    gradleWrapperFile: 'gradlew'
+#    gradleOptions: '-Xmx3072m'
+#    publishJUnitResults: true
+#    testResultsFiles: '**/TEST-*.xml'
+#    tasks: 'connectedCheck'
 - task: PublishBuildArtifacts@1
 
 
