@@ -40,7 +40,7 @@ public class SmokeTest {
         onView(withId(R.id.account)).perform(typeText(ACCOUNT_NAME));
         onView(withText("Add")).perform(click());
         try {
-            Thread.sleep(10000);
+            Thread.sleep(20000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
