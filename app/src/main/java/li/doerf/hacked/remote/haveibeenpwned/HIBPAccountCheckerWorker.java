@@ -76,13 +76,20 @@ public class HIBPAccountCheckerWorker extends Worker {
         Log.i(LOGTAG, "doWork");
         long id = getInputData().getLong(KEY_ID, -1);
         updateLastCheckTimestamp = id < 0;
-        Boolean foundNewBreach = check(id);
-        doPostCheckActions(foundNewBreach);
+        Boolean foundNewBreach = false;
 
-        return Result.success();
+        try {
+            foundNewBreach = check(id);
+            return Result.success();
+        } catch (IOException e) {
+            Log.e(LOGTAG, "caught exception during check", e);
+            return Result.failure();
+        } finally {
+            doPostCheckActions(foundNewBreach);
+        }
     }
 
-    private synchronized Boolean check(Long id) {
+    private synchronized Boolean check(Long id) throws IOException {
         Log.d(LOGTAG, "starting check for breaches");
         boolean newBreachFound = false;
 
@@ -147,11 +154,18 @@ public class HIBPAccountCheckerWorker extends Worker {
         return isNewBreachFound;
     }
 
-    private List<BreachedAccount> doCheck(String anAccount) {
+    private List<BreachedAccount> doCheck(String anAccount) throws IOException {
         try {
             Response<List<BreachedAccount>> response = retrieveBreaches(anAccount);
 
-            if (response.isSuccessful()) {
+            String contentTypeHeader = response.headers().get("content-type");
+
+            if (contentTypeHeader != null && ! contentTypeHeader.startsWith("application/json") ) {
+                new Handler(Looper.getMainLooper()).post(() -> Toast.makeText(myContext.get(), myContext.get().getString(R.string.toast_error_error_during_check), Toast.LENGTH_LONG).show());
+                throw new IOException("content-type in response was not application/json");
+            }
+
+            if (response.isSuccessful() ) {
                 return response.body();
             } else {
                 if (response.code() == 404) {
@@ -161,10 +175,10 @@ public class HIBPAccountCheckerWorker extends Worker {
                     Log.w(LOGTAG, "unexpected response code: " + response.code());
                 }
             }
-
         } catch (IOException e) {
             Log.e(LOGTAG, "caughtIOException while contacting www.haveibeenpwned.com - " + e.getMessage(), e);
             new Handler(Looper.getMainLooper()).post(() -> Toast.makeText(myContext.get(), myContext.get().getString(R.string.toast_error_error_during_check), Toast.LENGTH_LONG).show());
+            throw e;
         }
         return Lists.newArrayList();
     }

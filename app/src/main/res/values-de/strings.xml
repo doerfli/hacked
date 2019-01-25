@@ -10,7 +10,7 @@
     <string name="ok">OK</string>
     <string name="action_add_account">Konto hinzufügen</string>
     <string name="action_rateus">Jetzt bewerten</string>
-    <string name="snackbar_checking_account">Konten werden überprüft - dieser Vorgang wird vorraussichtlich %1$d Sekunden dauern.\n</string>
+    <string name="snackbar_checking_account">Konten werden überprüft - dieser Vorgang wird voraussichtlich %1$d Sekunden dauern.\n</string>
     <string name="last_checked">Letzte Prüfung:</string>
     <string name="placeholder_date">dd/mm/yyyy hh:mm</string>
     <string name="status">Status:</string>
@@ -52,7 +52,7 @@
     <string name="title_settings">Einstellungen</string>
     <string name="PREF_KEY_LAST_SYNC_TIMESTAMP">LAST_SYNC_TIMESTAMP</string>
     <string name="toast_error_no_network">Kein Netzwerk verfügbar. Bitte nochmals versuchen.</string>
-    <string name="toast_error_error_during_check">Während der Prüfung ist ein Problem aufgetreten. Bitte nochmals versuchen.</string>
+    <string name="toast_error_error_during_check">Die Verbindung zum Server war nicht erfolgreich. Bitte versuchen Sie es später nochmals.</string>
     <string name="pref_initial_setup_account_done">PREF_INITIAL_SETUP_ACCOUNT_DONE</string>
     <string name="toast_please_enter_account">Bitte einen Benutzernamen eingeben und nochmals versuchen.</string>
     <string name="toast_account_added">Glückwunsch, Sie haben Ihr erstes Benutzerkonto hinzugefügt!</string>

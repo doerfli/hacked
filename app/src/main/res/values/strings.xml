@@ -51,7 +51,7 @@
     <string name="title_settings">Settings</string>
     <string name="PREF_KEY_LAST_SYNC_TIMESTAMP">LAST_SYNC_TIMESTAMP</string>
     <string name="toast_error_no_network">No network available. Please try again later.</string>
-    <string name="toast_error_error_during_check">A problem occurred while checking for breaches. Please try again later.</string>
+    <string name="toast_error_error_during_check">The server could not be contacted - Please try again later</string>
     <string name="pref_initial_setup_account_done">PREF_INITIAL_SETUP_ACCOUNT_DONE</string>
     <string name="toast_please_enter_account">Please enter an account name and try again.</string>
     <string name="toast_account_added">Congratulations, you have added your first account!</string>
