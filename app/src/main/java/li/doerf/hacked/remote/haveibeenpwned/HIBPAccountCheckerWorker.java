@@ -38,6 +38,7 @@ import li.doerf.hacked.db.entities.Breach;
 import li.doerf.hacked.utils.AccountHelper;
 import li.doerf.hacked.utils.NotificationHelper;
 import li.doerf.hacked.utils.OreoNotificationHelper;
+import li.doerf.hacked.utils.RatingHelper;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Call;
@@ -161,7 +162,7 @@ public class HIBPAccountCheckerWorker extends Worker {
             String contentTypeHeader = response.headers().get("content-type");
 
             if (contentTypeHeader != null && ! contentTypeHeader.startsWith("application/json") ) {
-                new Handler(Looper.getMainLooper()).post(() -> Toast.makeText(myContext.get(), myContext.get().getString(R.string.toast_error_error_during_check), Toast.LENGTH_LONG).show());
+//                new Handler(Looper.getMainLooper()).post(() -> Toast.makeText(myContext.get(), myContext.get().getString(R.string.toast_error_error_during_check), Toast.LENGTH_LONG).show());
                 throw new IOException("content-type in response was not application/json");
             }
 
@@ -178,6 +179,12 @@ public class HIBPAccountCheckerWorker extends Worker {
         } catch (IOException e) {
             Log.e(LOGTAG, "caughtIOException while contacting www.haveibeenpwned.com - " + e.getMessage(), e);
             new Handler(Looper.getMainLooper()).post(() -> Toast.makeText(myContext.get(), myContext.get().getString(R.string.toast_error_error_during_check), Toast.LENGTH_LONG).show());
+
+            PreferenceManager.getDefaultSharedPreferences(myContext.get())
+                    .edit()
+                    .putLong(RatingHelper.PREF_KEY_LAST_CONNECTION_FAILURE, System.currentTimeMillis())
+                    .apply();
+
             throw e;
         }
         return Lists.newArrayList();
