@@ -10,8 +10,8 @@ android {
         applicationId "li.doerf.hacked"
         minSdkVersion 16
         targetSdkVersion 28
-        versionCode 52
-        versionName "2.0.4.5"
+        versionCode 53
+        versionName "2.0.4.6"
         multiDexEnabled true
         javaCompileOptions {
             annotationProcessorOptions {
