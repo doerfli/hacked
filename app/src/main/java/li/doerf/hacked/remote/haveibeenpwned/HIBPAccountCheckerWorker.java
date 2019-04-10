@@ -163,7 +163,7 @@ public class HIBPAccountCheckerWorker extends Worker {
 
             if (contentTypeHeader != null && ! contentTypeHeader.startsWith("application/json") ) {
 //                new Handler(Looper.getMainLooper()).post(() -> Toast.makeText(myContext.get(), myContext.get().getString(R.string.toast_error_error_during_check), Toast.LENGTH_LONG).show());
-                throw new IOException("content-type in response was not application/json");
+                throw new AccessNotAllowedException("content-type in response was not application/json");
             }
 
             if (response.isSuccessful() ) {
@@ -179,13 +179,15 @@ public class HIBPAccountCheckerWorker extends Worker {
         } catch (IOException e) {
             Log.e(LOGTAG, "caughtIOException while contacting www.haveibeenpwned.com - " + e.getMessage(), e);
             new Handler(Looper.getMainLooper()).post(() -> Toast.makeText(myContext.get(), myContext.get().getString(R.string.toast_error_error_during_check), Toast.LENGTH_LONG).show());
-
+            throw e;
+        } catch (AccessNotAllowedException e) {
+            Log.e(LOGTAG, "caughtIOException while contacting www.haveibeenpwned.com - " + e.getMessage(), e);
+            new Handler(Looper.getMainLooper()).post(() -> Toast.makeText(myContext.get(), myContext.get().getString(R.string.toast_error_error_during_check), Toast.LENGTH_LONG).show());
             PreferenceManager.getDefaultSharedPreferences(myContext.get())
                     .edit()
-                    .putLong(RatingHelper.PREF_KEY_LAST_CONNECTION_FAILURE, System.currentTimeMillis())
+                    .putLong(RatingHelper.PREF_KEY_LAST_ACCESS_DENIED_FAILURE, System.currentTimeMillis())
                     .apply();
-
-            throw e;
+            throw new IOException(e);
         }
         return Lists.newArrayList();
     }

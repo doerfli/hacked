@@ -12,7 +12,7 @@ public class RatingHelper {
     public static final String PREF_KEY_HAS_RATED_US = "PREF_KEY_HAS_RATED_US";
     public static final String PREF_KEY_RATING_COUNTER = "PREF_KEY_RATING_COUNTER";
     public static final String PREF_KEY_RATING_NEVER = "PREF_KEY_RATING_NEVER";
-    public static final String PREF_KEY_LAST_CONNECTION_FAILURE = "PREF_KEY_LAST_CONNECTION_FAILURE";
+    public static final String PREF_KEY_LAST_ACCESS_DENIED_FAILURE = "PREF_KEY_LAST_CONNECTION_FAILURE";
     public static final int RATING_DIALOG_COUNTER_THRESHOLD = 7;
     private final String LOGTAG = getClass().getSimpleName();
     private final Context myContext;
@@ -45,7 +45,7 @@ public class RatingHelper {
 
     private boolean hadConnectionFailureWithinLast10Days() {
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(myContext);
-        long lastConnectionFailure = settings.getLong(PREF_KEY_LAST_CONNECTION_FAILURE, 0);
+        long lastConnectionFailure = settings.getLong(PREF_KEY_LAST_ACCESS_DENIED_FAILURE, 0);
         long tenDays = 1000*60*60*24*10;
         return System.currentTimeMillis() < lastConnectionFailure + tenDays;
     }
