@@ -10,8 +10,8 @@ android {
         applicationId "li.doerf.hacked"
         minSdkVersion 16
         targetSdkVersion 28
-        versionCode 54
-        versionName "2.0.4.7"
+        versionCode 55
+        versionName "2.0.4.8"
         multiDexEnabled true
         javaCompileOptions {
             annotationProcessorOptions {
@@ -37,7 +37,7 @@ android {
 dependencies {
     def room_version = "2.0.0"
     def lifecycle_version = "2.0.0"
-    def work_version = "1.0.0"
+    def work_version = "1.0.1"
 
     implementation 'androidx.multidex:multidex:2.0.1'
     implementation 'androidx.appcompat:appcompat:1.0.2'
@@ -62,12 +62,12 @@ dependencies {
 
     // http://square.github.io/retrofit/
     implementation 'com.squareup.retrofit2:retrofit:2.5.0'
-    implementation 'com.squareup.okhttp3:logging-interceptor:3.14.0'
+    implementation 'com.squareup.okhttp3:logging-interceptor:3.14.1'
     implementation 'com.squareup.retrofit2:converter-gson:2.5.0'
     implementation 'com.squareup.retrofit2:converter-scalars:2.5.0'
     implementation 'commons-codec:commons-codec:1.12'
     // https://github.com/google/guava
-    implementation 'com.google.guava:guava:27.0.1-android'
+    implementation 'com.google.guava:guava:27.1-android'
     // http://www.joda.org/joda-time/
     implementation 'joda-time:joda-time:2.10.1'
 
