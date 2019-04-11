@@ -10,8 +10,8 @@ android {
         applicationId "li.doerf.hacked"
         minSdkVersion 16
         targetSdkVersion 28
-        versionCode 55
-        versionName "2.0.4.8"
+        versionCode 56
+        versionName "2.1.0.0"
         multiDexEnabled true
         javaCompileOptions {
             annotationProcessorOptions {
@@ -67,7 +67,7 @@ dependencies {
     implementation 'com.squareup.retrofit2:converter-scalars:2.5.0'
     implementation 'commons-codec:commons-codec:1.12'
     // https://github.com/google/guava
-    implementation 'com.google.guava:guava:27.1-android'
+//    implementation 'com.google.guava:guava:27.1-android'
     // http://www.joda.org/joda-time/
     implementation 'joda-time:joda-time:2.10.1'
 
