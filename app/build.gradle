@@ -48,7 +48,6 @@ dependencies {
     implementation ("android.arch.work:work-runtime:$work_version")
 
     implementation "androidx.room:room-runtime:$room_version"
-    implementation "androidx.room:room-guava:$room_version"
     implementation "androidx.room:room-rxjava2:$room_version"
     implementation 'io.reactivex.rxjava2:rxandroid:2.1.1'
     annotationProcessor "androidx.room:room-compiler:$room_version"
@@ -66,8 +65,6 @@ dependencies {
     implementation 'com.squareup.retrofit2:converter-gson:2.5.0'
     implementation 'com.squareup.retrofit2:converter-scalars:2.5.0'
     implementation 'commons-codec:commons-codec:1.12'
-    // https://github.com/google/guava
-//    implementation 'com.google.guava:guava:27.1-android'
     // http://www.joda.org/joda-time/
     implementation 'joda-time:joda-time:2.10.1'
 

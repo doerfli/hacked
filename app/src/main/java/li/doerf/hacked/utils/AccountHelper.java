@@ -2,8 +2,8 @@ package li.doerf.hacked.utils;
 
 import android.content.Context;
 
-import com.google.common.collect.Collections2;
-
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import li.doerf.hacked.db.AppDatabase;
@@ -22,7 +22,17 @@ public class AccountHelper {
     public void updateBreachCounts(Account account) {
         List<Breach> breaches = myBreachDao.findByAccount(account.getId());
         account.setNumBreaches(breaches.size());
-        account.setNumAcknowledgedBreaches(Collections2.filter(breaches, Breach::getAcknowledged).size());
+        account.setNumAcknowledgedBreaches(getAcknowledged(breaches).size());
+    }
+
+    private Collection<Breach> getAcknowledged(List<Breach> breaches) {
+        List<Breach> result = new ArrayList<>();
+        for(Breach b : breaches) {
+            if(b.getAcknowledged()) {
+                result.add(b);
+            }
+        }
+        return result;
     }
 
 }

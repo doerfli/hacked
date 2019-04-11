@@ -12,9 +12,6 @@ import android.preference.PreferenceManager;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.google.common.base.Joiner;
-import com.google.common.collect.Lists;
-
 import org.joda.time.DateTime;
 
 import java.io.IOException;
@@ -39,6 +36,7 @@ import li.doerf.hacked.utils.AccountHelper;
 import li.doerf.hacked.utils.NotificationHelper;
 import li.doerf.hacked.utils.OreoNotificationHelper;
 import li.doerf.hacked.utils.RatingHelper;
+import li.doerf.hacked.utils.StringHelper;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Call;
@@ -135,7 +133,7 @@ public class HIBPAccountCheckerWorker extends Worker {
             newBreach.setAddedDate(DateTime.parse(ba.getAddedDate()).getMillis());
             newBreach.setPwnCount(ba.getPwnCount());
             newBreach.setDescription(ba.getDescription());
-            newBreach.setDataClasses(ba.getDataClasses() != null ? Joiner.on(", ").join(ba.getDataClasses()) : "");
+            newBreach.setDataClasses(ba.getDataClasses() != null ? StringHelper.join(ba.getDataClasses(), ", ") : "");
             newBreach.setVerified(ba.getIsVerified());
             newBreach.setAcknowledged(false);
             myBreachDao.insert(newBreach);
@@ -171,7 +169,7 @@ public class HIBPAccountCheckerWorker extends Worker {
             } else {
                 if (response.code() == 404) {
                     Log.i(LOGTAG, "no breach found: " + account);
-                    return Lists.newArrayList();
+                    return new ArrayList<>();
                 } else {
                     Log.w(LOGTAG, "unexpected response code: " + response.code());
                 }
@@ -189,7 +187,7 @@ public class HIBPAccountCheckerWorker extends Worker {
                     .apply();
             throw new IOException(e);
         }
-        return Lists.newArrayList();
+        return new ArrayList<>();
     }
 
     @NonNull

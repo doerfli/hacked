@@ -10,8 +10,6 @@ import android.preference.PreferenceManager;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.google.common.base.Joiner;
-
 import org.joda.time.IllegalInstantException;
 
 import java.io.IOException;
@@ -28,6 +26,7 @@ import li.doerf.hacked.R;
 import li.doerf.hacked.db.AppDatabase;
 import li.doerf.hacked.db.daos.BreachedSiteDao;
 import li.doerf.hacked.db.entities.BreachedSite;
+import li.doerf.hacked.utils.StringHelper;
 import retrofit2.Call;
 import retrofit2.Response;
 import retrofit2.Retrofit;
@@ -98,7 +97,7 @@ public class HIBPGetBreachedSitesWorker extends Worker {
                 }
                 site.setPwnCount(ba.getPwnCount());
                 site.setDescription(ba.getDescription());
-                site.setDataClasses(ba.getDataClasses() != null ? Joiner.on(", ").join(ba.getDataClasses()) : "");
+                site.setDataClasses(ba.getDataClasses() != null ? StringHelper.join(ba.getDataClasses(), ", ") : "");
                 site.setVerified(ba.getIsVerified());
 
                 myBreachedSiteDao.insert(site);
