@@ -10,8 +10,8 @@ android {
         applicationId "li.doerf.hacked"
         minSdkVersion 16
         targetSdkVersion 28
-        versionCode 56
-        versionName "2.1.0.0"
+        versionCode 57
+        versionName "2.1.0.1"
         multiDexEnabled true
         javaCompileOptions {
             annotationProcessorOptions {
@@ -57,7 +57,7 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-viewmodel:$lifecycle_version"
     annotationProcessor "androidx.lifecycle:lifecycle-compiler:$lifecycle_version"
 
-    implementation 'com.google.firebase:firebase-core:16.0.8'
+    implementation 'com.google.firebase:firebase-core:16.0.9'
 
     // http://square.github.io/retrofit/
     implementation 'com.squareup.retrofit2:retrofit:2.5.0'
@@ -66,7 +66,7 @@ dependencies {
     implementation 'com.squareup.retrofit2:converter-scalars:2.5.0'
     implementation 'commons-codec:commons-codec:1.12'
     // http://www.joda.org/joda-time/
-    implementation 'joda-time:joda-time:2.10.1'
+    implementation 'joda-time:joda-time:2.10.2'
 
     androidTestImplementation 'androidx.test:runner:1.1.1'
     androidTestImplementation 'androidx.test:rules:1.1.1'
