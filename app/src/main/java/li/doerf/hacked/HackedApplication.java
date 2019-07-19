@@ -6,15 +6,18 @@ import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.util.Log;
 
-import com.google.firebase.analytics.FirebaseAnalytics;
-
-import java.util.List;
-
 import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.LifecycleObserver;
 import androidx.lifecycle.OnLifecycleEvent;
 import androidx.lifecycle.ProcessLifecycleOwner;
 import androidx.multidex.MultiDexApplication;
+
+import com.google.firebase.analytics.FirebaseAnalytics;
+import com.google.firebase.iid.FirebaseInstanceId;
+
+import java.util.List;
+import java.util.Objects;
+
 import li.doerf.hacked.db.AppDatabase;
 import li.doerf.hacked.db.daos.AccountDao;
 import li.doerf.hacked.db.daos.BreachDao;
@@ -39,6 +42,20 @@ public class HackedApplication extends MultiDexApplication implements LifecycleO
         firebaseAnalytics = FirebaseAnalytics.getInstance(this);
         migrateBackgroundCheckService();
         migrateNumBreaches();
+
+        FirebaseInstanceId.getInstance().getInstanceId()
+                .addOnCompleteListener(task -> {
+                    if (!task.isSuccessful()) {
+                        Log.w(TAG, "getInstanceId failed", task.getException());
+                        return;
+                    }
+
+                    // Get new Instance ID token
+                    String token = Objects.requireNonNull(task.getResult()).getToken();
+
+                    // Log and toast
+                    Log.d(TAG, "firebase token: " + token);
+                });
     }
 
     public synchronized void trackView(String name) {

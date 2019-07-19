@@ -46,6 +46,14 @@
             </intent-filter>
         </receiver>
 
+        <service
+            android:name=".services.FirebaseMessagagingService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+
         <meta-data android:name="android.max_aspect" android:value="2.1"/>
     </application>
 
