@@ -54,6 +54,7 @@ import static li.doerf.hacked.R.id.account;
 public class HIBPAccountCheckerWorker extends Worker {
     public static final String BROADCAST_ACTION_ACCOUNT_CHECK_FINISHED = "li.doerf.hacked.BROADCAST_ACTION_ACCOUNT_CHECK_FINISHED";
     public static final String KEY_ID = "ID";
+    public static final String KEY_DEVICE_TOKEN = "DEVICE_TOKEN";
     private static final String NOTIFICATION_GROUP_KEY_BREACHES = "group_key_breachs";
     private static long noReqBefore = 0;
     private final String LOGTAG = getClass().getSimpleName();
@@ -105,8 +106,9 @@ public class HIBPAccountCheckerWorker extends Worker {
         for (Account account : accountsToCheck) {
             Log.d(LOGTAG, "Checking for account: " + account.getName());
             // TODO v3 check with hibp-proxy
-            List<BreachedAccount> breachedAccounts = doCheck(account.getName());
-            newBreachFound |= processBreachedAccounts( account, breachedAccounts);
+//            List<BreachedAccount> breachedAccounts = doCheck(account.getName());
+//            newBreachFound |= processBreachedAccounts( account, breachedAccounts);
+            sendSearch(account.getName(), getInputData().getString(KEY_DEVICE_TOKEN));
         }
 
         Log.d(LOGTAG, "finished checking for breaches");
@@ -114,6 +116,27 @@ public class HIBPAccountCheckerWorker extends Worker {
         return newBreachFound;
     }
 
+    private void sendSearch(String name, String deviceToken) throws IOException {
+        Log.d(LOGTAG, "sending search request for account: " + name);
+        HttpLoggingInterceptor logging = new HttpLoggingInterceptor(message -> Log.v("OkHttp", message));
+        // set your desired log level
+        logging.setLevel(HttpLoggingInterceptor.Level.BODY);
+        OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
+        httpClient.addInterceptor(logging);
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("https://hibp-proxy.herokuapp.com/")
+                .addConverterFactory(GsonConverterFactory.create())
+                .client(httpClient.build())
+                .build();
+        
+        Log.d(LOGTAG, "firebase token: " + deviceToken);
+        HIBPProxy service = retrofit.create(HIBPProxy.class);
+        Call<Void> breachedAccountsList = service.search(name, deviceToken);
+        breachedAccountsList.execute();
+    }
+
+    // TODO v3 remove when no longer needed
     private boolean processBreachedAccounts(Account account, List<BreachedAccount> breachedAccounts) {
         boolean isNewBreachFound = false;
 
@@ -155,6 +178,7 @@ public class HIBPAccountCheckerWorker extends Worker {
         return isNewBreachFound;
     }
 
+
     private List<BreachedAccount> doCheck(String anAccount) throws IOException {
         try {
             Response<List<BreachedAccount>> response = retrieveBreaches(anAccount);
@@ -192,6 +216,7 @@ public class HIBPAccountCheckerWorker extends Worker {
         return new ArrayList<>();
     }
 
+    // TODO v3 remove when no longer needed
     @NonNull
     private synchronized Response<List<BreachedAccount>> retrieveBreaches(String account) throws IOException {
         Log.d(LOGTAG, "retrieving breaches: " + account);
@@ -254,6 +279,7 @@ public class HIBPAccountCheckerWorker extends Worker {
         }
     }
 
+    // TODO v3 remove when no longer needed
     private void showNotification() {
         if ( android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.O ) {
             OreoNotificationHelper onh = new OreoNotificationHelper(myContext.get());

@@ -17,6 +17,8 @@ public class BreachedAccount {
     private Boolean IsSensitive;
     private Boolean IsRetired;
 
+    // TODO add new fields
+
     public String getName() {
         return Name;
     }

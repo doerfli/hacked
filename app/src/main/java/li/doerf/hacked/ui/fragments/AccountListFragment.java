@@ -20,11 +20,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.google.android.material.snackbar.Snackbar;
-
-import java.util.ArrayList;
-import java.util.List;
-
 import androidx.annotation.Nullable;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
@@ -34,8 +29,15 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+import androidx.work.Data;
 import androidx.work.OneTimeWorkRequest;
 import androidx.work.WorkManager;
+
+import com.google.android.material.snackbar.Snackbar;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import li.doerf.hacked.HackedApplication;
 import li.doerf.hacked.R;
 import li.doerf.hacked.db.AppDatabase;
@@ -217,14 +219,20 @@ public class AccountListFragment extends Fragment {
     }
 
     public void checkForBreaches(Account account) {
+        Data inputData = new Data.Builder()
+                .putString(HIBPAccountCheckerWorker.KEY_DEVICE_TOKEN, ((HackedApplication) getActivity().getApplication()).getDeviceToken())
+                .build();
+
         OneTimeWorkRequest checker =
                 new OneTimeWorkRequest.Builder(HIBPAccountCheckerWorker.class)
+                        .setInputData(inputData)
                         .build();
         WorkManager.getInstance().enqueue(checker);
 
         mySwipeRefreshLayout.setRefreshing(true);
 
         if ( account == null && isAdded() ) { // only show this message when checking for more then one account
+            // TODO v3 what to show here now?
             int expectedDuration = (int) Math.ceil(myAccountsAdapter.getItemCount() * 2.5);
             Snackbar.make(myFragmentRootView, getString(R.string.snackbar_checking_account, expectedDuration), Snackbar.LENGTH_LONG)
                     .setAction("Action", null).show();

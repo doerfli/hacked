@@ -1,13 +1,14 @@
 package li.doerf.hacked.db.daos;
 
-import java.util.List;
-
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.Query;
 import androidx.room.Update;
+
+import java.util.List;
+
 import li.doerf.hacked.db.entities.Account;
 
 @Dao
@@ -30,6 +31,9 @@ public interface AccountDao {
 
     @Query("SELECT * FROM accounts where _id=:anId")
     List<Account> findById(Long anId);
+
+    @Query("SELECT * FROM accounts where name=:name")
+    List<Account> findByName(String name);
 
 //    @Query("SELECT * FROM accounts where name=:aName")
 //    Account findByName(String aName);

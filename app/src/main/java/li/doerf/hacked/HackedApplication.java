@@ -34,6 +34,7 @@ public class HackedApplication extends MultiDexApplication implements LifecycleO
     private static final String TAG = "HackedApplication";
     private static final String PREF_KEY_MIGRATE_BACKGROUND_SERVICE_TO_WORKMANAGER_DONE = "PREF_KEY_MIGRATE_BACKGROUND_SERVICE_TO_WORKMANAGER_DONE";
     private FirebaseAnalytics firebaseAnalytics;
+    private String deviceToken;
 
     @Override
     public void onCreate() {
@@ -51,10 +52,10 @@ public class HackedApplication extends MultiDexApplication implements LifecycleO
                     }
 
                     // Get new Instance ID token
-                    String token = Objects.requireNonNull(task.getResult()).getToken();
+                    deviceToken = Objects.requireNonNull(task.getResult()).getToken();
 
                     // Log and toast
-                    Log.d(TAG, "firebase token: " + token);
+                    Log.d(TAG, "firebase token: " + deviceToken);
                 });
     }
 
@@ -135,4 +136,11 @@ public class HackedApplication extends MultiDexApplication implements LifecycleO
         firebaseAnalytics.logEvent(FirebaseAnalytics.Event.APP_OPEN, bundle);
     }
 
+    public String getDeviceToken() {
+        return deviceToken;
+    }
+
+    public void setDeviceToken(String token) {
+        deviceToken = token;
+    }
 }

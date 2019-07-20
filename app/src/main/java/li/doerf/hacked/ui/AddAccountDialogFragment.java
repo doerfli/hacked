@@ -19,6 +19,7 @@ import androidx.work.Data;
 import androidx.work.NetworkType;
 import androidx.work.OneTimeWorkRequest;
 import androidx.work.WorkManager;
+
 import io.reactivex.Single;
 import io.reactivex.schedulers.Schedulers;
 import li.doerf.hacked.HackedApplication;
@@ -112,6 +113,7 @@ public class AddAccountDialogFragment extends DialogFragment {
 
                     Data inputData = new Data.Builder()
                             .putLong(HIBPAccountCheckerWorker.KEY_ID, ids.get(0))
+                            .putString(HIBPAccountCheckerWorker.KEY_DEVICE_TOKEN, ((HackedApplication) application).getDeviceToken())
                             .build();
                     Constraints constraints = new Constraints.Builder()
                             .setRequiredNetworkType(NetworkType.UNMETERED)

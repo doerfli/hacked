@@ -5,12 +5,15 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
-import java.util.concurrent.TimeUnit;
-
 import androidx.work.Constraints;
+import androidx.work.Data;
 import androidx.work.NetworkType;
 import androidx.work.PeriodicWorkRequest;
 import androidx.work.WorkManager;
+
+import java.util.concurrent.TimeUnit;
+
+import li.doerf.hacked.HackedApplication;
 import li.doerf.hacked.R;
 import li.doerf.hacked.remote.haveibeenpwned.HIBPAccountCheckerWorker;
 
@@ -47,10 +50,15 @@ public class SynchronizationHelper {
                 .setRequiredNetworkType(networkType)
                 .build();
 
+        Data inputData = new Data.Builder()
+                .putString(HIBPAccountCheckerWorker.KEY_DEVICE_TOKEN, ((HackedApplication) aContext.getApplicationContext()).getDeviceToken())
+                .build();
+
         PeriodicWorkRequest.Builder checkWorker =
                 new PeriodicWorkRequest.Builder(HIBPAccountCheckerWorker.class, currentIntervalHours,
                         TimeUnit.HOURS)
                 .addTag(JOB_TAG)
+                .setInputData(inputData)
                 .setConstraints(constraints);
 
         PeriodicWorkRequest photoCheckWork = checkWorker.build();
