@@ -12,6 +12,12 @@ import android.preference.PreferenceManager;
 import android.util.Log;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.core.app.NotificationCompat;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
+import androidx.work.Worker;
+import androidx.work.WorkerParameters;
+
 import org.joda.time.DateTime;
 
 import java.io.IOException;
@@ -20,11 +26,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import androidx.annotation.NonNull;
-import androidx.core.app.NotificationCompat;
-import androidx.localbroadcastmanager.content.LocalBroadcastManager;
-import androidx.work.Worker;
-import androidx.work.WorkerParameters;
 import li.doerf.hacked.R;
 import li.doerf.hacked.activities.MainActivity;
 import li.doerf.hacked.db.AppDatabase;
@@ -103,6 +104,7 @@ public class HIBPAccountCheckerWorker extends Worker {
 
         for (Account account : accountsToCheck) {
             Log.d(LOGTAG, "Checking for account: " + account.getName());
+            // TODO v3 check with hibp-proxy
             List<BreachedAccount> breachedAccounts = doCheck(account.getName());
             newBreachFound |= processBreachedAccounts( account, breachedAccounts);
         }
