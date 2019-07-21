@@ -12,14 +12,6 @@ import retrofit2.http.Path;
  */
 public interface HaveIBeenPwned {
 
-    // TODO v3 update to v3
-    @Headers({
-            "Accept: application/vnd.haveibeenpwned.v2+json",
-            "User-Agent: Hacked_Android_App"
-    })
-    @GET("/api/v2/breachedaccount/{account}?includeUnverified=true")
-    Call<List<BreachedAccount>> listBreachedAccounts(@Path("account") String account);
-
     @Headers({
             "Accept: application/vnd.haveibeenpwned.v2+json",
             "User-Agent: Hacked_Android_App"
@@ -27,12 +19,11 @@ public interface HaveIBeenPwned {
     @GET("/api/v3/breach/{name}")
     Call<BreachedAccount> getBreach(@Path("name") String name);
 
-    // TODO v3 update to v3
     @Headers({
             "Accept: application/vnd.haveibeenpwned.v2+json",
             "User-Agent: Hacked_Android_App"
     })
-    @GET("/api/v2/breaches")
+    @GET("/api/v3/breaches")
     Call<List<BreachedAccount>> getBreachedSites();
 
 }
