@@ -61,13 +61,13 @@ dependencies {
     implementation 'com.google.firebase:firebase-messaging:19.0.1'
 
     // http://square.github.io/retrofit/
-    implementation 'com.squareup.retrofit2:retrofit:2.5.0'
-    implementation 'com.squareup.okhttp3:logging-interceptor:3.14.1'
-    implementation 'com.squareup.retrofit2:converter-gson:2.5.0'
-    implementation 'com.squareup.retrofit2:converter-scalars:2.5.0'
+    implementation 'com.squareup.retrofit2:retrofit:2.6.0'
+    implementation 'com.squareup.okhttp3:logging-interceptor:4.0.1'
+    implementation 'com.squareup.retrofit2:converter-gson:2.6.0'
+    implementation 'com.squareup.retrofit2:converter-scalars:2.6.0'
     implementation 'commons-codec:commons-codec:1.12'
     // http://www.joda.org/joda-time/
-    implementation 'joda-time:joda-time:2.10.2'
+    implementation 'joda-time:joda-time:2.10.3'
 
     androidTestImplementation 'androidx.test:runner:1.2.0'
     androidTestImplementation 'androidx.test:rules:1.2.0'
