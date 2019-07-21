@@ -1,7 +1,12 @@
 package li.doerf.hacked.services;
 
+import android.app.Notification;
+import android.app.PendingIntent;
+import android.content.Intent;
+import android.os.Build;
 import android.util.Log;
 
+import androidx.core.app.NotificationCompat;
 import androidx.work.Constraints;
 import androidx.work.Data;
 import androidx.work.NetworkType;
@@ -17,7 +22,10 @@ import java.util.List;
 import java.util.Map;
 
 import li.doerf.hacked.HackedApplication;
+import li.doerf.hacked.activities.MainActivity;
 import li.doerf.hacked.remote.haveibeenpwned.HIBPAccountResponseWorker;
+import li.doerf.hacked.utils.NotificationHelper;
+import li.doerf.hacked.utils.OreoNotificationHelper;
 
 public class FirebaseMessagagingService extends FirebaseMessagingService {
 
@@ -37,7 +45,7 @@ public class FirebaseMessagagingService extends FirebaseMessagingService {
                 processHibpResponse(remoteMessage.getData().get("account"), remoteMessage.getData().get("response"));
             }
         } else if (remoteMessage.getNotification() != null) {
-            // TODO v3 show notification
+            showNotification(remoteMessage.getNotification());
         }
     }
 
@@ -62,5 +70,34 @@ public class FirebaseMessagagingService extends FirebaseMessagingService {
                 .setConstraints(constraints)
                 .build();
         WorkManager.getInstance().enqueue(workerRequest);
+    }
+
+    private void showNotification(RemoteMessage.Notification remoteNotification) {
+        if ( android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.O ) {
+            OreoNotificationHelper onh = new OreoNotificationHelper(getApplicationContext());
+            onh.createGeneralNotificationChannel();
+        }
+
+        androidx.core.app.NotificationCompat.Builder mBuilder =
+                new NotificationCompat.Builder(getApplicationContext(), OreoNotificationHelper.CHANNEL_ID)
+                        .setSmallIcon(android.R.drawable.sym_def_app_icon)
+                        .setContentTitle(remoteNotification.getTitle())
+                        .setContentText(remoteNotification.getBody())
+                        .setChannelId(OreoNotificationHelper.CHANNEL_ID_GENERAL)
+                        .setOnlyAlertOnce(true)
+                        .setAutoCancel(true);
+
+        Intent showBreachDetails = new Intent(getApplicationContext(), MainActivity.class);
+        PendingIntent resultPendingIntent =
+                PendingIntent.getActivity(
+                        getApplicationContext(),
+                        0,
+                        showBreachDetails,
+                        PendingIntent.FLAG_ONE_SHOT
+                );
+        mBuilder.setContentIntent(resultPendingIntent);
+
+        Notification notification = mBuilder.build();
+        NotificationHelper.notify(getApplicationContext(), notification);
     }
 }

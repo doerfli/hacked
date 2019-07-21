@@ -159,7 +159,8 @@ public class HIBPAccountResponseWorker extends Worker {
                         .setContentText(myContext.get().getString(R.string.notification_text_click_to_open))
                         .setChannelId(OreoNotificationHelper.CHANNEL_ID)
                         .setOnlyAlertOnce(true)
-                        .setGroup(NOTIFICATION_GROUP_KEY_BREACHES);
+                        .setGroup(NOTIFICATION_GROUP_KEY_BREACHES)
+                        .setAutoCancel(true);
 
         Intent showBreachDetails = new Intent(myContext.get(), MainActivity.class);
         PendingIntent resultPendingIntent =
