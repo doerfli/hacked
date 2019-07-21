@@ -9,7 +9,7 @@
     <string name="ok">OK</string>
     <string name="action_add_account">Add account</string>
     <string name="action_rateus">Rate us</string>
-    <string name="snackbar_checking_account">Checking for breaches - this will take approximately %1$d seconds.\nThe list will be updated.</string>
+    <string name="snackbar_checking_account">Checking for breaches - the list will be updated with results soon</string>
     <string name="last_checked">Last checked:</string>
     <string name="placeholder_date">yyyy/mm/dd hh:mm</string>
     <string name="status">Breach status:</string>

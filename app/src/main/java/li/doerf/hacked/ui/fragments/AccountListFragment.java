@@ -179,7 +179,6 @@ public class AccountListFragment extends Fragment {
 
     @SuppressLint("CheckResult")
     private void insertFirstAccount(EditText accountET, AccountDao accountDao, Account newAcc, CardView initialAccount, SharedPreferences settings) {
-        //noinspection ResultOfMethodCallIgnored
         new BackgroundTaskHelper<List<Long>>().runInBackgroundAndConsumeOnMain(
                 () -> accountDao.insert(newAcc),
                 ids -> {
@@ -232,9 +231,7 @@ public class AccountListFragment extends Fragment {
         mySwipeRefreshLayout.setRefreshing(true);
 
         if ( account == null && isAdded() ) { // only show this message when checking for more then one account
-            // TODO v3 what to show here now?
-            int expectedDuration = (int) Math.ceil(myAccountsAdapter.getItemCount() * 2.5);
-            Snackbar.make(myFragmentRootView, getString(R.string.snackbar_checking_account, expectedDuration), Snackbar.LENGTH_LONG)
+            Snackbar.make(myFragmentRootView, getString(R.string.snackbar_checking_account), Snackbar.LENGTH_LONG)
                     .setAction("Action", null).show();
         }
     }

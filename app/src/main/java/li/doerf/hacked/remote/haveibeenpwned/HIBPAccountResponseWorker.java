@@ -70,18 +70,11 @@ public class HIBPAccountResponseWorker extends Worker {
                 foundNewBreach |= handleBreach(account, breachName);
             }
 
-            account.setLastChecked(DateTime.now());
-            if (foundNewBreach && ! account.getHacked() ) {
-                account.setHacked(true);
+            if ( foundNewBreach) {
+                showNotification();
             }
-            if (foundNewBreach) {
-                new AccountHelper(myContext.get()).updateBreachCounts(account);
-            }
-            myAccountDao.update(account);
 
-
-            // TODO v3 check if breach already exists
-            // TODO v3 if not add breach
+            updateAccount(account, foundNewBreach);
 
             return Result.success();
         } catch (IOException e) {
@@ -90,6 +83,18 @@ public class HIBPAccountResponseWorker extends Worker {
             new Handler(Looper.getMainLooper()).post(() -> Toast.makeText(myContext.get(), myContext.get().getString(R.string.toast_error_error_during_check), Toast.LENGTH_LONG).show());
             return Result.failure();
         }
+    }
+
+    private void updateAccount(Account account, boolean foundNewBreach) {
+        account.setLastChecked(DateTime.now());
+        if (foundNewBreach && ! account.getHacked() ) {
+            account.setHacked(true);
+        }
+        if (foundNewBreach) {
+            new AccountHelper(myContext.get()).updateBreachCounts(account);
+        }
+
+        myAccountDao.update(account);
     }
 
     private boolean handleBreach(Account account, String breachName) throws IOException {
@@ -138,17 +143,6 @@ public class HIBPAccountResponseWorker extends Worker {
         Call<BreachedAccount> call = service.getBreach(breachName);
         Response<BreachedAccount> response = call.execute();
         return response.body();
-    }
-
-    private void doPostCheckActions(Boolean foundNewBreach) {
-        // TODO here or before?
-//        Intent localIntent = new Intent(HIBPAccountCheckerWorker.BROADCAST_ACTION_ACCOUNT_CHECK_FINISHED);
-//        LocalBroadcastManager.getInstance(myContext.get()).sendBroadcast(localIntent);
-//        Log.d(TAG, "broadcast finish sent");
-
-        if ( foundNewBreach) {
-            showNotification();
-        }
     }
 
     private void showNotification() {

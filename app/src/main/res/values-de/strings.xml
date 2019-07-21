@@ -10,7 +10,7 @@
     <string name="ok">OK</string>
     <string name="action_add_account">Konto hinzufügen</string>
     <string name="action_rateus">Jetzt bewerten</string>
-    <string name="snackbar_checking_account">Konten werden überprüft - dieser Vorgang wird voraussichtlich %1$d Sekunden dauern.\n</string>
+    <string name="snackbar_checking_account">Konten werden überprüft - die Liste wird demnächst aktualisiert</string>
     <string name="last_checked">Letzte Prüfung:</string>
     <string name="placeholder_date">dd/mm/yyyy hh:mm</string>
     <string name="status">Status:</string>
