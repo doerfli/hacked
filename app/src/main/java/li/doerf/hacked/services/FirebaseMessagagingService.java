@@ -21,7 +21,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import li.doerf.hacked.HackedApplication;
 import li.doerf.hacked.activities.MainActivity;
 import li.doerf.hacked.remote.haveibeenpwned.HIBPAccountResponseWorker;
 import li.doerf.hacked.utils.NotificationHelper;
@@ -30,11 +29,6 @@ import li.doerf.hacked.utils.OreoNotificationHelper;
 public class FirebaseMessagagingService extends FirebaseMessagingService {
 
     private static final String TAG = "FirebaseMessagagingServ";
-
-    @Override
-    public void onNewToken(String token) {
-        ((HackedApplication)getApplication()).setDeviceToken(token);
-    }
 
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {

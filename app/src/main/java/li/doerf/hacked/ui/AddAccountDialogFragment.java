@@ -113,7 +113,6 @@ public class AddAccountDialogFragment extends DialogFragment {
 
                     Data inputData = new Data.Builder()
                             .putLong(HIBPAccountCheckerWorker.KEY_ID, ids.get(0))
-                            .putString(HIBPAccountCheckerWorker.KEY_DEVICE_TOKEN, ((HackedApplication) application).getDeviceToken())
                             .build();
                     Constraints constraints = new Constraints.Builder()
                             .setRequiredNetworkType(NetworkType.UNMETERED)

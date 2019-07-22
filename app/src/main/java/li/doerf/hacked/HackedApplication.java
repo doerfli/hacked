@@ -13,10 +13,8 @@ import androidx.lifecycle.ProcessLifecycleOwner;
 import androidx.multidex.MultiDexApplication;
 
 import com.google.firebase.analytics.FirebaseAnalytics;
-import com.google.firebase.iid.FirebaseInstanceId;
 
 import java.util.List;
-import java.util.Objects;
 
 import li.doerf.hacked.db.AppDatabase;
 import li.doerf.hacked.db.daos.AccountDao;
@@ -34,7 +32,6 @@ public class HackedApplication extends MultiDexApplication implements LifecycleO
     private static final String TAG = "HackedApplication";
     private static final String PREF_KEY_MIGRATE_BACKGROUND_SERVICE_TO_WORKMANAGER_DONE = "PREF_KEY_MIGRATE_BACKGROUND_SERVICE_TO_WORKMANAGER_DONE";
     private FirebaseAnalytics firebaseAnalytics;
-    private String deviceToken;
 
     @Override
     public void onCreate() {
@@ -43,20 +40,6 @@ public class HackedApplication extends MultiDexApplication implements LifecycleO
         firebaseAnalytics = FirebaseAnalytics.getInstance(this);
         migrateBackgroundCheckService();
         migrateNumBreaches();
-
-        FirebaseInstanceId.getInstance().getInstanceId()
-                .addOnCompleteListener(task -> {
-                    if (!task.isSuccessful()) {
-                        Log.w(TAG, "getInstanceId failed", task.getException());
-                        return;
-                    }
-
-                    // Get new Instance ID token
-                    deviceToken = Objects.requireNonNull(task.getResult()).getToken();
-
-                    // Log and toast
-                    Log.d(TAG, "firebase token: " + deviceToken);
-                });
     }
 
     public synchronized void trackView(String name) {
@@ -136,11 +119,4 @@ public class HackedApplication extends MultiDexApplication implements LifecycleO
         firebaseAnalytics.logEvent(FirebaseAnalytics.Event.APP_OPEN, bundle);
     }
 
-    public String getDeviceToken() {
-        return deviceToken;
-    }
-
-    public void setDeviceToken(String token) {
-        deviceToken = token;
-    }
 }

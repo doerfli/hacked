@@ -14,10 +14,18 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.work.Worker;
 import androidx.work.WorkerParameters;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GoogleApiAvailability;
+import com.google.android.gms.tasks.Task;
+import com.google.android.gms.tasks.Tasks;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.InstanceIdResult;
+
 import java.io.IOException;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 import li.doerf.hacked.R;
 import li.doerf.hacked.db.AppDatabase;
@@ -36,7 +44,6 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class HIBPAccountCheckerWorker extends Worker {
     public static final String BROADCAST_ACTION_ACCOUNT_CHECK_FINISHED = "li.doerf.hacked.BROADCAST_ACTION_ACCOUNT_CHECK_FINISHED";
     public static final String KEY_ID = "ID";
-    public static final String KEY_DEVICE_TOKEN = "DEVICE_TOKEN";
     private final String LOGTAG = getClass().getSimpleName();
 
     private final WeakReference<Context> myContext;
@@ -55,10 +62,8 @@ public class HIBPAccountCheckerWorker extends Worker {
         Log.i(LOGTAG, "doWork");
         long id = getInputData().getLong(KEY_ID, -1);
         updateLastCheckTimestamp = id < 0;
-        String device_token = getInputData().getString(KEY_DEVICE_TOKEN);
 
-        if (device_token == null || device_token.equals("")) {
-            Log.e(LOGTAG, "device token not set - probably google play services not installed");
+        if (GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(getApplicationContext()) != ConnectionResult.RESULT_SUCCESS.getErrorCode() ) {
             new Handler(Looper.getMainLooper()).post(() -> Toast.makeText(
                     myContext.get(),
                     myContext.get().getString(R.string.toast_error_google_play_missing),
@@ -67,8 +72,21 @@ public class HIBPAccountCheckerWorker extends Worker {
             return Result.failure();
         }
 
+        Task<InstanceIdResult> deviceTokenTask = FirebaseInstanceId.getInstance().getInstanceId();
+        InstanceIdResult result;
+
         try {
-            check(id, device_token);
+            result = Tasks.await(deviceTokenTask);
+        } catch (ExecutionException e) {
+            Log.e(LOGTAG, "caught ExecutionException", e);
+            return Result.failure();
+        } catch (InterruptedException e) {
+            Log.e(LOGTAG, "caught InterruptedException", e);
+            return Result.failure();
+        }
+
+        try {
+            check(id, result.getToken());
             return Result.success();
         } catch (IOException e) {
             Log.e(LOGTAG, "caught exception during check", e);

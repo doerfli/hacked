@@ -29,7 +29,6 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-import androidx.work.Data;
 import androidx.work.OneTimeWorkRequest;
 import androidx.work.WorkManager;
 
@@ -218,13 +217,9 @@ public class AccountListFragment extends Fragment {
     }
 
     public void checkForBreaches(Account account) {
-        Data inputData = new Data.Builder()
-                .putString(HIBPAccountCheckerWorker.KEY_DEVICE_TOKEN, ((HackedApplication) getActivity().getApplication()).getDeviceToken())
-                .build();
 
         OneTimeWorkRequest checker =
                 new OneTimeWorkRequest.Builder(HIBPAccountCheckerWorker.class)
-                        .setInputData(inputData)
                         .build();
         WorkManager.getInstance().enqueue(checker);
 
