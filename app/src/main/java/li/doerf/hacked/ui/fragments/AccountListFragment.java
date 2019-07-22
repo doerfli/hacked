@@ -28,7 +28,6 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import androidx.work.OneTimeWorkRequest;
 import androidx.work.WorkManager;
 
@@ -56,7 +55,6 @@ public class AccountListFragment extends Fragment {
     private final String LOGTAG = getClass().getSimpleName();
     private AccountsAdapter myAccountsAdapter;
     private View myFragmentRootView;
-    private SwipeRefreshLayout mySwipeRefreshLayout;
     private LocalBroadcastReceiver myBroadcastReceiver;
 
     public static AccountListFragment create() {
@@ -91,12 +89,6 @@ public class AccountListFragment extends Fragment {
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(accountsList.getContext(),
                 lm.getOrientation());
         accountsList.addItemDecoration(dividerItemDecoration);
-
-        mySwipeRefreshLayout = myFragmentRootView.findViewById(R.id.swipe_refresh_layout);
-        mySwipeRefreshLayout.setOnRefreshListener(() -> {
-            checkForBreaches(null);
-            ((HackedApplication) getActivity().getApplication()).trackEvent("CheckForBreaches");
-        });
 
         showInitialSetupAccount(myFragmentRootView);
         showInitialHelp(myFragmentRootView);
@@ -223,19 +215,10 @@ public class AccountListFragment extends Fragment {
                         .build();
         WorkManager.getInstance().enqueue(checker);
 
-        mySwipeRefreshLayout.setRefreshing(true);
-
         if ( account == null && isAdded() ) { // only show this message when checking for more then one account
             Snackbar.make(myFragmentRootView, getString(R.string.snackbar_checking_account), Snackbar.LENGTH_LONG)
                     .setAction("Action", null).show();
         }
-    }
-
-    /**
-     * Indicate that the refresh is complete to stop refresh animation.
-     */
-    private void refreshComplete() {
-        mySwipeRefreshLayout.setRefreshing(false);
     }
 
     private void registerReceiver() {
@@ -253,7 +236,6 @@ public class AccountListFragment extends Fragment {
         @Override
         public void onReceive(Context context, Intent intent) {
             Log.d(LOGTAG, "received local broadcast message");
-            refreshComplete();
         }
     }
 }
