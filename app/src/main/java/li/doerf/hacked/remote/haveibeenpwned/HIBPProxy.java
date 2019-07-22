@@ -7,6 +7,6 @@ import retrofit2.http.Query;
 public interface HIBPProxy {
 
     @GET("/search")
-    Call<Void> search(@Query("email") String email, @Query("device_token") String deviceToken);
+    Call<Void> search(@Query("account") String account, @Query("device_token") String deviceToken);
 
 }
