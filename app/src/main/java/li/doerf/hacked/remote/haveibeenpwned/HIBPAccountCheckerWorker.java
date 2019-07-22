@@ -3,8 +3,11 @@ package li.doerf.hacked.remote.haveibeenpwned;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Handler;
+import android.os.Looper;
 import android.preference.PreferenceManager;
 import android.util.Log;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
@@ -52,19 +55,30 @@ public class HIBPAccountCheckerWorker extends Worker {
         Log.i(LOGTAG, "doWork");
         long id = getInputData().getLong(KEY_ID, -1);
         updateLastCheckTimestamp = id < 0;
+        String device_token = getInputData().getString(KEY_DEVICE_TOKEN);
+
+        if (device_token == null || device_token.equals("")) {
+            Log.e(LOGTAG, "device token not set - probably google play services not installed");
+            new Handler(Looper.getMainLooper()).post(() -> Toast.makeText(
+                    myContext.get(),
+                    myContext.get().getString(R.string.toast_error_google_play_missing),
+                    Toast.LENGTH_LONG).show());
+            doPostCheckActions();
+            return Result.failure();
+        }
 
         try {
-            check(id);
+            check(id, device_token);
             return Result.success();
         } catch (IOException e) {
             Log.e(LOGTAG, "caught exception during check", e);
-            return Result.failure();
+            return Result.retry();
         } finally {
             doPostCheckActions();
         }
     }
 
-    private synchronized void check(Long id) throws IOException {
+    private synchronized void check(Long id, String device_token) throws IOException {
         Log.d(LOGTAG, "starting check for breaches");
 
         List<Account> accountsToCheck = new ArrayList<>();
@@ -78,7 +92,7 @@ public class HIBPAccountCheckerWorker extends Worker {
 
         for (Account account : accountsToCheck) {
             Log.d(LOGTAG, "Checking for account: " + account.getName());
-            sendSearch(account.getName(), getInputData().getString(KEY_DEVICE_TOKEN));
+            sendSearch(account.getName(), device_token);
         }
 
         Log.d(LOGTAG, "finished checking for breaches");

@@ -100,4 +100,5 @@
     <string name="rating_dialog_positive">Jetzt bewerten</string>
     <string name="rating_dialog_neutral">Später</string>
     <string name="rating_dialog_negative">Nie</string>
+    <string name="toast_error_google_play_missing">Google Play services werden benötigt. Bitte installieren und nochmals probieren.</string>
 </resources>

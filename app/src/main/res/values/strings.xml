@@ -99,4 +99,5 @@
     <string name="rating_dialog_positive">Rate us now</string>
     <string name="rating_dialog_neutral">Maybe later</string>
     <string name="rating_dialog_negative">Never</string>
+    <string name="toast_error_google_play_missing">Google Play services are required. Please install and try again.</string>
 </resources>
