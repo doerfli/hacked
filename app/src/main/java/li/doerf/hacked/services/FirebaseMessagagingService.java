@@ -9,6 +9,7 @@ import android.util.Log;
 import androidx.core.app.NotificationCompat;
 import androidx.work.Constraints;
 import androidx.work.Data;
+import androidx.work.ExistingWorkPolicy;
 import androidx.work.NetworkType;
 import androidx.work.OneTimeWorkRequest;
 import androidx.work.WorkManager;
@@ -63,7 +64,7 @@ public class FirebaseMessagagingService extends FirebaseMessagingService {
                 .setInputData(inputData)
                 .setConstraints(constraints)
                 .build();
-        WorkManager.getInstance().enqueue(workerRequest);
+        WorkManager.getInstance().enqueueUniqueWork("hibp-response", ExistingWorkPolicy.APPEND, workerRequest);
     }
 
     private void showNotification(RemoteMessage.Notification remoteNotification) {
