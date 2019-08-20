@@ -6,9 +6,10 @@ import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.util.Log;
 
-import androidx.lifecycle.Lifecycle;
+import androidx.annotation.NonNull;
+import androidx.lifecycle.DefaultLifecycleObserver;
 import androidx.lifecycle.LifecycleObserver;
-import androidx.lifecycle.OnLifecycleEvent;
+import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.ProcessLifecycleOwner;
 import androidx.multidex.MultiDexApplication;
 
@@ -28,7 +29,7 @@ import li.doerf.hacked.utils.SynchronizationHelper;
  * Created by moo on 25.05.17.
  */
 
-public class HackedApplication extends MultiDexApplication implements LifecycleObserver {
+public class HackedApplication extends MultiDexApplication implements LifecycleObserver, DefaultLifecycleObserver {
     private static final String TAG = "HackedApplication";
     private static final String PREF_KEY_MIGRATE_BACKGROUND_SERVICE_TO_WORKMANAGER_DONE = "PREF_KEY_MIGRATE_BACKGROUND_SERVICE_TO_WORKMANAGER_DONE";
     private FirebaseAnalytics firebaseAnalytics;
@@ -112,8 +113,8 @@ public class HackedApplication extends MultiDexApplication implements LifecycleO
                 });
     }
 
-    @OnLifecycleEvent(Lifecycle.Event.ON_START)
-    public void onAppForegrounded() {
+    @Override
+    public void onStart(@NonNull LifecycleOwner owner) {
         Log.d(TAG, "application opened");
         Bundle bundle = new Bundle();
         firebaseAnalytics.logEvent(FirebaseAnalytics.Event.APP_OPEN, bundle);
