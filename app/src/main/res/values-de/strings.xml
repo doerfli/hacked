@@ -101,4 +101,13 @@
     <string name="rating_dialog_neutral">Später</string>
     <string name="rating_dialog_negative">Nie</string>
     <string name="toast_error_google_play_missing">Google Play services werden benötigt. Bitte installieren und nochmals probieren.</string>
+    <string name="breach_details_compromised_account_found">Ein Datenleck wurde gefunden</string>
+    <string name="breach_details_dash">-</string>
+    <string name="breach_details_what_now">wie weiter?</string>
+    <string name="breach_details_first">1.</string>
+    <string name="breach_details_second">2.</string>
+    <string name="breach_details_third">3.</string>
+    <string name="breach_details_first_text">Benutzen Sie einen Passwort Manager (%1$s, %2$s, %3$s, …) um für jedes Konto ein neues, zufälliges Password zu generieren</string>
+    <string name="breach_details_second_text">Aktivieren Sie 2-Faktor Authentisierung wenn es möglich ist</string>
+    <string name="breach_details_third_text">Nachdem ein Datenleck entdeckt wurde muessen Sie nur mehr dieses Passwort ändern</string>
 </resources>
