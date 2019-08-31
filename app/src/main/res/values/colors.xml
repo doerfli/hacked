@@ -15,4 +15,5 @@
     <color name="not_acknoweldged">#ffffff</color>
     <color name="green">#007900</color>
     <color name="hibp_info_bg">#E8777777</color>
+    <color name="bg_notification">#FFE8D0</color>
 </resources>

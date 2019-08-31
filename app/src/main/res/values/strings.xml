@@ -100,4 +100,13 @@
     <string name="rating_dialog_neutral">Maybe later</string>
     <string name="rating_dialog_negative">Never</string>
     <string name="toast_error_google_play_missing">Google Play services are required. Please install and try again.</string>
+    <string name="breach_details_compromised_account_found">A compromised account was found</string>
+    <string name="breach_details_dash">-</string>
+    <string name="breach_details_what_now">what now?</string>
+    <string name="breach_details_first">1.</string>
+    <string name="breach_details_second">2.</string>
+    <string name="breach_details_third">3.</string>
+    <string name="breach_details_first_text">Use a password manager (%1$s, %2$s, %3$s, …) to generate a unique random password for every account</string>
+    <string name="breach_details_second_text">Enable 2-factor authentication</string>
+    <string name="breach_details_third_text">When an account is breached, just change that password</string>
 </resources>
