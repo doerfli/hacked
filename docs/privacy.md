@@ -47,4 +47,3 @@ The app itself requires no hosting at runtime. The _hibp-proxy_ service is hoste
 ## Source code
 
 The source code for [_Hacked? - have i been pwned_](https://github.com/doerfli/hacked) and the [_hibp-proxy_](https://github.com/doerfli/hibp-proxy) can be found on their respective Github pages. 
-
