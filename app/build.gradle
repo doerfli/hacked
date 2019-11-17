@@ -59,7 +59,7 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-common-java8:$lifecycle_version"
 
     implementation 'com.google.firebase:firebase-core:17.2.1'
-    implementation 'com.google.firebase:firebase-messaging:20.0.0'
+    implementation 'com.google.firebase:firebase-messaging:20.0.1'
 
     // http://square.github.io/retrofit/
     implementation 'com.squareup.retrofit2:retrofit:2.6.2'
