@@ -132,6 +132,13 @@ public class AccountListFragment extends Fragment {
             return true;
         }
 
+//        if (id == R.id.action_privacypolicy) {
+//            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://doerfli.github.io/hacked/privacy"));
+//            startActivity(browserIntent);
+//
+//            return true;
+//        }
+
         if (id == R.id.action_rateus) {
             new RatingHelper(getContext()).showRateUsDialog();
             return true;

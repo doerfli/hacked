@@ -110,4 +110,5 @@
     <string name="breach_details_first_text">Benutzen Sie einen Passwort Manager (%1$s, %2$s, %3$s, …) um für jedes Konto ein neues, zufälliges Password zu generieren</string>
     <string name="breach_details_second_text">Aktivieren Sie 2-Faktor Authentisierung wenn es möglich ist</string>
     <string name="breach_details_third_text">Nachdem ein Datenleck entdeckt wurde muessen Sie nur mehr dieses Passwort ändern</string>
+    <string name="action_privacypolicy">Privacy policy</string>
 </resources>

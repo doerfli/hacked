@@ -1,6 +1,7 @@
 package li.doerf.hacked.activities;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -99,6 +100,21 @@ public class MainActivity extends AppCompatActivity
 //
 //        return super.onOptionsItemSelected(item);
 //    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == R.id.action_privacypolicy) {
+            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://doerfli.github.io/hacked/privacy"));
+            startActivity(browserIntent);
+
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
