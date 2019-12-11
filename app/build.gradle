@@ -39,6 +39,7 @@ dependencies {
     def lifecycle_version = "2.1.0"
     def work_version = "1.0.1"
     def retrofit_version = "2.7.0"
+    def firebase_bom_version = "24.3.0"
 
     implementation 'androidx.multidex:multidex:2.0.1'
     implementation 'androidx.appcompat:appcompat:1.1.0'
@@ -59,8 +60,9 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-viewmodel:$lifecycle_version"
     implementation "androidx.lifecycle:lifecycle-common-java8:$lifecycle_version"
 
-    implementation 'com.google.firebase:firebase-analytics:17.2.1'
-    implementation 'com.google.firebase:firebase-messaging:20.1.0'
+    implementation(platform("com.google.firebase:firebase-bom:$firebase_bom_version"))
+    implementation 'com.google.firebase:firebase-analytics'
+    implementation 'com.google.firebase:firebase-messaging'
 
     // http://square.github.io/retrofit/
     implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
