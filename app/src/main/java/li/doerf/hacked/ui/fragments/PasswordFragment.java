@@ -17,9 +17,10 @@ import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
+
 import li.doerf.hacked.HackedApplication;
 import li.doerf.hacked.R;
-import li.doerf.hacked.remote.pwnedpasswords.PwnedPasswordAsyncTask;
+import li.doerf.hacked.remote.pwnedpasswords.PwnedPassword;
 import li.doerf.hacked.ui.HibpInfo;
 import li.doerf.hacked.utils.StringHelper;
 
@@ -90,13 +91,12 @@ public class PasswordFragment extends Fragment {
         passwordOk.setVisibility(View.GONE);
         passwordPwned.setVisibility(View.GONE);
         progressBar.setVisibility(View.VISIBLE);
-        PwnedPasswordAsyncTask passwordCheck = new PwnedPasswordAsyncTask(getContext());
-        passwordCheck.execute(password);
+        new PwnedPassword(LocalBroadcastManager.getInstance(getContext())).check(password);
         ((HackedApplication) getActivity().getApplication()).trackEvent("CheckPasswordPwned");
     }
 
     private void registerReceiver() {
-        IntentFilter intentFilter = new IntentFilter(PwnedPasswordAsyncTask.BROADCAST_ACTION_PASSWORD_PWNED);
+        IntentFilter intentFilter = new IntentFilter(PwnedPassword.BROADCAST_ACTION_PASSWORD_PWNED);
         myBroadcastReceiver = new LocalBroadcastReceiver();
         LocalBroadcastManager.getInstance(getContext()).registerReceiver(myBroadcastReceiver, intentFilter);
     }
@@ -106,16 +106,16 @@ public class PasswordFragment extends Fragment {
         myBroadcastReceiver = null;
     }
 
-    private void handleResult(String pwned, boolean exception) {
+    private void handleResult(boolean pwned, int numPwned, boolean exception) {
         progressBar.setVisibility(View.GONE);
 
         if ( exception ) {
             Toast.makeText(getContext(), getString(R.string.error_download_data), Toast.LENGTH_SHORT).show();
-        } else if ( pwned == null ) {
+        } else if ( ! pwned ) {
             passwordOk.setVisibility(View.VISIBLE);
         } else {
             passwordPwned.setVisibility(View.VISIBLE);
-            String t = getString(R.string.password_pwned, StringHelper.addDigitSeperator(pwned));
+            String t = getString(R.string.password_pwned, StringHelper.addDigitSeperator(Integer.toString(numPwned)));
             passwordPwned.setText(t);
         }
     }
@@ -125,8 +125,9 @@ public class PasswordFragment extends Fragment {
         public void onReceive(Context context, Intent intent) {
             Log.d(TAG, "received local broadcast message");
             handleResult(
-                    intent.getStringExtra(PwnedPasswordAsyncTask.EXTRA_PASSWORD_PWNED),
-                    intent.getBooleanExtra(PwnedPasswordAsyncTask.EXTRA_EXCEPTION, false));
+                    intent.getBooleanExtra(PwnedPassword.EXTRA_PASSWORD_PWNED, false),
+                    intent.getIntExtra(PwnedPassword.EXTRA_PASSWORD_PWNED_Count, 0),
+                    intent.getBooleanExtra(PwnedPassword.EXTRA_EXCEPTION, false));
         }
 
     }
