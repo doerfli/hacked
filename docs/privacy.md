@@ -33,8 +33,14 @@ The request is sent directly to the _Have I Been Pwned API_ and not through the 
 
 ## Logging
 
-The app stores limited logs through the Android Log service. 
-These logs are stored within the Android device and never sent to an external system. 
+The app stores limited technical logs through the Android Log service. 
+These logs are stored within the Android device and never sent to an external system.
+ 
+If the app crashes, a crash report is sent to [Crashlytics](https://firebase.google.com/docs/crashlytics) for analysis. 
+
+The app uses [Firebase analytics](https://firebase.google.com/docs/analytics) to track some key events (like account added, password checked, breach acknowledged, ...). 
+In all cases no content data is sent to the analytics host, only the indication that the event happened is transmitted.
+This data is used to analyze how the app is being used. 
 
 The _hibp-proxy_ stores only the bare minimum logs keep the service operational and combat malicious activity. 
 This includes transient web server logs. 
