@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.preference.PreferenceFragment;
 import android.util.Log;
 
+import li.doerf.hacked.CustomEvent;
 import li.doerf.hacked.HackedApplication;
 import li.doerf.hacked.R;
 import li.doerf.hacked.utils.SynchronizationHelper;
@@ -48,9 +49,9 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
             boolean enabled = SynchronizationHelper.scheduleSync(getActivity().getApplicationContext());
 
             if ( enabled) {
-                ((HackedApplication) getActivity().getApplication()).trackEvent("BackgroundSyncEnable");
+                ((HackedApplication) getActivity().getApplication()).trackCustomEvent(CustomEvent.BACKGROUND_SYNC_ENABLED);
             } else {
-                ((HackedApplication) getActivity().getApplication()).trackEvent("BackgroundSyncDisable");
+                ((HackedApplication) getActivity().getApplication()).trackCustomEvent(CustomEvent.BACKGROUND_SYNC_DISABLED);
             }
         }
     }

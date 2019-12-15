@@ -4,11 +4,13 @@ import android.app.Application;
 import android.app.Dialog;
 import android.os.Bundle;
 
-import java.util.List;
-
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.DialogFragment;
+
+import java.util.List;
+
+import li.doerf.hacked.CustomEvent;
 import li.doerf.hacked.HackedApplication;
 import li.doerf.hacked.R;
 import li.doerf.hacked.db.AppDatabase;
@@ -55,7 +57,7 @@ public class DeleteAccountDialogFragment extends DialogFragment {
                         }
                         accountDao.delete(myAccount);
                     } finally {
-                        ((HackedApplication) myApplication).trackEvent("DeleteAccount");
+                        ((HackedApplication) myApplication).trackCustomEvent(CustomEvent.ACCOUNT_DELETED);
                     }
                     return true;
                 },

@@ -19,6 +19,7 @@ import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 
+import li.doerf.hacked.CustomEvent;
 import li.doerf.hacked.HackedApplication;
 import li.doerf.hacked.R;
 import li.doerf.hacked.ui.fragments.AccountListFragment;
@@ -55,10 +56,10 @@ public class MainActivity extends AppCompatActivity
         fab.setOnClickListener(view -> {
             if ( myContentFragment instanceof AccountListFragment ) {
                 ((AccountListFragment) myContentFragment).checkForBreaches(null);
-                ((HackedApplication) getApplication()).trackEvent("CheckForBreaches");
+                ((HackedApplication) getApplication()).trackCustomEvent(CustomEvent.CHECK_FOR_BREACHES);
             } else if ( myContentFragment instanceof BreachedSitesListFragment ) {
                 ((BreachedSitesListFragment)myContentFragment).reloadBreachedSites();
-                ((HackedApplication) getApplication()).trackEvent("ReloadBreachedSites");
+                ((HackedApplication) getApplication()).trackCustomEvent(CustomEvent.RELOAD_BREACHED_SITES);
             }
         });
 

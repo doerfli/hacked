@@ -22,6 +22,7 @@ import androidx.work.WorkManager;
 
 import io.reactivex.Single;
 import io.reactivex.schedulers.Schedulers;
+import li.doerf.hacked.CustomEvent;
 import li.doerf.hacked.HackedApplication;
 import li.doerf.hacked.R;
 import li.doerf.hacked.db.AppDatabase;
@@ -109,7 +110,7 @@ public class AddAccountDialogFragment extends DialogFragment {
         Single.fromCallable(() -> accountDao.insert(account))
                 .subscribeOn(Schedulers.io())
                 .subscribe(ids -> {
-                    ((HackedApplication) application).trackEvent("AddAccount");
+                    ((HackedApplication) application).trackCustomEvent(CustomEvent.ACCOUNT_ADDED);
 
                     Data inputData = new Data.Builder()
                             .putLong(HIBPAccountCheckerWorker.KEY_ID, ids.get(0))

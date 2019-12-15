@@ -9,6 +9,10 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.google.android.material.snackbar.Snackbar;
 
 import org.joda.time.format.DateTimeFormat;
@@ -16,9 +20,7 @@ import org.joda.time.format.DateTimeFormatter;
 
 import java.util.List;
 
-import androidx.annotation.NonNull;
-import androidx.cardview.widget.CardView;
-import androidx.recyclerview.widget.RecyclerView;
+import li.doerf.hacked.CustomEvent;
 import li.doerf.hacked.HackedApplication;
 import li.doerf.hacked.R;
 import li.doerf.hacked.db.AppDatabase;
@@ -125,7 +127,7 @@ public class BreachesAdapter extends RecyclerView.Adapter<RecyclerViewHolder> {
         breach.setAcknowledged(true);
         myBreachDao.update(breach);
         Log.d(LOGTAG, "breach updated - acknowledge = true");
-        ((HackedApplication) getContext().getApplicationContext()).trackEvent("BreachAcknowledged");
+        ((HackedApplication) getContext().getApplicationContext()).trackCustomEvent(CustomEvent.BREACH_ACKNOWLEDGED);
     }
 
     @Override

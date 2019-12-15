@@ -36,6 +36,7 @@ import com.google.android.material.snackbar.Snackbar;
 import java.util.ArrayList;
 import java.util.List;
 
+import li.doerf.hacked.CustomEvent;
 import li.doerf.hacked.HackedApplication;
 import li.doerf.hacked.R;
 import li.doerf.hacked.db.AppDatabase;
@@ -158,7 +159,7 @@ public class AccountListFragment extends Fragment {
                 EditText accountET = aRootView.findViewById(R.id.account);
                 String accountName = accountET.getText().toString().trim();
 
-                ((HackedApplication) getActivity().getApplication()).trackEvent("AddInitialAccount");
+                ((HackedApplication) getActivity().getApplication()).trackCustomEvent(CustomEvent.FIRST_ACCOUNT_ADDED);
 
                 if ( accountName.equals("") ) {
                     Toast.makeText(getContext(), getString(R.string.toast_please_enter_account), Toast.LENGTH_LONG).show();
@@ -210,7 +211,7 @@ public class AccountListFragment extends Fragment {
                 editor.putBoolean(getString(R.string.pref_initial_help_dismissed), true);
                 editor.apply();
 
-                ((HackedApplication) getActivity().getApplication()).trackEvent("InitialHelpDismiss");
+                ((HackedApplication) getActivity().getApplication()).trackCustomEvent(CustomEvent.DISMISS_INITIAL_HELP);
             });
         }
     }

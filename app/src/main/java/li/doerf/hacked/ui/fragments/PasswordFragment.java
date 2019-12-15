@@ -18,6 +18,7 @@ import android.widget.Toast;
 import androidx.fragment.app.Fragment;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
+import li.doerf.hacked.CustomEvent;
 import li.doerf.hacked.HackedApplication;
 import li.doerf.hacked.R;
 import li.doerf.hacked.remote.pwnedpasswords.PwnedPassword;
@@ -92,7 +93,7 @@ public class PasswordFragment extends Fragment {
         passwordPwned.setVisibility(View.GONE);
         progressBar.setVisibility(View.VISIBLE);
         new PwnedPassword(LocalBroadcastManager.getInstance(getContext())).check(password);
-        ((HackedApplication) getActivity().getApplication()).trackEvent("CheckPasswordPwned");
+        ((HackedApplication) getActivity().getApplication()).trackCustomEvent(CustomEvent.CHECK_PASSWORD_PWNED);
     }
 
     private void registerReceiver() {
@@ -110,10 +111,13 @@ public class PasswordFragment extends Fragment {
         progressBar.setVisibility(View.GONE);
 
         if ( exception ) {
+            ((HackedApplication) getActivity().getApplication()).trackCustomEvent(CustomEvent.PASSWORD_PWNED_EXCEPTION);
             Toast.makeText(getContext(), getString(R.string.error_download_data), Toast.LENGTH_SHORT).show();
         } else if ( ! pwned ) {
+            ((HackedApplication) getActivity().getApplication()).trackCustomEvent(CustomEvent.PASSWORD_NOT_PWNED);
             passwordOk.setVisibility(View.VISIBLE);
         } else {
+            ((HackedApplication) getActivity().getApplication()).trackCustomEvent(CustomEvent.PASSWORD_PWNED);
             passwordPwned.setVisibility(View.VISIBLE);
             String t = getString(R.string.password_pwned, StringHelper.addDigitSeperator(Integer.toString(numPwned)));
             passwordPwned.setText(t);

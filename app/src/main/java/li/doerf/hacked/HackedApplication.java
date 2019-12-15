@@ -66,12 +66,11 @@ public class HackedApplication extends MultiDexApplication implements LifecycleO
         firebaseAnalytics.logEvent(FirebaseAnalytics.Event.VIEW_ITEM, bundle);
     }
 
-    public synchronized void trackEvent(String name) {
+    public synchronized void trackCustomEvent(CustomEvent eventName) {
         if ( runsInTestlab() ) return;
         Bundle bundle = new Bundle();
-        bundle.putString(FirebaseAnalytics.Param.ITEM_ID, name);
         bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "Function");
-        firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
+        firebaseAnalytics.logEvent(eventName.name(), bundle);
     }
 
     private boolean runsInTestlab() {
