@@ -12,9 +12,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
@@ -27,9 +24,13 @@ import androidx.work.Constraints;
 import androidx.work.NetworkType;
 import androidx.work.OneTimeWorkRequest;
 import androidx.work.WorkManager;
+
+import java.io.Serializable;
+import java.util.ArrayList;
+
 import li.doerf.hacked.HackedApplication;
 import li.doerf.hacked.R;
-import li.doerf.hacked.remote.haveibeenpwned.HIBPGetBreachedSitesWorker;
+import li.doerf.hacked.remote.hibp.BreachedSitesWorker;
 import li.doerf.hacked.ui.HibpInfo;
 import li.doerf.hacked.ui.adapters.BreachedSitesAdapter;
 import li.doerf.hacked.ui.viewmodels.BreachedSitesViewModel;
@@ -129,7 +130,7 @@ public class BreachedSitesListFragment extends Fragment {
     }
 
     private void registerReceiver() {
-        IntentFilter intentFilter = new IntentFilter(HIBPGetBreachedSitesWorker.BROADCAST_ACTION_GET_BREACHED_SITES_FINISHED);
+        IntentFilter intentFilter = new IntentFilter(BreachedSitesWorker.BROADCAST_ACTION_GET_BREACHED_SITES_FINISHED);
         myBroadcastReceiver = new LocalBroadcastReceiver();
         LocalBroadcastManager.getInstance(getContext()).registerReceiver(myBroadcastReceiver, intentFilter);
     }
@@ -166,7 +167,7 @@ public class BreachedSitesListFragment extends Fragment {
                 .build();
 
         OneTimeWorkRequest checker =
-                new OneTimeWorkRequest.Builder(HIBPGetBreachedSitesWorker.class)
+                new OneTimeWorkRequest.Builder(BreachedSitesWorker.class)
                         .setConstraints(constraints)
                         .build();
         WorkManager.getInstance().enqueue(checker);
