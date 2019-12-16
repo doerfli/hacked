@@ -13,7 +13,7 @@ android {
         minSdkVersion 16
         targetSdkVersion 29
         versionCode 69
-        versionName "2.6.0.99"
+        versionName "2.6.0.0"
         multiDexEnabled true
         javaCompileOptions {
             annotationProcessorOptions {
