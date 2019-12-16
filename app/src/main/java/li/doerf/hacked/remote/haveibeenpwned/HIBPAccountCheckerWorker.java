@@ -14,6 +14,7 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.work.Worker;
 import androidx.work.WorkerParameters;
 
+import com.crashlytics.android.Crashlytics;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.tasks.Task;
@@ -90,7 +91,11 @@ public class HIBPAccountCheckerWorker extends Worker {
             return Result.success();
         } catch (IOException e) {
             Log.e(LOGTAG, "caught exception during check", e);
+            Crashlytics.logException(e);
             return Result.retry();
+        } catch (Exception e) {
+            Crashlytics.logException(e);
+            throw e;
         } finally {
             doPostCheckActions();
         }

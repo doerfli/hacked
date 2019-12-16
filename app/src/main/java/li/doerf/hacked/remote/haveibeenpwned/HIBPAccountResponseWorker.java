@@ -15,6 +15,8 @@ import androidx.core.app.NotificationCompat;
 import androidx.work.Worker;
 import androidx.work.WorkerParameters;
 
+import com.crashlytics.android.Crashlytics;
+
 import org.joda.time.DateTime;
 
 import java.io.IOException;
@@ -79,9 +81,13 @@ public class HIBPAccountResponseWorker extends Worker {
             return Result.success();
         } catch (IOException e) {
             Log.e(TAG, "caughtIOException while contacting www.haveibeenpwned.com - " + e.getMessage(), e);
+            Crashlytics.logException(e);
             // TODO better error
             new Handler(Looper.getMainLooper()).post(() -> Toast.makeText(myContext.get(), myContext.get().getString(R.string.toast_error_error_during_check), Toast.LENGTH_LONG).show());
             return Result.failure();
+        } catch (Exception e) {
+            Crashlytics.logException(e);
+            throw e;
         }
     }
 

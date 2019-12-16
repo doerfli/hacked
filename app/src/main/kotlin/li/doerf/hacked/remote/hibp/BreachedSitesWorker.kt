@@ -11,6 +11,7 @@ import android.widget.Toast
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
+import com.crashlytics.android.Crashlytics
 import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.databind.PropertyNamingStrategy
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
@@ -46,6 +47,7 @@ class BreachedSitesWorker(private val context: Context, params: WorkerParameters
         } catch (exception: Exception) {
             Log.e(PwnedPassword.TAG, "caught exception while reteieving sites: ${exception.message}")
             Log.e(PwnedPassword.TAG, exception.stackTrace.joinToString("\n"))
+            Crashlytics.logException(exception)
             Handler(Looper.getMainLooper()).post { Toast.makeText(context, context.getString(R.string.error_download_data), Toast.LENGTH_LONG).show() }
             Result.failure()
         }
