@@ -110,4 +110,8 @@
     <string name="breach_details_second_text">Enable 2-factor authentication when possible</string>
     <string name="breach_details_third_text">When an account is breached, just change that password</string>
     <string name="action_privacypolicy">Privacy policy</string>
+    <string name="title_activity_nav">NavActivity</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
