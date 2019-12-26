@@ -181,7 +181,7 @@ public class BreachedSitesListFragment extends Fragment {
         mySwipeRefreshLayout.setRefreshing(false);
     }
 
-    private class LocalBroadcastReceiver extends BroadcastReceiver {
+    class LocalBroadcastReceiver extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
             Log.d(LOGTAG, "received local broadcast message");

@@ -1,15 +1,69 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.fragments.OverviewFragment">
+    tools:context=".ui.fragments.OverviewFragment"
+    >
 
-    <!-- TODO: Update blank fragment layout -->
     <TextView
+        android:id="@+id/title_accounts"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:layout_height="wrap_content"
+        android:text="@string/title_accounts"
+        android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        />
 
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/accounts_list"
+        android:scrollbars="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/title_accounts"
+        app:layout_constraintStart_toStartOf="parent"
+        />
 
-</FrameLayout>
+    <TextView
+        android:id="@+id/title_recent_breaches"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/title_recent_breaches"
+        android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"
+        app:layout_constraintTop_toBottomOf="@id/accounts_list"
+        app:layout_constraintStart_toStartOf="parent"
+        />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/breached_sites_list"
+        android:scrollbars="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/title_recent_breaches"
+        app:layout_constraintStart_toStartOf="parent"
+        />
+
+    <TextView
+        android:id="@+id/title_pwned_passwords"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/title_pwned_passwords"
+        android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"
+        app:layout_constraintTop_toBottomOf="@id/breached_sites_list"
+        app:layout_constraintStart_toStartOf="parent"
+        />
+
+    <EditText
+        android:id="@+id/password"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="textPassword"
+        android:hint="@string/password"
+        app:layout_constraintTop_toBottomOf="@id/title_pwned_passwords"
+        app:layout_constraintStart_toStartOf="parent"
+        />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
