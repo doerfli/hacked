@@ -7,11 +7,12 @@
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="card_padding_short">4dp</dimen>
     <dimen name="card_padding">8dp</dimen>
-    <dimen name="card_margin">2dp</dimen>
+    <dimen name="card_margin">4dp</dimen>
     <dimen name="text_space">8dp</dimen>
     <dimen name="width_status">20dp</dimen>
     <dimen name="width_status_breach">10dp</dimen>
     <!-- Default screen margins, per the Android Design guidelines. -->
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="card_padding_with_status">18dp</dimen>
+    <dimen name="card_title_padding_bottom">6dp</dimen>
 </resources>
