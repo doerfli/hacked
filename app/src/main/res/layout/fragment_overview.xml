@@ -1,41 +1,51 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
+<androidx.core.widget.NestedScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:fillViewport="true"
     tools:context=".ui.fragments.OverviewFragment"
     >
-
-    <fragment
-        android:name="li.doerf.hacked.ui.fragments.AccountsFragment"
-        android:id="@+id/fragment_accounts"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/card_margin"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        />
+        >
 
-    <fragment
-        android:name="li.doerf.hacked.ui.fragments.BreachesFragment"
-        android:id="@+id/fragment_breaches"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/card_margin"
-        app:layout_constraintTop_toBottomOf="@id/fragment_accounts"
-        app:layout_constraintStart_toStartOf="parent"
-        />
+        <fragment
+            android:name="li.doerf.hacked.ui.fragments.AccountsFragment"
+            android:id="@+id/fragment_accounts"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_margin="@dimen/card_margin"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/fragment_breaches"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintHeight_default="spread"
+            app:layout_constraintHeight_min="300dp"/>
 
-    <fragment
-        android:name="li.doerf.hacked.ui.fragments.PwnedPasswordFragment"
-        android:id="@+id/fragment_pwned_passwords"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/card_margin"
-        app:layout_constraintTop_toBottomOf="@id/fragment_breaches"
-        app:layout_constraintStart_toStartOf="parent"
-        />
+        <fragment
+            android:name="li.doerf.hacked.ui.fragments.BreachesFragment"
+            android:id="@+id/fragment_breaches"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:layout_margin="@dimen/card_margin"
+            app:layout_constraintTop_toBottomOf="@id/fragment_accounts"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/fragment_pwned_passwords"
+            />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <fragment
+            android:name="li.doerf.hacked.ui.fragments.PwnedPasswordFragment"
+            android:id="@+id/fragment_pwned_passwords"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:layout_margin="@dimen/card_margin"
+            app:layout_constraintTop_toBottomOf="@id/fragment_breaches"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.core.widget.NestedScrollView>
