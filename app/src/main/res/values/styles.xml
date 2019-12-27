@@ -13,8 +13,19 @@
         <item name="windowNoTitle">true</item>
     </style>
 
-    <style name="TextTitle" parent="@style/TextAppearance.AppCompat.Title">
+    <style name="TextTitle">
         <item name="android:textColor">@color/textHighEmphasis</item>
+        <item name="android:paddingBottom">@dimen/card_title_padding_bottom</item>
+        <item name="android:textAppearance">@style/TextAppearance.AppCompat.Title</item>
+        <item name="android:drawableBottom">@drawable/section_header</item>
+        <item name="android:textSize">18sp</item>
+    </style>
+
+    <style name="OverviewCard" >
+        <item name="android:paddingLeft">@dimen/card_padding</item>
+        <item name="android:paddingRight">@dimen/card_padding</item>
+        <item name="android:paddingTop">@dimen/card_padding_short</item>
+        <item name="android:paddingBottom">@dimen/card_padding</item>
     </style>
 
 
