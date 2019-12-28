@@ -43,4 +43,7 @@ public interface AccountDao {
 
     @Query("SELECT * from accounts WHERE num_breaches IS NULL OR num_acknowledged_breaches IS NULL")
     List<Account> getAllWithNumBreachesNull();
+
+    @Query("SELECT * FROM accounts ORDER BY last_checked DESC LIMIT 1")
+    Account getLastChecked();
 }

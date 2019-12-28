@@ -8,7 +8,7 @@
     <color name="refresh_progress_3">@android:color/holo_purple</color>
     <color name="refresh_progress_4">@android:color/holo_blue_light</color>
     <color name="account_status_ok">#4CAF50</color>
-    <color name="account_status_only_acknowledged">#FFEB3B</color>
+    <color name="account_status_only_acknowledged">#89AF4C</color>
     <color name="account_status_breached">#F44336</color>
     <color name="account_status_unknown">#9E9E9E</color>
     <color name="acknoweldged">#AAAAAA</color>

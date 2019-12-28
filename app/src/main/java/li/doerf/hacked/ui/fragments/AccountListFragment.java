@@ -69,7 +69,7 @@ public class AccountListFragment extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        myAccountsAdapter = new AccountsAdapter(getContext(), new ArrayList<>(), getFragmentManager());
+        myAccountsAdapter = new AccountsAdapter(getContext(), new ArrayList<>());
         setHasOptionsMenu(true);
 
         AccountViewModel myViewModel = ViewModelProviders.of(this).get(AccountViewModel.class);

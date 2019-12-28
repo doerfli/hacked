@@ -15,12 +15,22 @@
 
         <TextView
             android:id="@+id/title_accounts"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/title_accounts"
             style="@style/TextTitle"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
+            />
+
+        <TextView
+            android:id="@+id/last_checked"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/placeholder_date"
+            style="@style/TextNotice"
+            app:layout_constraintBaseline_toBaselineOf="@+id/title_accounts"
+            app:layout_constraintEnd_toEndOf="parent"
             />
 
         <androidx.recyclerview.widget.RecyclerView
