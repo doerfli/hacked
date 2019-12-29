@@ -12,15 +12,4 @@ class NavActivity : AppCompatActivity() {
         setContentView(R.layout.activity_nav)
     }
 
-//    override fun onBackPressed() {
-//        Log.d("NavActivity", "c: " + supportFragmentManager.backStackEntryCount)
-//        supportFragmentManager.popBackStack()
-////        super.onBackPressed()
-//    }
-
-//    override fun onSupportNavigateUp(): Boolean {
-//        return (Navigation.findNavController(this, R.id.overviewFragment).navigateUp()
-//                || super.onSupportNavigateUp())
-//    }
-
 }

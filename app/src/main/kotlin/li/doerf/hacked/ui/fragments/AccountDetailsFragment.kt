@@ -4,7 +4,6 @@ import android.content.Context
 import android.os.Bundle
 import android.text.Html
 import android.text.method.LinkMovementMethod
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -102,9 +101,6 @@ class AccountDetailsFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         (activity!!.application as HackedApplication).trackView("Fragment~AccountDetails")
-        Log.d("NavActivity", "c: " + fragmentManager?.backStackEntryCount)
-        Log.d("NavActivity", "s: " + fragmentManager?.fragments?.size)
-        Log.d("NavActivity", "f: " + fragmentManager?.fragments?.first())
     }
 
 }

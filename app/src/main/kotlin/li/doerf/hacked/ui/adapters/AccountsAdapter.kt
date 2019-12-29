@@ -14,6 +14,7 @@ import li.doerf.hacked.ui.fragments.OverviewFragmentDirections
 import li.doerf.hacked.utils.NotificationHelper
 import java.util.*
 
+
 class AccountsAdapter(private val context: Context, private var accountList: List<Account>) : RecyclerView.Adapter<RecyclerViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerViewHolder {
