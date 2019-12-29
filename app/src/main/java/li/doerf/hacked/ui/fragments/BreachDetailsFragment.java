@@ -48,6 +48,12 @@ public class BreachDetailsFragment extends Fragment {
         return fragment;
     }
 
+//    @Override
+//    public void onCreate(@Nullable Bundle savedInstanceState) {
+//        super.onCreate(savedInstanceState);
+//        myAccountId = AccountDetailsFragmentArgs.fromBundle(getArguments()).getAccountId();
+//    }
+
     @SuppressLint("CheckResult")
     @Override
     public void onAttach(Context context) {

@@ -1,16 +1,16 @@
 package li.doerf.hacked.ui.adapters
 
 import android.content.Context
-import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import li.doerf.hacked.R
-import li.doerf.hacked.activities.BreachDetailsActivity
 import li.doerf.hacked.db.entities.Account
+import li.doerf.hacked.ui.fragments.OverviewFragmentDirections
 import li.doerf.hacked.utils.NotificationHelper
 import java.util.*
 
@@ -47,11 +47,11 @@ class AccountsAdapter(private val context: Context, private var accountList: Lis
             breachCount.visibility = View.GONE
         }
 
-        showDetails.setOnClickListener { v: View? ->
-            val showBreachDetails = Intent(context, BreachDetailsActivity::class.java)
-            showBreachDetails.putExtra(BreachDetailsActivity.EXTRA_ACCOUNT_ID, account.id)
-            context.startActivity(showBreachDetails)
+        showDetails.setOnClickListener { v: View ->
             NotificationHelper.cancelAll(context)
+            val action = OverviewFragmentDirections.actionOverviewFragmentToAccountDetailsFragment()
+            action.accountId = account.id
+            view.findNavController().navigate(action)
         }
     }
 

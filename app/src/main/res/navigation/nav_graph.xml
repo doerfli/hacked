@@ -12,11 +12,22 @@
         tools:layout="@layout/fragment_overview" >
         <action
             android:id="@+id/action_overviewFragment_to_accountDetailsFragment"
-            app:destination="@id/accountDetailsFragment" />
+            app:destination="@id/accountDetailsFragment"
+            app:launchSingleTop="true"
+            app:popUpTo="@+id/overviewFragment"
+            app:popUpToInclusive="false">
+            <argument
+                android:name="accountId"
+                android:defaultValue="0L" />
+        </action>
     </fragment>
     <fragment
         android:id="@+id/accountDetailsFragment"
         android:name="li.doerf.hacked.ui.fragments.AccountDetailsFragment"
         android:label="fragment_account_details"
-        tools:layout="@layout/fragment_account_details" />
+        tools:layout="@layout/fragment_account_details" >
+        <argument
+            android:name="accountId"
+            app:argType="long" />
+    </fragment>
 </navigation>
