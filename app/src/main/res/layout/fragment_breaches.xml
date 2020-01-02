@@ -23,6 +23,17 @@
             app:layout_constraintStart_toStartOf="parent"
             />
 
+        <ImageView
+            android:id="@+id/show_details"
+            android:src="@drawable/chevron_right_black"
+            android:layout_width="18sp"
+            android:layout_height="18sp"
+            android:layout_marginBottom="8dp"
+            android:contentDescription="@string/show_details"
+            app:layout_constraintBottom_toBottomOf="@id/title_recent_breaches"
+            app:layout_constraintEnd_toEndOf="parent"
+            />
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/breached_sites_list"
             android:scrollbars="vertical"
