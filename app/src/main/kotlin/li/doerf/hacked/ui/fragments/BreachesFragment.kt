@@ -45,9 +45,9 @@ class BreachesFragment : Fragment() {
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        breachedSitesAdapter = BreachedSitesAdapter(getContext(), ArrayList())
+        breachedSitesAdapter = BreachedSitesAdapter(context, ArrayList())
         val breachedSitesViewModel = ViewModelProviders.of(this).get(BreachedSitesViewModel::class.java)
-        breachedSitesViewModel.breachesSitesMostRecent.observe(this, Observer { sites: List<BreachedSite?>? -> breachedSitesAdapter.addItems(sites) })
+        breachedSitesViewModel.breachesSitesMostRecent.observe(this, Observer { sites: List<BreachedSite> -> breachedSitesAdapter.addItems(sites) })
     }
 
     override fun onResume() {
@@ -57,7 +57,7 @@ class BreachesFragment : Fragment() {
         }
     }
 
-    fun reloadBreachedSites() {
+    private fun reloadBreachedSites() {
         val constraints = Constraints.Builder()
                 .setRequiredNetworkType(NetworkType.UNMETERED)
                 .build()
