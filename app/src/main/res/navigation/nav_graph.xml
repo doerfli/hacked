@@ -8,7 +8,7 @@
     <fragment
         android:id="@+id/overviewFragment"
         android:name="li.doerf.hacked.ui.fragments.OverviewFragment"
-        android:label="fragment_overview"
+        android:label="Hacked?"
         tools:layout="@layout/fragment_overview" >
         <action
             android:id="@+id/action_overviewFragment_to_accountDetailsFragment"
@@ -20,14 +20,25 @@
                 android:name="accountId"
                 android:defaultValue="0L" />
         </action>
+        <action
+            android:id="@+id/action_overviewFragment_to_addAccountFragment"
+            app:destination="@id/addAccountFragment"
+            app:launchSingleTop="true"
+            app:popUpTo="@+id/overviewFragment"
+            app:popUpToInclusive="false" />
     </fragment>
     <fragment
         android:id="@+id/accountDetailsFragment"
         android:name="li.doerf.hacked.ui.fragments.AccountDetailsFragment"
-        android:label="fragment_account_details"
+        android:label="Account details"
         tools:layout="@layout/fragment_account_details" >
         <argument
             android:name="accountId"
             app:argType="long" />
     </fragment>
+    <fragment
+        android:id="@+id/addAccountFragment"
+        android:name="li.doerf.hacked.ui.fragments.AddAccountFragment"
+        android:label="Add account"
+        tools:layout="@layout/fragment_add_account" />
 </navigation>
