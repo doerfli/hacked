@@ -26,6 +26,12 @@
             app:launchSingleTop="true"
             app:popUpTo="@+id/overviewFragment"
             app:popUpToInclusive="false" />
+        <action
+            android:id="@+id/action_overviewFragment_to_accountsListFullFragment"
+            app:destination="@id/accountsListFullFragment"
+            app:launchSingleTop="true"
+            app:popUpTo="@+id/overviewFragment"
+            app:popUpToInclusive="false" />
     </fragment>
     <fragment
         android:id="@+id/accountDetailsFragment"
@@ -41,4 +47,15 @@
         android:name="li.doerf.hacked.ui.fragments.AddAccountFragment"
         android:label="Add account"
         tools:layout="@layout/fragment_add_account" />
+    <fragment
+        android:id="@+id/accountsListFullFragment"
+        android:name="li.doerf.hacked.ui.fragments.AccountsListFullFragment"
+        android:label="Accounts">
+        <action
+            android:id="@+id/action_accountsListFullFragment_to_accountDetailsFragment"
+            app:destination="@id/accountDetailsFragment"
+            app:launchSingleTop="true"
+            app:popUpTo="@+id/accountsListFullFragment"
+            app:popUpToInclusive="false" />
+    </fragment>
 </navigation>

@@ -10,12 +10,12 @@ import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import li.doerf.hacked.R
 import li.doerf.hacked.db.entities.Account
-import li.doerf.hacked.ui.fragments.OverviewFragmentDirections
+import li.doerf.hacked.ui.fragments.NavDirectionsToAccountDetailsFactory
 import li.doerf.hacked.utils.NotificationHelper
 import java.util.*
 
 
-class AccountsAdapter(private val context: Context, private var accountList: List<Account>) : RecyclerView.Adapter<RecyclerViewHolder>() {
+class AccountsAdapter(private val context: Context, private var accountList: List<Account>, private val navDirectionsToAccountDetailsFactory: NavDirectionsToAccountDetailsFactory) : RecyclerView.Adapter<RecyclerViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerViewHolder {
         val itemLayout = LayoutInflater.from(parent.context)
@@ -50,8 +50,7 @@ class AccountsAdapter(private val context: Context, private var accountList: Lis
 
         showDetails.setOnClickListener { v: View ->
             NotificationHelper.cancelAll(context)
-            val action = OverviewFragmentDirections.actionOverviewFragmentToAccountDetailsFragment()
-            action.accountId = account.id
+            val action = navDirectionsToAccountDetailsFactory.getNavDirections(account.id)
             view.findNavController().navigate(action)
         }
     }
