@@ -4,6 +4,6 @@ import androidx.navigation.NavDirections
 
 interface NavDirectionsToAccountDetailsFactory {
 
-    fun getNavDirections(accountId: Long): NavDirections
+    fun createNavDirections(accountId: Long): NavDirections
 
 }

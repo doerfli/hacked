@@ -11,7 +11,6 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
-import androidx.navigation.NavDirections
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -27,10 +26,10 @@ import java.util.*
 
 /**
  * A simple [Fragment] subclass.
- * Use the [AccountsFragment.newInstance] factory method to
+ * Use the [AccountsFragmentBase.newInstance] factory method to
  * create an instance of this fragment.
  */
-class AccountsFragment : Fragment(), NavDirectionsToAccountDetailsFactory {
+abstract class AccountsFragmentBase : Fragment(), NavDirectionsToAccountDetailsFactory {
     private lateinit var accountDao: AccountDao
     private lateinit var accountsAdapter: AccountsAdapter
 
@@ -91,30 +90,6 @@ class AccountsFragment : Fragment(), NavDirectionsToAccountDetailsFactory {
         accountsAdapter = AccountsAdapter(context, ArrayList(), this)
         val accountsViewModel = ViewModelProviders.of(this).get(AccountViewModel::class.java)
         accountsViewModel.accountList.observe(this, Observer { accounts: List<Account> -> accountsAdapter.addItems(accounts) })
-    }
-
-    override fun getNavDirections(accountId: Long): NavDirections {
-        val action = OverviewFragmentDirections.actionOverviewFragmentToAccountDetailsFragment()
-        action.accountId = accountId
-        return action
-    }
-
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         * @return A new instance of fragment AccountsFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance() = AccountsFragment()
-//        fun newInstance(param1: String, param2: String) =
-//                AccountsFragment().apply {
-//                    arguments = Bundle().apply {
-//                        putString(ARG_PARAM1, param1)
-//                        putString(ARG_PARAM2, param2)
-//                    }
-//                }
     }
 
 }

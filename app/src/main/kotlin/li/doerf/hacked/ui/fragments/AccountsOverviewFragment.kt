@@ -6,16 +6,15 @@ import androidx.navigation.NavDirections
 
 /**
  * A simple [Fragment] subclass.
- * Use the [AccountsListFullFragment.newInstance] factory method to
+ * Use the [AccountsOverviewFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-class AccountsListFullFragment : AccountsFragmentBase() {
+class AccountsOverviewFragment : AccountsFragmentBase() {
 
     override fun createNavDirections(accountId: Long): NavDirections {
-        val action = AccountsListFullFragmentDirections.actionAccountsListFullFragmentToAccountDetailsFragment(accountId)
+        val action = OverviewFragmentDirections.actionOverviewFragmentToAccountDetailsFragment()
         action.accountId = accountId
         return action
     }
-
 
 }
