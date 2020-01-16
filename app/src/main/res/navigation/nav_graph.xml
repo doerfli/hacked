@@ -21,12 +21,6 @@
                 android:defaultValue="0L" />
         </action>
         <action
-            android:id="@+id/action_overviewFragment_to_addAccountFragment"
-            app:destination="@id/addAccountFragment"
-            app:launchSingleTop="true"
-            app:popUpTo="@+id/overviewFragment"
-            app:popUpToInclusive="false" />
-        <action
             android:id="@+id/action_overviewFragment_to_accountsListFullFragment"
             app:destination="@id/accountsListFullFragment"
             app:launchSingleTop="true"
@@ -42,11 +36,6 @@
             android:name="accountId"
             app:argType="long" />
     </fragment>
-    <fragment
-        android:id="@+id/addAccountFragment"
-        android:name="li.doerf.hacked.ui.fragments.AddAccountFragment"
-        android:label="Add account"
-        tools:layout="@layout/fragment_add_account" />
     <fragment
         android:id="@+id/accountsListFullFragment"
         android:name="li.doerf.hacked.ui.fragments.AccountsListFullFragment"

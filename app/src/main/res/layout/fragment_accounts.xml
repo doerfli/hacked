@@ -73,6 +73,14 @@
             style="@style/Widget.AppCompat.Button.Borderless.Colored"
             />
 
+        <androidx.constraintlayout.widget.Group
+            android:id="@+id/group_add_account"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            app:constraint_referenced_ids="add,cancel,account"
+            />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.cardview.widget.CardView>
