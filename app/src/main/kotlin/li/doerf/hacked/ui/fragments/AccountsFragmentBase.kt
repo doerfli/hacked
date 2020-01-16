@@ -2,7 +2,6 @@ package li.doerf.hacked.ui.fragments
 
 
 import android.app.Application
-import android.content.ContentValues
 import android.content.Context
 import android.os.Bundle
 import android.util.Log
@@ -19,9 +18,6 @@ import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.work.*
-import io.reactivex.Single
-import io.reactivex.functions.Consumer
-import io.reactivex.schedulers.Schedulers
 import kotlinx.coroutines.*
 import li.doerf.hacked.CustomEvent
 import li.doerf.hacked.HackedApplication
@@ -32,14 +28,10 @@ import li.doerf.hacked.db.entities.Account
 import li.doerf.hacked.remote.haveibeenpwned.HIBPAccountCheckerWorker
 import li.doerf.hacked.ui.adapters.AccountsAdapter
 import li.doerf.hacked.ui.viewmodels.AccountViewModel
+import li.doerf.hacked.util.createCoroutingExceptionHandler
 import org.joda.time.format.DateTimeFormat
 import java.util.*
 
-/**
- * A simple [Fragment] subclass.
- * Use the [AccountsFragmentBase.newInstance] factory method to
- * create an instance of this fragment.
- */
 abstract class AccountsFragmentBase : Fragment(), NavDirectionsToAccountDetailsFactory {
     private lateinit var groupAddAccount: Group
     private lateinit var accountDao: AccountDao
@@ -126,48 +118,55 @@ abstract class AccountsFragmentBase : Fragment(), NavDirectionsToAccountDetailsF
     }
 
     private fun addAccount(aName: String) {
-        if (aName == null || aName.trim { it <= ' ' } == "") {
+        if ( aName.trim { it <= ' ' } == "") {
             Toast.makeText(context, getString(R.string.toast_enter_valid_name), Toast.LENGTH_LONG).show()
             Log.w(LOGTAG, "account name not valid")
             return
         }
         val name = aName.trim { it <= ' ' }
-        val accountDao = AppDatabase.get(context).accountDao
-        getAccountCount(name, accountDao)
-                .subscribe(Consumer { count: Int ->
-                    if (count == 0) {
-                        val account = Account()
-                        account.name = name
-                        account.numBreaches = 0
-                        account.numAcknowledgedBreaches = 0
-                        insertAccount(accountDao, account, activity!!.application)
-                    }
 
-                })
+        runBlocking(context = Dispatchers.IO) {
+            launch(createCoroutingExceptionHandler(LOGTAG)) {
+                addNewAccount(name)
+            }
+        }
     }
 
-    private fun getAccountCount(name: String, accountDao: AccountDao): Single<Int> {
-        return Single.fromCallable { accountDao.countByName(name) }
-                .subscribeOn(Schedulers.io())
+    private fun addNewAccount(name: String) {
+        val accountDao = AppDatabase.get(context).accountDao
+        val count = accountDao.countByName(name)
+        if (count > 0) {
+            return
+        }
+        insertAccount(accountDao, createNewAccount(name), activity!!.application)
+    }
+
+    private fun createNewAccount(name: String): Account {
+        val account = Account()
+        account.name = name
+        account.numBreaches = 0
+        account.numAcknowledgedBreaches = 0
+        return account
     }
 
     private fun insertAccount(accountDao: AccountDao, account: Account, application: Application) {
-        Single.fromCallable { accountDao.insert(account) }
-                .subscribeOn(Schedulers.io())
-                .subscribe({ ids: List<Long> ->
-                    (application as HackedApplication).trackCustomEvent(CustomEvent.ACCOUNT_ADDED)
-                    val inputData = Data.Builder()
-                            .putLong(HIBPAccountCheckerWorker.KEY_ID, ids[0])
-                            .build()
-                    val constraints = Constraints.Builder()
-                            .setRequiredNetworkType(NetworkType.UNMETERED)
-                            .build()
-                    val checker = OneTimeWorkRequest.Builder(HIBPAccountCheckerWorker::class.java)
-                            .setInputData(inputData)
-                            .setConstraints(constraints)
-                            .build()
-                    WorkManager.getInstance().enqueue(checker)
-                }) { throwable: Throwable? -> Log.e(ContentValues.TAG, "Error msg", throwable) }
+        val ids = accountDao.insert(account)
+        (application as HackedApplication).trackCustomEvent(CustomEvent.ACCOUNT_ADDED)
+        checkNewAccount(ids)
+    }
+
+    private fun checkNewAccount(ids: MutableList<Long>) {
+        val inputData = Data.Builder()
+                .putLong(HIBPAccountCheckerWorker.KEY_ID, ids[0])
+                .build()
+        val constraints = Constraints.Builder()
+                .setRequiredNetworkType(NetworkType.UNMETERED)
+                .build()
+        val checker = OneTimeWorkRequest.Builder(HIBPAccountCheckerWorker::class.java)
+                .setInputData(inputData)
+                .setConstraints(constraints)
+                .build()
+        WorkManager.getInstance(context!!).enqueue(checker)
     }
 
     companion object {
