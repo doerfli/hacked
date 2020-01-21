@@ -38,7 +38,7 @@
     </fragment>
     <fragment
         android:id="@+id/accountsListFullFragment"
-        android:name="li.doerf.hacked.ui.fragments.AccountsListFullFragment"
+        android:name="li.doerf.hacked.ui.fragments.AccountsFragment"
         android:label="Accounts">
         <action
             android:id="@+id/action_accountsListFullFragment_to_accountDetailsFragment"
@@ -46,5 +46,9 @@
             app:launchSingleTop="true"
             app:popUpTo="@+id/accountsListFullFragment"
             app:popUpToInclusive="false" />
+        <argument
+            android:name="FullView"
+            app:argType="boolean"
+            android:defaultValue="true" />
     </fragment>
 </navigation>

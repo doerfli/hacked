@@ -14,7 +14,9 @@ import androidx.constraintlayout.widget.Group
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import androidx.navigation.NavDirections
 import androidx.navigation.findNavController
+import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.work.*
@@ -32,15 +34,23 @@ import li.doerf.hacked.util.createCoroutingExceptionHandler
 import org.joda.time.format.DateTimeFormat
 import java.util.*
 
-abstract class AccountsFragmentBase : Fragment(), NavDirectionsToAccountDetailsFactory {
+class AccountsFragment : Fragment(), NavDirectionsToAccountDetailsFactory {
     private lateinit var groupAddAccount: Group
     private lateinit var accountDao: AccountDao
     private lateinit var accountsAdapter: AccountsAdapter
+    private var isFullView: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
         accountDao = AppDatabase.get(context).accountDao
+
+        if (arguments != null) {
+            val args: AccountsFragmentArgs by navArgs()
+            if (args.fullView) {
+                isFullView = true
+            }
+        }
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -169,8 +179,21 @@ abstract class AccountsFragmentBase : Fragment(), NavDirectionsToAccountDetailsF
         WorkManager.getInstance(context!!).enqueue(checker)
     }
 
+    override fun createNavDirections(accountId: Long): NavDirections {
+        if (isFullView) {
+            val action = AccountsFragmentDirections.actionAccountsListFullFragmentToAccountDetailsFragment(accountId)
+            action.accountId = accountId
+            return action
+        }
+
+        val action = OverviewFragmentDirections.actionOverviewFragmentToAccountDetailsFragment()
+        action.accountId = accountId
+        return action
+    }
+
     companion object {
         const val LOGTAG = "AccountsFragmentBase"
+        const val ARG_FULL_VIEW = "FullView"
     }
 
 }

@@ -6,7 +6,7 @@
     >
 
     <fragment
-        android:name="li.doerf.hacked.ui.fragments.AccountsOverviewFragment"
+        android:name="li.doerf.hacked.ui.fragments.AccountsFragment"
         android:id="@+id/fragment_accounts"
         android:layout_width="match_parent"
         android:layout_height="0dp"
