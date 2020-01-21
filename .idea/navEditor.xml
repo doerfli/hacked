@@ -41,18 +41,6 @@
                       </LayoutPositions>
                     </value>
                   </entry>
-                  <entry key="addAccountFragment">
-                    <value>
-                      <LayoutPositions>
-                        <option name="myPosition">
-                          <Point>
-                            <option name="x" value="-141" />
-                            <option name="y" value="195" />
-                          </Point>
-                        </option>
-                      </LayoutPositions>
-                    </value>
-                  </entry>
                   <entry key="overviewFragment">
                     <value>
                       <LayoutPositions>
@@ -70,11 +58,6 @@
                               </value>
                             </entry>
                             <entry key="action_overviewFragment_to_accountsListFullFragment">
-                              <value>
-                                <LayoutPositions />
-                              </value>
-                            </entry>
-                            <entry key="action_overviewFragment_to_addAccountFragment">
                               <value>
                                 <LayoutPositions />
                               </value>

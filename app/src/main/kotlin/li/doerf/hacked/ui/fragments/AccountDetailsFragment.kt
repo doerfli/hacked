@@ -4,19 +4,22 @@ import android.content.Context
 import android.os.Bundle
 import android.text.Html
 import android.text.method.LinkMovementMethod
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.cardview.widget.CardView
 import androidx.constraintlayout.widget.Group
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
+import li.doerf.hacked.CustomEvent
 import li.doerf.hacked.HackedApplication
 import li.doerf.hacked.R
 import li.doerf.hacked.db.AppDatabase
@@ -25,6 +28,7 @@ import li.doerf.hacked.db.entities.Breach
 import li.doerf.hacked.ui.HibpInfo
 import li.doerf.hacked.ui.adapters.BreachesAdapter
 import li.doerf.hacked.ui.viewmodels.BreachViewModel
+import li.doerf.hacked.util.createCoroutingExceptionHandler
 import li.doerf.hacked.utils.BackgroundTaskHelper
 import java.util.*
 
@@ -37,6 +41,7 @@ class AccountDetailsFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true)
         val args: AccountDetailsFragmentArgs by navArgs()
         myAccountId = args.accountId
     }
@@ -103,4 +108,38 @@ class AccountDetailsFragment : Fragment() {
         (activity!!.application as HackedApplication).trackView("Fragment~AccountDetails")
     }
 
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        return inflater.inflate(R.menu.menu_fragment_account_details, menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == R.id.action_delete) {
+            deleteAccount()
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
+    private fun deleteAccount() {
+        runBlocking(context = Dispatchers.IO) {
+            launch(createCoroutingExceptionHandler(LOGTAG)) {
+                val accountDao = AppDatabase.get(context).accountDao
+                val breachDao = AppDatabase.get(context).breachDao
+                val account = accountDao.findById(myAccountId).first()
+                val breaches = breachDao.findByAccount(myAccountId)
+                try {
+                    for (b in breaches) {
+                        breachDao.delete(b)
+                    }
+                    accountDao.delete(account)
+                } finally {
+                    (activity!!.application as HackedApplication).trackCustomEvent(CustomEvent.ACCOUNT_DELETED)
+                }
+            }
+        }
+        findNavController().popBackStack()
+    }
+
+    companion object {
+        const val LOGTAG = "AccountDetailsFragment"
+    }
 }
