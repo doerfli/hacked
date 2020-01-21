@@ -6,6 +6,7 @@ import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.*
+import android.view.inputmethod.InputMethodManager
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
@@ -35,6 +36,7 @@ import org.joda.time.format.DateTimeFormat
 import java.util.*
 
 class AccountsFragment : Fragment(), NavDirectionsToAccountDetailsFactory {
+    private lateinit var accountEditText: EditText
     private lateinit var groupAddAccount: Group
     private lateinit var accountDao: AccountDao
     private lateinit var accountsAdapter: AccountsAdapter
@@ -89,23 +91,29 @@ class AccountsFragment : Fragment(), NavDirectionsToAccountDetailsFactory {
             fragmentRootView.findNavController().navigate(action)
         }
 
-        val account = fragmentRootView.findViewById<EditText>(R.id.account)
+        accountEditText = fragmentRootView.findViewById<EditText>(R.id.account)
 
         val addButton = fragmentRootView.findViewById<Button>(R.id.add)
         addButton.setOnClickListener {
-            val accountName = account.text
+            val accountName = accountEditText.text
             addAccount(accountName.toString())
-            groupAddAccount.visibility = View.GONE
+            hideSectionAndKeyboard(fragmentRootView)
         }
 
         val cancelButton = fragmentRootView.findViewById<Button>(R.id.cancel)
         cancelButton.setOnClickListener {
-            groupAddAccount.visibility = View.GONE
+            hideSectionAndKeyboard(fragmentRootView)
         }
 
         groupAddAccount = fragmentRootView.findViewById(R.id.group_add_account)
 
         return fragmentRootView
+    }
+
+    private fun hideSectionAndKeyboard(fragmentRootView: View) {
+        groupAddAccount.visibility = View.GONE
+        val imm = context!!.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.hideSoftInputFromWindow(fragmentRootView.windowToken, 0)
     }
 
     override fun onAttach(context: Context) {
@@ -121,6 +129,7 @@ class AccountsFragment : Fragment(), NavDirectionsToAccountDetailsFactory {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item.itemId == R.id.action_add) {
+            accountEditText.text.clear()
             groupAddAccount.visibility = View.VISIBLE
             return true
         }
