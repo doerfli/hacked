@@ -10,9 +10,12 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import android.widget.*
 import androidx.fragment.app.Fragment
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
+import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import li.doerf.hacked.CustomEvent
 import li.doerf.hacked.HackedApplication
 import li.doerf.hacked.R
@@ -24,51 +27,79 @@ import li.doerf.hacked.utils.StringHelper
  */
 class PwnedPasswordFragment : Fragment() {
 
+    private lateinit var fragmentRootView: View
+    private var isFullFragment: Boolean = false
     private lateinit var pwnedButton: Button
     private lateinit var progressBar: ProgressBar
     private lateinit var passwordField: EditText
     private lateinit var passwordPwned: TextView
     private lateinit var passwordOk: TextView
     private lateinit var myBroadcastReceiver: LocalBroadcastReceiver
-    private lateinit var enteredPassword: String
+    private var enteredPassword: String = ""
 
-//    override fun onCreate(savedInstanceState: Bundle?) {
-//        if (arguments != null) {
-//            val args: PPF by navArgs()
-//            if (args.fullView) {
-//                isFullView = true
-//            }
-//        }
-//    }
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        if (arguments != null) {
+            val args: PwnedPasswordFragmentArgs by navArgs()
+            isFullFragment = true
+            enteredPassword = args.password
+        }
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
-        val rootview = inflater.inflate(R.layout.fragment_pwned_password, container, false)
+        fragmentRootView = inflater.inflate(R.layout.fragment_pwned_password, container, false)
 
-        passwordField = rootview.findViewById(R.id.password)
-        passwordOk = rootview.findViewById(R.id.result_ok)
-        passwordPwned = rootview.findViewById(R.id.result_pwned)
-        progressBar = rootview.findViewById(R.id.progressbar)
+        passwordField = fragmentRootView.findViewById(R.id.password)
+        passwordOk = fragmentRootView.findViewById(R.id.result_ok)
+        passwordPwned = fragmentRootView.findViewById(R.id.result_pwned)
+        progressBar = fragmentRootView.findViewById(R.id.progressbar)
 
-        pwnedButton = rootview.findViewById(R.id.check_pwned)
+        pwnedButton = fragmentRootView.findViewById(R.id.check_pwned)
         pwnedButton.setOnClickListener { checkPassword(passwordField.text.toString()) }
 
-        return rootview
+        if (isFullFragment) {
+            fragmentRootView.findViewById<TextView>(R.id.title_pwned_passwords).visibility = View.GONE
+        }
+
+        return fragmentRootView
+    }
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        val imm = context!!.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.hideSoftInputFromWindow(fragmentRootView.windowToken, 0)
     }
 
     override fun onResume() {
         super.onResume()
         registerReceiver()
         (activity!!.application as HackedApplication).trackView("Fragment~Password")
+        if (isFullFragment && enteredPassword != "" ) {
+            passwordField.setText(enteredPassword)
+            checkPassword(enteredPassword)
+            enteredPassword = ""
+        }
+        passwordOk.visibility = View.GONE
+        passwordPwned.visibility = View.GONE
+        progressBar.visibility = View.GONE
     }
 
     override fun onPause() {
+        passwordField.text.clear()
         unregisterReceiver()
         super.onPause()
     }
 
     private fun checkPassword(password: String) {
+        // navigate to full screen pwnedpassword fragment
+        if (! isFullFragment) {
+            val action = OverviewFragmentDirections.actionOverviewFragmentToPwnedPasswordFragment(password)
+            findNavController().navigate(action)
+            return
+        }
+
         passwordOk.visibility = View.GONE
         passwordPwned.visibility = View.GONE
         progressBar.visibility = View.VISIBLE
