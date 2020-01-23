@@ -24,7 +24,6 @@ import java.util.*
 
 /**
  * A simple [Fragment] subclass.
- * Use the [BreachesFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
 class BreachesFragment : Fragment() {
@@ -67,14 +66,4 @@ class BreachesFragment : Fragment() {
         WorkManager.getInstance().enqueue(checker)
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         * @return A new instance of fragment BreachesFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance() = BreachesFragment()
-    }
 }
