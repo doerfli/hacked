@@ -31,6 +31,12 @@
             app:destination="@id/pwnedPasswordFragment"
             app:popUpTo="@+id/overviewFragment"
             app:popUpToInclusive="false" />
+        <action
+            android:id="@+id/action_overviewFragment_to_allBreachesFragment"
+            app:destination="@id/allBreachesFragment"
+            app:launchSingleTop="true"
+            app:popUpTo="@+id/overviewFragment"
+            app:popUpToInclusive="false" />
     </fragment>
     <fragment
         android:id="@+id/accountDetailsFragment"
@@ -65,4 +71,8 @@
             android:name="password"
             app:argType="string" />
     </fragment>
+    <fragment
+        android:id="@+id/allBreachesFragment"
+        android:name="li.doerf.hacked.ui.fragments.AllBreachesFragment"
+        android:label="AllBreachesFragment" />
 </navigation>

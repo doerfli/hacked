@@ -56,7 +56,7 @@ public class BreachedSitesListFragment extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        myBreachedSitesAdapter = new BreachedSitesAdapter(getContext(), new ArrayList<>());
+        myBreachedSitesAdapter = new BreachedSitesAdapter(getContext(), new ArrayList<>(), false);
         setHasOptionsMenu(true);
         initViewModel();
     }

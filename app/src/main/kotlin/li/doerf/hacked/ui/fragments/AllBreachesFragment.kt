@@ -6,11 +6,9 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
-import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.work.Constraints
@@ -28,18 +26,12 @@ import java.util.*
  * A simple [Fragment] subclass.
  * create an instance of this fragment.
  */
-class BreachesFragment : Fragment() {
+class AllBreachesFragment : Fragment() {
     private lateinit var breachedSitesAdapter: BreachedSitesAdapter
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        val fragmentRootView = inflater.inflate(R.layout.fragment_breaches, container, false)
-
-        val headingChevron = fragmentRootView.findViewById<ImageView>(R.id.show_details)
-        headingChevron.setOnClickListener {
-            val action = OverviewFragmentDirections.actionOverviewFragmentToAllBreachesFragment()
-            fragmentRootView.findNavController().navigate(action)
-        }
+        val fragmentRootView = inflater.inflate(R.layout.fragment_all_breaches, container, false)
 
         val breachedSites: RecyclerView = fragmentRootView.findViewById(R.id.breached_sites_list)
         breachedSites.setHasFixedSize(true)
@@ -52,9 +44,9 @@ class BreachesFragment : Fragment() {
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        breachedSitesAdapter = BreachedSitesAdapter(context, ArrayList(), true)
+        breachedSitesAdapter = BreachedSitesAdapter(context, ArrayList(), false)
         val breachedSitesViewModel = ViewModelProviders.of(this).get(BreachedSitesViewModel::class.java)
-        breachedSitesViewModel.breachesSitesMostRecent.observe(this, Observer { sites: List<BreachedSite> -> breachedSitesAdapter.addItems(sites) })
+        breachedSitesViewModel.breachesSites.observe(this, Observer { sites: List<BreachedSite> -> breachedSitesAdapter.addItems(sites) })
     }
 
     override fun onResume() {
