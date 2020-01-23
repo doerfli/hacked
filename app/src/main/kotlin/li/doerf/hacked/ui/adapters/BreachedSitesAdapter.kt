@@ -8,9 +8,11 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.RelativeLayout
 import android.widget.TextView
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import li.doerf.hacked.R
 import li.doerf.hacked.db.entities.BreachedSite
+import li.doerf.hacked.ui.fragments.OverviewFragmentDirections
 import org.joda.time.format.DateTimeFormat
 
 class BreachedSitesAdapter(
@@ -33,15 +35,15 @@ class BreachedSitesAdapter(
         val view = holder.view
 
         if (compactView) {
-            bindCompactView(view, site)
+            bindCompactView(view, site, position)
         } else {
             bindFullView(view, site)
         }
 
     }
 
-    private fun bindFullView(view: View, site: BreachedSite) {
-        val nameView = view.findViewById<TextView>(R.id.site_name)
+    private fun bindFullView(siteCard: View, site: BreachedSite) {
+        val nameView = siteCard.findViewById<TextView>(R.id.site_name)
         nameView.text = site.name
         //        val unconfirmed = cardView.findViewById<TextView>(R.id.unconfirmed)
         if (site.verified) {
@@ -51,35 +53,39 @@ class BreachedSitesAdapter(
             nameView.setTextColor(context.resources.getColor(R.color.account_status_unknown))
             //            unconfirmed.visibility = View.VISIBLE
         }
-        val pwnCountView = view.findViewById<TextView>(R.id.pwn_count)
+        val pwnCountView = siteCard.findViewById<TextView>(R.id.pwn_count)
         pwnCountView.text = String.format(context.resources.configuration.locale, "(%,d)", site.pwnCount)
 
-        val details = view.findViewById<RelativeLayout>(R.id.breach_details)
-        val arrowDown = view.findViewById<ImageView>(R.id.arrow_down)
-        val arrowUp = view.findViewById<ImageView>(R.id.arrow_up)
-        view.setOnClickListener { view: View ->
-            if (details.visibility == View.VISIBLE) {
-                details.visibility = View.GONE
-                arrowDown.visibility = View.VISIBLE
-                arrowUp.visibility = View.GONE
-            } else {
-                details.visibility = View.VISIBLE
-                arrowDown.visibility = View.GONE
-                arrowUp.visibility = View.VISIBLE
-                val domain = view.findViewById<TextView>(R.id.domain)
-                domain.text = site.domain
-                val dtfOut = DateTimeFormat.forPattern("yyyy/MM/dd")
-                val breachDate = view.findViewById<TextView>(R.id.breach_date)
-                breachDate.text = dtfOut.print(site.breachDate)
-                val compromisedData = view.findViewById<TextView>(R.id.compromised_data)
-                compromisedData.text = site.dataClasses
-                val description = view.findViewById<TextView>(R.id.description)
-                description.text = Html.fromHtml(site.description).toString()
-            }
+        val details = siteCard.findViewById<RelativeLayout>(R.id.breach_details)
+        val arrowDown = siteCard.findViewById<ImageView>(R.id.arrow_down)
+        val arrowUp = siteCard.findViewById<ImageView>(R.id.arrow_up)
+
+        if (! site.detailsVisible) {
+            details.visibility = View.GONE
+            arrowDown.visibility = View.VISIBLE
+            arrowUp.visibility = View.GONE
+        } else {
+            details.visibility = View.VISIBLE
+            arrowDown.visibility = View.GONE
+            arrowUp.visibility = View.VISIBLE
+            val domain = siteCard.findViewById<TextView>(R.id.domain)
+            domain.text = site.domain
+            val dtfOut = DateTimeFormat.forPattern("yyyy/MM/dd")
+            val breachDate = siteCard.findViewById<TextView>(R.id.breach_date)
+            breachDate.text = dtfOut.print(site.breachDate)
+            val compromisedData = siteCard.findViewById<TextView>(R.id.compromised_data)
+            compromisedData.text = site.dataClasses
+            val description = siteCard.findViewById<TextView>(R.id.description)
+            description.text = Html.fromHtml(site.description).toString()
+        }
+
+        siteCard.setOnClickListener { view: View ->
+            site.detailsVisible = ! site.detailsVisible
+            notifyDataSetChanged()
         }
 }
 
-    private fun bindCompactView(view: View, site: BreachedSite) {
+    private fun bindCompactView(view: View, site: BreachedSite, position: Int) {
         val nameView = view.findViewById<TextView>(R.id.site_name)
         nameView.text = site.name
         //        val unconfirmed = cardView.findViewById<TextView>(R.id.unconfirmed)
@@ -93,7 +99,12 @@ class BreachedSitesAdapter(
         val pwnCountView = view.findViewById<TextView>(R.id.pwn_count)
         pwnCountView.text = String.format(context.resources.configuration.locale, "(%,d)", site.pwnCount)
 
-        // TODO clicklistener for chevron
+        val showDetails = view.findViewById<ImageView>(R.id.show_details)
+        showDetails.setOnClickListener { view ->
+            val action = OverviewFragmentDirections.actionOverviewFragmentToAllBreachesFragment()
+            action.breachedSiteId = site.id
+            view.findNavController().navigate(action)
+        }
     }
 
     override fun getItemCount(): Int {

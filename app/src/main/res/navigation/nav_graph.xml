@@ -74,5 +74,10 @@
     <fragment
         android:id="@+id/allBreachesFragment"
         android:name="li.doerf.hacked.ui.fragments.AllBreachesFragment"
-        android:label="AllBreachesFragment" />
+        android:label="AllBreachesFragment" >
+        <argument
+            android:name="breachedSiteId"
+            app:argType="long"
+            android:defaultValue="-1L" />
+    </fragment>
 </navigation>
