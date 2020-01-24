@@ -44,7 +44,7 @@ class BreachedSitesAdapter(
 
     private fun bindFullView(siteCard: View, site: BreachedSite) {
         val nameView = siteCard.findViewById<TextView>(R.id.site_name)
-        nameView.text = site.name
+        nameView.text = site.title
         //        val unconfirmed = cardView.findViewById<TextView>(R.id.unconfirmed)
         if (site.verified) {
             nameView.setTextColor(context.resources.getColor(android.R.color.primary_text_light))
@@ -87,7 +87,7 @@ class BreachedSitesAdapter(
 
     private fun bindCompactView(view: View, site: BreachedSite, position: Int) {
         val nameView = view.findViewById<TextView>(R.id.site_name)
-        nameView.text = site.name
+        nameView.text = site.title
         //        val unconfirmed = cardView.findViewById<TextView>(R.id.unconfirmed)
         if (site.verified) {
             nameView.setTextColor(context.resources.getColor(android.R.color.primary_text_light))
