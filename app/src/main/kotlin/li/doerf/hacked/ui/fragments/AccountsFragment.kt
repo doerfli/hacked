@@ -70,7 +70,7 @@ class AccountsFragment : Fragment(), NavDirectionsToAccountDetailsFactory {
             withContext(Dispatchers.IO) {
                 val lastCheckedAccount = accountDao.lastChecked
                 withContext(Dispatchers.Main) {
-                    Log.d("AccountsFragment", "lastChecked: " + lastCheckedAccount.lastChecked)
+                    Log.d("AccountsFragment", "lastChecked: " + lastCheckedAccount?.lastChecked)
                     val lastChecked = fragmentRootView.findViewById<TextView>(R.id.last_checked)
                     if (lastCheckedAccount != null) {
                         val dtfOut = DateTimeFormat.forPattern("yyyy/MM/dd HH:mm")

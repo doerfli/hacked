@@ -23,6 +23,9 @@ public interface BreachedSiteDao {
     @Delete
     int delete(BreachedSite... entity);
 
+    @Query("SELECT * FROM breached_sites WHERE name=:name LIMIT 1")
+    BreachedSite getByName(String name);
+
     @Query("SELECT * FROM breached_sites ORDER BY name")
     List<BreachedSite> getAll();
 

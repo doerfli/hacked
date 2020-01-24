@@ -55,11 +55,11 @@ class BreachedSitesWorker(private val context: Context, params: WorkerParameters
 
     private suspend fun retrieveSites(): Result {
         Log.d(LOGTAG, "retrieveSites")
-        val allOldSites: List<BreachedSite> = breachedSiteDao.all
-        if (allOldSites.isNotEmpty()) {
-            Log.d(LOGTAG, "deleting old sites")
-            breachedSiteDao.delete(*allOldSites.toTypedArray())
-        }
+//        val allOldSites: List<BreachedSite> = breachedSiteDao.all
+//        if (allOldSites.isNotEmpty()) {
+//            Log.d(LOGTAG, "deleting old sites")
+//            breachedSiteDao.delete(*allOldSites.toTypedArray())
+//        }
 
         Log.d(LOGTAG, "retrieving breached sites")
         @SuppressLint("SimpleDateFormat") val date = SimpleDateFormat("yyyy-MM-dd")
@@ -80,8 +80,21 @@ class BreachedSitesWorker(private val context: Context, params: WorkerParameters
 
             for (ba in result) {
                 Log.d(LOGTAG, "breached site: " + ba.name)
-                val site = mapAccountToSite(ba, date, datetime)
-                breachedSiteDao.insert(site)
+                val newSite = mapAccountToSite(ba, date, datetime)
+                val site = breachedSiteDao.getByName(newSite.name)
+                if (site == null) {
+                    breachedSiteDao.insert(newSite)
+                } else {
+                    site.title = newSite.title
+                    site.domain = newSite.domain
+                    site.addedDate = newSite.addedDate
+                    site.breachDate = newSite.breachDate
+                    site.pwnCount = newSite.pwnCount
+                    site.description = newSite.description
+                    site.dataClasses = newSite.dataClasses
+                    site.verified = newSite.verified
+                    breachedSiteDao.update(site)
+                }
             }
 
             return Result.success()
