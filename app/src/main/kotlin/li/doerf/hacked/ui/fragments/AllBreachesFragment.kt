@@ -1,6 +1,7 @@
 package li.doerf.hacked.ui.fragments
 
 
+import android.app.Activity
 import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -71,18 +72,34 @@ class AllBreachesFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         if (breachedSitesAdapter.itemCount == 0 ) {
-            reloadBreachedSites()
+            reloadBreachedSites(activity!!)
         }
     }
 
-    private fun reloadBreachedSites() {
-        val constraints = Constraints.Builder()
-                .setRequiredNetworkType(NetworkType.UNMETERED)
-                .build()
-        val checker = OneTimeWorkRequest.Builder(BreachedSitesWorker::class.java)
-                .setConstraints(constraints)
-                .build()
-        WorkManager.getInstance().enqueue(checker)
+
+
+    companion object {
+        private const val PREF_KEY_LAST_BREACHED_SITES_SYNC = "PREF_KEY_LAST_BREACHED_SITES_SYNC"
+        private const val SIXHOURS = 6 * 60 * 60 * 1000
+
+        fun reloadBreachedSites(activity: Activity) {
+            val sharedPref = activity.getPreferences(Context.MODE_PRIVATE) ?: return
+            val lastSync = sharedPref.getLong(PREF_KEY_LAST_BREACHED_SITES_SYNC, 0)
+
+            if (System.currentTimeMillis() - lastSync > SIXHOURS) {
+                val constraints = Constraints.Builder()
+                        .setRequiredNetworkType(NetworkType.UNMETERED)
+                        .build()
+                val checker = OneTimeWorkRequest.Builder(BreachedSitesWorker::class.java)
+                        .setConstraints(constraints)
+                        .build()
+                WorkManager.getInstance().enqueue(checker)
+                with (sharedPref.edit()) {
+                    putLong(PREF_KEY_LAST_BREACHED_SITES_SYNC, System.currentTimeMillis());
+                    commit()
+                }
+            }
+        }
     }
 
 }

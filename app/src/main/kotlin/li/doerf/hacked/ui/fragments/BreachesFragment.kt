@@ -13,13 +13,8 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import androidx.work.Constraints
-import androidx.work.NetworkType
-import androidx.work.OneTimeWorkRequest
-import androidx.work.WorkManager
 import li.doerf.hacked.R
 import li.doerf.hacked.db.entities.BreachedSite
-import li.doerf.hacked.remote.hibp.BreachedSitesWorker
 import li.doerf.hacked.ui.adapters.BreachedSitesAdapter
 import li.doerf.hacked.ui.viewmodels.BreachedSitesViewModel
 import java.util.*
@@ -60,18 +55,8 @@ class BreachesFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         if (breachedSitesAdapter.getItemCount() == 0 ) {
-            reloadBreachedSites()
+            AllBreachesFragment.reloadBreachedSites(activity!!)
         }
-    }
-
-    private fun reloadBreachedSites() {
-        val constraints = Constraints.Builder()
-                .setRequiredNetworkType(NetworkType.UNMETERED)
-                .build()
-        val checker = OneTimeWorkRequest.Builder(BreachedSitesWorker::class.java)
-                .setConstraints(constraints)
-                .build()
-        WorkManager.getInstance().enqueue(checker)
     }
 
 }
