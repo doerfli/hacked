@@ -55,14 +55,6 @@
             android:label="@string/title_settings"
             android:parentActivityName=".activities.MainActivity" />
 
-        <receiver android:name=".receiver.PackageReplacedReceiver">
-            <intent-filter>
-                <action android:name="android.intent.action.PACKAGE_REPLACED" />
-
-                <data android:scheme="package" />
-            </intent-filter>
-        </receiver>
-
         <service
             android:name=".services.FirebaseMessagagingService"
             android:exported="false">
