@@ -3,8 +3,14 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/action_privacypolicy"
+        android:id="@+id/action_settings"
         android:orderInCategory="200"
+        android:title="@string/action_settings"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_privacypolicy"
+        android:orderInCategory="210"
         android:title="@string/action_privacypolicy"
         android:icon="@android:drawable/ic_dialog_info"
         app:showAsAction="never" />
