@@ -21,6 +21,7 @@ import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.work.*
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.*
 import li.doerf.hacked.CustomEvent
 import li.doerf.hacked.HackedApplication
@@ -36,6 +37,7 @@ import org.joda.time.format.DateTimeFormat
 import java.util.*
 
 class AccountsFragment : Fragment(), NavDirectionsToAccountDetailsFactory {
+    private lateinit var fragmentRootView: View
     private lateinit var accountEditText: EditText
     private lateinit var groupAddAccount: Group
     private lateinit var accountDao: AccountDao
@@ -58,7 +60,7 @@ class AccountsFragment : Fragment(), NavDirectionsToAccountDetailsFactory {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
-        val fragmentRootView = inflater.inflate(R.layout.fragment_accounts, container, false)
+        fragmentRootView = inflater.inflate(R.layout.fragment_accounts, container, false)
 
         val accountsList: RecyclerView = fragmentRootView.findViewById(R.id.accounts_list)
         accountsList.setHasFixedSize(true)
@@ -128,12 +130,23 @@ class AccountsFragment : Fragment(), NavDirectionsToAccountDetailsFactory {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (item.itemId == R.id.action_add) {
-            accountEditText.text.clear()
-            groupAddAccount.visibility = View.VISIBLE
-            return true
+        return when(item.itemId) {
+            R.id.action_add -> {
+                accountEditText.text.clear()
+                groupAddAccount.visibility = View.VISIBLE
+                true
+            }
+            R.id.action_refresh -> {
+                val checker = OneTimeWorkRequest.Builder(HIBPAccountCheckerWorker::class.java)
+                        .build()
+                WorkManager.getInstance(context!!).enqueue(checker)
+                Snackbar.make(fragmentRootView, getString(R.string.snackbar_checking_account), Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show()
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+
         }
-        return super.onOptionsItemSelected(item)
     }
 
     private fun addAccount(aName: String) {

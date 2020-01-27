@@ -121,4 +121,5 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="action_delete_account">Delete account</string>
+    <string name="action_refresh">Refresh</string>
 </resources>
