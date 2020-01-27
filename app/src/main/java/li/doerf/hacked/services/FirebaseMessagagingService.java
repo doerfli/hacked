@@ -64,7 +64,7 @@ public class FirebaseMessagagingService extends FirebaseMessagingService {
                 .setInputData(inputData)
                 .setConstraints(constraints)
                 .build();
-        WorkManager.getInstance().enqueueUniqueWork("hibp-response", ExistingWorkPolicy.APPEND, workerRequest);
+        WorkManager.getInstance(getApplicationContext()).enqueueUniqueWork("hibp-response", ExistingWorkPolicy.APPEND, workerRequest);
     }
 
     private void showNotification(RemoteMessage.Notification remoteNotification) {
