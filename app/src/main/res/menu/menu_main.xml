@@ -15,4 +15,11 @@
         android:icon="@android:drawable/ic_dialog_info"
         app:showAsAction="never" />
 
+    <item
+        android:id="@+id/action_visit_hibp"
+        android:orderInCategory="210"
+        android:title="@string/action_visit_hibp"
+        android:icon="@android:drawable/ic_dialog_info"
+        app:showAsAction="never" />
+
 </menu>

@@ -44,6 +44,11 @@ class NavActivity : AppCompatActivity() {
                 startActivity(browserIntent)
                 true
             }
+            R.id.action_visit_hibp -> {
+                val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse("https://haveibeenpwned.com"))
+                startActivity(browserIntent)
+                true
+            }
             R.id.action_settings -> {
                 val settingsIntent = Intent(this, SettingsActivity::class.java)
                 startActivity(settingsIntent)
