@@ -1,6 +1,7 @@
 package li.doerf.hacked.ui.adapters
 
 import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -39,16 +40,18 @@ class AccountsAdapter(private val context: Context, private var accountList: Lis
         val showDetails = view.findViewById<ImageView>(R.id.show_details)
         val breachCount = view.findViewById<TextView>(R.id.breach_count)
         val breachCounter = account.numBreaches
+        Log.d(LOGTAG, "breachCounter: ${breachCounter}")
 
         if (breachCounter > 0) {
             breachCount.text = String.format(Locale.getDefault(), "%d", breachCounter)
+            breachCount.visibility = View.VISIBLE
             showDetails.visibility = View.VISIBLE
         } else {
             showDetails.visibility = View.GONE
             breachCount.visibility = View.GONE
         }
 
-        showDetails.setOnClickListener { v: View ->
+        showDetails.setOnClickListener {
             NotificationHelper.cancelAll(context)
             val action = navDirectionsToAccountDetailsFactory.createNavDirections(account.id)
             view.findNavController().navigate(action)
@@ -76,6 +79,10 @@ class AccountsAdapter(private val context: Context, private var accountList: Lis
     fun addItems(accountList: List<Account>) {
         this.accountList = accountList
         notifyDataSetChanged()
+    }
+
+    companion object {
+        private val LOGTAG = javaClass.name
     }
 
 }
