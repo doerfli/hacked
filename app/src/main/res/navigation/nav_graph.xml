@@ -37,6 +37,11 @@
             app:launchSingleTop="true"
             app:popUpTo="@+id/overviewFragment"
             app:popUpToInclusive="false" />
+        <action
+            android:id="@+id/action_overviewFragment_to_firstUseFragment"
+            app:destination="@id/firstUseFragment"
+            app:launchSingleTop="true"
+            app:popUpToInclusive="true" />
     </fragment>
     <fragment
         android:id="@+id/accountDetailsFragment"
@@ -79,5 +84,16 @@
             android:name="breachedSiteId"
             app:argType="long"
             android:defaultValue="-1L" />
+    </fragment>
+    <fragment
+        android:id="@+id/firstUseFragment"
+        android:name="li.doerf.hacked.ui.fragments.FirstUseFragment"
+        android:label="Welcome to Hacked?"
+        tools:layout="@layout/fragment_first_use" >
+        <action
+            android:id="@+id/action_firstUseFragment_to_overviewFragment"
+            app:destination="@id/overviewFragment"
+            app:launchSingleTop="true"
+            app:popUpToInclusive="false" />
     </fragment>
 </navigation>

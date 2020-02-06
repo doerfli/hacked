@@ -53,6 +53,27 @@
                       </LayoutPositions>
                     </value>
                   </entry>
+                  <entry key="firstUseFragment">
+                    <value>
+                      <LayoutPositions>
+                        <option name="myPosition">
+                          <Point>
+                            <option name="x" value="-944" />
+                            <option name="y" value="-133" />
+                          </Point>
+                        </option>
+                        <option name="myPositions">
+                          <map>
+                            <entry key="action_firstUseFragment_to_overviewFragment">
+                              <value>
+                                <LayoutPositions />
+                              </value>
+                            </entry>
+                          </map>
+                        </option>
+                      </LayoutPositions>
+                    </value>
+                  </entry>
                   <entry key="overviewFragment">
                     <value>
                       <LayoutPositions>
@@ -75,6 +96,11 @@
                               </value>
                             </entry>
                             <entry key="action_overviewFragment_to_allBreachesFragment">
+                              <value>
+                                <LayoutPositions />
+                              </value>
+                            </entry>
+                            <entry key="action_overviewFragment_to_firstUseFragment">
                               <value>
                                 <LayoutPositions />
                               </value>
