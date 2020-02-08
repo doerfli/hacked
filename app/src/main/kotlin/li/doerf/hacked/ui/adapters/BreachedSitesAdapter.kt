@@ -99,8 +99,7 @@ class BreachedSitesAdapter(
         val pwnCountView = view.findViewById<TextView>(R.id.pwn_count)
         pwnCountView.text = String.format(context.resources.configuration.locale, "(%,d)", site.pwnCount)
 
-        val showDetails = view.findViewById<ImageView>(R.id.show_details)
-        showDetails.setOnClickListener { view ->
+        view.setOnClickListener { view ->
             val action = OverviewFragmentDirections.actionOverviewFragmentToAllBreachesFragment()
             action.breachedSiteId = site.id
             view.findNavController().navigate(action)

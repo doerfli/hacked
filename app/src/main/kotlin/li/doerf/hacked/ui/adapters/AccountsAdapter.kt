@@ -45,13 +45,11 @@ class AccountsAdapter(private val context: Context, private var accountList: Lis
         if (breachCounter > 0) {
             breachCount.text = String.format(Locale.getDefault(), "%d", breachCounter)
             breachCount.visibility = View.VISIBLE
-            showDetails.visibility = View.VISIBLE
         } else {
-            showDetails.visibility = View.GONE
             breachCount.visibility = View.GONE
         }
 
-        showDetails.setOnClickListener {
+        view.setOnClickListener {
             NotificationHelper.cancelAll(context)
             val action = navDirectionsToAccountDetailsFactory.createNavDirections(account.id)
             view.findNavController().navigate(action)
