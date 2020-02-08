@@ -83,4 +83,6 @@
     <string name="firstuse_p2">Since this is the first time you use the app, lets add your first account together</string>
     <string name="firstuse_p3">All accounts stored in the app will be checked once a day (this can be changed in the settings).</string>
     <string name="firstuse_p4">The data source for the breaches is the well known website <a href="https://haveibeenpwned.com">haveibeenpwned.com</a>. If you want to learn more about where the data comes from, have a look at their <a href="https://haveibeenpwned.com/FAQs">FAQs</a>.</string>
+    <string name="all_breaches">List of all breaches</string>
+    <string name="welcome">Welcome to Hacked?</string>
 </resources>

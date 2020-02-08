@@ -79,7 +79,7 @@
     <fragment
         android:id="@+id/allBreachesFragment"
         android:name="li.doerf.hacked.ui.fragments.AllBreachesFragment"
-        android:label="AllBreachesFragment" >
+        android:label="@string/all_breaches" >
         <argument
             android:name="breachedSiteId"
             app:argType="long"
@@ -88,7 +88,7 @@
     <fragment
         android:id="@+id/firstUseFragment"
         android:name="li.doerf.hacked.ui.fragments.FirstUseFragment"
-        android:label="Welcome to Hacked?"
+        android:label="@string/welcome"
         tools:layout="@layout/fragment_first_use" >
         <action
             android:id="@+id/action_firstUseFragment_to_overviewFragment"

@@ -84,4 +84,6 @@
     <string name="firstuse_p2">Da die App zum Ersten Mal gestartet wurde, kann nun gleich ein Konto hinzugefügt werden</string>
     <string name="firstuse_p3">Alle Konten werden einmal am Tag überprüft (dies kann in den Einstellungen angepasst werden).</string>
     <string name="firstuse_p4">Die Informationen zu Datenlecks werden von der bekannten Webseite <a href="https://haveibeenpwned.com">haveibeenpwned.com</a> bezogen. Wenn Sie weitere Informationen zur Herkunft der Daten wuenschen, dann lesen Sie bitte in den HIBP <a href="https://haveibeenpwned.com/FAQs">FAQs</a>s.</string>
+    <string name="all_breaches">Alle Datenlecks</string>
+    <string name="welcome">Willkommen zu Hacked?</string>
 </resources>
