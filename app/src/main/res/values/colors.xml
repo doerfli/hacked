@@ -3,16 +3,10 @@
     <color name="colorPrimary">#388E3C</color>
     <color name="colorPrimaryDark">#1B5E20</color>
     <color name="colorAccent">#FF9100</color>
-    <color name="refresh_progress_1">@color/colorPrimary</color>
-    <color name="refresh_progress_2">@color/colorAccent</color>
-    <color name="refresh_progress_3">@android:color/holo_purple</color>
-    <color name="refresh_progress_4">@android:color/holo_blue_light</color>
     <color name="account_status_ok">#4CAF50</color>
     <color name="account_status_only_acknowledged">#89AF4C</color>
     <color name="account_status_breached">#F44336</color>
     <color name="account_status_unknown">#9E9E9E</color>
-    <color name="acknoweldged">#AAAAAA</color>
-    <color name="not_acknoweldged">#ffffff</color>
     <color name="green">#007900</color>
     <color name="hibp_info_bg">#E8777777</color>
     <color name="bg_notification">#FFE8D0</color>
