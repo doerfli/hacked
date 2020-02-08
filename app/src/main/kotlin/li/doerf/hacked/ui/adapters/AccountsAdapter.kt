@@ -5,7 +5,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import android.widget.TextView
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
@@ -37,7 +36,6 @@ class AccountsAdapter(private val context: Context, private var accountList: Lis
         val nameView = view.findViewById<TextView>(R.id.name)
         nameView.text = account.name
 
-        val showDetails = view.findViewById<ImageView>(R.id.show_details)
         val breachCount = view.findViewById<TextView>(R.id.breach_count)
         val breachCounter = account.numBreaches
         Log.d(LOGTAG, "breachCounter: ${breachCounter}")
@@ -80,7 +78,7 @@ class AccountsAdapter(private val context: Context, private var accountList: Lis
     }
 
     companion object {
-        private val LOGTAG = javaClass.name
+        private val LOGTAG = this::class.java.name
     }
 
 }

@@ -16,14 +16,6 @@ import li.doerf.hacked.R
 import li.doerf.hacked.db.AppDatabase
 import li.doerf.hacked.utils.RatingHelper
 
-/**
- * A simple [Fragment] subclass.
- * Activities that contain this fragment must implement the
- * [OverviewFragment.OnFragmentInteractionListener] interface
- * to handle interaction events.
- * Use the [OverviewFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class OverviewFragment : Fragment() {
 
     private lateinit var hibpInfo: TextView
@@ -33,7 +25,7 @@ class OverviewFragment : Fragment() {
         // Inflate the layout for this fragment
         val rootView = inflater.inflate(R.layout.fragment_overview, container, false)
 
-        hibpInfo = rootView.findViewById<TextView>(R.id.hibp_info)
+        hibpInfo = rootView.findViewById(R.id.hibp_info)
         hibpInfo.movementMethod = LinkMovementMethod.getInstance()
         hibpInfo.text = Html.fromHtml("${getString(R.string.data_provided_by)} <a href=\"https://haveibeenpwned.com\">Have i been pwned?</a>")
 
@@ -57,7 +49,7 @@ class OverviewFragment : Fragment() {
         val sharedPref = activity!!.getPreferences(Context.MODE_PRIVATE)
         val firstUseSeen = sharedPref.getBoolean(PREF_KEY_FIRST_USE_SEEN, false)
         val numAccounts = AppDatabase.get(context).accountDao.all.size
-        Log.d(LOGTAG, "firstUseSeen: ${firstUseSeen} / numAccounts: ${numAccounts}")
+        Log.d(LOGTAG, "firstUseSeen: $firstUseSeen / numAccounts: $numAccounts")
         return ! firstUseSeen && numAccounts == 0
     }
 
@@ -76,7 +68,7 @@ class OverviewFragment : Fragment() {
 
     companion object {
         const val PREF_KEY_FIRST_USE_SEEN: String = "PREF_KEY_FIRST_USE_SEEN"
-        val LOGTAG: String = this.javaClass.name
+        val LOGTAG: String = this::class.java.name
     }
 
 }

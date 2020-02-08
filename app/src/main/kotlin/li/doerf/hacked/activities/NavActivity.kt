@@ -22,7 +22,7 @@ class NavActivity : AppCompatActivity() {
         setSupportActionBar(toolbar)
         toolbar.title = getString(R.string.app_name)
         title = getString(R.string.app_name)
-        val navController = Navigation.findNavController(this, R.id.nav_host_fragment);
+        val navController = Navigation.findNavController(this, R.id.nav_host_fragment)
         NavigationUI.setupActionBarWithNavController(this, navController)
     }
 

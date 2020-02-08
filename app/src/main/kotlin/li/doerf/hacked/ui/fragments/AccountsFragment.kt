@@ -160,7 +160,6 @@ class AccountsFragment : Fragment(), NavDirectionsToAccountDetailsFactory {
 
     companion object {
         const val LOGTAG = "AccountsFragmentBase"
-        const val ARG_FULL_VIEW = "FullView"
     }
 
 }

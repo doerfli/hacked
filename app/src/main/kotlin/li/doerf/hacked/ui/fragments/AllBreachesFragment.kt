@@ -93,9 +93,9 @@ class AllBreachesFragment : Fragment() {
                 val checker = OneTimeWorkRequest.Builder(BreachedSitesWorker::class.java)
                         .setConstraints(constraints)
                         .build()
-                WorkManager.getInstance().enqueue(checker)
+                WorkManager.getInstance(activity.applicationContext).enqueue(checker)
                 with (sharedPref.edit()) {
-                    putLong(PREF_KEY_LAST_BREACHED_SITES_SYNC, System.currentTimeMillis());
+                    putLong(PREF_KEY_LAST_BREACHED_SITES_SYNC, System.currentTimeMillis())
                     commit()
                 }
             }

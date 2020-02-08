@@ -85,21 +85,18 @@ class BreachedSitesAdapter(
         }
 }
 
-    private fun bindCompactView(view: View, site: BreachedSite, position: Int) {
-        val nameView = view.findViewById<TextView>(R.id.site_name)
+    private fun bindCompactView(card: View, site: BreachedSite, position: Int) {
+        val nameView = card.findViewById<TextView>(R.id.site_name)
         nameView.text = site.title
-        //        val unconfirmed = cardView.findViewById<TextView>(R.id.unconfirmed)
         if (site.verified) {
             nameView.setTextColor(context.resources.getColor(android.R.color.primary_text_light))
-            //            unconfirmed.visibility = View.GONE
         } else {
             nameView.setTextColor(context.resources.getColor(R.color.account_status_unknown))
-            //            unconfirmed.visibility = View.VISIBLE
         }
-        val pwnCountView = view.findViewById<TextView>(R.id.pwn_count)
+        val pwnCountView = card.findViewById<TextView>(R.id.pwn_count)
         pwnCountView.text = String.format(context.resources.configuration.locale, "(%,d)", site.pwnCount)
 
-        view.setOnClickListener { view ->
+        card.setOnClickListener { view ->
             val action = OverviewFragmentDirections.actionOverviewFragmentToAllBreachesFragment()
             action.breachedSiteId = site.id
             view.findNavController().navigate(action)

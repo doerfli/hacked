@@ -71,7 +71,7 @@ class AccountService(private val application: Application) {
                 .setInputData(inputData)
                 .setConstraints(constraints)
                 .build()
-        WorkManager.getInstance(context!!).enqueue(checker)
+        WorkManager.getInstance(context).enqueue(checker)
     }
 
 }
