@@ -22,7 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import li.doerf.hacked.activities.MainActivity;
+import li.doerf.hacked.activities.NavActivity;
 import li.doerf.hacked.remote.haveibeenpwned.HIBPAccountResponseWorker;
 import li.doerf.hacked.utils.NotificationHelper;
 import li.doerf.hacked.utils.OreoNotificationHelper;
@@ -82,7 +82,8 @@ public class FirebaseMessagagingService extends FirebaseMessagingService {
                         .setOnlyAlertOnce(true)
                         .setAutoCancel(true);
 
-        Intent showBreachDetails = new Intent(getApplicationContext(), MainActivity.class);
+        // TODO navigate directly to breaches
+        Intent showBreachDetails = new Intent(getApplicationContext(), NavActivity.class);
         PendingIntent resultPendingIntent =
                 PendingIntent.getActivity(
                         getApplicationContext(),

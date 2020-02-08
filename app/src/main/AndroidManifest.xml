@@ -47,10 +47,6 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".activities.BreachDetailsActivity"
-            android:label="@string/title_breach_details"
-            android:parentActivityName=".activities.MainActivity" />
-        <activity
             android:name=".activities.SettingsActivity"
             android:label="@string/title_settings"
             android:parentActivityName=".activities.MainActivity" />

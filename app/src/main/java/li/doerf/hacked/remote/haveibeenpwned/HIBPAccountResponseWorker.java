@@ -23,7 +23,7 @@ import java.io.IOException;
 import java.lang.ref.WeakReference;
 
 import li.doerf.hacked.R;
-import li.doerf.hacked.activities.MainActivity;
+import li.doerf.hacked.activities.NavActivity;
 import li.doerf.hacked.db.AppDatabase;
 import li.doerf.hacked.db.daos.AccountDao;
 import li.doerf.hacked.db.daos.BreachDao;
@@ -168,7 +168,8 @@ public class HIBPAccountResponseWorker extends Worker {
                         .setGroup(NOTIFICATION_GROUP_KEY_BREACHES)
                         .setAutoCancel(true);
 
-        Intent showBreachDetails = new Intent(myContext.get(), MainActivity.class);
+        // TODO navigate directly to breaches
+        Intent showBreachDetails = new Intent(myContext.get(), NavActivity.class);
         PendingIntent resultPendingIntent =
                 PendingIntent.getActivity(
                         myContext.get(),
