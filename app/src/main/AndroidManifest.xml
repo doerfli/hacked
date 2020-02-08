@@ -37,16 +37,6 @@
             android:value="false" />
 
         <activity
-            android:name=".activities.MainActivity"
-            android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar">
-            <intent-filter>
-<!--                <action android:name="android.intent.action.MAIN" />-->
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-        <activity
             android:name=".activities.SettingsActivity"
             android:label="@string/title_settings"
             android:parentActivityName=".activities.MainActivity" />

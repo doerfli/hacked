@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <li.doerf.hacked.ui.ColoredSwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/swipe_refresh_layout"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activities.MainActivity">
+    >
 
     <RelativeLayout
         android:layout_width="match_parent"
