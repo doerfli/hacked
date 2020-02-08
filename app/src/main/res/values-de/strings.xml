@@ -68,5 +68,20 @@
     <string name="breach_details_first_text">Benutzen Sie einen Passwort Manager (%1$s, %2$s, %3$s, …) um für jedes Konto ein neues, zufälliges Password zu generieren</string>
     <string name="breach_details_second_text">Aktivieren Sie 2-Faktor Authentisierung wenn es möglich ist</string>
     <string name="breach_details_third_text">Nachdem ein Datenleck entdeckt wurde muessen Sie nur mehr dieses Passwort ändern</string>
-    <string name="action_privacypolicy">Privacy policy</string>
+    <string name="action_privacypolicy">Datenschutzerklärung</string>
+    <string name="title_accounts">Meine Konten</string>
+    <string name="title_recent_breaches">Neueste Lecks auf HIBP</string>
+    <string name="title_pwned_passwords">Pwned Password</string>
+    <string name="show_details">Details anzeigen</string>
+    <string name="placeholder_count">0</string>
+    <string name="action_delete_account">Konto löschen</string>
+    <string name="action_refresh">Aktualisieren</string>
+    <string name="action_visit_hibp">haveibeenpwned.com öffnen</string>
+    <string name="firstuse_title">Hallo und willkommen bei Hacked?</string>
+    <string name="skip">Jetzt nicht</string>
+    <string name="add_and_dismiss_help">Konto hinzufügen</string>
+    <string name="firstuse_p1">Mit der Hacked? App können Sie überprüfen ob persönliche Kontoinformationen (Email Adresse, Passwort, …) durch ein Datenleck (öffentlich) im Internet verfügbar sind.</string>
+    <string name="firstuse_p2">Da die App zum Ersten Mal gestartet wurde, kann nun gleich ein Konto hinzugefügt werden</string>
+    <string name="firstuse_p3">Alle Konten werden einmal am Tag überprüft (dies kann in den Einstellungen angepasst werden).</string>
+    <string name="firstuse_p4">Die Informationen zu Datenlecks werden von der bekannten Webseite <a href="https://haveibeenpwned.com">haveibeenpwned.com</a> bezogen. Wenn Sie weitere Informationen zur Herkunft der Daten wuenschen, dann lesen Sie bitte in den HIBP <a href="https://haveibeenpwned.com/FAQs">FAQs</a>s.</string>
 </resources>
