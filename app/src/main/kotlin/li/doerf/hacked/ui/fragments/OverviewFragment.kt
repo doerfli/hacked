@@ -14,6 +14,7 @@ import androidx.navigation.fragment.findNavController
 import kotlinx.coroutines.*
 import li.doerf.hacked.R
 import li.doerf.hacked.db.AppDatabase
+import li.doerf.hacked.utils.RatingHelper
 
 /**
  * A simple [Fragment] subclass.
@@ -63,9 +64,8 @@ class OverviewFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-
+        RatingHelper(context).showRateUsDialogDelayed()
         hibpInfo.visibility = View.VISIBLE
-
         GlobalScope.launch {
             delay(5000)
             withContext(Dispatchers.Main) {

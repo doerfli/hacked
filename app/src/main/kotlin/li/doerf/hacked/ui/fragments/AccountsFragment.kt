@@ -146,8 +146,6 @@ class AccountsFragment : Fragment(), NavDirectionsToAccountDetailsFactory {
         }
     }
 
-
-
     override fun createNavDirections(accountId: Long): NavDirections {
         if (isFullView) {
             val action = AccountsFragmentDirections.actionAccountsListFullFragmentToAccountDetailsFragment(accountId)
