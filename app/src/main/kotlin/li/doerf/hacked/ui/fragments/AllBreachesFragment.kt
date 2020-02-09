@@ -20,6 +20,7 @@ import androidx.work.WorkManager
 import li.doerf.hacked.R
 import li.doerf.hacked.db.entities.BreachedSite
 import li.doerf.hacked.remote.hibp.BreachedSitesWorker
+import li.doerf.hacked.ui.HibpInfo
 import li.doerf.hacked.ui.adapters.BreachedSitesAdapter
 import li.doerf.hacked.ui.viewmodels.BreachedSitesViewModel
 import java.util.*
@@ -49,6 +50,8 @@ class AllBreachesFragment : Fragment() {
         layoutManager = LinearLayoutManager(context)
         breachedSites.layoutManager = layoutManager
         breachedSites.adapter = breachedSitesAdapter
+
+        HibpInfo.prepare(context, fragmentRootView.findViewById(R.id.hibp_info), breachedSites)
 
         return fragmentRootView
     }
