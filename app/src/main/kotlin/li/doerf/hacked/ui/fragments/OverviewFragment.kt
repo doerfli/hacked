@@ -11,7 +11,10 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
-import kotlinx.coroutines.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import li.doerf.hacked.R
 import li.doerf.hacked.db.AppDatabase
 import li.doerf.hacked.utils.RatingHelper
@@ -58,12 +61,6 @@ class OverviewFragment : Fragment() {
         super.onResume()
         RatingHelper(context).showRateUsDialogDelayed()
         hibpInfo.visibility = View.VISIBLE
-        GlobalScope.launch {
-            delay(5000)
-            withContext(Dispatchers.Main) {
-                hibpInfo.visibility = View.GONE
-            }
-        }
     }
 
     companion object {
