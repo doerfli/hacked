@@ -15,6 +15,8 @@ import androidx.multidex.MultiDexApplication;
 import com.google.android.gms.security.ProviderInstaller;
 import com.google.firebase.analytics.FirebaseAnalytics;
 
+import li.doerf.hacked.utils.SynchronizationHelper;
+
 /**
  * Created by moo on 25.05.17.
  */
@@ -68,6 +70,11 @@ public class HackedApplication extends MultiDexApplication implements LifecycleO
         Log.d(TAG, "application opened");
         Bundle bundle = new Bundle();
         firebaseAnalytics.logEvent(FirebaseAnalytics.Event.APP_OPEN, bundle);
+        scheduleBackgroundSync();
+    }
+
+    private void scheduleBackgroundSync() {
+        SynchronizationHelper.setupInitialSync(getApplicationContext());
     }
 
 }

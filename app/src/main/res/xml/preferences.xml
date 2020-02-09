@@ -7,7 +7,7 @@
             android:key="@string/pref_key_sync_enable"
             android:title="@string/pref_title_sync_enable"
             android:summary="@string/pref_summary_sync_enable"
-            android:defaultValue="false" />
+            android:defaultValue="true" />
         <CheckBoxPreference
             android:dependency="@string/pref_key_sync_enable"
             android:key="@string/pref_key_sync_via_cellular"

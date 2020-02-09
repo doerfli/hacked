@@ -6,10 +6,14 @@ import android.preference.PreferenceManager;
 import android.util.Log;
 
 import androidx.work.Constraints;
+import androidx.work.ExistingPeriodicWorkPolicy;
 import androidx.work.NetworkType;
 import androidx.work.PeriodicWorkRequest;
+import androidx.work.WorkInfo;
 import androidx.work.WorkManager;
 
+import java.util.List;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
 import li.doerf.hacked.R;
@@ -22,12 +26,35 @@ public class SynchronizationHelper {
     private static final String LOGTAG = "SynchronizationHelper";
     private static final String JOB_TAG = "hacked-background-check-job";
 
+    public static void setupInitialSync(Context aContext) {
+        boolean isScheduled = false;
+        try {
+            List<WorkInfo> workinfos = WorkManager.getInstance(aContext).getWorkInfosByTag(LOGTAG).get();
+            for (WorkInfo wi : workinfos) {
+                WorkInfo.State state = wi.getState();
+                if( state == WorkInfo.State.RUNNING || state == WorkInfo.State.ENQUEUED) {
+                    Log.d(LOGTAG, "found scheduled work");
+                    isScheduled = true;
+                }
+            }
+        } catch (ExecutionException e) {
+            Log.e(LOGTAG, "caught ExecutionException while checking status", e);
+        } catch (InterruptedException e) {
+            Log.e(LOGTAG, "caught InterruptedException while checking status", e);
+        }
+        if (!isScheduled) {
+            Log.i(LOGTAG, "no background work scheduled - need to schedule new background worker");
+            scheduleSync(aContext);
+        }
+    }
+
+
     public static boolean scheduleSync(Context aContext) {
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(aContext);
-        disableSync();
+        disableSync(aContext);
         boolean enabled = false;
 
-        if (settings.getBoolean(aContext.getString(R.string.pref_key_sync_enable), false)) {
+        if (settings.getBoolean(aContext.getString(R.string.pref_key_sync_enable), true)) {
             enableSync(aContext);
             enabled = true;
         }
@@ -55,14 +82,14 @@ public class SynchronizationHelper {
                 .setConstraints(constraints);
 
         PeriodicWorkRequest photoCheckWork = checkWorker.build();
-        WorkManager.getInstance().enqueue(photoCheckWork);
+        WorkManager.getInstance(aContext).enqueueUniquePeriodicWork(JOB_TAG, ExistingPeriodicWorkPolicy.KEEP, photoCheckWork);
 
         Log.i(LOGTAG, "scheduled job");
     }
 
-    private static void disableSync() {
+    private static void disableSync(Context aContext) {
         Log.d(LOGTAG, "unscheduling synchronization");
-        WorkManager.getInstance().cancelAllWorkByTag(JOB_TAG);
+        WorkManager.getInstance(aContext).cancelAllWorkByTag(JOB_TAG);
         Log.i(LOGTAG, "unscheduled sync job");
     }
 
@@ -92,5 +119,4 @@ public class SynchronizationHelper {
                 return 24;
         }
     }
-
 }
