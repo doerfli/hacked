@@ -32,14 +32,11 @@
             </intent-filter>
         </activity>
 
-        <meta-data
-            android:name="google_analytics_adid_collection_enabled"
-            android:value="false" />
-
         <activity
             android:name=".activities.SettingsActivity"
             android:label="@string/title_settings"
-            android:parentActivityName=".activities.MainActivity" />
+            android:parentActivityName=".activities.NavActivity" />
+
 
         <service
             android:name=".services.FirebaseMessagagingService"
@@ -48,6 +45,10 @@
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
+
+        <meta-data
+            android:name="google_analytics_adid_collection_enabled"
+            android:value="false" />
 
         <meta-data
             android:name="android.max_aspect"

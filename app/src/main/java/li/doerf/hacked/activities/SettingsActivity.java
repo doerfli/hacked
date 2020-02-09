@@ -3,7 +3,9 @@ package li.doerf.hacked.activities;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
-import li.doerf.hacked.ui.fragments.SettingsFragment;
+import androidx.appcompat.widget.Toolbar;
+
+import li.doerf.hacked.R;
 
 /**
  * Created by moo on 01/12/15.
@@ -14,12 +16,14 @@ public class SettingsActivity extends AppCompatActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_settings);
 
-        SettingsFragment settingsFragment = new SettingsFragment();
-        // Display the fragment as the main content.
-        getFragmentManager().beginTransaction()
-                .replace(android.R.id.content, settingsFragment)
-                .commit();
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        toolbar.setTitle(R.string.action_settings);
+        setTitle(R.string.action_settings);
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
 }
