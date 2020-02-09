@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="fill_parent"
-    tools:context=".ui.fragments.AccountsOverviewFragment">
+    tools:context=".ui.fragments.AccountsFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -79,6 +79,19 @@
             android:layout_height="wrap_content"
             android:visibility="gone"
             app:constraint_referenced_ids="add,cancel,account"
+            />
+
+        <TextView
+            android:id="@+id/hibp_info"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/textMediumEmphasis"
+            android:background="@color/hibp_info_bg_light"
+            android:textSize="12sp"
+            android:paddingTop="2dp"
+            android:paddingBottom="4dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

@@ -8,6 +8,7 @@
     <color name="account_status_breached">#F44336</color>
     <color name="account_status_unknown">#9E9E9E</color>
     <color name="green">#007900</color>
+    <color name="hibp_info_bg_light">#eeffffff</color>
     <color name="hibp_info_bg">#E8777777</color>
     <color name="bg_notification">#FFE8D0</color>
     <color name="textHighEmphasis">#DD000000</color>
