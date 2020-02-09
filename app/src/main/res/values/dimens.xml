@@ -10,4 +10,5 @@
     <!-- Default screen margins, per the Android Design guidelines. -->
     <dimen name="card_padding_with_status">18dp</dimen>
     <dimen name="card_title_padding_bottom">6dp</dimen>
+    <dimen name="overview_card_space">8dp</dimen>
 </resources>
