@@ -84,10 +84,12 @@ class AccountsFragment : Fragment(), NavDirectionsToAccountDetailsFactory {
 
         }
 
-        val title = fragmentRootView.findViewById<TextView>(R.id.title_accounts)
-        title.setOnClickListener {
-            val action = OverviewFragmentDirections.actionOverviewFragmentToAccountsListFullFragment()
-            fragmentRootView.findNavController().navigate(action)
+        if (!isFullView) {
+            val title = fragmentRootView.findViewById<TextView>(R.id.title_accounts)
+            title.setOnClickListener {
+                val action = OverviewFragmentDirections.actionOverviewFragmentToAccountsListFullFragment()
+                fragmentRootView.findNavController().navigate(action)
+            }
         }
 
         accountEditText = fragmentRootView.findViewById(R.id.account)
