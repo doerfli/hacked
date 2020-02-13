@@ -18,7 +18,7 @@ public interface AccountDao {
     List<Long> insert(Account... entities);
 
     @Update
-    int update(Account entity);
+    void update(Account entity);
 
     @Delete
     int delete(Account entity);
@@ -35,14 +35,8 @@ public interface AccountDao {
     @Query("SELECT * FROM accounts where name=:name")
     List<Account> findByName(String name);
 
-//    @Query("SELECT * FROM accounts where name=:aName")
-//    Account findByName(String aName);
-
     @Query("SELECT count(*) FROM accounts where name=:aName")
     Integer countByName(String aName);
-
-    @Query("SELECT * from accounts WHERE num_breaches IS NULL OR num_acknowledged_breaches IS NULL")
-    List<Account> getAllWithNumBreachesNull();
 
     @Query("SELECT * FROM accounts ORDER BY last_checked DESC LIMIT 1")
     LiveData<Account> getLastChecked();
