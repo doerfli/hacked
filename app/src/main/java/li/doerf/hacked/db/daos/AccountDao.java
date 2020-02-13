@@ -45,5 +45,5 @@ public interface AccountDao {
     List<Account> getAllWithNumBreachesNull();
 
     @Query("SELECT * FROM accounts ORDER BY last_checked DESC LIMIT 1")
-    Account getLastChecked();
+    LiveData<Account> getLastChecked();
 }

@@ -11,6 +11,7 @@ import android.widget.EditText
 import android.widget.TextView
 import androidx.constraintlayout.widget.Group
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.NavDirections
@@ -21,7 +22,6 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.work.OneTimeWorkRequest
 import androidx.work.WorkManager
 import com.google.android.material.snackbar.Snackbar
-import kotlinx.coroutines.*
 import li.doerf.hacked.R
 import li.doerf.hacked.db.AppDatabase
 import li.doerf.hacked.db.daos.AccountDao
@@ -65,24 +65,18 @@ class AccountsFragment : Fragment(), NavDirectionsToAccountDetailsFactory {
         accountsList.layoutManager = lm
         accountsList.adapter = accountsAdapter
 
-        CoroutineScope(Job()).launch {
-            withContext(Dispatchers.IO) {
-                val lastCheckedAccount = accountDao.lastChecked
-                withContext(Dispatchers.Main) {
-                    Log.d("AccountsFragment", "lastChecked: " + lastCheckedAccount?.lastChecked)
-                    val lastChecked = fragmentRootView.findViewById<TextView>(R.id.last_checked)
-                    if (lastCheckedAccount != null && lastCheckedAccount.lastChecked != null) {
-                        val dtfOut = DateTimeFormat.forPattern("yyyy/MM/dd HH:mm")
-                        Log.d("AccountsFragment", dtfOut.print(lastCheckedAccount.lastChecked))
-                        lastChecked.text = dtfOut.print(lastCheckedAccount.lastChecked)
-                        lastChecked.visibility = View.VISIBLE
-                    } else {
-                        lastChecked.visibility = View.INVISIBLE
-                    }
-                }
+        val lastChecked = fragmentRootView.findViewById<TextView>(R.id.last_checked)
+        val viewModel: AccountViewModel by viewModels()
+        viewModel.lastChecked.observe(this, Observer { lastCheckedAccount: Account? ->
+            if (lastCheckedAccount?.lastChecked != null) {
+                val dtfOut = DateTimeFormat.forPattern("yyyy/MM/dd HH:mm")
+                Log.d("AccountsFragment", dtfOut.print(lastCheckedAccount.lastChecked))
+                lastChecked.text = dtfOut.print(lastCheckedAccount.lastChecked)
+                lastChecked.visibility = View.VISIBLE
+            } else {
+                lastChecked.visibility = View.INVISIBLE
             }
-
-        }
+        })
 
         if (!isFullView) {
             val title = fragmentRootView.findViewById<TextView>(R.id.title_accounts)
