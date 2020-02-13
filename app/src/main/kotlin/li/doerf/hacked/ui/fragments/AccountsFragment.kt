@@ -13,7 +13,6 @@ import androidx.constraintlayout.widget.Group
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.NavDirections
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.navArgs
@@ -114,7 +113,7 @@ class AccountsFragment : Fragment(), NavDirectionsToAccountDetailsFactory {
     override fun onAttach(context: Context) {
         super.onAttach(context)
         accountsAdapter = AccountsAdapter(context, ArrayList(), this)
-        val accountsViewModel = ViewModelProviders.of(this).get(AccountViewModel::class.java)
+        val accountsViewModel: AccountViewModel by viewModels()
         accountsViewModel.accountList.observe(this, Observer { accounts: List<Account> -> accountsAdapter.addItems(accounts) })
     }
 
