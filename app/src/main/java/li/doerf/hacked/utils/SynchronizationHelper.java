@@ -29,7 +29,7 @@ public class SynchronizationHelper {
     public static void setupInitialSync(Context aContext) {
         boolean isScheduled = false;
         try {
-            List<WorkInfo> workinfos = WorkManager.getInstance(aContext).getWorkInfosByTag(LOGTAG).get();
+            List<WorkInfo> workinfos = WorkManager.getInstance(aContext).getWorkInfosByTag(JOB_TAG).get();
             for (WorkInfo wi : workinfos) {
                 WorkInfo.State state = wi.getState();
                 if( state == WorkInfo.State.RUNNING || state == WorkInfo.State.ENQUEUED) {
