@@ -23,5 +23,13 @@
             android:entries="@array/pref_sync_interval_entries"
             android:entryValues="@array/pref_sync_interval_values"
             android:defaultValue="@string/pref_sync_interval_default" />
+        <Preference
+            android:key="version"
+            android:title="@string/app_version"
+            android:summary="1.0.0 (1)"/>
+        <Preference
+            android:key="device"
+            android:title="@string/device_info"
+            android:summary="1.0.0 (1)"/>
     </PreferenceCategory>
 </PreferenceScreen>

@@ -2,10 +2,13 @@ package li.doerf.hacked.ui.fragments;
 
 
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
+import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.util.Log;
 
+import li.doerf.hacked.BuildConfig;
 import li.doerf.hacked.CustomEvent;
 import li.doerf.hacked.HackedApplication;
 import li.doerf.hacked.R;
@@ -24,6 +27,12 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
 
         // Load the preferences from an XML resource
         addPreferencesFromResource(R.xml.preferences);
+
+        Preference versionPreference = findPreference("version");
+        versionPreference.setSummary(String.format("%s (%s)", BuildConfig.VERSION_NAME, BuildConfig.VERSION_CODE));
+
+        Preference devicePreference = findPreference("device");
+        devicePreference.setSummary(String.format("%s %s / API %s", Build.MANUFACTURER, Build.MODEL, Build.VERSION.SDK_INT));
     }
 
     @Override
