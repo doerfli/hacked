@@ -61,10 +61,12 @@ class BreachedSitesAdapter(
         val arrowUp = siteCard.findViewById<ImageView>(R.id.arrow_up)
 
         if (! site.detailsVisible) {
+            siteCard.setBackgroundColor(context.resources.getColor(android.R.color.white, null))
             details.visibility = View.GONE
             arrowDown.visibility = View.VISIBLE
             arrowUp.visibility = View.GONE
         } else {
+            siteCard.setBackgroundColor(context.resources.getColor(R.color.selectedCard, null))
             details.visibility = View.VISIBLE
             arrowDown.visibility = View.GONE
             arrowUp.visibility = View.VISIBLE

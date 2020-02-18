@@ -10,7 +10,8 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        style="@style/OverviewCard"
+        android:layout_marginTop="@dimen/card_padding_short"
+        android:layout_marginBottom="@dimen/card_padding"
         >
 
         <TextView
@@ -21,6 +22,7 @@
             style="@style/TextTitle"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginLeft="@dimen/card_padding"
             />
 
         <ImageView
@@ -29,6 +31,7 @@
             android:layout_width="18sp"
             android:layout_height="18sp"
             android:layout_marginBottom="8dp"
+            android:layout_marginRight="@dimen/card_padding"
             android:contentDescription="@string/show_details"
             app:layout_constraintBottom_toBottomOf="@id/title_recent_breaches"
             app:layout_constraintEnd_toEndOf="parent"

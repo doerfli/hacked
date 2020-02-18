@@ -3,8 +3,9 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginTop="4dp"
     android:layout_marginBottom="4dp"
+    android:paddingLeft="8dp"
+    android:paddingRight="8dp"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <TextView
@@ -24,7 +25,6 @@
         android:layout_height="wrap_content"
         android:text="@string/sample_pwn_count"
         style="@style/TextNotice"
-        android:layout_marginLeft="8dp"
         android:layout_marginStart="8dp"
         app:layout_constraintBaseline_toBaselineOf="@id/site_name"
         app:layout_constraintStart_toEndOf="@id/site_name"
