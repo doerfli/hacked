@@ -33,6 +33,7 @@ import org.joda.time.format.DateTimeFormat
 import java.util.*
 
 class AccountsFragment : Fragment(), NavDirectionsToAccountDetailsFactory {
+    private lateinit var hibpInfo: TextView
     private lateinit var fragmentRootView: View
     private lateinit var accountEditText: EditText
     private lateinit var groupAddAccount: Group
@@ -92,14 +93,18 @@ class AccountsFragment : Fragment(), NavDirectionsToAccountDetailsFactory {
             val accountName = accountEditText.text
             AccountService(activity!!.application).addAccount(accountName.toString())
             hideSectionAndKeyboard(fragmentRootView)
+            hibpInfo.visibility = View.VISIBLE
         }
 
         val cancelButton = fragmentRootView.findViewById<Button>(R.id.cancel)
         cancelButton.setOnClickListener {
             hideSectionAndKeyboard(fragmentRootView)
+            hibpInfo.visibility = View.VISIBLE
         }
 
         groupAddAccount = fragmentRootView.findViewById(R.id.group_add_account)
+
+        hibpInfo = fragmentRootView.findViewById(R.id.hibp_info)
 
         return fragmentRootView
     }
@@ -126,6 +131,7 @@ class AccountsFragment : Fragment(), NavDirectionsToAccountDetailsFactory {
             R.id.action_add -> {
                 accountEditText.text.clear()
                 groupAddAccount.visibility = View.VISIBLE
+                hibpInfo.visibility = View.INVISIBLE
                 true
             }
             R.id.action_refresh -> {
