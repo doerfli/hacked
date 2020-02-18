@@ -131,7 +131,7 @@ class AccountsFragment : Fragment(), NavDirectionsToAccountDetailsFactory {
             R.id.action_add -> {
                 accountEditText.text.clear()
                 groupAddAccount.visibility = View.VISIBLE
-                hibpInfo.visibility = View.INVISIBLE
+                hibpInfo.visibility = View.GONE
                 true
             }
             R.id.action_refresh -> {
