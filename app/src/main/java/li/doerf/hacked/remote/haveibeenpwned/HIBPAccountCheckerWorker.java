@@ -80,9 +80,11 @@ public class HIBPAccountCheckerWorker extends Worker {
             result = Tasks.await(deviceTokenTask);
         } catch (ExecutionException e) {
             Log.e(LOGTAG, "caught ExecutionException", e);
+            Crashlytics.logException(e);
             return Result.failure();
         } catch (InterruptedException e) {
             Log.e(LOGTAG, "caught InterruptedException", e);
+            Crashlytics.logException(e);
             return Result.failure();
         }
 
