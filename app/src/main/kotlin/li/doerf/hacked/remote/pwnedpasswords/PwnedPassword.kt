@@ -13,6 +13,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import org.apache.commons.codec.binary.Hex
 import org.apache.commons.codec.digest.DigestUtils
+import java.net.UnknownHostException
 import java.util.*
 
 class PwnedPassword(private val broadcastManager: LocalBroadcastManager) {
@@ -28,9 +29,14 @@ class PwnedPassword(private val broadcastManager: LocalBroadcastManager) {
 
     fun check(password: String) {
         val handler = CoroutineExceptionHandler { _, exception ->
-            Log.e(TAG, "caught exception ${exception.message}")
-            Log.e(TAG, exception.stackTrace.joinToString("\n"))
-            Crashlytics.logException(exception)
+            when(exception) {
+                is UnknownHostException -> Log.w(TAG, "caught UnknownHostException", exception)
+                else -> {
+                    Log.e(TAG, "caught exception ${exception.message}")
+                    Log.e(TAG, exception.stackTrace.joinToString("\n"))
+                    Crashlytics.logException(exception)
+                }
+            }
             notifyException()
         }
         runBlocking(context = Dispatchers.IO) {
