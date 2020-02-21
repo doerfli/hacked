@@ -115,8 +115,26 @@ class AccountDetailsFragment : Fragment() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item.itemId == R.id.action_delete) {
             deleteAccount()
+            return true
+        }
+        if (item.itemId == R.id.action_reset_acknowledgements) {
+            resetAcknowledged()
+            return true
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    private fun resetAcknowledged() {
+        runBlocking(context = Dispatchers.IO) {
+            launch(createCoroutingExceptionHandler(LOGTAG)) {
+                val breachDao = AppDatabase.get(context).breachDao
+                val breaches = breachDao.findByAccount(myAccountId)
+                for (b in breaches) {
+                    b.acknowledged = false
+                    breachDao.update(b)
+                }
+            }
+        }
     }
 
     private fun deleteAccount() {
