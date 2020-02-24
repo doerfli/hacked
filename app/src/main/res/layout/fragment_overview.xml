@@ -32,7 +32,7 @@
         android:name="li.doerf.hacked.ui.fragments.BreachesFragment"
         android:id="@+id/fragment_breaches"
         android:layout_width="match_parent"
-        android:layout_height="140dp"
+        android:layout_height="150dp"
         app:layout_constraintTop_toBottomOf="@id/fragment_pwned_passwords"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
