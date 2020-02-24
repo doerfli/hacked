@@ -32,7 +32,10 @@ class PwnedPassword(private val broadcastManager: LocalBroadcastManager) {
         val handler = CoroutineExceptionHandler { _, exception ->
             when(exception) {
                 is UnknownHostException,
-                is SocketTimeoutException -> Log.w(TAG, "caught ${exception.javaClass.name}", exception)
+                is SocketTimeoutException -> {
+                    Log.w(TAG, "caught ${exception.javaClass.name}", exception)
+                    Crashlytics.logException(exception)
+                }
                 else -> {
                     Log.e(TAG, "caught exception ${exception.message}")
                     Log.e(TAG, exception.stackTrace.joinToString("\n"))
