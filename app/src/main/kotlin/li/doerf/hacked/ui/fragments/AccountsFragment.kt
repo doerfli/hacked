@@ -3,6 +3,8 @@ package li.doerf.hacked.ui.fragments
 
 import android.content.Context
 import android.os.Bundle
+import android.text.Html
+import android.text.method.LinkMovementMethod
 import android.util.Log
 import android.view.*
 import android.view.inputmethod.InputMethodManager
@@ -67,7 +69,7 @@ class AccountsFragment : Fragment(), NavDirectionsToAccountDetailsFactory {
 
         val lastChecked = fragmentRootView.findViewById<TextView>(R.id.last_checked)
         val viewModel: AccountViewModel by viewModels()
-        viewModel.lastChecked.observe(this, Observer { lastCheckedAccount: Account? ->
+        viewModel.lastChecked.observe(viewLifecycleOwner, Observer { lastCheckedAccount: Account? ->
             if (lastCheckedAccount?.lastChecked != null) {
                 val dtfOut = DateTimeFormat.forPattern("yyyy/MM/dd HH:mm")
                 Log.d("AccountsFragment", dtfOut.print(lastCheckedAccount.lastChecked))
@@ -105,6 +107,8 @@ class AccountsFragment : Fragment(), NavDirectionsToAccountDetailsFactory {
         groupAddAccount = fragmentRootView.findViewById(R.id.group_add_account)
 
         hibpInfo = fragmentRootView.findViewById(R.id.hibp_info)
+        hibpInfo.movementMethod = LinkMovementMethod.getInstance()
+        hibpInfo.text = Html.fromHtml("${getString(R.string.data_provided_by)} <a href=\"https://haveibeenpwned.com\">Have i been pwned?</a>")
 
         return fragmentRootView
     }

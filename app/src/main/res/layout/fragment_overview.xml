@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     >
 
-    <fragment
+    <androidx.fragment.app.FragmentContainerView
         android:name="li.doerf.hacked.ui.fragments.AccountsFragment"
         android:id="@+id/fragment_accounts"
         android:layout_width="match_parent"
@@ -17,7 +17,7 @@
         app:layout_constraintHeight_default="spread"
         app:layout_constraintHeight_min="250dp"/>
 
-    <fragment
+    <androidx.fragment.app.FragmentContainerView
         android:name="li.doerf.hacked.ui.fragments.PwnedPasswordFragment"
         android:id="@+id/fragment_pwned_passwords"
         android:layout_width="match_parent"
@@ -28,7 +28,7 @@
         app:layout_constraintStart_toStartOf="parent"
         />
 
-    <fragment
+    <androidx.fragment.app.FragmentContainerView
         android:name="li.doerf.hacked.ui.fragments.BreachesFragment"
         android:id="@+id/fragment_breaches"
         android:layout_width="match_parent"

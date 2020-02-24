@@ -2,13 +2,10 @@ package li.doerf.hacked.ui.fragments
 
 import android.content.Context
 import android.os.Bundle
-import android.text.Html
-import android.text.method.LinkMovementMethod
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import kotlinx.coroutines.Dispatchers
@@ -21,18 +18,9 @@ import li.doerf.hacked.utils.RatingHelper
 
 class OverviewFragment : Fragment() {
 
-    private lateinit var hibpInfo: TextView
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        // Inflate the layout for this fragment
-        val rootView = inflater.inflate(R.layout.fragment_overview, container, false)
-
-        hibpInfo = rootView.findViewById(R.id.hibp_info)
-        hibpInfo.movementMethod = LinkMovementMethod.getInstance()
-        hibpInfo.text = Html.fromHtml("${getString(R.string.data_provided_by)} <a href=\"https://haveibeenpwned.com\">Have i been pwned?</a>")
-
-        return rootView
+        return inflater.inflate(R.layout.fragment_overview, container, false)
     }
 
     override fun onStart() {
@@ -60,7 +48,6 @@ class OverviewFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         RatingHelper(context).showRateUsDialogDelayed()
-        hibpInfo.visibility = View.VISIBLE
     }
 
     companion object {
