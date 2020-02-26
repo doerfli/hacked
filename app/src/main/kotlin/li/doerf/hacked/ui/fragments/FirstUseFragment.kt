@@ -12,6 +12,8 @@ import android.widget.EditText
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import li.doerf.hacked.CustomEvent
+import li.doerf.hacked.HackedApplication
 import li.doerf.hacked.R
 import li.doerf.hacked.services.AccountService
 
@@ -32,6 +34,7 @@ class FirstUseFragment : Fragment() {
             AccountService(activity!!.application).addAccount(accountName.toString())
             accountEditText.visibility = View.GONE
             addButton.visibility = View.GONE
+            (activity!!.application as HackedApplication).trackCustomEvent(CustomEvent.FIRST_ACCOUNT_ADDED)
             navigateToOverview()
         }
 
