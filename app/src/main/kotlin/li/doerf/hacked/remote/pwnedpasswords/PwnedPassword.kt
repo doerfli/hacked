@@ -42,9 +42,11 @@ class PwnedPassword(private val broadcastManager: LocalBroadcastManager) {
                 } catch (exception: UnknownHostException) {
                     Log.w(TAG, "caught ${exception.javaClass.name}", exception)
                     Crashlytics.logException(exception)
+                    notifyException()
                 } catch (exception: SocketTimeoutException) {
                     Log.w(TAG, "caught ${exception.javaClass.name}", exception)
                     Crashlytics.logException(exception)
+                    notifyException()
                 }
             }
         }
