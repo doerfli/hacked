@@ -1,5 +1,3 @@
-[![Build Status](https://dev.azure.com/github0483/github/_apis/build/status/doerfli.hacked)](https://dev.azure.com/github0483/github/_build/latest?definitionId=1)
-
 # Hacked?
 
 Android app to track accounts on http://www.haveibeenpwned.com
