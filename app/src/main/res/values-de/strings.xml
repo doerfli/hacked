@@ -88,4 +88,6 @@
     <string name="welcome">Willkommen zu Hacked?</string>
     <string name="app_version">App Version</string>
     <string name="device_info">Informationen zum Gerät</string>
+    <string name="action_reset_acknowledgements">Konto zurücksetzen</string>
+    <string name="unable_to_start_browser">Die Seite %1$s konnte nicht geöffnet werden. Kein Browser gefunden</string>
 </resources>
