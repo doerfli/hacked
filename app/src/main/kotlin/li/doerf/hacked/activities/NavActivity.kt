@@ -1,15 +1,20 @@
 package li.doerf.hacked.activities
 
+import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.Toast
+import android.widget.Toast.makeText
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.navigation.Navigation
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.NavigationUI
+import com.crashlytics.android.Crashlytics
 import li.doerf.hacked.R
 
 
@@ -40,13 +45,25 @@ class NavActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when(item.itemId) {
             R.id.action_privacypolicy -> {
-                val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse("https://doerfli.github.io/hacked/privacy"))
-                startActivity(browserIntent)
+                try {
+                    val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse("https://doerfli.github.io/hacked/privacy"))
+                    startActivity(browserIntent)
+                } catch (e: ActivityNotFoundException) {
+                    Log.e(TAG, "caught ActivityNotFoundException", e)
+                    Crashlytics.logException(e)
+                    makeText(applicationContext, getString(R.string.unable_to_start_browser, "https://doerfli.github.io/hacked/privacy"), Toast.LENGTH_LONG).show()
+                }
                 true
             }
             R.id.action_visit_hibp -> {
-                val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse("https://haveibeenpwned.com"))
-                startActivity(browserIntent)
+                try {
+                    val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse("https://haveibeenpwned.com"))
+                    startActivity(browserIntent)
+                } catch (e: ActivityNotFoundException) {
+                    Log.e(TAG, "caught ActivityNotFoundException", e)
+                    Crashlytics.logException(e)
+                    makeText(applicationContext, getString(R.string.unable_to_start_browser, "https://haveibeenpwned.com"), Toast.LENGTH_LONG).show()
+                }
                 true
             }
             R.id.action_settings -> {
@@ -60,4 +77,7 @@ class NavActivity : AppCompatActivity() {
         }
     }
 
+    companion object {
+        private val TAG = "NavActivity"
+    }
 }
