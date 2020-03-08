@@ -5,7 +5,7 @@ import android.util.Log
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.crashlytics.android.Crashlytics
 import com.github.kittinunf.fuel.core.isSuccessful
-import com.github.kittinunf.fuel.coroutines.awaitStringResponse
+import com.github.kittinunf.fuel.coroutines.awaitStringResponseResult
 import com.github.kittinunf.fuel.httpGet
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers
@@ -13,8 +13,6 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import org.apache.commons.codec.binary.Hex
 import org.apache.commons.codec.digest.DigestUtils
-import java.net.SocketTimeoutException
-import java.net.UnknownHostException
 import java.util.*
 
 class PwnedPassword(private val broadcastManager: LocalBroadcastManager) {
@@ -37,17 +35,7 @@ class PwnedPassword(private val broadcastManager: LocalBroadcastManager) {
         }
         runBlocking(context = Dispatchers.IO) {
             launch(handler) {
-                try {
-                    checkPassword(password)
-                } catch (exception: UnknownHostException) {
-                    Log.w(TAG, "caught ${exception.javaClass.name}", exception)
-                    Crashlytics.logException(exception)
-                    notifyException()
-                } catch (exception: SocketTimeoutException) {
-                    Log.w(TAG, "caught ${exception.javaClass.name}", exception)
-                    Crashlytics.logException(exception)
-                    notifyException()
-                }
+                checkPassword(password)
             }
         }
     }
@@ -57,15 +45,16 @@ class PwnedPassword(private val broadcastManager: LocalBroadcastManager) {
         val pwdHashHead = pwdHash.substring(0, 5)
 
         Log.d(TAG, "checking password: ")
-        val (_, res, result) = "$URL/$pwdHashHead".httpGet().awaitStringResponse()
+        val (_, res, result) = "$URL/$pwdHashHead".httpGet().awaitStringResponseResult()
         Log.d(TAG, "status: ${res.statusCode}")
         if (!res.isSuccessful) {
+            Log.w(TAG, result.component2())
             Log.w(TAG, res.toString())
             notifyException()
             return
         }
 
-        val pwnedCount = processResult(result, pwdHashHead, pwdHash)
+        val pwnedCount = processResult(result.get(), pwdHashHead, pwdHash)
 
         if (pwnedCount > -1) {
             notifyPwned(pwnedCount)

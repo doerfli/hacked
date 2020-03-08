@@ -18,7 +18,7 @@ import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
 import com.github.kittinunf.fuel.core.ResponseDeserializable
 import com.github.kittinunf.fuel.core.isSuccessful
-import com.github.kittinunf.fuel.coroutines.awaitObjectResponse
+import com.github.kittinunf.fuel.coroutines.awaitObjectResponseResult
 import com.github.kittinunf.fuel.httpGet
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -71,14 +71,14 @@ class BreachedSitesWorker(private val context: Context, params: WorkerParameters
             val (_, res, result) = url.httpGet()
                     .header("Accept", "application/vnd.haveibeenpwned.v2+json")
                     .header("User-Agent", "Hacked_Android_App")
-                    .awaitObjectResponse(BreachedAccountDeserializer)
+                    .awaitObjectResponseResult(BreachedAccountDeserializer)
 
             if (!res.isSuccessful) {
                 Log.w(LOGTAG, "request was not successful")
                 return Result.failure()
             }
 
-            for (ba in result) {
+            for (ba in result.get()) {
                 Log.d(LOGTAG, "breached site: " + ba.name)
                 val newSite = mapAccountToSite(ba, date, datetime)
                 val site = breachedSiteDao.getByName(newSite.name)
