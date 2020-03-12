@@ -89,4 +89,5 @@
     <string name="device_info">Device information</string>
     <string name="action_reset_acknowledgements">Reset acknowledged</string>
     <string name="unable_to_start_browser">Unable to start browser to show %1$s</string>
+    <string name="enter_filter_text">Search breaches ...</string>
 </resources>
