@@ -3,14 +3,12 @@ package li.doerf.hacked.remote.pwnedpasswords
 import android.content.Intent
 import android.util.Log
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
-import com.crashlytics.android.Crashlytics
 import com.github.kittinunf.fuel.core.isSuccessful
 import com.github.kittinunf.fuel.coroutines.awaitStringResponseResult
 import com.github.kittinunf.fuel.httpGet
-import kotlinx.coroutines.CoroutineExceptionHandler
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 import org.apache.commons.codec.binary.Hex
 import org.apache.commons.codec.digest.DigestUtils
 import java.util.*
@@ -27,16 +25,8 @@ class PwnedPassword(private val broadcastManager: LocalBroadcastManager) {
     }
 
     fun check(password: String) {
-        val handler = CoroutineExceptionHandler { _, exception ->
-            Log.e(TAG, "caught exception ${exception.message}")
-            Log.e(TAG, exception.stackTrace.joinToString("\n"))
-            Crashlytics.logException(exception)
-            notifyException()
-        }
-        runBlocking(context = Dispatchers.IO) {
-            launch(handler) {
-                checkPassword(password)
-            }
+        CoroutineScope(Job()).launch {
+            checkPassword(password)
         }
     }
 
