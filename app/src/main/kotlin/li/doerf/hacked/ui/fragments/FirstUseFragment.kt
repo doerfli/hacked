@@ -45,7 +45,6 @@ class FirstUseFragment : Fragment() {
 
         val text4 = fragmentRootView.findViewById<TextView>(R.id.text4)
         text4.movementMethod = LinkMovementMethod.getInstance()
-//        text4.text = Html.fromHtml(getString(R.string.firstuse_p4) + "<a href=\"https://haveibeenpwned.com\">haveibeenpwned.com</a>")
 
         return fragmentRootView
     }

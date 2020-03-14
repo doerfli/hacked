@@ -28,9 +28,9 @@ import li.doerf.hacked.db.daos.AccountDao;
 import li.doerf.hacked.db.daos.BreachDao;
 import li.doerf.hacked.db.entities.Account;
 import li.doerf.hacked.db.entities.Breach;
+import li.doerf.hacked.util.RatingHelper;
 import li.doerf.hacked.utils.AccountHelper;
 import li.doerf.hacked.utils.BackgroundTaskHelper;
-import li.doerf.hacked.utils.RatingHelper;
 
 /**
  * Created by moo on 07/09/16.

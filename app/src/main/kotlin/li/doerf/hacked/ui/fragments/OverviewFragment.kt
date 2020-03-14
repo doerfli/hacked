@@ -8,13 +8,10 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.*
 import li.doerf.hacked.R
 import li.doerf.hacked.db.AppDatabase
-import li.doerf.hacked.utils.RatingHelper
+import li.doerf.hacked.util.RatingHelper
 
 class OverviewFragment : Fragment() {
 
@@ -26,7 +23,7 @@ class OverviewFragment : Fragment() {
     override fun onStart() {
         super.onStart()
 
-        GlobalScope.launch {
+        CoroutineScope(Job()).launch {
             if (isFirstUse()) {
                 val action = OverviewFragmentDirections.actionOverviewFragmentToFirstUseFragment()
                 withContext(Dispatchers.Main) {
@@ -47,7 +44,9 @@ class OverviewFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        RatingHelper(context).showRateUsDialogDelayed()
+        CoroutineScope(Job()).launch {
+            RatingHelper(context!!).showRateUsDialogDelayed()
+        }
     }
 
     companion object {
