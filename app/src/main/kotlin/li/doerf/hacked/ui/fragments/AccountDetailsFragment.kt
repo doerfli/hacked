@@ -16,9 +16,7 @@ import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.*
 import li.doerf.hacked.CustomEvent
 import li.doerf.hacked.HackedApplication
 import li.doerf.hacked.R
@@ -29,7 +27,6 @@ import li.doerf.hacked.ui.HibpInfo
 import li.doerf.hacked.ui.adapters.BreachesAdapter
 import li.doerf.hacked.ui.viewmodels.BreachViewModel
 import li.doerf.hacked.util.createCoroutingExceptionHandler
-import li.doerf.hacked.utils.BackgroundTaskHelper
 import java.util.*
 
 
@@ -54,29 +51,17 @@ class AccountDetailsFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_account_details, container, false)
-        val noBreachFound: CardView = view.findViewById(R.id.no_breach_found)
-        val breachHelp: CardView = view.findViewById(R.id.breach_help)
         val accountDao = AppDatabase.get(context).accountDao
-        // TODO coroutine
-        BackgroundTaskHelper<List<Account>>().runInBackgroundAndConsumeOnMain({ accountDao.findById(myAccountId) }) { accounts: List<Account> ->
-            for (account in accounts) {
-                activity!!.title = account.name
-                myViewModel.getBreachList(
-                        account.id).observe(
-                        this, Observer { breaches: List<Breach?>? ->
-                    myBreachesAdapter.addItems(breaches)
-                    if (myBreachesAdapter.itemCount == 0) {
-                        noBreachFound.visibility = View.VISIBLE
-                        breachHelp.visibility = View.GONE
-                    } else {
-                        noBreachFound.visibility = View.GONE
-                        breachHelp.visibility = View.VISIBLE
-                    }
-                })
+
+        CoroutineScope(Job()).launch {
+            val accounts = accountDao.findById(myAccountId)
+            withContext(Dispatchers.Main) {
+                displayAccounts(accounts, view)
             }
         }
+
         val whatNow: AppCompatTextView = view.findViewById(R.id.what_now)
-        whatNow.setOnClickListener { event: View? ->
+        whatNow.setOnClickListener { _: View? ->
             val breachHelpText: Group = view.findViewById(R.id.breach_help_text)
             if (breachHelpText.visibility == View.GONE) {
                 breachHelpText.visibility = View.VISIBLE
@@ -101,6 +86,27 @@ class AccountDetailsFragment : Fragment() {
         breachesList.addItemDecoration(dividerItemDecoration)
         HibpInfo.prepare(context, view.findViewById(R.id.hibp_info), breachesList)
         return view
+    }
+
+    private suspend fun displayAccounts(accounts: List<Account>, view: View) {
+        val noBreachFound: CardView = view.findViewById(R.id.no_breach_found)
+        val breachHelp: CardView = view.findViewById(R.id.breach_help)
+
+        for (account in accounts) {
+            activity?.title = account.name
+            myViewModel.getBreachList(
+                    account.id).observe(
+                    this, Observer { breaches: List<Breach?>? ->
+                myBreachesAdapter.addItems(breaches)
+                if (myBreachesAdapter.itemCount == 0) {
+                    noBreachFound.visibility = View.VISIBLE
+                    breachHelp.visibility = View.GONE
+                } else {
+                    noBreachFound.visibility = View.GONE
+                    breachHelp.visibility = View.VISIBLE
+                }
+            })
+        }
     }
 
     override fun onResume() {
