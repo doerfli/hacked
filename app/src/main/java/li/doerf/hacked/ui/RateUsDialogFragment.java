@@ -15,7 +15,7 @@ import androidx.fragment.app.DialogFragment;
 import li.doerf.hacked.CustomEvent;
 import li.doerf.hacked.HackedApplication;
 import li.doerf.hacked.R;
-import li.doerf.hacked.utils.RatingHelper;
+import li.doerf.hacked.util.RatingHelper;
 
 public class RateUsDialogFragment extends DialogFragment {
 
