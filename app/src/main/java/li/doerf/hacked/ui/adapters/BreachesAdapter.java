@@ -1,5 +1,6 @@
 package li.doerf.hacked.ui.adapters;
 
+import android.app.Activity;
 import android.content.Context;
 import android.text.Html;
 import android.util.Log;
@@ -40,14 +41,16 @@ public class BreachesAdapter extends RecyclerView.Adapter<RecyclerViewHolder> {
     private final Context myContext;
     private final BreachDao myBreachDao;
     private final AccountDao myAccountDao;
+    private final Activity myActivity;
     private List<Breach> myBreachList;
     private ViewGroup myParentView;
 
-    public BreachesAdapter(Context aContext, List<Breach> aList) {
-        myContext = aContext;
+    public BreachesAdapter(Activity activity, List<Breach> aList) {
+        myActivity = activity;
+        myContext = activity.getApplicationContext();
         myBreachList = aList;
-        myBreachDao = AppDatabase.get(aContext).getBreachDao();
-        myAccountDao = AppDatabase.get(aContext).getAccountDao();
+        myBreachDao = AppDatabase.get(myContext).getBreachDao();
+        myAccountDao = AppDatabase.get(myContext).getAccountDao();
     }
 
     @Override
@@ -118,7 +121,7 @@ public class BreachesAdapter extends RecyclerView.Adapter<RecyclerViewHolder> {
                     notifyDataSetChanged();
                     if (!result) return;
                     Snackbar.make(myParentView, getContext().getString(R.string.breach_acknowledged), Snackbar.LENGTH_SHORT).show();
-                    new RatingHelper(getContext()).setRatingCounterBelowthreshold();
+                    new RatingHelper(myActivity).setRatingCounterBelowthreshold();
                 }
         );
     }

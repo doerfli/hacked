@@ -46,7 +46,7 @@ class AccountDetailsFragment : Fragment() {
     override fun onAttach(context: Context) {
         super.onAttach(context)
         myViewModel = ViewModelProviders.of(this).get(BreachViewModel::class.java)
-        myBreachesAdapter = BreachesAdapter(getContext(), ArrayList())
+        myBreachesAdapter = BreachesAdapter(activity, ArrayList())
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {

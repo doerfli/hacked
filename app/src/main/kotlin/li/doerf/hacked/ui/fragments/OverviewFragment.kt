@@ -45,7 +45,7 @@ class OverviewFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         CoroutineScope(Job()).launch {
-            RatingHelper(context!!).showRateUsDialogDelayed()
+            RatingHelper(activity!!).showRateUsDialogDelayed()
         }
     }
 
