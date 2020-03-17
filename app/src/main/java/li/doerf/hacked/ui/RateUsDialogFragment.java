@@ -1,16 +1,20 @@
 package li.doerf.hacked.ui;
 
 import android.app.Dialog;
+import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.DialogFragment;
+
+import com.crashlytics.android.Crashlytics;
 
 import li.doerf.hacked.CustomEvent;
 import li.doerf.hacked.HackedApplication;
@@ -33,13 +37,19 @@ public class RateUsDialogFragment extends DialogFragment {
     }
 
     private void handleClickPositive() {
-        Intent intent = new Intent(Intent.ACTION_VIEW);
-        intent.setData(
-                Uri.parse(
-                "https://play.google.com/store/apps/details?id=li.doerf.hacked"));
-        intent.setPackage("com.android.vending");
-        startActivity(intent);
-        saveSettingRated();
+        try {
+            Intent intent = new Intent(Intent.ACTION_VIEW);
+            intent.setData(
+                    Uri.parse(
+                            "https://play.google.com/store/apps/details?id=li.doerf.hacked"));
+            intent.setPackage("com.android.vending");
+            startActivity(intent);
+            saveSettingRated();
+        } catch (ActivityNotFoundException e) {
+            Log.e(LOGTAG, "caught ActivityNotFoundException", e);
+            Crashlytics.logException(e);
+            Toast.makeText(getContext(), getString(R.string.unable_to_start_browser, "https://haveibeenpwned.com"), Toast.LENGTH_LONG).show();
+        }
     }
 
     private void saveSettingRated() {
