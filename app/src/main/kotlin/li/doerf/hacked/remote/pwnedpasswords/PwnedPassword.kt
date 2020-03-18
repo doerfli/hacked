@@ -3,14 +3,17 @@ package li.doerf.hacked.remote.pwnedpasswords
 import android.content.Intent
 import android.util.Log
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
+import com.crashlytics.android.Crashlytics
 import com.github.kittinunf.fuel.core.isSuccessful
 import com.github.kittinunf.fuel.coroutines.awaitStringResponseResult
 import com.github.kittinunf.fuel.httpGet
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
+import li.doerf.hacked.util.logException
 import org.apache.commons.codec.binary.Hex
 import org.apache.commons.codec.digest.DigestUtils
+import java.io.IOException
 import java.util.*
 
 class PwnedPassword(private val broadcastManager: LocalBroadcastManager) {
@@ -26,7 +29,13 @@ class PwnedPassword(private val broadcastManager: LocalBroadcastManager) {
 
     fun check(password: String) {
         CoroutineScope(Job()).launch {
-            checkPassword(password)
+            try {
+                checkPassword(password)
+            } catch (e: IOException) {
+                Crashlytics.logException(e)
+                logException(TAG, Log.ERROR, e, "caught IOException during pwned password check")
+                notifyException()
+            }
         }
     }
 
