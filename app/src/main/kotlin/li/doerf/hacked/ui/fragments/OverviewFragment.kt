@@ -7,13 +7,17 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.navigation.fragment.findNavController
+import io.reactivex.processors.PublishProcessor
 import kotlinx.coroutines.*
+import li.doerf.hacked.HackedApplication
 import li.doerf.hacked.R
 import li.doerf.hacked.db.AppDatabase
+import li.doerf.hacked.util.NavEvent
 import li.doerf.hacked.util.RatingHelper
 
 class OverviewFragment : Fragment() {
+
+    private lateinit var navEvents: PublishProcessor<NavEvent>
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -25,9 +29,8 @@ class OverviewFragment : Fragment() {
 
         CoroutineScope(Job()).launch {
             if (isFirstUse()) {
-                val action = OverviewFragmentDirections.actionOverviewFragmentToFirstUseFragment()
                 withContext(Dispatchers.Main) {
-                    findNavController().navigate(action)
+                    navEvents.onNext(NavEvent(NavEvent.Destination.FIRST_USE))
                 }
             }
         }
@@ -41,6 +44,10 @@ class OverviewFragment : Fragment() {
         return ! firstUseSeen && numAccounts == 0
     }
 
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        navEvents = (activity?.applicationContext as HackedApplication).navEvents
+    }
 
     override fun onResume() {
         super.onResume()

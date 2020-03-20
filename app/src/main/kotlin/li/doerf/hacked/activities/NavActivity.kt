@@ -1,5 +1,6 @@
 package li.doerf.hacked.activities
 
+import android.annotation.SuppressLint
 import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.net.Uri
@@ -11,17 +12,25 @@ import android.widget.Toast
 import android.widget.Toast.makeText
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.NavigationUI
 import com.crashlytics.android.Crashlytics
+import io.reactivex.processors.PublishProcessor
+import li.doerf.hacked.HackedApplication
 import li.doerf.hacked.R
+import li.doerf.hacked.ui.fragments.OverviewFragmentDirections
+import li.doerf.hacked.util.NavEvent
 
 
 class NavActivity : AppCompatActivity() {
 
+    lateinit var navEvents: PublishProcessor<NavEvent>
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        navEvents = (applicationContext as HackedApplication).navEvents
         setContentView(R.layout.activity_nav)
         val toolbar = findViewById<Toolbar>(R.id.toolbar)
         setSupportActionBar(toolbar)
@@ -29,6 +38,22 @@ class NavActivity : AppCompatActivity() {
         title = getString(R.string.app_name)
         val navController = Navigation.findNavController(this, R.id.nav_host_fragment)
         NavigationUI.setupActionBarWithNavController(this, navController)
+
+        setupNavigation(navController)
+    }
+
+    @SuppressLint("CheckResult")
+    private fun setupNavigation(navController: NavController) {
+        navEvents.subscribe {
+            when (it.destination) {
+                NavEvent.Destination.OVERVIEW -> TODO()
+                NavEvent.Destination.FIRST_USE -> navController.navigate(OverviewFragmentDirections.actionOverviewFragmentToFirstUseFragment())
+                NavEvent.Destination.ACCOUNTS_DETAILS -> TODO()
+                NavEvent.Destination.ACCOUNTS_LIST -> TODO()
+                NavEvent.Destination.ALL_BREACHES -> TODO()
+                NavEvent.Destination.PWNED_PASSWORDS -> TODO()
+            }
+        }
     }
 
     override fun onSupportNavigateUp(): Boolean {

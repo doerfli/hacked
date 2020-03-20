@@ -15,6 +15,8 @@ import androidx.multidex.MultiDexApplication;
 import com.google.android.gms.security.ProviderInstaller;
 import com.google.firebase.analytics.FirebaseAnalytics;
 
+import io.reactivex.processors.PublishProcessor;
+import li.doerf.hacked.util.NavEvent;
 import li.doerf.hacked.utils.SynchronizationHelper;
 
 /**
@@ -24,6 +26,7 @@ import li.doerf.hacked.utils.SynchronizationHelper;
 public class HackedApplication extends MultiDexApplication implements LifecycleObserver, DefaultLifecycleObserver {
     private static final String TAG = "HackedApplication";
     private FirebaseAnalytics firebaseAnalytics;
+    private PublishProcessor<NavEvent> navEvents = PublishProcessor.create();
 
     @Override
     public void onCreate() {
@@ -77,4 +80,7 @@ public class HackedApplication extends MultiDexApplication implements LifecycleO
         SynchronizationHelper.setupInitialSync(getApplicationContext());
     }
 
+    public PublishProcessor<NavEvent> getNavEvents() {
+        return navEvents;
+    }
 }
