@@ -85,7 +85,7 @@ class AccountsFragment : Fragment() {
         if (!isFullView) {
             val title = fragmentRootView.findViewById<TextView>(R.id.title_accounts)
             title.setOnClickListener {
-                navEvents.onNext(NavEvent(NavEvent.Destination.ACCOUNTS_LIST, null))
+                navEvents.onNext(NavEvent(NavEvent.Destination.ACCOUNTS_LIST, null, null))
             }
         }
 

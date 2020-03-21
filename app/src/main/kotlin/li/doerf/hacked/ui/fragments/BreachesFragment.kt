@@ -35,7 +35,7 @@ class BreachesFragment : Fragment() {
 
         val headingChevron = fragmentRootView.findViewById<ImageView>(R.id.show_details)
         headingChevron.setOnClickListener {
-            navEvents.onNext(NavEvent(NavEvent.Destination.ALL_BREACHES, null))
+            navEvents.onNext(NavEvent(NavEvent.Destination.ALL_BREACHES, null, null))
         }
 
         val breachedSites: RecyclerView = fragmentRootView.findViewById(R.id.breached_sites_list)

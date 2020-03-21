@@ -107,7 +107,7 @@ class BreachedSitesAdapter(
         pwnCountView.text = String.format(context.resources.configuration.locale, "(%,d)", site.pwnCount)
 
         card.setOnClickListener { _ ->
-            navEvents.onNext(NavEvent(NavEvent.Destination.ALL_BREACHES, site.id))
+            navEvents.onNext(NavEvent(NavEvent.Destination.ALL_BREACHES, site.id, null))
         }
     }
 

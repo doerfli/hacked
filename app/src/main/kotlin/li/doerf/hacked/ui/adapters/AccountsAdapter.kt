@@ -57,7 +57,7 @@ class AccountsAdapter(private val context: Context, private var accountList: Lis
 
         view.setOnClickListener {
             NotificationHelper.cancelAll(context)
-            navEvents.onNext(NavEvent(NavEvent.Destination.ACCOUNTS_DETAILS, account.id))
+            navEvents.onNext(NavEvent(NavEvent.Destination.ACCOUNTS_DETAILS, account.id, null))
         }
     }
 

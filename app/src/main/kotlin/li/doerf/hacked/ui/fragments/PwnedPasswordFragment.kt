@@ -14,12 +14,13 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.*
 import androidx.fragment.app.Fragment
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
-import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import io.reactivex.processors.PublishProcessor
 import li.doerf.hacked.CustomEvent
 import li.doerf.hacked.HackedApplication
 import li.doerf.hacked.R
 import li.doerf.hacked.remote.pwnedpasswords.PwnedPassword
+import li.doerf.hacked.util.NavEvent
 import li.doerf.hacked.utils.StringHelper
 
 /**
@@ -27,6 +28,7 @@ import li.doerf.hacked.utils.StringHelper
  */
 class PwnedPasswordFragment : Fragment() {
 
+    private lateinit var navEvents: PublishProcessor<NavEvent>
     private lateinit var fragmentRootView: View
     private var isFullFragment: Boolean = false
     private lateinit var pwnedButton: Button
@@ -66,6 +68,11 @@ class PwnedPasswordFragment : Fragment() {
         return fragmentRootView
     }
 
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        navEvents = (activity!!.applicationContext as HackedApplication).navEvents
+    }
+
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         val imm = context!!.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
@@ -95,8 +102,7 @@ class PwnedPasswordFragment : Fragment() {
     private fun checkPassword(password: String) {
         // navigate to full screen pwnedpassword fragment
         if (! isFullFragment) {
-            val action = OverviewFragmentDirections.actionOverviewFragmentToPwnedPasswordFragment(password)
-            findNavController().navigate(action)
+            navEvents.onNext(NavEvent(NavEvent.Destination.PWNED_PASSWORDS, null, password))
             return
         }
 

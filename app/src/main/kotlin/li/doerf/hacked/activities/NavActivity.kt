@@ -71,7 +71,11 @@ class NavActivity : AppCompatActivity() {
                     }
                     navController.navigate(action)
                 }
-                NavEvent.Destination.PWNED_PASSWORDS -> TODO()
+                NavEvent.Destination.PWNED_PASSWORDS -> {
+                    val action = OverviewFragmentDirections.actionOverviewFragmentToPwnedPasswordFragment(it.string!!)
+                    navController.navigate(action)
+
+                }
             }
         }
     }
