@@ -10,13 +10,15 @@ import android.widget.ImageView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
-import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import io.reactivex.processors.PublishProcessor
+import li.doerf.hacked.HackedApplication
 import li.doerf.hacked.R
 import li.doerf.hacked.db.entities.BreachedSite
 import li.doerf.hacked.ui.adapters.BreachedSitesAdapter
 import li.doerf.hacked.ui.viewmodels.BreachedSitesViewModel
+import li.doerf.hacked.util.NavEvent
 import java.util.*
 
 /**
@@ -24,6 +26,7 @@ import java.util.*
  * create an instance of this fragment.
  */
 class BreachesFragment : Fragment() {
+    private lateinit var navEvents: PublishProcessor<NavEvent>
     private lateinit var breachedSitesAdapter: BreachedSitesAdapter
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -32,8 +35,7 @@ class BreachesFragment : Fragment() {
 
         val headingChevron = fragmentRootView.findViewById<ImageView>(R.id.show_details)
         headingChevron.setOnClickListener {
-            val action = OverviewFragmentDirections.actionOverviewFragmentToAllBreachesFragment()
-            fragmentRootView.findNavController().navigate(action)
+            navEvents.onNext(NavEvent(NavEvent.Destination.ALL_BREACHES, null))
         }
 
         val breachedSites: RecyclerView = fragmentRootView.findViewById(R.id.breached_sites_list)
@@ -50,6 +52,7 @@ class BreachesFragment : Fragment() {
         breachedSitesAdapter = BreachedSitesAdapter(activity!!.applicationContext, ArrayList(), true)
         val breachedSitesViewModel = ViewModelProviders.of(this).get(BreachedSitesViewModel::class.java)
         breachedSitesViewModel.breachesSitesMostRecent.observe(this, Observer { sites: List<BreachedSite> -> breachedSitesAdapter.addItems(sites) })
+        navEvents = (activity!!.applicationContext as HackedApplication).navEvents
     }
 
     override fun onResume() {

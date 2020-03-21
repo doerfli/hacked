@@ -66,7 +66,9 @@ class NavActivity : AppCompatActivity() {
                 }
                 NavEvent.Destination.ALL_BREACHES -> {
                     val action = OverviewFragmentDirections.actionOverviewFragmentToAllBreachesFragment()
-                    action.breachedSiteId = it.id!!
+                    if (it.id != null) {
+                        action.breachedSiteId = it.id
+                    }
                     navController.navigate(action)
                 }
                 NavEvent.Destination.PWNED_PASSWORDS -> TODO()
