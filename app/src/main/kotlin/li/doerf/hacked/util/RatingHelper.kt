@@ -4,6 +4,7 @@ import android.app.Activity
 import android.preference.PreferenceManager
 import android.util.Log
 import androidx.fragment.app.FragmentActivity
+import androidx.fragment.app.FragmentManager
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import li.doerf.hacked.ui.RateUsDialogFragment
@@ -16,7 +17,10 @@ class RatingHelper(private val activity: Activity) {
         if (!activity.isFinishing && !activity.isDestroyed) {
             withContext(Dispatchers.Main) {
                 val dialog = RateUsDialogFragment()
-                dialog.show((activity as FragmentActivity).supportFragmentManager, "rateus")
+                val fragmentManager = (activity as FragmentActivity).supportFragmentManager as FragmentManager
+                if (! fragmentManager.isDestroyed) {
+                    dialog.show(fragmentManager, "rateus")
+                }
             }
         }
     }
