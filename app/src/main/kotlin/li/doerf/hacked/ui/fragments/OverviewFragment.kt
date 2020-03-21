@@ -30,7 +30,7 @@ class OverviewFragment : Fragment() {
         CoroutineScope(Job()).launch {
             if (isFirstUse()) {
                 withContext(Dispatchers.Main) {
-                    navEvents.onNext(NavEvent(NavEvent.Destination.FIRST_USE))
+                    navEvents.onNext(NavEvent(NavEvent.Destination.FIRST_USE, null))
                 }
             }
         }

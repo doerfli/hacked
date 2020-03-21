@@ -1,6 +1,6 @@
 package li.doerf.hacked.util
 
-class NavEvent(val destination: Destination) {
+class NavEvent(val destination: Destination, val id: Long?) {
     enum class Destination {
         OVERVIEW,
         FIRST_USE,

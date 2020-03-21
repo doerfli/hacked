@@ -6,16 +6,24 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
+import io.reactivex.processors.PublishProcessor
+import li.doerf.hacked.HackedApplication
 import li.doerf.hacked.R
 import li.doerf.hacked.db.entities.Account
-import li.doerf.hacked.ui.fragments.NavDirectionsToAccountDetailsFactory
+import li.doerf.hacked.util.NavEvent
 import li.doerf.hacked.utils.NotificationHelper
 import java.util.*
 
 
-class AccountsAdapter(private val context: Context, private var accountList: List<Account>, private val navDirectionsToAccountDetailsFactory: NavDirectionsToAccountDetailsFactory) : RecyclerView.Adapter<RecyclerViewHolder>() {
+class AccountsAdapter(private val context: Context, private var accountList: List<Account>) : RecyclerView.Adapter<RecyclerViewHolder>() {
+
+    private lateinit var navEvents: PublishProcessor<NavEvent>
+
+    override fun onViewAttachedToWindow(holder: RecyclerViewHolder) {
+        super.onViewAttachedToWindow(holder)
+        navEvents = (context as HackedApplication).navEvents
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerViewHolder {
         val itemLayout = LayoutInflater.from(parent.context)
@@ -49,8 +57,9 @@ class AccountsAdapter(private val context: Context, private var accountList: Lis
 
         view.setOnClickListener {
             NotificationHelper.cancelAll(context)
-            val action = navDirectionsToAccountDetailsFactory.createNavDirections(account.id)
-            view.findNavController().navigate(action)
+//            val action = navDirectionsToAccountDetailsFactory.createNavDirections(account.id)
+//            view.findNavController().navigate(action)
+            navEvents.onNext(NavEvent(NavEvent.Destination.ACCOUNTS_DETAILS, account.id))
         }
     }
 

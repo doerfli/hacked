@@ -15,7 +15,6 @@ import androidx.constraintlayout.widget.Group
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
-import androidx.navigation.NavDirections
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -34,7 +33,7 @@ import li.doerf.hacked.ui.viewmodels.AccountViewModel
 import org.joda.time.format.DateTimeFormat
 import java.util.*
 
-class AccountsFragment : Fragment(), NavDirectionsToAccountDetailsFactory {
+class AccountsFragment : Fragment() {
     private lateinit var hibpInfo: TextView
     private lateinit var fragmentRootView: View
     private lateinit var accountEditText: EditText
@@ -121,7 +120,7 @@ class AccountsFragment : Fragment(), NavDirectionsToAccountDetailsFactory {
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        accountsAdapter = AccountsAdapter(context, ArrayList(), this)
+        accountsAdapter = AccountsAdapter(activity!!.applicationContext, ArrayList())
         val accountsViewModel: AccountViewModel by viewModels()
         accountsViewModel.accountList.observe(this, Observer { accounts: List<Account> -> accountsAdapter.addItems(accounts) })
     }
@@ -149,18 +148,6 @@ class AccountsFragment : Fragment(), NavDirectionsToAccountDetailsFactory {
             else -> super.onOptionsItemSelected(item)
 
         }
-    }
-
-    override fun createNavDirections(accountId: Long): NavDirections {
-        if (isFullView) {
-            val action = AccountsFragmentDirections.actionAccountsListFullFragmentToAccountDetailsFragment(accountId)
-            action.accountId = accountId
-            return action
-        }
-
-        val action = OverviewFragmentDirections.actionOverviewFragmentToAccountDetailsFragment()
-        action.accountId = accountId
-        return action
     }
 
     companion object {

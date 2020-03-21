@@ -20,6 +20,7 @@ import com.crashlytics.android.Crashlytics
 import io.reactivex.processors.PublishProcessor
 import li.doerf.hacked.HackedApplication
 import li.doerf.hacked.R
+import li.doerf.hacked.ui.fragments.AccountsFragmentDirections
 import li.doerf.hacked.ui.fragments.OverviewFragmentDirections
 import li.doerf.hacked.util.NavEvent
 
@@ -48,7 +49,17 @@ class NavActivity : AppCompatActivity() {
             when (it.destination) {
                 NavEvent.Destination.OVERVIEW -> TODO()
                 NavEvent.Destination.FIRST_USE -> navController.navigate(OverviewFragmentDirections.actionOverviewFragmentToFirstUseFragment())
-                NavEvent.Destination.ACCOUNTS_DETAILS -> TODO()
+                NavEvent.Destination.ACCOUNTS_DETAILS -> when(navController.currentDestination?.id) {
+                    R.id.overviewFragment -> {
+                        val action = OverviewFragmentDirections.actionOverviewFragmentToAccountDetailsFragment()
+                        action.accountId = it.id!!
+                        navController.navigate(action)
+                    }
+                    R.id.accountsListFullFragment -> {
+                        val action = AccountsFragmentDirections.actionAccountsListFullFragmentToAccountDetailsFragment(it.id!!)
+                        navController.navigate(action)
+                    }
+                }
                 NavEvent.Destination.ACCOUNTS_LIST -> TODO()
                 NavEvent.Destination.ALL_BREACHES -> TODO()
                 NavEvent.Destination.PWNED_PASSWORDS -> TODO()
