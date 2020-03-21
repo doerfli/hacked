@@ -60,7 +60,10 @@ class NavActivity : AppCompatActivity() {
                         navController.navigate(action)
                     }
                 }
-                NavEvent.Destination.ACCOUNTS_LIST -> TODO()
+                NavEvent.Destination.ACCOUNTS_LIST -> {
+                    val action = OverviewFragmentDirections.actionOverviewFragmentToAccountsListFullFragment()
+                    navController.navigate(action)
+                }
                 NavEvent.Destination.ALL_BREACHES -> {
                     val action = OverviewFragmentDirections.actionOverviewFragmentToAllBreachesFragment()
                     action.breachedSiteId = it.id!!

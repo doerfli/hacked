@@ -15,13 +15,14 @@ import androidx.constraintlayout.widget.Group
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
-import androidx.navigation.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.work.OneTimeWorkRequest
 import androidx.work.WorkManager
 import com.google.android.material.snackbar.Snackbar
+import io.reactivex.processors.PublishProcessor
+import li.doerf.hacked.HackedApplication
 import li.doerf.hacked.R
 import li.doerf.hacked.db.AppDatabase
 import li.doerf.hacked.db.daos.AccountDao
@@ -30,6 +31,7 @@ import li.doerf.hacked.remote.haveibeenpwned.HIBPAccountCheckerWorker
 import li.doerf.hacked.services.AccountService
 import li.doerf.hacked.ui.adapters.AccountsAdapter
 import li.doerf.hacked.ui.viewmodels.AccountViewModel
+import li.doerf.hacked.util.NavEvent
 import org.joda.time.format.DateTimeFormat
 import java.util.*
 
@@ -40,6 +42,7 @@ class AccountsFragment : Fragment() {
     private lateinit var groupAddAccount: Group
     private lateinit var accountDao: AccountDao
     private lateinit var accountsAdapter: AccountsAdapter
+    private lateinit var navEvents: PublishProcessor<NavEvent>
     private var isFullView: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -82,8 +85,7 @@ class AccountsFragment : Fragment() {
         if (!isFullView) {
             val title = fragmentRootView.findViewById<TextView>(R.id.title_accounts)
             title.setOnClickListener {
-                val action = OverviewFragmentDirections.actionOverviewFragmentToAccountsListFullFragment()
-                fragmentRootView.findNavController().navigate(action)
+                navEvents.onNext(NavEvent(NavEvent.Destination.ACCOUNTS_LIST, null))
             }
         }
 
@@ -123,6 +125,7 @@ class AccountsFragment : Fragment() {
         accountsAdapter = AccountsAdapter(activity!!.applicationContext, ArrayList())
         val accountsViewModel: AccountViewModel by viewModels()
         accountsViewModel.accountList.observe(this, Observer { accounts: List<Account> -> accountsAdapter.addItems(accounts) })
+        navEvents = (activity!!.applicationContext as HackedApplication).navEvents
     }
 
     override fun onCreateOptionsMenu(menu: Menu, menuInflater: MenuInflater) {
