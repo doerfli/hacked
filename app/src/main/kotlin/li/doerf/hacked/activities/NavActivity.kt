@@ -21,6 +21,7 @@ import io.reactivex.processors.PublishProcessor
 import li.doerf.hacked.HackedApplication
 import li.doerf.hacked.R
 import li.doerf.hacked.ui.fragments.AccountsFragmentDirections
+import li.doerf.hacked.ui.fragments.FirstUseFragmentDirections
 import li.doerf.hacked.ui.fragments.OverviewFragmentDirections
 import li.doerf.hacked.util.NavEvent
 
@@ -47,7 +48,10 @@ class NavActivity : AppCompatActivity() {
     private fun setupNavigation(navController: NavController) {
         navEvents.subscribe {
             when (it.destination) {
-                NavEvent.Destination.OVERVIEW -> TODO()
+                NavEvent.Destination.OVERVIEW -> {
+                    val action = FirstUseFragmentDirections.actionFirstUseFragmentToOverviewFragment()
+                    navController.navigate(action)
+                }
                 NavEvent.Destination.FIRST_USE -> navController.navigate(OverviewFragmentDirections.actionOverviewFragmentToFirstUseFragment())
                 NavEvent.Destination.ACCOUNTS_DETAILS -> when(navController.currentDestination?.id) {
                     R.id.overviewFragment -> {

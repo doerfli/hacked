@@ -11,16 +11,19 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import androidx.fragment.app.Fragment
-import androidx.navigation.fragment.findNavController
+import io.reactivex.processors.PublishProcessor
 import li.doerf.hacked.CustomEvent
 import li.doerf.hacked.HackedApplication
 import li.doerf.hacked.R
 import li.doerf.hacked.services.AccountService
+import li.doerf.hacked.util.NavEvent
 
 /**
  * A simple [Fragment] subclass.
  */
 class FirstUseFragment : Fragment() {
+
+    private lateinit var navEvents: PublishProcessor<NavEvent>
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -49,14 +52,18 @@ class FirstUseFragment : Fragment() {
         return fragmentRootView
     }
 
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        navEvents = (activity!!.applicationContext as HackedApplication).navEvents
+    }
+
     private fun navigateToOverview() {
         val sharedPref = activity!!.getPreferences(Context.MODE_PRIVATE)
         with (sharedPref.edit()) {
             putBoolean(OverviewFragment.PREF_KEY_FIRST_USE_SEEN, true)
             commit()
         }
-        val action = FirstUseFragmentDirections.actionFirstUseFragmentToOverviewFragment()
-        findNavController().navigate(action)
+        navEvents.onNext(NavEvent(NavEvent.Destination.OVERVIEW, null, null))
     }
 
 }
