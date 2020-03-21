@@ -68,7 +68,7 @@ class AllBreachesFragment : Fragment() {
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        breachedSitesAdapter = BreachedSitesAdapter(context, ArrayList(), false)
+        breachedSitesAdapter = BreachedSitesAdapter(activity!!.applicationContext, ArrayList(), false)
         breachedSitesViewModel.breachesSites.observe(this, Observer { sites: List<BreachedSite> ->
             sites.find { it.id == breachedSiteId }?.detailsVisible = true
             breachedSitesAdapter.addItems(sites)
@@ -87,8 +87,6 @@ class AllBreachesFragment : Fragment() {
             reloadBreachedSites(activity!!)
         }
     }
-
-
 
     companion object {
         private const val LOGTAG = "AllBreachesFragment"

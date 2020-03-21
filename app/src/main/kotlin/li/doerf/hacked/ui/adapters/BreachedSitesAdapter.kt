@@ -8,15 +8,23 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.RelativeLayout
 import android.widget.TextView
-import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
+import io.reactivex.processors.PublishProcessor
+import li.doerf.hacked.HackedApplication
 import li.doerf.hacked.R
 import li.doerf.hacked.db.entities.BreachedSite
-import li.doerf.hacked.ui.fragments.OverviewFragmentDirections
+import li.doerf.hacked.util.NavEvent
 import org.joda.time.format.DateTimeFormat
 
 class BreachedSitesAdapter(
         val context: Context, private var myBreachedSites: List<BreachedSite>, private val compactView: Boolean) : RecyclerView.Adapter<RecyclerViewHolder>() {
+
+    private lateinit var navEvents: PublishProcessor<NavEvent>
+
+    override fun onViewAttachedToWindow(holder: RecyclerViewHolder) {
+        super.onViewAttachedToWindow(holder)
+        navEvents = (context as HackedApplication).navEvents
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerViewHolder {
         if (compactView) {
@@ -98,10 +106,8 @@ class BreachedSitesAdapter(
         val pwnCountView = card.findViewById<TextView>(R.id.pwn_count)
         pwnCountView.text = String.format(context.resources.configuration.locale, "(%,d)", site.pwnCount)
 
-        card.setOnClickListener { view ->
-            val action = OverviewFragmentDirections.actionOverviewFragmentToAllBreachesFragment()
-            action.breachedSiteId = site.id
-            view.findNavController().navigate(action)
+        card.setOnClickListener { _ ->
+            navEvents.onNext(NavEvent(NavEvent.Destination.ALL_BREACHES, site.id))
         }
     }
 

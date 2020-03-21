@@ -57,8 +57,6 @@ class AccountsAdapter(private val context: Context, private var accountList: Lis
 
         view.setOnClickListener {
             NotificationHelper.cancelAll(context)
-//            val action = navDirectionsToAccountDetailsFactory.createNavDirections(account.id)
-//            view.findNavController().navigate(action)
             navEvents.onNext(NavEvent(NavEvent.Destination.ACCOUNTS_DETAILS, account.id))
         }
     }

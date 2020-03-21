@@ -47,7 +47,7 @@ class BreachesFragment : Fragment() {
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        breachedSitesAdapter = BreachedSitesAdapter(context, ArrayList(), true)
+        breachedSitesAdapter = BreachedSitesAdapter(activity!!.applicationContext, ArrayList(), true)
         val breachedSitesViewModel = ViewModelProviders.of(this).get(BreachedSitesViewModel::class.java)
         breachedSitesViewModel.breachesSitesMostRecent.observe(this, Observer { sites: List<BreachedSite> -> breachedSitesAdapter.addItems(sites) })
     }
