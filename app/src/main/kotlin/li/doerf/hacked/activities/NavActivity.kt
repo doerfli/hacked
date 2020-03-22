@@ -48,11 +48,12 @@ class NavActivity : AppCompatActivity() {
     private fun setupNavigation(navController: NavController) {
         navEvents.subscribe {
             when (it.destination) {
-                NavEvent.Destination.OVERVIEW -> {
-                    val action = FirstUseFragmentDirections.actionFirstUseFragmentToOverviewFragment()
-                    navController.navigate(action)
+                NavEvent.Destination.OVERVIEW -> if(navController.currentDestination?.id == R.id.firstUseFragment) {
+                    navController.navigate(FirstUseFragmentDirections.actionFirstUseFragmentToOverviewFragment())
                 }
-                NavEvent.Destination.FIRST_USE -> navController.navigate(OverviewFragmentDirections.actionOverviewFragmentToFirstUseFragment())
+                NavEvent.Destination.FIRST_USE -> if(navController.currentDestination?.id == R.id.overviewFragment) {
+                    navController.navigate(OverviewFragmentDirections.actionOverviewFragmentToFirstUseFragment())
+                }
                 NavEvent.Destination.ACCOUNTS_DETAILS -> when(navController.currentDestination?.id) {
                     R.id.overviewFragment -> {
                         val action = OverviewFragmentDirections.actionOverviewFragmentToAccountDetailsFragment()
@@ -60,25 +61,21 @@ class NavActivity : AppCompatActivity() {
                         navController.navigate(action)
                     }
                     R.id.accountsListFullFragment -> {
-                        val action = AccountsFragmentDirections.actionAccountsListFullFragmentToAccountDetailsFragment(it.id!!)
-                        navController.navigate(action)
+                        navController.navigate(AccountsFragmentDirections.actionAccountsListFullFragmentToAccountDetailsFragment(it.id!!))
                     }
                 }
-                NavEvent.Destination.ACCOUNTS_LIST -> {
-                    val action = OverviewFragmentDirections.actionOverviewFragmentToAccountsListFullFragment()
-                    navController.navigate(action)
+                NavEvent.Destination.ACCOUNTS_LIST -> if(navController.currentDestination?.id == R.id.overviewFragment) {
+                    navController.navigate(OverviewFragmentDirections.actionOverviewFragmentToAccountsListFullFragment())
                 }
-                NavEvent.Destination.ALL_BREACHES -> {
+                NavEvent.Destination.ALL_BREACHES -> if(navController.currentDestination?.id == R.id.overviewFragment) {
                     val action = OverviewFragmentDirections.actionOverviewFragmentToAllBreachesFragment()
                     if (it.id != null) {
                         action.breachedSiteId = it.id
                     }
                     navController.navigate(action)
                 }
-                NavEvent.Destination.PWNED_PASSWORDS -> {
-                    val action = OverviewFragmentDirections.actionOverviewFragmentToPwnedPasswordFragment(it.string!!)
-                    navController.navigate(action)
-
+                NavEvent.Destination.PWNED_PASSWORDS -> if(navController.currentDestination?.id == R.id.overviewFragment) {
+                    navController.navigate(OverviewFragmentDirections.actionOverviewFragmentToPwnedPasswordFragment(it.string!!))
                 }
             }
         }
