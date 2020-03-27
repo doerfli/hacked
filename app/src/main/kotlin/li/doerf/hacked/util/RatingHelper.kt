@@ -27,15 +27,15 @@ class RatingHelper(private val activity: Activity) {
 
     private fun showNoRatingDialog(): Boolean {
         if (hadConnectionFailureWithinLast10Days()) {
-            Log.d(LOGTAG, "has had connection failure within last 10 days")
+            Log.i(LOGTAG, "has had connection failure within last 10 days")
             return true
         }
         if (hasRated()) {
-            Log.d(LOGTAG, "has already rated us")
+            Log.i(LOGTAG, "has already rated us")
             return true
         }
         if (hasNeverRating()) {
-            Log.d(LOGTAG, "has chosen rating never")
+            Log.i(LOGTAG, "has chosen rating never")
             return true
         }
         return false
