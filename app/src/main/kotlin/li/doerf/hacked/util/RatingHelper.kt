@@ -18,7 +18,7 @@ class RatingHelper(private val activity: Activity) {
             withContext(Dispatchers.Main) {
                 val dialog = RateUsDialogFragment()
                 val fragmentManager = (activity as FragmentActivity).supportFragmentManager as FragmentManager
-                if (! fragmentManager.isDestroyed) {
+                if (! fragmentManager.isDestroyed && !fragmentManager.isStateSaved) {
                     dialog.show(fragmentManager, "rateus")
                 }
             }
