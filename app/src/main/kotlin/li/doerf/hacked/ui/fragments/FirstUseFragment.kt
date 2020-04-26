@@ -4,9 +4,11 @@ package li.doerf.hacked.ui.fragments
 import android.content.Context
 import android.os.Bundle
 import android.text.method.LinkMovementMethod
+import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.EditorInfo
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
@@ -32,16 +34,30 @@ class FirstUseFragment : Fragment() {
 
         val accountEditText = fragmentRootView.findViewById<EditText>(R.id.account)
         val addButton = fragmentRootView.findViewById<Button>(R.id.button_add_initial_account)
-        addButton.setOnClickListener {
-            val accountName = accountEditText.text
-            AccountService(activity!!.application).addAccount(accountName.toString())
-            accountEditText.visibility = View.GONE
-            addButton.visibility = View.GONE
-            (activity!!.application as HackedApplication).trackCustomEvent(CustomEvent.FIRST_ACCOUNT_ADDED)
-            navigateToOverview()
+        val dismissButton = fragmentRootView.findViewById<Button>(R.id.dismiss)
+
+        accountEditText.setOnEditorActionListener { _, actionId, event ->
+            when (actionId) {
+                EditorInfo.IME_ACTION_SEARCH,
+                EditorInfo.IME_ACTION_DONE -> {
+                    addNewAccount(accountEditText, addButton)
+                    true
+                }
+                else -> {
+                    if(event.action == KeyEvent.ACTION_DOWN && event.keyCode == KeyEvent.KEYCODE_ENTER) {
+                        addNewAccount(accountEditText, addButton)
+                        true
+                    } else {
+                        false
+                    }
+                 }
+            }
         }
 
-        val dismissButton = fragmentRootView.findViewById<Button>(R.id.dismiss)
+        addButton.setOnClickListener {
+            addNewAccount(accountEditText, addButton)
+        }
+
         dismissButton.setOnClickListener {
             navigateToOverview()
         }
@@ -50,6 +66,15 @@ class FirstUseFragment : Fragment() {
         text4.movementMethod = LinkMovementMethod.getInstance()
 
         return fragmentRootView
+    }
+
+    private fun addNewAccount(accountEditText: EditText, addButton: Button) {
+        val accountName = accountEditText.text
+        AccountService(activity!!.application).addAccount(accountName.toString())
+        accountEditText.visibility = View.GONE
+        addButton.visibility = View.GONE
+        (activity!!.application as HackedApplication).trackCustomEvent(CustomEvent.FIRST_ACCOUNT_ADDED)
+        navigateToOverview()
     }
 
     override fun onAttach(context: Context) {
