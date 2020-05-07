@@ -16,6 +16,6 @@ jobs:
     - name: Decode google-services.json
       env:
         FIREBASE_CONFIG: ${{ secrets.FIREBASE_CONFIG }}
-      run: mkdir -p src/main/debug && echo $FIREBASE_CONFIG > src/main/debug/google-services.json
+      run: mkdir -p app/src/debug && echo $FIREBASE_CONFIG > app/src/debug/google-services.json
     - name: Build with Gradle
       run: ./gradlew dependencies assembleDebug
