@@ -14,7 +14,7 @@ import li.doerf.hacked.R
 import li.doerf.hacked.db.AppDatabase
 import li.doerf.hacked.db.daos.AccountDao
 import li.doerf.hacked.db.entities.Account
-import li.doerf.hacked.remote.haveibeenpwned.HIBPAccountCheckerWorker
+import li.doerf.hacked.remote.hibp.HIBPAccountCheckerWorker
 import li.doerf.hacked.ui.fragments.AccountsFragment
 import li.doerf.hacked.util.createCoroutingExceptionHandler
 

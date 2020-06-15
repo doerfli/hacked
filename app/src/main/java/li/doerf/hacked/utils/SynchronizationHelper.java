@@ -17,7 +17,7 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
 import li.doerf.hacked.R;
-import li.doerf.hacked.remote.haveibeenpwned.HIBPAccountCheckerWorker;
+import li.doerf.hacked.remote.hibp.HIBPAccountCheckerWorker;
 
 /**
  * Created by moo on 08/09/16.

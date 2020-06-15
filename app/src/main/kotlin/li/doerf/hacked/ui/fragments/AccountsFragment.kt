@@ -27,7 +27,7 @@ import li.doerf.hacked.R
 import li.doerf.hacked.db.AppDatabase
 import li.doerf.hacked.db.daos.AccountDao
 import li.doerf.hacked.db.entities.Account
-import li.doerf.hacked.remote.haveibeenpwned.HIBPAccountCheckerWorker
+import li.doerf.hacked.remote.hibp.HIBPAccountCheckerWorker
 import li.doerf.hacked.services.AccountService
 import li.doerf.hacked.ui.adapters.AccountsAdapter
 import li.doerf.hacked.ui.viewmodels.AccountViewModel
