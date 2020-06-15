@@ -25,7 +25,6 @@ import kotlinx.coroutines.withContext
 import li.doerf.hacked.R
 import li.doerf.hacked.db.AppDatabase
 import li.doerf.hacked.db.entities.BreachedSite
-import li.doerf.hacked.remote.haveibeenpwned.BreachedAccount
 import li.doerf.hacked.remote.pwnedpasswords.PwnedPassword
 import li.doerf.hacked.utils.StringHelper
 import org.joda.time.IllegalInstantException

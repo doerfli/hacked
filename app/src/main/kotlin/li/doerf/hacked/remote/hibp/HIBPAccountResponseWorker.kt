@@ -27,7 +27,6 @@ import li.doerf.hacked.db.daos.AccountDao
 import li.doerf.hacked.db.daos.BreachDao
 import li.doerf.hacked.db.entities.Account
 import li.doerf.hacked.db.entities.Breach
-import li.doerf.hacked.remote.haveibeenpwned.BreachedAccount
 import li.doerf.hacked.utils.AccountHelper
 import li.doerf.hacked.utils.NotificationHelper
 import li.doerf.hacked.utils.OreoNotificationHelper
