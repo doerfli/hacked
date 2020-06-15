@@ -79,14 +79,9 @@ dependencies {
     implementation 'com.google.firebase:firebase-messaging'
     implementation 'com.crashlytics.sdk.android:crashlytics'
 
-    // http://square.github.io/retrofit/
-    implementation "com.squareup.retrofit2:retrofit:$retrofit2_version"
-    implementation "com.squareup.retrofit2:converter-gson:$retrofit2_version"
-    implementation "com.squareup.retrofit2:converter-scalars:$retrofit2_version"
-    implementation "com.squareup.okhttp3:logging-interceptor:$okhttp3_version"
-    implementation 'commons-codec:commons-codec:1.14'
-    // http://www.joda.org/joda-time/
     implementation 'joda-time:joda-time:2.10.6'
+    implementation 'commons-codec:commons-codec:1.14'
+    implementation 'com.google.code.gson:gson:2.8.6'
 
     implementation "com.github.kittinunf.fuel:fuel:$fuel_version"
     implementation "com.github.kittinunf.fuel:fuel-coroutines:$fuel_version"
