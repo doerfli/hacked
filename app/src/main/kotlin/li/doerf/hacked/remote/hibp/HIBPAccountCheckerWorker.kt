@@ -149,4 +149,3 @@ class HIBPAccountCheckerWorker(private val context: Context, params: WorkerParam
 
 }
 
-private class WorkFailedException(val retry : Boolean = false) : Exception()

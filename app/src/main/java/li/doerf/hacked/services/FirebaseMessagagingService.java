@@ -23,7 +23,7 @@ import java.util.List;
 import java.util.Map;
 
 import li.doerf.hacked.activities.NavActivity;
-import li.doerf.hacked.remote.haveibeenpwned.HIBPAccountResponseWorker;
+import li.doerf.hacked.remote.hibp.HIBPAccountResponseWorker;
 import li.doerf.hacked.utils.NotificationHelper;
 import li.doerf.hacked.utils.OreoNotificationHelper;
 

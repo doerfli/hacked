@@ -71,7 +71,7 @@ class BreachedSitesWorker(private val context: Context, params: WorkerParameters
             val (_, res, result) = url.httpGet()
                     .header("Accept", "application/vnd.haveibeenpwned.v2+json")
                     .header("User-Agent", "Hacked_Android_App")
-                    .awaitObjectResponseResult(BreachedAccountDeserializer)
+                    .awaitObjectResponseResult(BreachedAccountListDeserializer)
 
             if (!res.isSuccessful) {
                 Log.w(LOGTAG, "request was not successful")
@@ -137,7 +137,7 @@ class BreachedSitesWorker(private val context: Context, params: WorkerParameters
 
 }
 
-object BreachedAccountDeserializer : ResponseDeserializable<Collection<BreachedAccount>> {
+object BreachedAccountListDeserializer : ResponseDeserializable<Collection<BreachedAccount>> {
     override fun deserialize(content: String) = run {
         val mapper = jacksonObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
         mapper.propertyNamingStrategy = PropertyNamingStrategy.UPPER_CAMEL_CASE
