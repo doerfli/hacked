@@ -1,4 +1,4 @@
-![Build](https://github.com/doerfli/hacked/workflows/Build/badge.svg) ![Check dependencies](https://github.com/doerfli/hacked/workflows/Check%20dependencies/badge.svg)
+![Build](https://github.com/doerfli/hacked/workflows/Build/badge.svg)
 
 # Hacked?
 
