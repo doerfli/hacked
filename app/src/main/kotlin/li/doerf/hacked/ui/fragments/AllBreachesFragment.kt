@@ -5,9 +5,7 @@ import android.app.Activity
 import android.content.Context
 import android.os.Bundle
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.EditText
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
@@ -40,6 +38,7 @@ class AllBreachesFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true)
         val args: AllBreachesFragmentArgs by navArgs()
         breachedSiteId = args.breachedSiteId
     }
@@ -53,6 +52,7 @@ class AllBreachesFragment : Fragment() {
         breachedSites.setHasFixedSize(true)
         layoutManager = LinearLayoutManager(context)
         breachedSites.layoutManager = layoutManager
+        breachedSitesAdapter = BreachedSitesAdapter(requireActivity().applicationContext, ArrayList(), false)
         breachedSites.adapter = breachedSitesAdapter
 
         HibpInfo.prepare(context, fragmentRootView.findViewById(R.id.hibp_info), breachedSites)
@@ -68,12 +68,11 @@ class AllBreachesFragment : Fragment() {
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        breachedSitesAdapter = BreachedSitesAdapter(activity!!.applicationContext, ArrayList(), false)
-        breachedSitesViewModel.breachesSites.observe(this, Observer { sites: List<BreachedSite> ->
+        breachedSitesViewModel.breachesSites!!.observe(this, Observer { sites: List<BreachedSite> ->
             sites.find { it.id == breachedSiteId }?.detailsVisible = true
             breachedSitesAdapter.addItems(sites)
             if (breachedSiteId > -1 && sites.isNotEmpty()) {
-                val position = sites.indexOfFirst { it.id == breachedSiteId  }
+                val position = sites.indexOfFirst { it.id == breachedSiteId }
                 if (position > -1) {
                     layoutManager.scrollToPositionWithOffset(position, 0)
                 }
@@ -84,8 +83,28 @@ class AllBreachesFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         if (breachedSitesAdapter.itemCount == 0 ) {
-            reloadBreachedSites(activity!!)
+            reloadBreachedSites(requireActivity())
         }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        return inflater.inflate(R.menu.menu_fragment_allbreaches, menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == R.id.sort_by_name) {
+            breachedSitesViewModel.orderByName()
+            return true
+        }
+        if (item.itemId == R.id.sort_by_count) {
+            breachedSitesViewModel.orderByCount()
+            return true
+        }
+        if (item.itemId == R.id.sort_by_date) {
+            breachedSitesViewModel.orderByDate()
+            return true
+        }
+        return super.onOptionsItemSelected(item)
     }
 
     companion object {

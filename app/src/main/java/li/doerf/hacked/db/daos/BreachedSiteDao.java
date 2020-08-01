@@ -32,6 +32,12 @@ public interface BreachedSiteDao {
     @Query("SELECT * FROM breached_sites ORDER BY name")
     LiveData<List<BreachedSite>> getAllLD();
 
+    @Query("SELECT * FROM breached_sites ORDER BY pwn_count DESC")
+    LiveData<List<BreachedSite>> getAllByPwnCountLD();
+
+    @Query("SELECT * FROM breached_sites ORDER BY added_date DESC")
+    LiveData<List<BreachedSite>> getAllByDateAddedLD();
+
     @Query("SELECT * FROM breached_sites WHERE name LIKE :name ORDER BY name")
     LiveData<List<BreachedSite>> getAllByName(String name);
 

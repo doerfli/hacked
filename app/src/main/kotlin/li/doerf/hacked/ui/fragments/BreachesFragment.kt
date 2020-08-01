@@ -8,8 +8,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import io.reactivex.processors.PublishProcessor
@@ -26,6 +26,7 @@ import java.util.*
  * create an instance of this fragment.
  */
 class BreachesFragment : Fragment() {
+    private val breachedSitesViewModel: BreachedSitesViewModel by viewModels()
     private lateinit var navEvents: PublishProcessor<NavEvent>
     private lateinit var breachedSitesAdapter: BreachedSitesAdapter
 
@@ -49,16 +50,15 @@ class BreachesFragment : Fragment() {
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        breachedSitesAdapter = BreachedSitesAdapter(activity!!.applicationContext, ArrayList(), true)
-        val breachedSitesViewModel = ViewModelProviders.of(this).get(BreachedSitesViewModel::class.java)
-        breachedSitesViewModel.breachesSitesMostRecent.observe(this, Observer { sites: List<BreachedSite> -> breachedSitesAdapter.addItems(sites) })
-        navEvents = (activity!!.applicationContext as HackedApplication).navEvents
+        breachedSitesAdapter = BreachedSitesAdapter(requireActivity().applicationContext, ArrayList(), true)
+        breachedSitesViewModel.breachesSitesMostRecent!!.observe(this, Observer { sites: List<BreachedSite> -> breachedSitesAdapter.addItems(sites) })
+        navEvents = (requireActivity().applicationContext as HackedApplication).navEvents
     }
 
     override fun onResume() {
         super.onResume()
-        if (breachedSitesAdapter.getItemCount() == 0 ) {
-            AllBreachesFragment.reloadBreachedSites(activity!!)
+        if (breachedSitesAdapter.itemCount == 0 ) {
+            AllBreachesFragment.reloadBreachedSites(requireActivity())
         }
     }
 

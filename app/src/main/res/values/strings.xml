@@ -46,7 +46,7 @@
     <string name="data_provided_by">Data provided by</string>
     <string name="pwned">Pwned?</string>
     <string name="password">Password</string>
-    <string name="password_ok">This password looks ok.</string>
+    <string name="password_ok">This password looks OK.</string>
     <string name="password_pwned">This password was found %1$s times in known data breaches and should never be used. If you have used it anywhere, change it immediately!</string>
     <string name="password_info">Enter password below to check if it was exposed in data breaches</string>
     <string name="channel_name">Hacked?</string>
@@ -79,7 +79,7 @@
     <string name="firstuse_title">Hello and welcome to Hacked?</string>
     <string name="skip">Not now</string>
     <string name="add_and_dismiss_help">Add account</string>
-    <string name="firstuse_p1">The Hacked? app allows you to check if an account has been compromised and it\'s account details (email address, password, ...) have been (publicly) leaked onto the internet.</string>
+    <string name="firstuse_p1">The Hacked? app allows you to check if an account has been compromised and it\'s account details (email address, password, …) have been (publicly) leaked onto the internet.</string>
     <string name="firstuse_p2">Since this is the first time you use the app, lets add your first account together</string>
     <string name="firstuse_p3">All accounts stored in the app will be checked once a day (this can be changed in the settings).</string>
     <string name="firstuse_p4">The data source for the breaches is the well known website <a href="https://haveibeenpwned.com">haveibeenpwned.com</a>. If you want to learn more about where the data comes from, have a look at their <a href="https://haveibeenpwned.com/FAQs">FAQs</a>.</string>
@@ -89,5 +89,8 @@
     <string name="device_info">Device information</string>
     <string name="action_reset_acknowledgements">Reset acknowledged</string>
     <string name="unable_to_start_browser">Unable to start browser to show %1$s</string>
-    <string name="enter_filter_text">Search breaches ...</string>
+    <string name="enter_filter_text">Search breaches …</string>
+    <string name="action_sort_numpwned">Sort by count</string>
+    <string name="action_sort_dateadded">Sort by most recent</string>
+    <string name="action_sort_name">Sort by name</string>
 </resources>
