@@ -2,18 +2,16 @@ name: Check dependencies
 
 on:
   schedule:
-  - cron: "40 16 * * *"
+  - cron: "42 16 * * *"
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
-
     steps:
-      - uses: actions/checkout@v1
-      - name: Decode google-services.json
-        env:
-          FIREBASE_CONFIG: ${{ secrets.FIREBASE_CONFIG }}
-        run: mkdir -p app/src/debug && echo $FIREBASE_CONFIG > app/src/debug/google-services.json
-      - name: Check dependencies
-        run: ./gradlew dependencyUpdates
+    - uses: actions/checkout@v1
+    - name: Decode google-services.json
+      env:
+        FIREBASE_CONFIG: ${{ secrets.FIREBASE_CONFIG }}
+      run: mkdir -p app/src/debug && echo $FIREBASE_CONFIG > app/src/debug/google-services.json
+    - name: Check dependencies
+      run: ./gradlew dependencyUpdates
