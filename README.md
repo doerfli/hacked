@@ -1,3 +1,5 @@
+![Android CI](https://github.com/doerfli/hacked/workflows/Android%20CI/badge.svg) ![Check dependencies](https://github.com/doerfli/hacked/workflows/Check%20dependencies/badge.svg)
+
 # Hacked?
 
 Android app to track accounts on http://www.haveibeenpwned.com
