@@ -36,3 +36,17 @@ allprojects {
 task clean(type: Delete) {
     delete rootProject.buildDir
 }
+
+def isNonStable = { String version ->
+    def stableKeyword = ['RELEASE', 'FINAL', 'GA'].any { it -> version.toUpperCase().contains(it) }
+    def regex = /^[0-9,.v-]+(-r)?$/
+    return !stableKeyword && !(version ==~ regex)
+}
+
+dependencyUpdates.gradleReleaseChannel="current"
+tasks.named("dependencyUpdates").configure {
+    // Example 1: reject all non stable versions
+    rejectVersionIf {
+        isNonStable(it.candidate.version)
+    }
+}
