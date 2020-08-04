@@ -12,6 +12,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.*
+import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.navigation.fragment.navArgs
@@ -60,6 +61,10 @@ class PwnedPasswordFragment : Fragment() {
 
         pwnedButton = fragmentRootView.findViewById(R.id.check_pwned)
         pwnedButton.setOnClickListener { checkPassword(passwordField.text.toString()) }
+
+        passwordField.doAfterTextChanged { action ->
+            pwnedButton.isEnabled = action.toString().isNotEmpty()
+        }
 
         if (isFullFragment) {
             fragmentRootView.findViewById<TextView>(R.id.title_pwned_passwords).visibility = View.GONE
