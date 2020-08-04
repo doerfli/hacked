@@ -70,19 +70,19 @@ class PwnedPasswordFragment : Fragment() {
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        navEvents = (activity!!.applicationContext as HackedApplication).navEvents
+        navEvents = (requireActivity().applicationContext as HackedApplication).navEvents
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        val imm = context!!.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        val imm = requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         imm.hideSoftInputFromWindow(fragmentRootView.windowToken, 0)
     }
 
     override fun onResume() {
         super.onResume()
         registerReceiver()
-        (activity!!.application as HackedApplication).trackView("Fragment~Password")
+        (requireActivity().application as HackedApplication).trackView("Fragment~Password")
         if (isFullFragment && enteredPassword != "" ) {
             passwordField.setText(enteredPassword)
             checkPassword(enteredPassword)
@@ -109,33 +109,33 @@ class PwnedPasswordFragment : Fragment() {
         passwordOk.visibility = View.GONE
         passwordPwned.visibility = View.GONE
         progressBar.visibility = View.VISIBLE
-        PwnedPassword(LocalBroadcastManager.getInstance(context!!)).check(password)
-        (activity!!.application as HackedApplication).trackCustomEvent(CustomEvent.CHECK_PASSWORD_PWNED)
+        PwnedPassword(LocalBroadcastManager.getInstance(requireContext())).check(password)
+        (requireActivity().application as HackedApplication).trackCustomEvent(CustomEvent.CHECK_PASSWORD_PWNED)
     }
 
     private fun registerReceiver() {
         val intentFilter = IntentFilter(PwnedPassword.BROADCAST_ACTION_PASSWORD_PWNED)
         myBroadcastReceiver = LocalBroadcastReceiver(this)
-        LocalBroadcastManager.getInstance(context!!).registerReceiver(myBroadcastReceiver, intentFilter)
+        LocalBroadcastManager.getInstance(requireContext()).registerReceiver(myBroadcastReceiver, intentFilter)
     }
 
     private fun unregisterReceiver() {
-        LocalBroadcastManager.getInstance(context!!).unregisterReceiver(myBroadcastReceiver)
+        LocalBroadcastManager.getInstance(requireContext()).unregisterReceiver(myBroadcastReceiver)
     }
 
     private fun handleResult(pwned: Boolean, numPwned: Int, exception: Boolean) {
         progressBar.visibility = View.GONE
         if (exception) {
-            (activity!!.application as HackedApplication).trackCustomEvent(CustomEvent.PASSWORD_PWNED_EXCEPTION)
+            (requireActivity().application as HackedApplication).trackCustomEvent(CustomEvent.PASSWORD_PWNED_EXCEPTION)
             Toast.makeText(context, getString(R.string.error_download_data), Toast.LENGTH_SHORT).show()
         } else if (!pwned) {
-            (activity!!.application as HackedApplication).trackCustomEvent(CustomEvent.PASSWORD_NOT_PWNED)
+            (requireActivity().application as HackedApplication).trackCustomEvent(CustomEvent.PASSWORD_NOT_PWNED)
             passwordOk.visibility = View.VISIBLE
         } else {
-            (activity!!.application as HackedApplication).trackCustomEvent(CustomEvent.PASSWORD_PWNED)
+            (requireActivity().application as HackedApplication).trackCustomEvent(CustomEvent.PASSWORD_PWNED)
             passwordPwned.visibility = View.VISIBLE
-            val t = getString(R.string.password_pwned, StringHelper.addDigitSeperator(Integer.toString(numPwned)))
-            passwordPwned.setText(t)
+            val t = getString(R.string.password_pwned, StringHelper.addDigitSeperator(numPwned.toString()))
+            passwordPwned.text = t
         }
     }
 
