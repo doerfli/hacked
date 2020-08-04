@@ -11,7 +11,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
-import android.widget.*
+import android.widget.Button
+import android.widget.EditText
+import android.widget.ProgressBar
+import android.widget.TextView
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
@@ -37,6 +40,7 @@ class PwnedPasswordFragment : Fragment() {
     private lateinit var passwordField: EditText
     private lateinit var passwordPwned: TextView
     private lateinit var passwordOk: TextView
+    private lateinit var errorMsg: TextView
     private lateinit var myBroadcastReceiver: LocalBroadcastReceiver
     private var enteredPassword: String = ""
 
@@ -58,8 +62,9 @@ class PwnedPasswordFragment : Fragment() {
         passwordOk = fragmentRootView.findViewById(R.id.result_ok)
         passwordPwned = fragmentRootView.findViewById(R.id.result_pwned)
         progressBar = fragmentRootView.findViewById(R.id.progressbar)
-
         pwnedButton = fragmentRootView.findViewById(R.id.check_pwned)
+        errorMsg = fragmentRootView.findViewById(R.id.error_msg)
+
         pwnedButton.setOnClickListener { checkPassword(passwordField.text.toString()) }
 
         passwordField.doAfterTextChanged { action ->
@@ -114,6 +119,7 @@ class PwnedPasswordFragment : Fragment() {
         passwordOk.visibility = View.GONE
         passwordPwned.visibility = View.GONE
         progressBar.visibility = View.VISIBLE
+        errorMsg.visibility = View.GONE
         PwnedPassword(LocalBroadcastManager.getInstance(requireContext())).check(password)
         (requireActivity().application as HackedApplication).trackCustomEvent(CustomEvent.CHECK_PASSWORD_PWNED)
     }
@@ -132,7 +138,7 @@ class PwnedPasswordFragment : Fragment() {
         progressBar.visibility = View.GONE
         if (exception) {
             (requireActivity().application as HackedApplication).trackCustomEvent(CustomEvent.PASSWORD_PWNED_EXCEPTION)
-            Toast.makeText(context, getString(R.string.error_download_data), Toast.LENGTH_SHORT).show()
+            errorMsg.visibility = View.VISIBLE
         } else if (!pwned) {
             (requireActivity().application as HackedApplication).trackCustomEvent(CustomEvent.PASSWORD_NOT_PWNED)
             passwordOk.visibility = View.VISIBLE
