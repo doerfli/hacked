@@ -57,7 +57,7 @@ dependencies {
     implementation 'androidx.cardview:cardview:1.0.0'
     implementation 'androidx.recyclerview:recyclerview:1.1.0'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
-    implementation 'com.google.android.material:material:1.2.0'
+    implementation 'com.google.android.material:material:1.2.1'
     implementation("androidx.work:work-runtime:$work_version")
     implementation("androidx.work:work-runtime-ktx:$work_version")
     implementation 'androidx.constraintlayout:constraintlayout:2.0.1'
@@ -80,7 +80,7 @@ dependencies {
     implementation 'com.crashlytics.sdk.android:crashlytics'
 
     implementation 'joda-time:joda-time:2.10.6'
-    implementation 'commons-codec:commons-codec:1.14'
+    implementation 'commons-codec:commons-codec:1.15'
     implementation 'com.google.code.gson:gson:2.8.6'
 
     implementation "com.github.kittinunf.fuel:fuel:$fuel_version"
