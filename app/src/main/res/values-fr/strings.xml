@@ -47,7 +47,7 @@
     <string name="pwned">Pwned?</string>
     <string name="password">Mot de passe</string>
     <string name="password_ok">Ce mot de passe semble correct.</string>
-    <string name="password_pwned">Ce mot de passe a été trouvé %1$s fois dans des brèches de données connues et ne doit jamais être utilisé. Si vous l\'avez utilisé n'importe où, changez-le immédiatement!</string>
+    <string name="password_pwned">Ce mot de passe a été trouvé %1$s fois dans des brèches de données connues et ne doit jamais être utilisé. Si vous l\'avez utilisé n\'importe où, changez-le immédiatement!</string>
     <string name="password_info">Saisissez le mot de passe ci-dessous pour vérifier s\'il a été exposé à des brèches de données</string>
     <string name="channel_name">Hacked?</string>
     <string name="channel_name_general">Hacked? - Informations générales</string>
@@ -90,4 +90,7 @@
     <string name="action_reset_acknowledgements">Réinitialiser validation</string>
     <string name="unable_to_start_browser">Impossible de démarrer le navigateur pour afficher %1$s</string>
     <string name="enter_filter_text">Recherche de brèches …</string>
+    <string name="action_sort_numpwned">Sort by count</string>
+    <string name="action_sort_dateadded">Sort by most recent</string>
+    <string name="action_sort_name">Sort by name</string>
 </resources>
