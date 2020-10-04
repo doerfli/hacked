@@ -90,7 +90,7 @@
     <string name="action_reset_acknowledgements">Réinitialiser validation</string>
     <string name="unable_to_start_browser">Impossible de démarrer le navigateur pour afficher %1$s</string>
     <string name="enter_filter_text">Recherche de brèches …</string>
-    <string name="action_sort_numpwned">Sort by count</string>
-    <string name="action_sort_dateadded">Sort by most recent</string>
-    <string name="action_sort_name">Sort by name</string>
+    <string name="action_sort_numpwned">Trier par nombre de brèche</string>
+    <string name="action_sort_dateadded">Trier par plus récent</string>
+    <string name="action_sort_name">Trier par nom</string>
 </resources>
