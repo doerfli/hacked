@@ -60,7 +60,7 @@ dependencies {
     implementation 'com.google.android.material:material:1.2.1'
     implementation("androidx.work:work-runtime:$work_version")
     implementation("androidx.work:work-runtime-ktx:$work_version")
-    implementation 'androidx.constraintlayout:constraintlayout:2.0.1'
+    implementation "androidx.constraintlayout:constraintlayout:$constraintlayout_version"
     implementation "androidx.navigation:navigation-fragment-ktx:$nav_version"
     implementation "androidx.navigation:navigation-ui-ktx:$nav_version"
     implementation "com.google.android.play:core-ktx:$play_core_version"
@@ -80,7 +80,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-messaging'
     implementation 'com.crashlytics.sdk.android:crashlytics'
 
-    implementation 'joda-time:joda-time:2.10.6'
+    implementation "joda-time:joda-time:$jodatime_version"
     implementation 'commons-codec:commons-codec:1.15'
     implementation 'com.google.code.gson:gson:2.8.6'
 
