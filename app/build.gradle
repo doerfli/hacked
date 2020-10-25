@@ -13,8 +13,8 @@ android {
         applicationId "li.doerf.hacked"
         minSdkVersion 21
         targetSdkVersion 30
-        versionCode 92
-        versionName "3.2.1"
+        versionCode 93
+        versionName "3.3.0"
         multiDexEnabled true
         javaCompileOptions {
             annotationProcessorOptions {
@@ -63,6 +63,7 @@ dependencies {
     implementation 'androidx.constraintlayout:constraintlayout:2.0.1'
     implementation "androidx.navigation:navigation-fragment-ktx:$nav_version"
     implementation "androidx.navigation:navigation-ui-ktx:$nav_version"
+    implementation "com.google.android.play:core-ktx:$play_core_version"
 
     implementation "androidx.room:room-runtime:$room_version"
     implementation "androidx.room:room-rxjava2:$room_version"
