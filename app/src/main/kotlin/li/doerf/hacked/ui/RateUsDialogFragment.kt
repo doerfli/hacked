@@ -1,0 +1,48 @@
+package li.doerf.hacked.ui
+
+import android.app.Dialog
+import android.content.DialogInterface
+import android.os.Bundle
+import android.preference.PreferenceManager
+import android.util.Log
+import androidx.appcompat.app.AlertDialog
+import androidx.fragment.app.DialogFragment
+import li.doerf.hacked.CustomEvent
+import li.doerf.hacked.HackedApplication
+import li.doerf.hacked.R
+import li.doerf.hacked.util.AppReview
+import li.doerf.hacked.util.RatingHelper
+
+class RateUsDialogFragment(val appReview: AppReview) : DialogFragment() {
+    private val LOGTAG = javaClass.simpleName
+    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+        return AlertDialog.Builder(requireContext())
+                .setTitle(getString(R.string.rating_dialog_title))
+                .setMessage(getString(R.string.rating_dialog_message))
+                .setPositiveButton(getString(R.string.rating_dialog_positive)) { dialog: DialogInterface?, which: Int -> handleClickPositive() }
+                .setNeutralButton(getString(R.string.rating_dialog_neutral)) { dialog: DialogInterface?, which: Int -> handleClickNeutral() }
+                .setNegativeButton(getString(R.string.rating_dialog_negative)) { dialog: DialogInterface?, which: Int -> handleClickNegative() }.create()
+    }
+
+    private fun handleClickPositive() {
+        appReview.showReview()
+    }
+
+    private fun handleClickNeutral() {
+        val settings = PreferenceManager.getDefaultSharedPreferences(context)
+        val editor = settings.edit()
+        editor.putInt(RatingHelper.PREF_KEY_RATING_COUNTER, 0)
+        editor.apply()
+        Log.i(LOGTAG, "setting: reset rating counter")
+        (requireActivity().application as HackedApplication).trackCustomEvent(CustomEvent.RATE_LATER)
+    }
+
+    private fun handleClickNegative() {
+        val settings = PreferenceManager.getDefaultSharedPreferences(context)
+        val editor = settings.edit()
+        editor.putBoolean(RatingHelper.PREF_KEY_RATING_NEVER, true)
+        editor.apply()
+        Log.i(LOGTAG, "setting: never rate")
+        (requireActivity().application as HackedApplication).trackCustomEvent(CustomEvent.RATE_NEVER)
+    }
+}
