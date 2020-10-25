@@ -1,10 +1,9 @@
 package li.doerf.hacked.util
 
 import android.app.Activity
-import android.preference.PreferenceManager
 import android.util.Log
 import androidx.fragment.app.FragmentActivity
-import androidx.fragment.app.FragmentManager
+import androidx.preference.PreferenceManager
 import com.google.android.play.core.review.ReviewManagerFactory
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -13,14 +12,12 @@ import li.doerf.hacked.HackedApplication
 import li.doerf.hacked.ui.RateUsDialogFragment
 
 class RatingHelper(private val activity: Activity) : AppReview {
-    private val LOGTAG = javaClass.simpleName
-
     private suspend fun showRateUsDialog() {
         // since the show is delayed (and app could be closed now) this needs to be checked here
         if (!activity.isFinishing && !activity.isDestroyed) {
             val dialog = RateUsDialogFragment(this)
             withContext(Dispatchers.Main) {
-                val fragmentManager = (activity as FragmentActivity).supportFragmentManager as FragmentManager
+                val fragmentManager = (activity as FragmentActivity).supportFragmentManager
                 if (! fragmentManager.isDestroyed && !fragmentManager.isStateSaved) {
                     dialog.show(fragmentManager, "rateus")
                 }
@@ -56,7 +53,7 @@ class RatingHelper(private val activity: Activity) : AppReview {
     private fun saveSettingRated() {
         val settings = PreferenceManager.getDefaultSharedPreferences(activity.applicationContext)
         val editor = settings.edit()
-        editor.putBoolean(RatingHelper.PREF_KEY_HAS_RATED_US, true)
+        editor.putBoolean(PREF_KEY_HAS_RATED_US, true)
         editor.apply()
         (activity.application as HackedApplication).trackCustomEvent(CustomEvent.RATE_NOW)
         Log.i(LOGTAG, "setting: rated us - true")
@@ -118,6 +115,7 @@ class RatingHelper(private val activity: Activity) : AppReview {
     }
 
     companion object {
+        const val LOGTAG = "RatingHelper"
         const val PREF_KEY_HAS_RATED_US = "PREF_KEY_HAS_RATED_US"
         const val PREF_KEY_RATING_COUNTER = "PREF_KEY_RATING_COUNTER"
         const val PREF_KEY_RATING_NEVER = "PREF_KEY_RATING_NEVER"

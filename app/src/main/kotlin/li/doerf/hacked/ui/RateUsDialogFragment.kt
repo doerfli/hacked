@@ -3,10 +3,10 @@ package li.doerf.hacked.ui
 import android.app.Dialog
 import android.content.DialogInterface
 import android.os.Bundle
-import android.preference.PreferenceManager
 import android.util.Log
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
+import androidx.preference.PreferenceManager
 import li.doerf.hacked.CustomEvent
 import li.doerf.hacked.HackedApplication
 import li.doerf.hacked.R
@@ -19,9 +19,9 @@ class RateUsDialogFragment(val appReview: AppReview) : DialogFragment() {
         return AlertDialog.Builder(requireContext())
                 .setTitle(getString(R.string.rating_dialog_title))
                 .setMessage(getString(R.string.rating_dialog_message))
-                .setPositiveButton(getString(R.string.rating_dialog_positive)) { dialog: DialogInterface?, which: Int -> handleClickPositive() }
-                .setNeutralButton(getString(R.string.rating_dialog_neutral)) { dialog: DialogInterface?, which: Int -> handleClickNeutral() }
-                .setNegativeButton(getString(R.string.rating_dialog_negative)) { dialog: DialogInterface?, which: Int -> handleClickNegative() }.create()
+                .setPositiveButton(getString(R.string.rating_dialog_positive)) { _: DialogInterface?, _: Int -> handleClickPositive() }
+                .setNeutralButton(getString(R.string.rating_dialog_neutral)) { _: DialogInterface?, _: Int -> handleClickNeutral() }
+                .setNegativeButton(getString(R.string.rating_dialog_negative)) { _: DialogInterface?, _: Int -> handleClickNegative() }.create()
     }
 
     private fun handleClickPositive() {
