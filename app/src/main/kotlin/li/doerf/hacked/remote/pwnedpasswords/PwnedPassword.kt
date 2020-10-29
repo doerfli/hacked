@@ -3,11 +3,11 @@ package li.doerf.hacked.remote.pwnedpasswords
 import android.content.Intent
 import android.util.Log
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
-import com.crashlytics.android.Crashlytics
 import com.github.kittinunf.fuel.core.FuelError
 import com.github.kittinunf.fuel.core.isSuccessful
 import com.github.kittinunf.fuel.coroutines.awaitStringResponseResult
 import com.github.kittinunf.fuel.httpGet
+import com.google.firebase.crashlytics.FirebaseCrashlytics
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
@@ -32,7 +32,7 @@ class PwnedPassword(private val broadcastManager: LocalBroadcastManager) {
             try {
                 checkPassword(password)
             } catch (e: FuelError) {
-                Crashlytics.logException(e)
+                FirebaseCrashlytics.getInstance().recordException(e)
                 logException(TAG, Log.ERROR, e, "caught FuelError during pwned password check")
                 notifyException()
             }

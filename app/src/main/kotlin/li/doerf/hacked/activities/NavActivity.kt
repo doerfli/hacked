@@ -16,7 +16,7 @@ import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.NavigationUI
-import com.crashlytics.android.Crashlytics
+import com.google.firebase.crashlytics.FirebaseCrashlytics
 import io.reactivex.processors.PublishProcessor
 import li.doerf.hacked.HackedApplication
 import li.doerf.hacked.R
@@ -100,7 +100,7 @@ class NavActivity : AppCompatActivity() {
                     startActivity(browserIntent)
                 } catch (e: ActivityNotFoundException) {
                     Log.e(TAG, "caught ActivityNotFoundException", e)
-                    Crashlytics.logException(e)
+                    FirebaseCrashlytics.getInstance().recordException(e)
                     makeText(applicationContext, getString(R.string.unable_to_start_browser, "https://doerfli.github.io/hacked/privacy"), Toast.LENGTH_LONG).show()
                 }
                 true
@@ -111,7 +111,7 @@ class NavActivity : AppCompatActivity() {
                     startActivity(browserIntent)
                 } catch (e: ActivityNotFoundException) {
                     Log.e(TAG, "caught ActivityNotFoundException", e)
-                    Crashlytics.logException(e)
+                    FirebaseCrashlytics.getInstance().recordException(e)
                     makeText(applicationContext, getString(R.string.unable_to_start_browser, "https://haveibeenpwned.com"), Toast.LENGTH_LONG).show()
                 }
                 true

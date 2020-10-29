@@ -11,7 +11,6 @@ import android.widget.Toast
 import androidx.core.app.NotificationCompat
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
-import com.crashlytics.android.Crashlytics
 import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.databind.PropertyNamingStrategy
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
@@ -20,6 +19,7 @@ import com.github.kittinunf.fuel.core.ResponseDeserializable
 import com.github.kittinunf.fuel.core.isSuccessful
 import com.github.kittinunf.fuel.coroutines.awaitObjectResponseResult
 import com.github.kittinunf.fuel.httpGet
+import com.google.firebase.crashlytics.FirebaseCrashlytics
 import li.doerf.hacked.R
 import li.doerf.hacked.activities.NavActivity
 import li.doerf.hacked.db.AppDatabase
@@ -63,7 +63,7 @@ class HIBPAccountResponseWorker(private val context: Context, workerParams: Work
             Result.success()
         } catch (e: IOException) {
             Log.e(TAG, "caughtIOException while contacting www.haveibeenpwned.com - " + e.message, e)
-            Crashlytics.logException(e)
+            FirebaseCrashlytics.getInstance().recordException(e)
             // TODO better error
             Handler(Looper.getMainLooper()).post { Toast.makeText(context, context.getString(R.string.toast_error_error_during_check), Toast.LENGTH_LONG).show() }
             Result.failure()
@@ -74,7 +74,7 @@ class HIBPAccountResponseWorker(private val context: Context, workerParams: Work
                 Result.failure()
             }
         } catch (e: Exception) {
-            Crashlytics.logException(e)
+            FirebaseCrashlytics.getInstance().recordException(e)
             throw e
         }
     }

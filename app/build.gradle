@@ -79,7 +79,8 @@ dependencies {
     implementation(platform("com.google.firebase:firebase-bom:$firebase_bom_version"))
     implementation 'com.google.firebase:firebase-analytics'
     implementation 'com.google.firebase:firebase-messaging'
-    implementation 'com.crashlytics.sdk.android:crashlytics'
+    implementation 'com.google.firebase:firebase-crashlytics'
+    implementation 'com.google.firebase:firebase-analytics'
 
     implementation "joda-time:joda-time:$jodatime_version"
     implementation 'commons-codec:commons-codec:1.15'

@@ -10,7 +10,6 @@ import android.widget.Toast
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
-import com.crashlytics.android.Crashlytics
 import com.github.kittinunf.fuel.core.isSuccessful
 import com.github.kittinunf.fuel.coroutines.awaitByteArrayResponse
 import com.github.kittinunf.fuel.httpGet
@@ -18,6 +17,7 @@ import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
 import com.google.android.gms.tasks.Task
 import com.google.android.gms.tasks.Tasks
+import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.firebase.iid.FirebaseInstanceId
 import com.google.firebase.iid.InstanceIdResult
 import kotlinx.coroutines.Dispatchers
@@ -67,10 +67,10 @@ class HIBPAccountCheckerWorker(private val context: Context, params: WorkerParam
             Result.success()
         } catch (e: IOException) {
             Log.e(LOGTAG, "caught exception during check", e)
-            Crashlytics.logException(e)
+            FirebaseCrashlytics.getInstance().recordException(e)
             throw WorkFailedException(true)
         } catch (e: Exception) {
-            Crashlytics.logException(e)
+            FirebaseCrashlytics.getInstance().recordException(e)
             throw e
         } finally {
             doPostCheckActions()
@@ -82,11 +82,11 @@ class HIBPAccountCheckerWorker(private val context: Context, params: WorkerParam
             Tasks.await(deviceTokenTask).token
         } catch (e: ExecutionException) {
             Log.e(LOGTAG, "caught ExecutionException", e)
-            Crashlytics.logException(e)
+            FirebaseCrashlytics.getInstance().recordException(e)
             throw WorkFailedException()
         } catch (e: InterruptedException) {
             Log.e(LOGTAG, "caught InterruptedException", e)
-            Crashlytics.logException(e)
+            FirebaseCrashlytics.getInstance().recordException(e)
             throw WorkFailedException()
         }
     }
