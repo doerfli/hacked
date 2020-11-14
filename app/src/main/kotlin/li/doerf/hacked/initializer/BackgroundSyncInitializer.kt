@@ -14,7 +14,7 @@ class BackgroundSyncInitializer : Initializer<String> {
     }
 
     override fun dependencies(): List<Class<out Initializer<*>>> {
-        return listOf(WorkManagerInitializer::class.java, Tls12Initializer::class.java)
+        return listOf(WorkManagerInitializer::class.java)
     }
     
     companion object {
