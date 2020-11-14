@@ -92,6 +92,10 @@ class BreachedSitesWorker(private val context: Context, params: WorkerParameters
                     site.description = newSite.description
                     site.dataClasses = newSite.dataClasses
                     site.verified = newSite.verified
+                    site.retired = newSite.retired
+                    site.spamList = newSite.spamList
+                    site.sensitive = newSite.sensitive
+                    site.fabricated = newSite.fabricated
                     breachedSiteDao.update(site)
                 }
             }
@@ -131,6 +135,10 @@ class BreachedSitesWorker(private val context: Context, params: WorkerParameters
         site.description = ba.description
         site.dataClasses = if (ba.dataClasses != null) StringHelper.join(ba.dataClasses, ", ") else ""
         site.verified = ba.isVerified
+        site.retired = ba.isRetired
+        site.fabricated = ba.isFabricated
+        site.sensitive = ba.isSensitive
+        site.spamList = ba.IsSpamList
         return site
     }
 

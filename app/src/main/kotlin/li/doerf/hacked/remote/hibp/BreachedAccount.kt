@@ -13,6 +13,8 @@ data class BreachedAccount(
         var description: String? = null,
         var dataClasses: Array<String>? = null,
         var isVerified: Boolean? = null,
-        var sensitive: Boolean? = null,
-        var retired: Boolean? = null
+        var isSensitive: Boolean? = null,
+        var isRetired: Boolean? = null,
+        var isFabricated: Boolean? = null,
+        var IsSpamList: Boolean? = null
 )
