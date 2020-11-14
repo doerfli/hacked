@@ -1,6 +1,5 @@
 package li.doerf.hacked;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.util.Log;
@@ -12,7 +11,6 @@ import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.ProcessLifecycleOwner;
 import androidx.multidex.MultiDexApplication;
 
-import com.google.android.gms.security.ProviderInstaller;
 import com.google.firebase.analytics.FirebaseAnalytics;
 
 import io.reactivex.processors.PublishProcessor;
@@ -31,21 +29,8 @@ public class HackedApplication extends MultiDexApplication implements LifecycleO
     @Override
     public void onCreate() {
         super.onCreate();
-        enableTls12ForAndroidApi19AndBelow();
         ProcessLifecycleOwner.get().getLifecycle().addObserver(this);
         firebaseAnalytics = FirebaseAnalytics.getInstance(this);
-    }
-
-    private void enableTls12ForAndroidApi19AndBelow() {
-        ProviderInstaller.installIfNeededAsync(this, new ProviderInstaller.ProviderInstallListener() {
-            @Override
-            public void onProviderInstalled() {
-            }
-            @Override
-            public void onProviderInstallFailed(int i, Intent intent) {
-                Log.i(TAG, "Provider install failed (" + i + ") : SSL Problems may occurs");
-            }
-        });
     }
 
     public synchronized void trackView(String name) {
