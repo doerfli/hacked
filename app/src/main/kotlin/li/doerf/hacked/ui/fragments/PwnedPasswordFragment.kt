@@ -24,6 +24,7 @@ import li.doerf.hacked.CustomEvent
 import li.doerf.hacked.HackedApplication
 import li.doerf.hacked.R
 import li.doerf.hacked.remote.pwnedpasswords.PwnedPassword
+import li.doerf.hacked.util.Analytics
 import li.doerf.hacked.util.NavEvent
 import li.doerf.hacked.utils.StringHelper
 
@@ -92,7 +93,7 @@ class PwnedPasswordFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         registerReceiver()
-        (requireActivity().application as HackedApplication).trackView("Fragment~Password")
+        Analytics.trackView("Fragment~Password")
         if (isFullFragment && enteredPassword != "" ) {
             passwordField.setText(enteredPassword)
             checkPassword(enteredPassword)
@@ -121,7 +122,7 @@ class PwnedPasswordFragment : Fragment() {
         progressBar.visibility = View.VISIBLE
         errorMsg.visibility = View.GONE
         PwnedPassword(LocalBroadcastManager.getInstance(requireContext())).check(password)
-        (requireActivity().application as HackedApplication).trackCustomEvent(CustomEvent.CHECK_PASSWORD_PWNED)
+        Analytics.trackCustomEvent(CustomEvent.CHECK_PASSWORD_PWNED)
     }
 
     private fun registerReceiver() {
@@ -137,13 +138,13 @@ class PwnedPasswordFragment : Fragment() {
     private fun handleResult(pwned: Boolean, numPwned: Int, exception: Boolean) {
         progressBar.visibility = View.GONE
         if (exception) {
-            (requireActivity().application as HackedApplication).trackCustomEvent(CustomEvent.PASSWORD_PWNED_EXCEPTION)
+            Analytics.trackCustomEvent(CustomEvent.PASSWORD_PWNED_EXCEPTION)
             errorMsg.visibility = View.VISIBLE
         } else if (!pwned) {
-            (requireActivity().application as HackedApplication).trackCustomEvent(CustomEvent.PASSWORD_NOT_PWNED)
+            Analytics.trackCustomEvent(CustomEvent.PASSWORD_NOT_PWNED)
             passwordOk.visibility = View.VISIBLE
         } else {
-            (requireActivity().application as HackedApplication).trackCustomEvent(CustomEvent.PASSWORD_PWNED)
+            Analytics.trackCustomEvent(CustomEvent.PASSWORD_PWNED)
             passwordPwned.visibility = View.VISIBLE
             val t = getString(R.string.password_pwned, StringHelper.addDigitSeperator(numPwned.toString()))
             passwordPwned.text = t

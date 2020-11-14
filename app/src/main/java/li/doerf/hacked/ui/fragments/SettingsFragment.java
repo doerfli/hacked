@@ -10,8 +10,8 @@ import android.util.Log;
 
 import li.doerf.hacked.BuildConfig;
 import li.doerf.hacked.CustomEvent;
-import li.doerf.hacked.HackedApplication;
 import li.doerf.hacked.R;
+import li.doerf.hacked.util.Analytics;
 import li.doerf.hacked.utils.SynchronizationHelper;
 
 
@@ -39,7 +39,7 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
     public void onResume() {
         super.onResume();
         getPreferenceScreen().getSharedPreferences().registerOnSharedPreferenceChangeListener(this);
-        ((HackedApplication) getActivity().getApplication()).trackView("Fragment~Settings");
+        Analytics.Companion.trackView("Fragment~Settings");
     }
 
     @Override
@@ -58,9 +58,9 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
             boolean enabled = SynchronizationHelper.scheduleSync(getActivity().getApplicationContext());
 
             if ( enabled) {
-                ((HackedApplication) getActivity().getApplication()).trackCustomEvent(CustomEvent.BACKGROUND_SYNC_ENABLED);
+                Analytics.Companion.trackCustomEvent(CustomEvent.BACKGROUND_SYNC_ENABLED);
             } else {
-                ((HackedApplication) getActivity().getApplication()).trackCustomEvent(CustomEvent.BACKGROUND_SYNC_DISABLED);
+                Analytics.Companion.trackCustomEvent(CustomEvent.BACKGROUND_SYNC_DISABLED);
             }
         }
     }

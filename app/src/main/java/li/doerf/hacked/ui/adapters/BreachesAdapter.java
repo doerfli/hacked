@@ -22,13 +22,13 @@ import org.joda.time.format.DateTimeFormatter;
 import java.util.List;
 
 import li.doerf.hacked.CustomEvent;
-import li.doerf.hacked.HackedApplication;
 import li.doerf.hacked.R;
 import li.doerf.hacked.db.AppDatabase;
 import li.doerf.hacked.db.daos.AccountDao;
 import li.doerf.hacked.db.daos.BreachDao;
 import li.doerf.hacked.db.entities.Account;
 import li.doerf.hacked.db.entities.Breach;
+import li.doerf.hacked.util.Analytics;
 import li.doerf.hacked.util.RatingHelper;
 import li.doerf.hacked.utils.AccountHelper;
 import li.doerf.hacked.utils.BackgroundTaskHelper;
@@ -130,7 +130,7 @@ public class BreachesAdapter extends RecyclerView.Adapter<RecyclerViewHolder> {
         breach.setAcknowledged(true);
         myBreachDao.update(breach);
         Log.d(LOGTAG, "breach updated - acknowledge = true");
-        ((HackedApplication) getContext().getApplicationContext()).trackCustomEvent(CustomEvent.BREACH_ACKNOWLEDGED);
+        Analytics.Companion.trackCustomEvent(CustomEvent.BREACH_ACKNOWLEDGED);
     }
 
     @Override

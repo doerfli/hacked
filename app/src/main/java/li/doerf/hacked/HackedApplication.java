@@ -1,7 +1,6 @@
 package li.doerf.hacked;
 
 import android.os.Bundle;
-import android.provider.Settings;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -29,26 +28,6 @@ public class HackedApplication extends MultiDexApplication implements LifecycleO
     public void onCreate() {
         super.onCreate();
         ProcessLifecycleOwner.get().getLifecycle().addObserver(this);
-    }
-
-    public synchronized void trackView(String name) {
-        if ( runsInTestlab() ) return;
-        Bundle bundle = new Bundle();
-        bundle.putString(FirebaseAnalytics.Param.ITEM_ID, name);
-        bundle.putString(FirebaseAnalytics.Param.ITEM_CATEGORY, "View");
-        Analytics.Companion.getInstance().logEvent(FirebaseAnalytics.Event.VIEW_ITEM, bundle);
-    }
-
-    public synchronized void trackCustomEvent(CustomEvent eventName) {
-        if ( runsInTestlab() ) return;
-        Bundle bundle = new Bundle();
-        bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "Function");
-        Analytics.Companion.getInstance().logEvent(eventName.name(), bundle);
-    }
-
-    private boolean runsInTestlab() {
-        String testLabSetting = Settings.System.getString(getContentResolver(), "firebase.test.lab");
-        return "true".equals(testLabSetting);
     }
 
     @Override

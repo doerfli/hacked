@@ -8,7 +8,6 @@ import com.google.android.play.core.review.ReviewManagerFactory
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import li.doerf.hacked.CustomEvent
-import li.doerf.hacked.HackedApplication
 import li.doerf.hacked.ui.RateUsDialogFragment
 
 class RatingHelper(private val activity: Activity) : AppReview {
@@ -55,7 +54,7 @@ class RatingHelper(private val activity: Activity) : AppReview {
         val editor = settings.edit()
         editor.putBoolean(PREF_KEY_HAS_RATED_US, true)
         editor.apply()
-        (activity.application as HackedApplication).trackCustomEvent(CustomEvent.RATE_NOW)
+        Analytics.trackCustomEvent(CustomEvent.RATE_NOW)
         Log.i(LOGTAG, "setting: rated us - true")
     }
 
