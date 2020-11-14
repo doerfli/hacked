@@ -8,8 +8,8 @@ import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
 import androidx.preference.PreferenceManager
 import li.doerf.hacked.CustomEvent
-import li.doerf.hacked.HackedApplication
 import li.doerf.hacked.R
+import li.doerf.hacked.util.Analytics
 import li.doerf.hacked.util.AppReview
 import li.doerf.hacked.util.RatingHelper
 
@@ -34,7 +34,7 @@ class RateUsDialogFragment(val appReview: AppReview) : DialogFragment() {
         editor.putInt(RatingHelper.PREF_KEY_RATING_COUNTER, 0)
         editor.apply()
         Log.i(LOGTAG, "setting: reset rating counter")
-        (requireActivity().application as HackedApplication).trackCustomEvent(CustomEvent.RATE_LATER)
+        Analytics.trackCustomEvent(CustomEvent.RATE_LATER)
     }
 
     private fun handleClickNegative() {
@@ -43,6 +43,6 @@ class RateUsDialogFragment(val appReview: AppReview) : DialogFragment() {
         editor.putBoolean(RatingHelper.PREF_KEY_RATING_NEVER, true)
         editor.apply()
         Log.i(LOGTAG, "setting: never rate")
-        (requireActivity().application as HackedApplication).trackCustomEvent(CustomEvent.RATE_NEVER)
+        Analytics.trackCustomEvent(CustomEvent.RATE_NEVER)
     }
 }

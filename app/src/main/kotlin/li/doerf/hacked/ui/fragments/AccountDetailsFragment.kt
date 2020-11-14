@@ -18,7 +18,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.coroutines.*
 import li.doerf.hacked.CustomEvent
-import li.doerf.hacked.HackedApplication
 import li.doerf.hacked.R
 import li.doerf.hacked.db.AppDatabase
 import li.doerf.hacked.db.entities.Account
@@ -26,6 +25,7 @@ import li.doerf.hacked.db.entities.Breach
 import li.doerf.hacked.ui.HibpInfo
 import li.doerf.hacked.ui.adapters.BreachesAdapter
 import li.doerf.hacked.ui.viewmodels.BreachViewModel
+import li.doerf.hacked.util.Analytics
 import li.doerf.hacked.util.createCoroutingExceptionHandler
 import java.util.*
 
@@ -111,7 +111,7 @@ class AccountDetailsFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        (activity!!.application as HackedApplication).trackView("Fragment~AccountDetails")
+        Analytics.trackView("Fragment~AccountDetails")
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -156,7 +156,7 @@ class AccountDetailsFragment : Fragment() {
                     }
                     accountDao.delete(account)
                 } finally {
-                    (activity!!.application as HackedApplication).trackCustomEvent(CustomEvent.ACCOUNT_DELETED)
+                    Analytics.trackCustomEvent(CustomEvent.ACCOUNT_DELETED)
                 }
             }
         }

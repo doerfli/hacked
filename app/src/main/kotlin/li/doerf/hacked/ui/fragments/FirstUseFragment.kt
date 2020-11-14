@@ -18,6 +18,7 @@ import li.doerf.hacked.CustomEvent
 import li.doerf.hacked.HackedApplication
 import li.doerf.hacked.R
 import li.doerf.hacked.services.AccountService
+import li.doerf.hacked.util.Analytics
 import li.doerf.hacked.util.NavEvent
 
 /**
@@ -73,7 +74,7 @@ class FirstUseFragment : Fragment() {
         AccountService(activity!!.application).addAccount(accountName.toString())
         accountEditText.visibility = View.GONE
         addButton.visibility = View.GONE
-        (activity!!.application as HackedApplication).trackCustomEvent(CustomEvent.FIRST_ACCOUNT_ADDED)
+        Analytics.trackCustomEvent(CustomEvent.FIRST_ACCOUNT_ADDED)
         navigateToOverview()
     }
 

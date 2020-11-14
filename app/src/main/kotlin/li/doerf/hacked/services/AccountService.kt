@@ -9,13 +9,13 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import li.doerf.hacked.CustomEvent
-import li.doerf.hacked.HackedApplication
 import li.doerf.hacked.R
 import li.doerf.hacked.db.AppDatabase
 import li.doerf.hacked.db.daos.AccountDao
 import li.doerf.hacked.db.entities.Account
 import li.doerf.hacked.remote.hibp.HIBPAccountCheckerWorker
 import li.doerf.hacked.ui.fragments.AccountsFragment
+import li.doerf.hacked.util.Analytics
 import li.doerf.hacked.util.createCoroutingExceptionHandler
 
 class AccountService(private val application: Application) {
@@ -56,7 +56,7 @@ class AccountService(private val application: Application) {
 
     private fun insertAccount(accountDao: AccountDao, account: Account, application: Application) {
         val ids = accountDao.insert(account)
-        (application as HackedApplication).trackCustomEvent(CustomEvent.ACCOUNT_ADDED)
+        Analytics.trackCustomEvent(CustomEvent.ACCOUNT_ADDED)
         checkNewAccount(ids)
     }
 
