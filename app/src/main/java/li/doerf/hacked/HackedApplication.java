@@ -14,6 +14,7 @@ import androidx.multidex.MultiDexApplication;
 import com.google.firebase.analytics.FirebaseAnalytics;
 
 import io.reactivex.processors.PublishProcessor;
+import li.doerf.hacked.util.Analytics;
 import li.doerf.hacked.util.NavEvent;
 
 /**
@@ -22,14 +23,12 @@ import li.doerf.hacked.util.NavEvent;
 
 public class HackedApplication extends MultiDexApplication implements LifecycleObserver, DefaultLifecycleObserver {
     private static final String TAG = "HackedApplication";
-    private FirebaseAnalytics firebaseAnalytics;
     private PublishProcessor<NavEvent> navEvents = PublishProcessor.create();
 
     @Override
     public void onCreate() {
         super.onCreate();
         ProcessLifecycleOwner.get().getLifecycle().addObserver(this);
-        firebaseAnalytics = FirebaseAnalytics.getInstance(this);
     }
 
     public synchronized void trackView(String name) {
@@ -37,14 +36,14 @@ public class HackedApplication extends MultiDexApplication implements LifecycleO
         Bundle bundle = new Bundle();
         bundle.putString(FirebaseAnalytics.Param.ITEM_ID, name);
         bundle.putString(FirebaseAnalytics.Param.ITEM_CATEGORY, "View");
-        firebaseAnalytics.logEvent(FirebaseAnalytics.Event.VIEW_ITEM, bundle);
+        Analytics.Companion.getInstance(getApplicationContext()).logEvent(FirebaseAnalytics.Event.VIEW_ITEM, bundle);
     }
 
     public synchronized void trackCustomEvent(CustomEvent eventName) {
         if ( runsInTestlab() ) return;
         Bundle bundle = new Bundle();
         bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "Function");
-        firebaseAnalytics.logEvent(eventName.name(), bundle);
+        Analytics.Companion.getInstance(getApplicationContext()).logEvent(eventName.name(), bundle);
     }
 
     private boolean runsInTestlab() {
@@ -55,8 +54,7 @@ public class HackedApplication extends MultiDexApplication implements LifecycleO
     @Override
     public void onStart(@NonNull LifecycleOwner owner) {
         Log.d(TAG, "application opened");
-        Bundle bundle = new Bundle();
-        firebaseAnalytics.logEvent(FirebaseAnalytics.Event.APP_OPEN, bundle);
+        Analytics.Companion.getInstance(getApplicationContext()).logEvent(FirebaseAnalytics.Event.APP_OPEN, new Bundle());
     }
 
     public PublishProcessor<NavEvent> getNavEvents() {

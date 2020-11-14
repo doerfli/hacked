@@ -53,7 +53,7 @@
             android:exported="false"
             tools:node="merge">
             <!-- This entry makes ExampleLoggerInitializer discoverable. -->
-            <meta-data  android:name="li.doerf.hacked.initializer.Tls12Initializer"
+            <meta-data  android:name="li.doerf.hacked.initializer.FirebaseAnalyticsInitializer"
                 android:value="androidx.startup" />
             <meta-data  android:name="li.doerf.hacked.initializer.BackgroundSyncInitializer"
                 android:value="androidx.startup" />
