@@ -10,13 +10,13 @@ import com.google.android.gms.security.ProviderInstaller.ProviderInstallListener
 class Tls12Initializer : Initializer<String> {
 
     override fun create(context: Context): String {
-        Log.i(TAG, "initializing")
         ProviderInstaller.installIfNeededAsync(context, object : ProviderInstallListener {
             override fun onProviderInstalled() {}
             override fun onProviderInstallFailed(i: Int, intent: Intent) {
                 Log.i(TAG, "Provider install failed ($i) : SSL Problems may occurs")
             }
         })
+        Log.i(TAG, "initialized")
         return "initialized"
     }
 

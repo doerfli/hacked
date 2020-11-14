@@ -15,7 +15,6 @@ import com.google.firebase.analytics.FirebaseAnalytics;
 
 import io.reactivex.processors.PublishProcessor;
 import li.doerf.hacked.util.NavEvent;
-import li.doerf.hacked.utils.SynchronizationHelper;
 
 /**
  * Created by moo on 25.05.17.
@@ -58,11 +57,6 @@ public class HackedApplication extends MultiDexApplication implements LifecycleO
         Log.d(TAG, "application opened");
         Bundle bundle = new Bundle();
         firebaseAnalytics.logEvent(FirebaseAnalytics.Event.APP_OPEN, bundle);
-        scheduleBackgroundSync();
-    }
-
-    private void scheduleBackgroundSync() {
-        SynchronizationHelper.setupInitialSync(getApplicationContext());
     }
 
     public PublishProcessor<NavEvent> getNavEvents() {
