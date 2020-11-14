@@ -36,14 +36,14 @@ public class HackedApplication extends MultiDexApplication implements LifecycleO
         Bundle bundle = new Bundle();
         bundle.putString(FirebaseAnalytics.Param.ITEM_ID, name);
         bundle.putString(FirebaseAnalytics.Param.ITEM_CATEGORY, "View");
-        Analytics.Companion.getInstance(getApplicationContext()).logEvent(FirebaseAnalytics.Event.VIEW_ITEM, bundle);
+        Analytics.Companion.getInstance().logEvent(FirebaseAnalytics.Event.VIEW_ITEM, bundle);
     }
 
     public synchronized void trackCustomEvent(CustomEvent eventName) {
         if ( runsInTestlab() ) return;
         Bundle bundle = new Bundle();
         bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "Function");
-        Analytics.Companion.getInstance(getApplicationContext()).logEvent(eventName.name(), bundle);
+        Analytics.Companion.getInstance().logEvent(eventName.name(), bundle);
     }
 
     private boolean runsInTestlab() {
@@ -54,7 +54,7 @@ public class HackedApplication extends MultiDexApplication implements LifecycleO
     @Override
     public void onStart(@NonNull LifecycleOwner owner) {
         Log.d(TAG, "application opened");
-        Analytics.Companion.getInstance(getApplicationContext()).logEvent(FirebaseAnalytics.Event.APP_OPEN, new Bundle());
+        Analytics.Companion.getInstance().logEvent(FirebaseAnalytics.Event.APP_OPEN, new Bundle());
     }
 
     public PublishProcessor<NavEvent> getNavEvents() {

@@ -6,13 +6,11 @@ import com.google.firebase.analytics.FirebaseAnalytics
 class Analytics {
 
     companion object {
-        private lateinit var analyticsInstance: FirebaseAnalytics
+        private lateinit var context: Context
+        val instance: FirebaseAnalytics by lazy { FirebaseAnalytics.getInstance(context) }
 
-        fun getInstance(context: Context): FirebaseAnalytics {
-            if (! this::analyticsInstance.isInitialized) {
-                analyticsInstance = FirebaseAnalytics.getInstance(context)
-            }
-            return analyticsInstance
+        fun initialize(aContext: Context) {
+            context = aContext
         }
 
     }
