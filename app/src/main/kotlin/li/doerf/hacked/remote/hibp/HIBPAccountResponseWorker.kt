@@ -112,6 +112,10 @@ class HIBPAccountResponseWorker(private val context: Context, workerParams: Work
         newBreach.description = ba.description
         newBreach.dataClasses = if (ba.dataClasses != null) StringHelper.join(ba.dataClasses, ", ") else ""
         newBreach.verified = ba.isVerified
+        newBreach.fabricated = ba.isFabricated
+        newBreach.retired = ba.isRetired
+        newBreach.sensitive = ba.isSensitive
+        newBreach.spamList = ba.IsSpamList
         newBreach.acknowledged = false
         myBreachDao.insert(newBreach)
         Log.i(TAG, "breach inserted into db")

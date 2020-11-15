@@ -146,6 +146,7 @@ class BreachedSitesWorker(private val context: Context, params: WorkerParameters
 
 object BreachedAccountListDeserializer : ResponseDeserializable<Collection<BreachedAccount>> {
     override fun deserialize(content: String) = run {
+        Log.d("XXXXXX", content)
         val mapper = jacksonObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
         mapper.propertyNamingStrategy = PropertyNamingStrategy.UPPER_CAMEL_CASE
         mapper.readValue<Collection<BreachedAccount>>(content)
