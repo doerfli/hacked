@@ -31,6 +31,14 @@ public class Breach {
     private Boolean isVerified;
     @ColumnInfo(name = "is_acknowledged")
     private Boolean isAcknowledged;
+    @ColumnInfo(name = "is_sensitive")
+    private Boolean isSensitive;
+    @ColumnInfo(name = "is_retired")
+    private Boolean isRetired;
+    @ColumnInfo(name = "is_fabricated")
+    private Boolean isFabricated;
+    @ColumnInfo(name = "is_spam_list")
+    private Boolean isSpamList;
 
     public Long getId() {
         return id;
@@ -113,6 +121,9 @@ public class Breach {
     }
 
     public Boolean getVerified() {
+        if (isVerified == null) {
+            return false;
+        }
         return isVerified;
     }
 
@@ -126,5 +137,53 @@ public class Breach {
 
     public void setAcknowledged(Boolean acknowledged) {
         isAcknowledged = acknowledged;
+    }
+
+    public Boolean getSensitive() {
+        if (isSensitive == null) {
+            return false;
+        }
+        return isSensitive;
+    }
+
+    public void setSensitive(Boolean sensitive) {
+        isSensitive = sensitive;
+    }
+
+    public Boolean getRetired() {
+        if (isRetired == null) {
+            return false;
+        }
+        return isRetired;
+    }
+
+    public void setRetired(Boolean retired) {
+        isRetired = retired;
+    }
+
+    public Boolean getFabricated() {
+        if (isFabricated == null) {
+            return false;
+        }
+        return isFabricated;
+    }
+
+    public void setFabricated(Boolean fabricated) {
+        isFabricated = fabricated;
+    }
+
+    public Boolean getSpamList() {
+        if (isSpamList == null) {
+            return false;
+        }
+        return isSpamList;
+    }
+
+    public void setSpamList(Boolean spamList) {
+        isSpamList = spamList;
+    }
+
+    public boolean hasAdditionalFlags() {
+        return ! getVerified() || getFabricated() || getSensitive() || getSpamList() || getRetired();
     }
 }

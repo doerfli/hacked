@@ -7,6 +7,7 @@ import androidx.room.Room;
 import androidx.room.RoomDatabase;
 import androidx.room.migration.Migration;
 import androidx.sqlite.db.SupportSQLiteDatabase;
+
 import li.doerf.hacked.db.daos.AccountDao;
 import li.doerf.hacked.db.daos.BreachDao;
 import li.doerf.hacked.db.daos.BreachedSiteDao;
@@ -14,7 +15,7 @@ import li.doerf.hacked.db.entities.Account;
 import li.doerf.hacked.db.entities.Breach;
 import li.doerf.hacked.db.entities.BreachedSite;
 
-@Database(entities = {Account.class, Breach.class, BreachedSite.class}, version = 5)
+@Database(entities = {Account.class, Breach.class, BreachedSite.class}, version = 6)
 public abstract class AppDatabase extends RoomDatabase {
 
     private static AppDatabase instance;
@@ -37,6 +38,21 @@ public abstract class AppDatabase extends RoomDatabase {
         }
     };
 
+    private static final Migration MIGRATION_5_6 = new Migration(5, 6) {
+        @Override
+        public void migrate(
+                SupportSQLiteDatabase database) {
+            database.execSQL("ALTER TABLE `breaches` ADD COLUMN `is_sensitive` INTEGER DEFAULT 0;");
+            database.execSQL("ALTER TABLE `breaches` ADD COLUMN `is_retired` INTEGER DEFAULT 0;");
+            database.execSQL("ALTER TABLE `breaches` ADD COLUMN `is_fabricated` INTEGER DEFAULT 0;");
+            database.execSQL("ALTER TABLE `breaches` ADD COLUMN `is_spam_list` INTEGER DEFAULT 0;");
+            database.execSQL("ALTER TABLE `breached_sites` ADD COLUMN `is_sensitive` INTEGER DEFAULT 0;");
+            database.execSQL("ALTER TABLE `breached_sites` ADD COLUMN `is_retired` INTEGER DEFAULT 0;");
+            database.execSQL("ALTER TABLE `breached_sites` ADD COLUMN `is_fabricated` INTEGER DEFAULT 0;");
+            database.execSQL("ALTER TABLE `breached_sites` ADD COLUMN `is_spam_list` INTEGER DEFAULT 0;");
+        }
+    };
+
     public static AppDatabase get(Context context) {
         synchronized (AppDatabase.class) {
             if (instance != null) {
@@ -44,7 +60,7 @@ public abstract class AppDatabase extends RoomDatabase {
             }
 
             instance = Room.databaseBuilder(context, AppDatabase.class, "hacked.db")
-                .addMigrations(MIGRATION_3_4, MIGRATION_4_5)
+                .addMigrations(MIGRATION_3_4, MIGRATION_4_5, MIGRATION_5_6)
                     .build();
             return instance;
         }

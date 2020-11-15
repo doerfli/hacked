@@ -51,7 +51,7 @@
     <string name="password_info">Enter password below to check if it was exposed in data breaches</string>
     <string name="channel_name">Hacked?</string>
     <string name="channel_name_general">Hacked? - General info</string>
-    <string name="unverified">(unverified)</string>
+    <string name="unverified">Unverified</string>
     <string name="rating_dialog_title">Do you like the \'Hacked?\' app?</string>
     <string name="rating_dialog_message">Please leave your feedback in the Google Play Store</string>
     <string name="rating_dialog_positive">Rate us now</string>
@@ -93,4 +93,10 @@
     <string name="action_sort_numpwned">Sort by count</string>
     <string name="action_sort_dateadded">Sort by most recent</string>
     <string name="action_sort_name">Sort by name</string>
+    <string name="label_additional_flags">Flags:</string>
+    <string name="placeholder_additional_flags">Unverified, Retried, ...</string>
+    <string name="fabricated">Fabricated</string>
+    <string name="retired">Retired</string>
+    <string name="sensitive">Sensitive</string>
+    <string name="spam_list">Spamlist</string>
 </resources>

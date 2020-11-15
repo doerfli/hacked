@@ -112,6 +112,10 @@ class HIBPAccountResponseWorker(private val context: Context, workerParams: Work
         newBreach.description = ba.description
         newBreach.dataClasses = if (ba.dataClasses != null) StringHelper.join(ba.dataClasses, ", ") else ""
         newBreach.verified = ba.isVerified
+        newBreach.fabricated = ba.isFabricated
+        newBreach.retired = ba.isRetired
+        newBreach.sensitive = ba.isSensitive
+        newBreach.spamList = ba.IsSpamList
         newBreach.acknowledged = false
         myBreachDao.insert(newBreach)
         Log.i(TAG, "breach inserted into db")
@@ -168,6 +172,7 @@ class HIBPAccountResponseWorker(private val context: Context, workerParams: Work
 
 object BreachedAccountDeserializer : ResponseDeserializable<BreachedAccount> {
     override fun deserialize(content: String) = run {
+        Log.d("BreachedAccountDeserial", content)
         val mapper = jacksonObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
         mapper.propertyNamingStrategy = PropertyNamingStrategy.UPPER_CAMEL_CASE
         mapper.readValue<BreachedAccount>(content)

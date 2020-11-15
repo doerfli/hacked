@@ -34,16 +34,6 @@
                 />
 
             <TextView
-                android:id="@+id/unverified"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/unverified"
-                android:layout_toRightOf="@+id/title"
-                android:layout_alignBaseline="@+id/title"
-                android:layout_marginLeft="4dp"
-                />
-
-            <TextView
                 android:id="@+id/label_domain"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -101,12 +91,31 @@
                 />
 
             <TextView
+                android:id="@+id/label_additional_flags"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/label_additional_flags"
+                android:layout_below="@+id/compromised_data"
+                android:paddingRight="@dimen/text_space"
+                />
+
+            <TextView
+                android:id="@+id/additional_flags"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/placeholder_additional_flags"
+                android:textColor="@android:color/black"
+                android:layout_below="@+id/compromised_data"
+                android:layout_toRightOf="@id/label_additional_flags"
+                />
+
+            <TextView
                 android:id="@+id/description"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/placeholder_description"
                 android:textColor="@android:color/black"
-                android:layout_below="@+id/compromised_data"
+                android:layout_below="@+id/additional_flags"
                 />
 
             <androidx.appcompat.widget.AppCompatButton
