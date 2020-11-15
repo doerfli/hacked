@@ -113,6 +113,9 @@ public class BreachedSite {
     }
 
     public Boolean getVerified() {
+        if (isVerified == null) {
+            return false;
+        }
         return isVerified;
     }
 
@@ -129,6 +132,9 @@ public class BreachedSite {
     }
 
     public Boolean getSensitive() {
+        if (isSensitive == null) {
+            return false;
+        }
         return isSensitive;
     }
 
@@ -137,6 +143,9 @@ public class BreachedSite {
     }
 
     public Boolean getRetired() {
+        if (isRetired == null) {
+            return false;
+        }
         return isRetired;
     }
 
@@ -145,6 +154,9 @@ public class BreachedSite {
     }
 
     public Boolean getFabricated() {
+        if (isFabricated == null) {
+            return false;
+        }
         return isFabricated;
     }
 
@@ -153,6 +165,9 @@ public class BreachedSite {
     }
 
     public Boolean getSpamList() {
+        if (isSpamList == null) {
+            return false;
+        }
         return isSpamList;
     }
 
