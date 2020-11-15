@@ -42,14 +42,14 @@ public abstract class AppDatabase extends RoomDatabase {
         @Override
         public void migrate(
                 SupportSQLiteDatabase database) {
-            database.execSQL("ALTER TABLE `breaches` ADD COLUMN `is_sensitive` INTEGER;");
-            database.execSQL("ALTER TABLE `breaches` ADD COLUMN `is_retired` INTEGER;");
-            database.execSQL("ALTER TABLE `breaches` ADD COLUMN `is_fabricated` INTEGER;");
-            database.execSQL("ALTER TABLE `breaches` ADD COLUMN `is_spam_list` INTEGER;");
-            database.execSQL("ALTER TABLE `breached_sites` ADD COLUMN `is_sensitive` INTEGER;");
-            database.execSQL("ALTER TABLE `breached_sites` ADD COLUMN `is_retired` INTEGER;");
-            database.execSQL("ALTER TABLE `breached_sites` ADD COLUMN `is_fabricated` INTEGER;");
-            database.execSQL("ALTER TABLE `breached_sites` ADD COLUMN `is_spam_list` INTEGER;");
+            database.execSQL("ALTER TABLE `breaches` ADD COLUMN `is_sensitive` INTEGER DEFAULT 0;");
+            database.execSQL("ALTER TABLE `breaches` ADD COLUMN `is_retired` INTEGER DEFAULT 0;");
+            database.execSQL("ALTER TABLE `breaches` ADD COLUMN `is_fabricated` INTEGER DEFAULT 0;");
+            database.execSQL("ALTER TABLE `breaches` ADD COLUMN `is_spam_list` INTEGER DEFAULT 0;");
+            database.execSQL("ALTER TABLE `breached_sites` ADD COLUMN `is_sensitive` INTEGER DEFAULT 0;");
+            database.execSQL("ALTER TABLE `breached_sites` ADD COLUMN `is_retired` INTEGER DEFAULT 0;");
+            database.execSQL("ALTER TABLE `breached_sites` ADD COLUMN `is_fabricated` INTEGER DEFAULT 0;");
+            database.execSQL("ALTER TABLE `breached_sites` ADD COLUMN `is_spam_list` INTEGER DEFAULT 0;");
         }
     };
 
