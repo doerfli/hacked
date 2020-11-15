@@ -167,4 +167,8 @@ public class Breach {
     public void setSpamList(Boolean spamList) {
         isSpamList = spamList;
     }
+
+    public boolean hasAdditionalFlags() {
+        return ! isVerified || isFabricated || isSensitive || isSpamList || isRetired;
+    }
 }

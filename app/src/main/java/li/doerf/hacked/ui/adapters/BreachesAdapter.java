@@ -94,6 +94,42 @@ public class BreachesAdapter extends RecyclerView.Adapter<RecyclerViewHolder> {
             statusIndicator.setBackgroundColor(getContext().getResources().getColor(R.color.account_status_only_acknowledged));
             acknowledge.setVisibility(View.GONE);
         }
+
+        View additionalFlagsLabel = cardView.findViewById(R.id.label_additional_flags);
+        TextView additionalFlags = cardView.findViewById(R.id.additional_flags);
+
+        if (breach.hasAdditionalFlags()) {
+            additionalFlagsLabel.setVisibility(View.VISIBLE);
+            additionalFlags.setVisibility(View.VISIBLE);
+
+            additionalFlags.setText(getFlags(breach));
+
+        } else {
+            additionalFlagsLabel.setVisibility(View.GONE);
+            additionalFlags.setVisibility(View.GONE);
+        }
+    }
+
+    private String getFlags(Breach breach) {
+        StringBuilder flags = new StringBuilder();
+
+        if (! breach.getVerified()) {
+            flags.append(getContext().getString(R.string.unverified)).append(" ");
+        }
+        if (breach.getFabricated()) {
+            flags.append(getContext().getString(R.string.fabricated)).append(" ");
+        }
+        if (breach.getRetired()) {
+            flags.append(getContext().getString(R.string.retired)).append(" ");
+        }
+        if (breach.getSensitive()) {
+            flags.append(getContext().getString(R.string.sensitive)).append(" ");
+        }
+        if (breach.getSpamList()) {
+            flags.append(getContext().getString(R.string.spam_list)).append(" ");
+        }
+
+        return flags.toString();
     }
 
     private void handleAcknowledgeClicked(long breachId) {
