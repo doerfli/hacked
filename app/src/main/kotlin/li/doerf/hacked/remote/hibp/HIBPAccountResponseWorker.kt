@@ -172,6 +172,7 @@ class HIBPAccountResponseWorker(private val context: Context, workerParams: Work
 
 object BreachedAccountDeserializer : ResponseDeserializable<BreachedAccount> {
     override fun deserialize(content: String) = run {
+        Log.d("BreachedAccountDeserial", content)
         val mapper = jacksonObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
         mapper.propertyNamingStrategy = PropertyNamingStrategy.UPPER_CAMEL_CASE
         mapper.readValue<BreachedAccount>(content)
