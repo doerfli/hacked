@@ -121,6 +121,9 @@ public class Breach {
     }
 
     public Boolean getVerified() {
+        if (isVerified == null) {
+            return false;
+        }
         return isVerified;
     }
 
@@ -137,6 +140,9 @@ public class Breach {
     }
 
     public Boolean getSensitive() {
+        if (isSensitive == null) {
+            return false;
+        }
         return isSensitive;
     }
 
@@ -145,6 +151,9 @@ public class Breach {
     }
 
     public Boolean getRetired() {
+        if (isRetired == null) {
+            return false;
+        }
         return isRetired;
     }
 
@@ -153,6 +162,9 @@ public class Breach {
     }
 
     public Boolean getFabricated() {
+        if (isFabricated == null) {
+            return false;
+        }
         return isFabricated;
     }
 
@@ -161,6 +173,9 @@ public class Breach {
     }
 
     public Boolean getSpamList() {
+        if (isSpamList == null) {
+            return false;
+        }
         return isSpamList;
     }
 
@@ -169,6 +184,6 @@ public class Breach {
     }
 
     public boolean hasAdditionalFlags() {
-        return ! isVerified || isFabricated || isSensitive || isSpamList || isRetired;
+        return ! getVerified() || getFabricated() || getSensitive() || getSpamList() || getRetired();
     }
 }
