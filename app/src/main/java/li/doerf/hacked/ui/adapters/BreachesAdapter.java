@@ -94,14 +94,6 @@ public class BreachesAdapter extends RecyclerView.Adapter<RecyclerViewHolder> {
             statusIndicator.setBackgroundColor(getContext().getResources().getColor(R.color.account_status_only_acknowledged));
             acknowledge.setVisibility(View.GONE);
         }
-
-        TextView unverified = cardView.findViewById(R.id.unverified);
-
-        if ( breach.getVerified() ) {
-            unverified.setVisibility(View.GONE);
-        } else {
-            unverified.setVisibility(View.VISIBLE);
-        }
     }
 
     private void handleAcknowledgeClicked(long breachId) {
