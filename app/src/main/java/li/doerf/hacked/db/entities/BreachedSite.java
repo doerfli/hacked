@@ -174,4 +174,8 @@ public class BreachedSite {
     public void setSpamList(Boolean spamList) {
         isSpamList = spamList;
     }
+
+    public boolean hasAdditionalFlags() {
+        return ! getVerified() || getFabricated() || getSensitive() || getSpamList() || getRetired();
+    }
 }

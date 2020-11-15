@@ -2,6 +2,7 @@ package li.doerf.hacked.ui.adapters
 
 import android.content.Context
 import android.text.Html
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -53,14 +54,7 @@ class BreachedSitesAdapter(
     private fun bindFullView(siteCard: View, site: BreachedSite) {
         val nameView = siteCard.findViewById<TextView>(R.id.site_name)
         nameView.text = site.title
-        //        val unconfirmed = cardView.findViewById<TextView>(R.id.unconfirmed)
-        if (site.verified) {
-            nameView.setTextColor(context.resources.getColor(android.R.color.primary_text_light))
-            //            unconfirmed.visibility = View.GONE
-        } else {
-            nameView.setTextColor(context.resources.getColor(R.color.account_status_unknown))
-            //            unconfirmed.visibility = View.VISIBLE
-        }
+
         val pwnCountView = siteCard.findViewById<TextView>(R.id.pwn_count)
         pwnCountView.text = String.format(context.resources.configuration.locale, "(%,d)", site.pwnCount)
 
@@ -89,26 +83,61 @@ class BreachedSitesAdapter(
             description.text = Html.fromHtml(site.description).toString()
         }
 
+        val additionalFlagsLabel: View = siteCard.findViewById<View>(R.id.label_additional_flags)
+        val additionalFlags: TextView = siteCard.findViewById<TextView>(R.id.additional_flags)
+
+        if (site.hasAdditionalFlags()) {
+            additionalFlagsLabel.visibility = View.VISIBLE
+            additionalFlags.visibility = View.VISIBLE
+            additionalFlags.setText(getFlags(site))
+        } else {
+            additionalFlagsLabel.visibility = View.GONE
+            additionalFlags.visibility = View.GONE
+        }
+
         siteCard.setOnClickListener { view: View ->
             site.detailsVisible = ! site.detailsVisible
             notifyDataSetChanged()
         }
-}
+    }
 
     private fun bindCompactView(card: View, site: BreachedSite, position: Int) {
         val nameView = card.findViewById<TextView>(R.id.site_name)
         nameView.text = site.title
-        if (site.verified) {
-            nameView.setTextColor(context.resources.getColor(android.R.color.primary_text_light))
-        } else {
-            nameView.setTextColor(context.resources.getColor(R.color.account_status_unknown))
-        }
+
+        getFlags(site)
+
         val pwnCountView = card.findViewById<TextView>(R.id.pwn_count)
         pwnCountView.text = String.format(context.resources.configuration.locale, "(%,d)", site.pwnCount)
 
         card.setOnClickListener { _ ->
             navEvents.onNext(NavEvent(NavEvent.Destination.ALL_BREACHES, site.id, null))
         }
+    }
+
+    private fun getFlags(site: BreachedSite): String? {
+        val flags = StringBuilder()
+        if (!site.verified) {
+            Log.d("BreachedSitesAdapter", "unverified: " + site.name)
+            flags.append(context.getString(R.string.unverified)).append(" ")
+        }
+        if (site.fabricated) {
+            Log.d("BreachedSitesAdapter", "fabricated: " + site.name)
+            flags.append(context.getString(R.string.fabricated)).append(" ")
+        }
+        if (site.retired) {
+            Log.d("BreachedSitesAdapter", "retired: " + site.name)
+            flags.append(context.getString(R.string.retired)).append(" ")
+        }
+        if (site.sensitive) {
+            Log.d("BreachedSitesAdapter", "sensitive: " + site.name)
+            flags.append(context.getString(R.string.sensitive)).append(" ")
+        }
+        if (site.spamList) {
+            Log.d("BreachedSitesAdapter", "spam_list: " + site.name)
+            flags.append(context.getString(R.string.spam_list)).append(" ")
+        }
+        return flags.toString()
     }
 
     override fun getItemCount(): Int {
