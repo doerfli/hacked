@@ -52,7 +52,7 @@
     <string name="password_info">Geben Sie ein Passwort ein um es in bekannten Datenlecks zu finden</string>
     <string name="channel_name">Hacked?</string>
     <string name="channel_name_general">Hacked? - Allgemeine Informationen</string>
-    <string name="unverified">(unbestätigt)</string>
+    <string name="unverified">Unbestätigt</string>
     <string name="rating_dialog_title">Gefällt Ihnen die \'Hacked?\' App?</string>
     <string name="rating_dialog_message">Bitte hinterlassen Sie Ihre Meinung im Google Play Store</string>
     <string name="rating_dialog_positive">Jetzt bewerten</string>
@@ -94,4 +94,10 @@
     <string name="action_sort_numpwned">Sortieren nach Anzahl Konten</string>
     <string name="action_sort_dateadded">Sortieren nach Datum</string>
     <string name="action_sort_name">Sortieren nach Name</string>
+    <string name="label_additional_flags">Zusätze:</string>
+    <string name="placeholder_additional_flags">Unbestaetigt, Zurueckgezogen, …</string>
+    <string name="fabricated">Gefälscht</string>
+    <string name="retired">Zurückgezogen</string>
+    <string name="sensitive">Sensibel</string>
+    <string name="spam_list">Spamliste</string>
 </resources>

@@ -51,7 +51,7 @@
     <string name="password_info">Saisissez le mot de passe ci-dessous pour vérifier s\'il a été exposé à des brèches de données</string>
     <string name="channel_name">Hacked?</string>
     <string name="channel_name_general">Hacked? - Informations générales</string>
-    <string name="unverified">(non vérifié)</string>
+    <string name="unverified">Non vérifié</string>
     <string name="rating_dialog_title">Aimez-vous l\'application \'Hacked?\' </string>
     <string name="rating_dialog_message">S\'il vous plaît poster vos commentaires sur le Google Play Store</string>
     <string name="rating_dialog_positive">Évaluez-nous maintenant</string>
@@ -93,4 +93,10 @@
     <string name="action_sort_numpwned">Trier par nombre de brèche</string>
     <string name="action_sort_dateadded">Trier par plus récent</string>
     <string name="action_sort_name">Trier par nom</string>
+    <string name="label_additional_flags">Option:</string>
+    <string name="placeholder_additional_flags">Unverified, Retried, …</string>
+    <string name="fabricated">Fabriqué</string>
+    <string name="retired">Retraité</string>
+    <string name="sensitive">Sensible</string>
+    <string name="spam_list">Spamlist</string>
 </resources>
