@@ -26,6 +26,8 @@ import li.doerf.hacked.R
 import li.doerf.hacked.db.AppDatabase
 import li.doerf.hacked.db.daos.AccountDao
 import li.doerf.hacked.db.entities.Account
+import org.apache.commons.codec.binary.Hex
+import org.apache.commons.codec.digest.DigestUtils
 import java.io.IOException
 import java.util.*
 import java.util.concurrent.ExecutionException
@@ -127,7 +129,9 @@ class HIBPAccountCheckerWorker(private val context: Context, params: WorkerParam
         Log.d(LOGTAG, "sending search request for account: $name")
 
         val url = "https://hibp-proxy.herokuapp.com/search"
-        val (_, res, _) = url.httpGet(listOf("account" to name, "device_token" to deviceToken)).header().awaitByteArrayResponse()
+        val now = System.currentTimeMillis()
+        val reqToken = String(Hex.encodeHex(DigestUtils.sha1("${name}-${now}-${deviceToken}}"))).toUpperCase(Locale.getDefault())
+        val (_, res, _) = url.httpGet(listOf("account" to name, "device_token" to deviceToken)).header(mapOf("x-hacked-requestToken" to reqToken, "x-hacked-now" to now)).awaitByteArrayResponse()
 
         if (!res.isSuccessful) {
             Log.e(LOGTAG, "failure sending search request")
