@@ -2,6 +2,8 @@ package li.doerf.hacked.remote.hibp
 
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageInfo
+import android.content.pm.PackageManager
 import android.os.Handler
 import android.os.Looper
 import android.preference.PreferenceManager
@@ -31,6 +33,7 @@ import org.apache.commons.codec.digest.DigestUtils
 import java.io.IOException
 import java.util.*
 import java.util.concurrent.ExecutionException
+
 
 /**
  * Created by moo on 26.03.17.
@@ -131,7 +134,10 @@ class HIBPAccountCheckerWorker(private val context: Context, params: WorkerParam
         val url = "https://hibp-proxy.herokuapp.com/search"
         val now = System.currentTimeMillis()
         val reqToken = String(Hex.encodeHex(DigestUtils.sha1("${name}-${now}-${deviceToken}}"))).toUpperCase(Locale.getDefault())
-        val (_, res, _) = url.httpGet(listOf("account" to name, "device_token" to deviceToken)).header(mapOf("x-hacked-requestToken" to reqToken, "x-hacked-now" to now)).awaitByteArrayResponse()
+        val (_, res, _) = url
+                .httpGet(listOf("account" to name, "device_token" to deviceToken))
+                .header(mapOf("x-hacked-requestToken" to reqToken, "x-hacked-now" to now, "user-agent" to "Hacked android app: ${getVersion(context)}"))
+                .awaitByteArrayResponse()
 
         if (!res.isSuccessful) {
             Log.e(LOGTAG, "failure sending search request")
@@ -149,6 +155,16 @@ class HIBPAccountCheckerWorker(private val context: Context, params: WorkerParam
             settings.edit().putLong(context.getString(R.string.PREF_KEY_LAST_SYNC_TIMESTAMP), ts).apply()
             Log.i(LOGTAG, "updated last checked timestamp: $ts")
         }
+    }
+
+    private fun getVersion(context: Context): String {
+        try {
+            val pInfo: PackageInfo = context.packageManager.getPackageInfo(context.packageName, 0)
+            return pInfo.versionName
+        } catch (e: PackageManager.NameNotFoundException) {
+            Log.e(LOGTAG, "caught PackageManager.NameNotFoundException", e)
+        }
+        return "unknown";
     }
 
 }
