@@ -127,7 +127,7 @@ class HIBPAccountCheckerWorker(private val context: Context, params: WorkerParam
         Log.d(LOGTAG, "sending search request for account: $name")
 
         val url = "https://hibp-proxy.herokuapp.com/search"
-        val (_, res, _) = url.httpGet(listOf("account" to name, "device_token" to deviceToken)).awaitByteArrayResponse()
+        val (_, res, _) = url.httpGet(listOf("account" to name, "device_token" to deviceToken)).header().awaitByteArrayResponse()
 
         if (!res.isSuccessful) {
             Log.e(LOGTAG, "failure sending search request")
