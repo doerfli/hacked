@@ -114,12 +114,16 @@ class HIBPAccountCheckerWorker(private val context: Context, params: WorkerParam
     @Throws(IOException::class)
     private suspend fun check(id: Long, device_token: String) {
         Log.d(LOGTAG, "starting check for breaches")
-        val accountsToCheck: MutableList<Account> = ArrayList()
+        var accountsToCheck: MutableList<Account> = ArrayList()
         if (id < 0) {
             accountsToCheck.addAll(myAccountDao.all)
         } else {
             Log.d(LOGTAG, "only id $id")
             accountsToCheck.addAll(myAccountDao.findById(id))
+        }
+        if (accountsToCheck.size > 50) {
+            Log.w(LOGTAG, "limiting results to first 50")
+            accountsToCheck = accountsToCheck.filterIndexed { index, _ -> index < 50 }.toMutableList()
         }
         accountsToCheck.forEachIndexed { index, account ->
             delayAfter25Requests(index)

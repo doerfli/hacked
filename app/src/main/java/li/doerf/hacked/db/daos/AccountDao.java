@@ -23,7 +23,7 @@ public interface AccountDao {
     @Delete
     int delete(Account entity);
 
-    @Query("SELECT * FROM accounts")
+    @Query("SELECT * FROM accounts ORDER BY name")
     List<Account> getAll();
 
     @Query("SELECT * FROM accounts ORDER BY is_hacked DESC, name")
