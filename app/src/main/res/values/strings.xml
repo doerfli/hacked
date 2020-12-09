@@ -7,6 +7,7 @@
     <string name="action_add_account">Add account</string>
     <string name="action_rateus">Rate us</string>
     <string name="snackbar_checking_account">Checking for breaches - the list will be updated with results soon</string>
+    <string name="snackbar_max_accounts">You cannot add any more accounts. A maximum of 50 accounts can be added to the list.</string>
     <string name="last_checked">Last checked:</string>
     <string name="placeholder_date">yyyy/mm/dd hh:mm</string>
     <string name="notification_title_new_breaches_found">Found new breached accounts</string>

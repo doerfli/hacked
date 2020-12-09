@@ -8,6 +8,7 @@
     <string name="action_add_account">Konto hinzufügen</string>
     <string name="action_rateus">Jetzt bewerten</string>
     <string name="snackbar_checking_account">Konten werden überprüft - die Liste wird demnächst aktualisiert</string>
+    <string name="snackbar_max_accounts">Sie können kein weiteres Konto hinzufügen. Es sind maximal 50 Konten erlaubt.</string>
     <string name="last_checked">Letzte Prüfung:</string>
     <string name="placeholder_date">dd/mm/yyyy hh:mm</string>
     <string name="notification_title_new_breaches_found">Neue Datenlecks gefunden</string>

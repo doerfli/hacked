@@ -28,6 +28,7 @@ import li.doerf.hacked.R
 import li.doerf.hacked.db.AppDatabase
 import li.doerf.hacked.db.daos.AccountDao
 import li.doerf.hacked.db.entities.Account
+import li.doerf.hacked.ui.fragments.AccountsFragment
 import org.apache.commons.codec.binary.Hex
 import org.apache.commons.codec.digest.DigestUtils
 import java.io.IOException
@@ -121,7 +122,7 @@ class HIBPAccountCheckerWorker(private val context: Context, params: WorkerParam
             Log.d(LOGTAG, "only id $id")
             accountsToCheck.addAll(myAccountDao.findById(id))
         }
-        if (accountsToCheck.size > 50) {
+        if (accountsToCheck.size > AccountsFragment.MAX_ACCOUNTS) {
             Log.w(LOGTAG, "limiting results to first 50")
             accountsToCheck = accountsToCheck.filterIndexed { index, _ -> index < 50 }.toMutableList()
         }

@@ -22,6 +22,7 @@ import androidx.work.OneTimeWorkRequest
 import androidx.work.WorkManager
 import com.google.android.material.snackbar.Snackbar
 import io.reactivex.processors.PublishProcessor
+import kotlinx.coroutines.*
 import li.doerf.hacked.HackedApplication
 import li.doerf.hacked.R
 import li.doerf.hacked.db.AppDatabase
@@ -135,9 +136,7 @@ class AccountsFragment : Fragment() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when(item.itemId) {
             R.id.action_add -> {
-                accountEditText.text.clear()
-                groupAddAccount.visibility = View.VISIBLE
-                hibpInfo.visibility = View.GONE
+                showAddAcountView()
                 true
             }
             R.id.action_refresh -> {
@@ -153,8 +152,26 @@ class AccountsFragment : Fragment() {
         }
     }
 
+    private fun showAddAcountView() {
+        CoroutineScope(Job()).launch {
+            val accounts = accountDao.all
+            withContext(Dispatchers.Main) {
+                if (accounts.size > MAX_ACCOUNTS) {
+                    Log.w(LOGTAG, "maximum number of accounts reached")
+                    Snackbar.make(fragmentRootView, getString(R.string.snackbar_max_accounts), Snackbar.LENGTH_LONG)
+                            .setAction("Action", null).show()
+                } else {
+                    accountEditText.text.clear()
+                    groupAddAccount.visibility = View.VISIBLE
+                    hibpInfo.visibility = View.GONE
+                }
+            }
+        }
+    }
+
     companion object {
         const val LOGTAG = "AccountsFragmentBase"
+        const val MAX_ACCOUNTS = 50
     }
 
 }

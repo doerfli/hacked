@@ -7,6 +7,7 @@
     <string name="action_add_account">Ajouter un compte</string>
     <string name="action_rateus">Évaluez-nous</string>
     <string name="snackbar_checking_account">Vérification des brèches - la liste sera bientôt mise à jour avec les résultats</string>
+    <string name="snackbar_max_accounts">Vous ne pouvez plus ajouter de comptes. Un maximum de 50 comptes peuvent être ajoutés à la liste.</string>
     <string name="last_checked">Dernier contrôle:</string>
     <string name="placeholder_date">dd/mm/yyyy hh:mm</string>
     <string name="notification_title_new_breaches_found">Nouvelle brèches de compte trouvés</string>
