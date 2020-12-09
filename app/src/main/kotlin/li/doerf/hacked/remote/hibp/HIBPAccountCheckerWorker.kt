@@ -22,6 +22,7 @@ import com.google.android.gms.tasks.Tasks
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.firebase.messaging.FirebaseMessaging
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext
 import li.doerf.hacked.R
 import li.doerf.hacked.db.AppDatabase
@@ -32,6 +33,7 @@ import org.apache.commons.codec.digest.DigestUtils
 import java.io.IOException
 import java.util.*
 import java.util.concurrent.ExecutionException
+import kotlin.random.Random
 
 
 /**
@@ -119,11 +121,21 @@ class HIBPAccountCheckerWorker(private val context: Context, params: WorkerParam
             Log.d(LOGTAG, "only id $id")
             accountsToCheck.addAll(myAccountDao.findById(id))
         }
-        for (account in accountsToCheck) {
-            Log.d(LOGTAG, "Checking for account: " + account.name)
+        accountsToCheck.forEachIndexed { index, account ->
+            delayAfter25Requests(index)
+            Log.d(LOGTAG, "Checking for account ($index): " + account.name)
             sendSearch(account.name, device_token)
         }
         Log.d(LOGTAG, "finished checking for breaches")
+    }
+
+    private suspend fun delayAfter25Requests(index: Int) {
+        if ((index > 0) && (index % 25 == 0)) {
+            // when more than 25 accounts are sent, delay further request by 1-5 minutes
+            val delayMs = ((Random.nextInt(3) + 1) * 60 * 1000).toLong()
+            Log.i(LOGTAG, "delaying next requests by ${delayMs}ms to reduce strain on proxy")
+            delay(delayMs)
+        }
     }
 
     @Throws(IOException::class)
