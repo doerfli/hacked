@@ -6,10 +6,10 @@ import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
 import android.os.Handler
 import android.os.Looper
-import android.preference.PreferenceManager
 import android.util.Log
 import android.widget.Toast
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
+import androidx.preference.PreferenceManager
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 import com.github.kittinunf.fuel.core.isSuccessful
@@ -20,8 +20,7 @@ import com.google.android.gms.common.GoogleApiAvailability
 import com.google.android.gms.tasks.Task
 import com.google.android.gms.tasks.Tasks
 import com.google.firebase.crashlytics.FirebaseCrashlytics
-import com.google.firebase.iid.FirebaseInstanceId
-import com.google.firebase.iid.InstanceIdResult
+import com.google.firebase.messaging.FirebaseMessaging
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import li.doerf.hacked.R
@@ -41,7 +40,7 @@ import java.util.concurrent.ExecutionException
 class HIBPAccountCheckerWorker(private val context: Context, params: WorkerParameters) : CoroutineWorker(context, params) {
 
     companion object {
-        private val LOGTAG = "HIBPAccountCheckerWorke"
+        private const val LOGTAG = "HIBPAccountCheckerWorke"
         const val BROADCAST_ACTION_ACCOUNT_CHECK_FINISHED = "li.doerf.hacked.BROADCAST_ACTION_ACCOUNT_CHECK_FINISHED"
         const val KEY_ID = "ID"
     }
@@ -66,7 +65,7 @@ class HIBPAccountCheckerWorker(private val context: Context, params: WorkerParam
         val id = inputData.getLong(KEY_ID, -1)
         updateLastCheckTimestamp = id < 0
         checkGooglePlayServicesAvailable()
-        val deviceTokenTask = FirebaseInstanceId.getInstance().instanceId
+        val deviceTokenTask = FirebaseMessaging.getInstance().token
         return try {
             check(id, getDeviceToken(deviceTokenTask))
             Result.success()
@@ -82,9 +81,9 @@ class HIBPAccountCheckerWorker(private val context: Context, params: WorkerParam
         }
     }
 
-    private fun getDeviceToken(deviceTokenTask: Task<InstanceIdResult>): String {
+    private fun getDeviceToken(deviceTokenTask: Task<String>): String {
         return try {
-            Tasks.await(deviceTokenTask).token
+            Tasks.await(deviceTokenTask)
         } catch (e: ExecutionException) {
             Log.e(LOGTAG, "caught ExecutionException", e)
             FirebaseCrashlytics.getInstance().recordException(e)
@@ -164,7 +163,7 @@ class HIBPAccountCheckerWorker(private val context: Context, params: WorkerParam
         } catch (e: PackageManager.NameNotFoundException) {
             Log.e(LOGTAG, "caught PackageManager.NameNotFoundException", e)
         }
-        return "unknown";
+        return "unknown"
     }
 
 }
