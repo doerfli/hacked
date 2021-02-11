@@ -9,8 +9,8 @@ import androidx.appcompat.widget.AppCompatTextView
 import androidx.cardview.widget.CardView
 import androidx.constraintlayout.widget.Group
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.DividerItemDecoration
@@ -33,7 +33,6 @@ import java.util.*
 class AccountDetailsFragment : Fragment() {
 
     private lateinit var myBreachesAdapter: BreachesAdapter
-    private lateinit var myViewModel: BreachViewModel
     private var myAccountId: Long = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -45,7 +44,6 @@ class AccountDetailsFragment : Fragment() {
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        myViewModel = ViewModelProviders.of(this).get(BreachViewModel::class.java)
         myBreachesAdapter = BreachesAdapter(activity, ArrayList())
     }
 
@@ -94,9 +92,10 @@ class AccountDetailsFragment : Fragment() {
 
         for (account in accounts) {
             activity?.title = account.name
-            myViewModel.getBreachList(
+            val viewModel: BreachViewModel by viewModels()
+            viewModel.getBreachList(
                     account.id).observe(
-                    this, Observer { breaches: List<Breach?>? ->
+                    viewLifecycleOwner, Observer { breaches: List<Breach?>? ->
                 myBreachesAdapter.addItems(breaches)
                 if (myBreachesAdapter.itemCount == 0) {
                     noBreachFound.visibility = View.VISIBLE
