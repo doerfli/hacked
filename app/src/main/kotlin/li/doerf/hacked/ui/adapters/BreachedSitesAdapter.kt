@@ -44,7 +44,7 @@ class BreachedSitesAdapter(
         val view = holder.view
 
         if (compactView) {
-            bindCompactView(view, site, position)
+            bindCompactView(view, site)
         } else {
             bindFullView(view, site)
         }
@@ -95,13 +95,13 @@ class BreachedSitesAdapter(
             additionalFlags.visibility = View.GONE
         }
 
-        siteCard.setOnClickListener { view: View ->
+        siteCard.setOnClickListener {
             site.detailsVisible = ! site.detailsVisible
             notifyDataSetChanged()
         }
     }
 
-    private fun bindCompactView(card: View, site: BreachedSite, position: Int) {
+    private fun bindCompactView(card: View, site: BreachedSite) {
         val nameView = card.findViewById<TextView>(R.id.site_name)
         nameView.text = site.title
 

@@ -43,7 +43,7 @@ class AccountService(private val application: Application) {
         if (count > 0) {
             return
         }
-        insertAccount(accountDao, createNewAccount(name), application)
+        insertAccount(accountDao, createNewAccount(name))
     }
 
     private fun createNewAccount(name: String): Account {
@@ -54,7 +54,7 @@ class AccountService(private val application: Application) {
         return account
     }
 
-    private fun insertAccount(accountDao: AccountDao, account: Account, application: Application) {
+    private fun insertAccount(accountDao: AccountDao, account: Account) {
         val ids = accountDao.insert(account)
         Analytics.trackCustomEvent(CustomEvent.ACCOUNT_ADDED)
         checkNewAccount(ids)
