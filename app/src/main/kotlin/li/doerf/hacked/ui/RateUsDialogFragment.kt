@@ -13,8 +13,10 @@ import li.doerf.hacked.util.Analytics
 import li.doerf.hacked.util.AppReview
 import li.doerf.hacked.util.RatingHelper
 
-class RateUsDialogFragment(val appReview: AppReview) : DialogFragment() {
+class RateUsDialogFragment() : DialogFragment() {
     private val LOGTAG = javaClass.simpleName
+    private lateinit var appReview: AppReview
+
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         return AlertDialog.Builder(requireContext())
                 .setTitle(getString(R.string.rating_dialog_title))
@@ -24,8 +26,16 @@ class RateUsDialogFragment(val appReview: AppReview) : DialogFragment() {
                 .setNegativeButton(getString(R.string.rating_dialog_negative)) { _: DialogInterface?, _: Int -> handleClickNegative() }.create()
     }
 
+    fun setAppReview(appRevie: AppReview) {
+        this.appReview = appRevie
+    }
+
     private fun handleClickPositive() {
-        appReview.showReview()
+        if (this::appReview.isInitialized) {
+            appReview.showReview()
+        } else {
+            handleClickNeutral();
+        }
     }
 
     private fun handleClickNeutral() {

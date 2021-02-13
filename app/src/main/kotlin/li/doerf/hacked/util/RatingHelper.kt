@@ -14,7 +14,8 @@ class RatingHelper(private val activity: Activity) : AppReview {
     private suspend fun showRateUsDialog() {
         // since the show is delayed (and app could be closed now) this needs to be checked here
         if (!activity.isFinishing && !activity.isDestroyed) {
-            val dialog = RateUsDialogFragment(this)
+            val dialog = RateUsDialogFragment()
+            dialog.setAppReview(this)
             withContext(Dispatchers.Main) {
                 val fragmentManager = (activity as FragmentActivity).supportFragmentManager
                 if (! fragmentManager.isDestroyed && !fragmentManager.isStateSaved) {
