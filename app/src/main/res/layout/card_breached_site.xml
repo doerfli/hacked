@@ -95,6 +95,14 @@
             android:layout_toRightOf="@id/label_breach_date"
             />
 
+        <ImageView
+            android:id="@+id/logo"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            />
+
         <TextView
             android:id="@+id/label_compromised_data"
             android:layout_width="wrap_content"
@@ -131,6 +139,7 @@
             android:layout_below="@+id/compromised_data"
             android:layout_toRightOf="@id/label_additional_flags"
             />
+
 
         <TextView
             android:id="@+id/description"
