@@ -16,5 +16,6 @@ data class BreachedAccount(
         var isSensitive: Boolean? = null,
         var isRetired: Boolean? = null,
         var isFabricated: Boolean? = null,
-        var IsSpamList: Boolean? = null
+        var IsSpamList: Boolean? = null,
+        var LogoPath: String? = null
 )
