@@ -116,6 +116,7 @@ class HIBPAccountResponseWorker(private val context: Context, workerParams: Work
         newBreach.retired = ba.isRetired
         newBreach.sensitive = ba.isSensitive
         newBreach.spamList = ba.IsSpamList
+        newBreach.logoPath = ba.LogoPath
         newBreach.acknowledged = false
         myBreachDao.insert(newBreach)
         Log.i(TAG, "breach inserted into db")

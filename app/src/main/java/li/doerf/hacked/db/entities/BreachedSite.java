@@ -37,6 +37,8 @@ public class BreachedSite {
     private Boolean isFabricated;
     @ColumnInfo(name = "is_spam_list")
     private Boolean isSpamList;
+    @ColumnInfo(name = "logo_path")
+    private String logoPath;
     @Ignore
     private Boolean detailsVisible = false;
 
@@ -177,5 +179,13 @@ public class BreachedSite {
 
     public boolean hasAdditionalFlags() {
         return ! getVerified() || getFabricated() || getSensitive() || getSpamList() || getRetired();
+    }
+
+    public String getLogoPath() {
+        return logoPath;
+    }
+
+    public void setLogoPath(String logoPath) {
+        this.logoPath = logoPath;
     }
 }

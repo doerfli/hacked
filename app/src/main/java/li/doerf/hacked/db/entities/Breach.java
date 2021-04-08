@@ -39,6 +39,8 @@ public class Breach {
     private Boolean isFabricated;
     @ColumnInfo(name = "is_spam_list")
     private Boolean isSpamList;
+    @ColumnInfo(name = "logo_path")
+    private String logoPath;
 
     public Long getId() {
         return id;
@@ -185,5 +187,13 @@ public class Breach {
 
     public boolean hasAdditionalFlags() {
         return ! getVerified() || getFabricated() || getSensitive() || getSpamList() || getRetired();
+    }
+
+    public String getLogoPath() {
+        return logoPath;
+    }
+
+    public void setLogoPath(String logoPath) {
+        this.logoPath = logoPath;
     }
 }

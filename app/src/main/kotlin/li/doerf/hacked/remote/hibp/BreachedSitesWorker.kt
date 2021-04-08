@@ -96,6 +96,7 @@ class BreachedSitesWorker(private val context: Context, params: WorkerParameters
                     site.spamList = newSite.spamList
                     site.sensitive = newSite.sensitive
                     site.fabricated = newSite.fabricated
+                    site.logoPath = newSite.logoPath
                     breachedSiteDao.update(site)
                 }
             }
@@ -139,6 +140,7 @@ class BreachedSitesWorker(private val context: Context, params: WorkerParameters
         site.fabricated = ba.isFabricated
         site.sensitive = ba.isSensitive
         site.spamList = ba.IsSpamList
+        site.logoPath = ba.LogoPath
         return site
     }
 
