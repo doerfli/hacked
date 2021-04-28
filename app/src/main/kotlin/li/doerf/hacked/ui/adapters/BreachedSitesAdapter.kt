@@ -1,7 +1,6 @@
 package li.doerf.hacked.ui.adapters
 
 import android.content.Context
-import android.graphics.BitmapFactory
 import android.text.Html
 import android.util.Log
 import android.view.LayoutInflater
@@ -11,14 +10,13 @@ import android.widget.ImageView
 import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.squareup.picasso.Picasso
 import io.reactivex.processors.PublishProcessor
-import kotlinx.coroutines.*
 import li.doerf.hacked.HackedApplication
 import li.doerf.hacked.R
 import li.doerf.hacked.db.entities.BreachedSite
 import li.doerf.hacked.util.NavEvent
 import org.joda.time.format.DateTimeFormat
-import java.net.URL
 
 
 class BreachedSitesAdapter(
@@ -88,16 +86,8 @@ class BreachedSitesAdapter(
 
             val logoView = siteCard.findViewById<ImageView>(R.id.logo)
             if (site.logoPath != null && site.logoPath.isNotEmpty()) {
-                CoroutineScope(Job()).launch {
-                    withContext(Dispatchers.IO) {
-                        val url = URL(site.logoPath)
-                        val bmp = BitmapFactory.decodeStream(url.openConnection().getInputStream())
-                        withContext(Dispatchers.Main) {
-                            logoView.visibility = View.VISIBLE
-                            logoView.setImageBitmap(bmp)
-                        }
-                    }
-                }
+                logoView.visibility = View.VISIBLE
+                Picasso.get().load(site.logoPath).into(logoView)
             } else {
                 logoView.visibility = View.GONE
             }

@@ -2,8 +2,6 @@ package li.doerf.hacked.ui.adapters;
 
 import android.app.Activity;
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -18,11 +16,11 @@ import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.snackbar.Snackbar;
+import com.squareup.picasso.Picasso;
 
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
-import java.net.URL;
 import java.util.List;
 
 import li.doerf.hacked.CustomEvent;
@@ -115,16 +113,8 @@ public class BreachesAdapter extends RecyclerView.Adapter<RecyclerViewHolder> {
 
         ImageView logoView = cardView.findViewById(R.id.logo);
         if (breach.getLogoPath() != null && breach.getLogoPath() != "") {
-            new BackgroundTaskHelper<Bitmap>().runInBackgroundAndConsumeOnMain(
-                    () -> {
-                        URL url = new URL(breach.getLogoPath());
-                        return BitmapFactory.decodeStream(url.openConnection().getInputStream());
-                    },
-                    (result) -> {
-                        logoView.setVisibility(View.VISIBLE);
-                        logoView.setImageBitmap(result);
-                    }
-            );
+            logoView.setVisibility(View.VISIBLE);
+            Picasso.get().load(breach.getLogoPath()).into(logoView);
         } else {
             logoView.setVisibility(View.GONE);
         }
