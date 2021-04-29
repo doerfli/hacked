@@ -1,23 +1,9 @@
-package li.doerf.hacked.ui.adapters;
+package li.doerf.hacked.ui.adapters
 
-import android.view.View;
-
-import androidx.recyclerview.widget.RecyclerView;
+import android.view.View
+import androidx.recyclerview.widget.RecyclerView
 
 /**
  * Created by moo on 31/01/15.
  */
-public class RecyclerViewHolder extends RecyclerView.ViewHolder {
-
-    private final View myView;
-
-    RecyclerViewHolder(View itemView) {
-        super(itemView);
-        myView = itemView;
-    }
-
-    View getView()
-    {
-        return myView;
-    }
-}
+class RecyclerViewHolder internal constructor(val view: View) : RecyclerView.ViewHolder(view)
