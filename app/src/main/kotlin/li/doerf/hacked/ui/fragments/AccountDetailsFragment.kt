@@ -44,7 +44,7 @@ class AccountDetailsFragment : Fragment() {
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        myBreachesAdapter = BreachesAdapter(activity, ArrayList())
+        myBreachesAdapter = BreachesAdapter(requireActivity(), ArrayList())
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -95,7 +95,7 @@ class AccountDetailsFragment : Fragment() {
             val viewModel: BreachViewModel by viewModels()
             viewModel.getBreachList(
                     account.id).observe(
-                    viewLifecycleOwner, Observer { breaches: List<Breach?>? ->
+                    viewLifecycleOwner, Observer { breaches: List<Breach> ->
                 myBreachesAdapter.addItems(breaches)
                 if (myBreachesAdapter.itemCount == 0) {
                     noBreachFound.visibility = View.VISIBLE
