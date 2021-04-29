@@ -14,6 +14,7 @@ import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
 import com.squareup.picasso.Picasso
+import kotlinx.coroutines.*
 import li.doerf.hacked.CustomEvent
 import li.doerf.hacked.R
 import li.doerf.hacked.db.AppDatabase
@@ -23,7 +24,6 @@ import li.doerf.hacked.db.entities.Breach
 import li.doerf.hacked.util.Analytics.Companion.trackCustomEvent
 import li.doerf.hacked.util.RatingHelper
 import li.doerf.hacked.utils.AccountHelper
-import li.doerf.hacked.utils.BackgroundTaskHelper
 import org.joda.time.format.DateTimeFormat
 
 /**
@@ -108,22 +108,19 @@ class BreachesAdapter(private val myActivity: Activity, aList: List<Breach>) : R
     }
 
     private fun handleAcknowledgeClicked(breachId: Long) {
-        BackgroundTaskHelper<Boolean>().runInBackgroundAndConsumeOnMain(
-                {
-                    val breach = myBreachDao.findById(breachId)
-                    if (breach == null) {
-                        Log.w(LOGTAG, "no breack found with id $breachId")
-                        return@runInBackgroundAndConsumeOnMain false
-                    }
-                    setBreachAcknowledged(breach)
-                    updateAccountIsHacked(breach.account)
-                    true
+        CoroutineScope(Job()).launch {
+            val breach = myBreachDao.findById(breachId)
+            if (breach != null) {
+                setBreachAcknowledged(breach)
+                updateAccountIsHacked(breach.account)
+                withContext(Dispatchers.Main) {
+                    notifyDataSetChanged()
+                    Snackbar.make(myParentView!!, context.getString(R.string.breach_acknowledged), Snackbar.LENGTH_SHORT).show()
+                    RatingHelper(myActivity).setRatingCounterBelowthreshold()
                 }
-        ) { result: Boolean? ->
-            notifyDataSetChanged()
-            if (!result!!) return@runInBackgroundAndConsumeOnMain
-            Snackbar.make(myParentView!!, context.getString(R.string.breach_acknowledged), Snackbar.LENGTH_SHORT).show()
-            RatingHelper(myActivity).setRatingCounterBelowthreshold()
+            } else {
+                Log.w(LOGTAG, "no breach found with id $breachId")
+            }
         }
     }
 
