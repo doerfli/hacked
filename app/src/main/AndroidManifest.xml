@@ -25,10 +25,10 @@
             android:name=".activities.NavActivity"
             android:label="@string/app_name"
             android:windowSoftInputMode="stateHidden|adjustPan"
+            android:exported="true"
             >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -37,8 +37,6 @@
             android:name=".activities.SettingsActivity"
             android:label="@string/title_settings"
             android:parentActivityName=".activities.NavActivity" />
-
-
         <service
             android:name=".services.FirebaseMessagagingService"
             android:exported="false">
@@ -64,6 +62,7 @@
         <provider
             android:name="androidx.work.impl.WorkManagerInitializer"
             android:authorities="${applicationId}.workmanager-init"
+            android:exported="false"
             tools:node="remove" />
 
         <meta-data
