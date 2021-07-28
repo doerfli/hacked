@@ -3,6 +3,7 @@ package li.doerf.hacked.initializer
 import android.content.Context
 import android.util.Log
 import androidx.startup.Initializer
+import androidx.work.WorkManagerInitializer
 import li.doerf.hacked.utils.SynchronizationHelper
 
 class BackgroundSyncInitializer : Initializer<String> {

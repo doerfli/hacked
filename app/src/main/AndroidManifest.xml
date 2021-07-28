@@ -55,15 +55,7 @@
                 android:value="androidx.startup" />
             <meta-data  android:name="li.doerf.hacked.initializer.BackgroundSyncInitializer"
                 android:value="androidx.startup" />
-            <meta-data  android:name="li.doerf.hacked.initializer.WorkManagerInitializer"
-                android:value="androidx.startup" />
         </provider>
-
-        <provider
-            android:name="androidx.work.impl.WorkManagerInitializer"
-            android:authorities="${applicationId}.workmanager-init"
-            android:exported="false"
-            tools:node="remove" />
 
         <meta-data
             android:name="google_analytics_adid_collection_enabled"
