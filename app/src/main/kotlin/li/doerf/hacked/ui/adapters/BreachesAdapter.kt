@@ -2,18 +2,29 @@ package li.doerf.hacked.ui.adapters
 
 import android.app.Activity
 import android.content.Context
-import android.text.Html
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.ImageView
-import android.widget.TextView
 import androidx.cardview.widget.CardView
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.*
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Text
+import androidx.compose.material.TextButton
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import androidx.core.text.HtmlCompat
 import androidx.recyclerview.widget.RecyclerView
+import com.google.accompanist.coil.rememberCoilPainter
 import com.google.android.material.snackbar.Snackbar
-import com.squareup.picasso.Picasso
 import kotlinx.coroutines.*
 import li.doerf.hacked.CustomEvent
 import li.doerf.hacked.R
@@ -47,45 +58,69 @@ class BreachesAdapter(private val myActivity: Activity, aList: List<Breach>) : R
         val breach = myBreachList[position]
         val cardView = holder.view as CardView
         val breachId = breach.id
-        val title = cardView.findViewById<TextView>(R.id.title)
-        title.text = breach.title
-        val domain = cardView.findViewById<TextView>(R.id.domain)
-        domain.text = breach.domain
-        val dtfOut = DateTimeFormat.forPattern("yyyy/MM/dd")
-        val breachDate = cardView.findViewById<TextView>(R.id.breach_date)
-        breachDate.text = dtfOut.print(breach.breachDate)
-        val compromisedData = cardView.findViewById<TextView>(R.id.compromised_data)
-        compromisedData.text = breach.dataClasses
-        val description = cardView.findViewById<TextView>(R.id.description)
-        description.text = Html.fromHtml(breach.description).toString()
+
         val statusIndicator = cardView.findViewById<View>(R.id.status_indicator)
-        val acknowledge = cardView.findViewById<Button>(R.id.acknowledge)
         if (!breach.acknowledged) {
             statusIndicator.setBackgroundColor(context.resources.getColor(R.color.account_status_breached))
-            acknowledge.visibility = View.VISIBLE
-            acknowledge.setOnClickListener { v: View? -> handleAcknowledgeClicked(breachId) }
         } else {
             statusIndicator.setBackgroundColor(context.resources.getColor(R.color.account_status_only_acknowledged))
-            acknowledge.visibility = View.GONE
         }
-        val additionalFlagsLabel = cardView.findViewById<View>(R.id.label_additional_flags)
-        val additionalFlags = cardView.findViewById<TextView>(R.id.additional_flags)
-        if (breach.hasAdditionalFlags()) {
-            additionalFlagsLabel.visibility = View.VISIBLE
-            additionalFlags.visibility = View.VISIBLE
-            additionalFlags.text = getFlags(breach)
-        } else {
-            additionalFlagsLabel.visibility = View.GONE
-            additionalFlags.visibility = View.GONE
-        }
-        val logoView = cardView.findViewById<ImageView>(R.id.logo)
-        if (breach.logoPath != null && breach.logoPath !== "") {
-            logoView.visibility = View.VISIBLE
-            Picasso.get().load(breach.logoPath).into(logoView)
-        } else {
-            logoView.visibility = View.GONE
+
+        val greeting = cardView.findViewById<ComposeView>(R.id.breach)
+        greeting.setContent {
+            MaterialTheme {
+                BreachUi(breach)
+            }
         }
     }
+
+    @Composable
+    private fun BreachUi(breach: Breach) {
+        val dtfOut = DateTimeFormat.forPattern("yyyy/MM/dd")
+
+        // TODO layout
+        Box(Modifier.padding(8.dp)) {
+            Column(modifier = Modifier.fillMaxSize(), horizontalAlignment = Alignment.End) {
+                Image(
+                    painter = rememberCoilPainter(
+                        request = breach.logoPath
+                    ),
+                    contentDescription = "Logo of ${breach.title}",
+                    modifier = Modifier
+                        .width(48.dp)
+                        .height(48.dp)
+                )
+            }
+            Column() {
+                Text(breach.title, style = TextStyle(fontWeight = FontWeight.Bold, fontSize = 20.sp))
+                NameValue(context.getString(R.string.label_domain), breach.domain)
+                NameValue(context.getString(R.string.label_breach_date), dtfOut.print(breach.breachDate))
+                NameValue(context.getString(R.string.label_compromised_data), breach.dataClasses, true)
+                if (breach.hasAdditionalFlags()) {
+                    NameValue(context.getString(R.string.label_additional_flags), getFlags(breach))
+                }
+                Text(HtmlCompat.fromHtml(breach.description, HtmlCompat.FROM_HTML_MODE_COMPACT).toString())
+                Column(Modifier.fillMaxSize(), horizontalAlignment = Alignment.End) {
+                    TextButton(onClick = { handleAcknowledgeClicked(breach.id) }) {
+                        Text(context.getString(R.string.acknowledge), color = Color(context.resources.getColor(R.color.colorAccent)))
+                    }
+                }
+            }
+        }
+    }
+
+    @Composable
+    private fun NameValue(name: String, value: String, valueIsRed: Boolean = false) {
+        Row() {
+            Text(name, color = Color.Gray, modifier = Modifier.padding(end = 2.dp))
+            if (valueIsRed) {
+                Text(value, color = Color.Red)
+            } else {
+                Text(value)
+            }
+        }
+    }
+
 
     private fun getFlags(breach: Breach): String {
         val flags = StringBuilder()
