@@ -4,24 +4,9 @@
     android:layout_height="wrap_content"
     >
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <View
-            android:id="@+id/status_indicator"
-            android:background="@color/account_status_unknown"
-            android:orientation="horizontal"
-            android:layout_width="@dimen/width_status_breach"
-            android:layout_height="match_parent"
-            />
-
         <androidx.compose.ui.platform.ComposeView
             android:id="@+id/breach"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
-
-    </LinearLayout>
+            android:layout_height="match_parent"/>
 
 </androidx.cardview.widget.CardView>

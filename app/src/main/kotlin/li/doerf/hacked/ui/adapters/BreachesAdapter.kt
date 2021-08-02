@@ -4,10 +4,10 @@ import android.app.Activity
 import android.content.Context
 import android.util.Log
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.cardview.widget.CardView
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
@@ -57,19 +57,23 @@ class BreachesAdapter(private val myActivity: Activity, aList: List<Breach>) : R
     override fun onBindViewHolder(holder: RecyclerViewHolder, position: Int) {
         val breach = myBreachList[position]
         val cardView = holder.view as CardView
-        val breachId = breach.id
 
-        val statusIndicator = cardView.findViewById<View>(R.id.status_indicator)
-        if (!breach.acknowledged) {
-            statusIndicator.setBackgroundColor(context.resources.getColor(R.color.account_status_breached))
+        val statusColor =  if (!breach.acknowledged) {
+            context.resources.getColor(R.color.account_status_breached)
         } else {
-            statusIndicator.setBackgroundColor(context.resources.getColor(R.color.account_status_only_acknowledged))
+            context.resources.getColor(R.color.account_status_only_acknowledged)
         }
 
         val greeting = cardView.findViewById<ComposeView>(R.id.breach)
         greeting.setContent {
             MaterialTheme {
-                BreachUi(breach)
+                Row(Modifier.fillMaxWidth().height(IntrinsicSize.Max)) {
+                    Spacer(modifier = Modifier
+                        .width(10.dp)
+                        .fillMaxHeight()
+                        .background(color = Color(statusColor)))
+                    BreachUi(breach)
+                }
             }
         }
     }
@@ -100,9 +104,15 @@ class BreachesAdapter(private val myActivity: Activity, aList: List<Breach>) : R
                     NameValue(context.getString(R.string.label_additional_flags), getFlags(breach))
                 }
                 Text(HtmlCompat.fromHtml(breach.description, HtmlCompat.FROM_HTML_MODE_COMPACT).toString())
-                Column(Modifier.fillMaxSize(), horizontalAlignment = Alignment.End) {
-                    TextButton(onClick = { handleAcknowledgeClicked(breach.id) }) {
-                        Text(context.getString(R.string.acknowledge), color = Color(context.resources.getColor(R.color.colorAccent)))
+
+                if (! breach.acknowledged) {
+                    Column(Modifier.fillMaxSize(), horizontalAlignment = Alignment.End) {
+                        TextButton(onClick = { handleAcknowledgeClicked(breach.id) }) {
+                            Text(
+                                context.getString(R.string.acknowledge),
+                                color = Color(context.resources.getColor(R.color.colorAccent))
+                            )
+                        }
                     }
                 }
             }
