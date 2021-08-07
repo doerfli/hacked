@@ -79,7 +79,7 @@ class BreachesAdapter(private val myActivity: Activity, aList: List<Breach>) : R
     }
 
     @Composable
-    private fun BreachUi(breach: Breach) {
+    fun BreachUi(breach: Breach) {
         val dtfOut = DateTimeFormat.forPattern("yyyy/MM/dd")
 
         // TODO layout
@@ -152,7 +152,7 @@ class BreachesAdapter(private val myActivity: Activity, aList: List<Breach>) : R
         return flags.toString()
     }
 
-    private fun handleAcknowledgeClicked(breachId: Long) {
+    fun handleAcknowledgeClicked(breachId: Long) {
         CoroutineScope(Job()).launch {
             val breach = myBreachDao.findById(breachId)
             if (breach != null) {
