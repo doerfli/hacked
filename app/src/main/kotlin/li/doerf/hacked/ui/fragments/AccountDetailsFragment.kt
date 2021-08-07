@@ -30,7 +30,6 @@ import li.doerf.hacked.R
 import li.doerf.hacked.db.AppDatabase
 import li.doerf.hacked.db.entities.Account
 import li.doerf.hacked.db.entities.Breach
-import li.doerf.hacked.ui.adapters.BreachesAdapter
 import li.doerf.hacked.ui.composable.BreachUi
 import li.doerf.hacked.ui.viewmodels.BreachViewModel
 import li.doerf.hacked.util.Analytics
@@ -41,7 +40,6 @@ import li.doerf.hacked.utils.AccountHelper
 
 class AccountDetailsFragment : Fragment() {
 
-    private lateinit var myBreachesAdapter: BreachesAdapter
     private lateinit var rootView: View
     private var myAccountId: Long = 0
 
@@ -54,7 +52,6 @@ class AccountDetailsFragment : Fragment() {
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        myBreachesAdapter = BreachesAdapter(requireActivity(), ArrayList())
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -91,14 +88,7 @@ class AccountDetailsFragment : Fragment() {
         val textOne: AppCompatTextView = rootView.findViewById(R.id.t1)
         textOne.movementMethod = LinkMovementMethod.getInstance()
         textOne.text = Html.fromHtml(text)
-//        val breachesList: RecyclerView = view.findViewById(R.id.breaches_list)
-//        breachesList.setHasFixedSize(true)
-//        val lm = LinearLayoutManager(context)
-//        breachesList.layoutManager = lm
-//        breachesList.adapter = myBreachesAdapter
-//        val dividerItemDecoration = DividerItemDecoration(breachesList.context,
-//                lm.orientation)
-//        breachesList.addItemDecoration(dividerItemDecoration)
+
         // TODO reenable this
 //        HibpInfo.prepare(context, view.findViewById(R.id.hibp_info), breachesListView)
         return rootView
