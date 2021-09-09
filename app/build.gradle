@@ -71,13 +71,13 @@ dependencies {
     implementation "com.google.android.gms:play-services-base:$play_services_base_version"
 
     // jetpack compose
-    implementation "androidx.activity:activity-compose:1.3.1"
-    implementation "androidx.compose.material:material:1.0.2"
-    implementation "androidx.compose.animation:animation:1.0.2"
-    implementation "androidx.compose.ui:ui-tooling:1.0.2"
+    implementation "androidx.activity:activity-compose:$activity_compose"
+    implementation "androidx.compose.material:material:$compose_version"
+    implementation "androidx.compose.animation:animation:$compose_version"
+    implementation "androidx.compose.ui:ui-tooling:$compose_version"
     // compose theme compatibility
-    implementation "com.google.accompanist:accompanist-appcompat-theme:0.18.0"
-    implementation "com.google.accompanist:accompanist-coil:0.15.0"
+    implementation "com.google.accompanist:accompanist-appcompat-theme:$accompanist_appcompat_theme"
+    implementation "com.google.accompanist:accompanist-coil:$accompanist_coil"
 
     implementation "androidx.preference:preference-ktx:1.1.1"
     implementation "androidx.startup:startup-runtime:$startup_version"
