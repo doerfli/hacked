@@ -89,7 +89,7 @@ public class FirebaseMessagagingService extends FirebaseMessagingService {
                         getApplicationContext(),
                         0,
                         showBreachDetails,
-                        PendingIntent.FLAG_ONE_SHOT
+                        PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_ONE_SHOT
                 );
         mBuilder.setContentIntent(resultPendingIntent);
 

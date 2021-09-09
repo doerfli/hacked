@@ -162,7 +162,7 @@ class HIBPAccountResponseWorker(private val context: Context, workerParams: Work
                 context,
                 0,
                 showBreachDetails,
-                PendingIntent.FLAG_ONE_SHOT
+                PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_ONE_SHOT
         )
         mBuilder.setContentIntent(resultPendingIntent)
         val notification = mBuilder.build()
