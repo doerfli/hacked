@@ -89,8 +89,6 @@ class AccountDetailsFragment : Fragment() {
         textOne.movementMethod = LinkMovementMethod.getInstance()
         textOne.text = Html.fromHtml(text)
 
-        // TODO reenable this
-//        HibpInfo.prepare(context, view.findViewById(R.id.hibp_info), breachesListView)
         return rootView
     }
 
