@@ -100,7 +100,7 @@ dependencies {
 
     implementation "joda-time:joda-time:$jodatime_version"
     implementation 'commons-codec:commons-codec:1.15'
-    implementation 'com.google.code.gson:gson:2.8.7'
+    implementation "com.google.code.gson:gson:$gson_version"
     implementation "com.squareup.picasso:picasso:$picasso_version"
 
     implementation "com.github.kittinunf.fuel:fuel:$fuel_version"
