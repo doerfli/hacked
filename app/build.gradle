@@ -47,6 +47,9 @@ android {
     sourceSets {
         main.java.srcDirs += 'src/main/kotlin'
     }
+    composeOptions {
+        kotlinCompilerExtensionVersion = compose_version
+    }
 }
 
 dependencies {
@@ -71,6 +74,7 @@ dependencies {
     implementation "com.google.android.gms:play-services-base:$play_services_base_version"
 
     // jetpack compose
+    implementation("androidx.compose.compiler:compiler:$compose_version")
     implementation "androidx.activity:activity-compose:$activity_compose"
     implementation "androidx.compose.material:material:$compose_version"
     implementation "androidx.compose.animation:animation:$compose_version"
@@ -100,7 +104,7 @@ dependencies {
 
     implementation "joda-time:joda-time:$jodatime_version"
     implementation 'commons-codec:commons-codec:1.15'
-    implementation 'com.google.code.gson:gson:2.8.7'
+    implementation "com.google.code.gson:gson:$gson_version"
     implementation "com.squareup.picasso:picasso:$picasso_version"
 
     implementation "com.github.kittinunf.fuel:fuel:$fuel_version"
