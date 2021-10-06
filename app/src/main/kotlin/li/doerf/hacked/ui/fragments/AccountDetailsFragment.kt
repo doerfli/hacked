@@ -134,9 +134,9 @@ class AccountDetailsFragment : Fragment() {
     @Composable
     private fun BreachRow(breach: Breach) {
         val statusColor = if (!breach.acknowledged) {
-            context!!.resources.getColor(R.color.account_status_breached)
+            requireContext().resources.getColor(R.color.account_status_breached)
         } else {
-            context!!.resources.getColor(R.color.account_status_only_acknowledged)
+            requireContext().resources.getColor(R.color.account_status_only_acknowledged)
         }
 
         Row(
@@ -154,7 +154,7 @@ class AccountDetailsFragment : Fragment() {
             )
             BreachUi(
                 breach,
-                context!!
+                requireContext()
             ) { id ->
                 handleAcknowledgeClicked(id)
             }
@@ -223,8 +223,8 @@ class AccountDetailsFragment : Fragment() {
                 setBreachAcknowledged(breach)
                 updateAccountIsHacked(breach.account)
                 withContext(Dispatchers.Main) {
-                    Snackbar.make(rootView, context!!.getString(R.string.breach_acknowledged), Snackbar.LENGTH_SHORT).show()
-                    RatingHelper(activity!!).setRatingCounterBelowthreshold()
+                    Snackbar.make(rootView, requireContext().getString(R.string.breach_acknowledged), Snackbar.LENGTH_SHORT).show()
+                    RatingHelper(requireActivity()).setRatingCounterBelowthreshold()
                 }
             } else {
                 Log.w(LOGTAG, "no breach found with id $breachId")

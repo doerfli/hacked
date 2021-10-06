@@ -21,6 +21,8 @@ public class BreachedSite {
     private Long breachDate;
     @ColumnInfo(name = "added_date")
     private Long addedDate;
+    @ColumnInfo(name = "modified_date")
+    private Long modifiedDate;
     @ColumnInfo(name = "pwn_count")
     private Long pwnCount;
     @ColumnInfo(name = "description")
@@ -88,6 +90,14 @@ public class BreachedSite {
 
     public void setAddedDate(Long addedDate) {
         this.addedDate = addedDate;
+    }
+
+    public Long getModifiedDate() {
+        return modifiedDate;
+    }
+
+    public void setModifiedDate(Long modifiedDate) {
+        this.modifiedDate = modifiedDate;
     }
 
     public Long getPwnCount() {
@@ -188,4 +198,5 @@ public class BreachedSite {
     public void setLogoPath(String logoPath) {
         this.logoPath = logoPath;
     }
+
 }

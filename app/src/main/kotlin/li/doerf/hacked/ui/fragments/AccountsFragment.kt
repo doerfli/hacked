@@ -95,7 +95,7 @@ class AccountsFragment : Fragment() {
         val addButton = fragmentRootView.findViewById<Button>(R.id.add)
         addButton.setOnClickListener {
             val accountName = accountEditText.text
-            AccountService(activity!!.application).addAccount(accountName.toString())
+            AccountService(requireActivity().application).addAccount(accountName.toString())
             hideSectionAndKeyboard(fragmentRootView)
             hibpInfo.visibility = View.VISIBLE
         }
@@ -117,16 +117,16 @@ class AccountsFragment : Fragment() {
 
     private fun hideSectionAndKeyboard(fragmentRootView: View) {
         groupAddAccount.visibility = View.GONE
-        val imm = context!!.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        val imm = requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         imm.hideSoftInputFromWindow(fragmentRootView.windowToken, 0)
     }
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        accountsAdapter = AccountsAdapter(activity!!.applicationContext, ArrayList())
+        accountsAdapter = AccountsAdapter(requireActivity().applicationContext, ArrayList())
         val accountsViewModel: AccountViewModel by viewModels()
         accountsViewModel.accountList.observe(this, Observer { accounts: List<Account> -> accountsAdapter.addItems(accounts) })
-        navEvents = (activity!!.applicationContext as HackedApplication).navEvents
+        navEvents = (requireActivity().applicationContext as HackedApplication).navEvents
     }
 
     override fun onCreateOptionsMenu(menu: Menu, menuInflater: MenuInflater) {
@@ -142,7 +142,7 @@ class AccountsFragment : Fragment() {
             R.id.action_refresh -> {
                 val checker = OneTimeWorkRequest.Builder(HIBPAccountCheckerWorker::class.java)
                         .build()
-                WorkManager.getInstance(context!!).enqueue(checker)
+                WorkManager.getInstance(requireContext()).enqueue(checker)
                 Snackbar.make(fragmentRootView, getString(R.string.snackbar_checking_account), Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show()
                 true

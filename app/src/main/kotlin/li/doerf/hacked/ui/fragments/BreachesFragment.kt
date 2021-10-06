@@ -40,7 +40,7 @@ class BreachesFragment : Fragment() {
         }
 
         val breachedSites: RecyclerView = fragmentRootView.findViewById(R.id.breached_sites_list)
-        breachedSites.setHasFixedSize(true)
+//        breachedSites.setHasFixedSize(true)
         val lmbs = LinearLayoutManager(context)
         breachedSites.layoutManager = lmbs
         breachedSites.adapter = breachedSitesAdapter

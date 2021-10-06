@@ -21,6 +21,8 @@ public class Breach {
     private Long breachDate;
     @ColumnInfo(name = "added_date")
     private Long addedDate;
+    @ColumnInfo(name = "modified_date")
+    private Long modifiedDate;
     @ColumnInfo(name = "pwn_count")
     private Long pwnCount;
     @ColumnInfo(name = "description")
@@ -41,6 +43,8 @@ public class Breach {
     private Boolean isSpamList;
     @ColumnInfo(name = "logo_path")
     private String logoPath;
+    @ColumnInfo(name = "last_checked")
+    private Long lastChecked;
 
     public Long getId() {
         return id;
@@ -96,6 +100,14 @@ public class Breach {
 
     public void setAddedDate(Long addedDate) {
         this.addedDate = addedDate;
+    }
+
+    public Long getModifiedDate() {
+        return modifiedDate;
+    }
+
+    public void setModifiedDate(Long modifiedDate) {
+        this.modifiedDate = modifiedDate;
     }
 
     public Long getPwnCount() {
@@ -195,5 +207,13 @@ public class Breach {
 
     public void setLogoPath(String logoPath) {
         this.logoPath = logoPath;
+    }
+
+    public Long getLastChecked() {
+        return lastChecked;
+    }
+
+    public void setLastChecked(Long lastCheckDate) {
+        this.lastChecked = lastCheckDate;
     }
 }

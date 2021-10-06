@@ -87,6 +87,7 @@ class BreachedSitesWorker(private val context: Context, params: WorkerParameters
                     site.title = newSite.title
                     site.domain = newSite.domain
                     site.addedDate = newSite.addedDate
+                    site.modifiedDate = newSite.modifiedDate
                     site.breachDate = newSite.breachDate
                     site.pwnCount = newSite.pwnCount
                     site.description = newSite.description
@@ -127,6 +128,7 @@ class BreachedSitesWorker(private val context: Context, params: WorkerParameters
         try {
             site.breachDate = date.parse(ba.breachDate).time
             site.addedDate = datetime.parse(ba.addedDate).time
+            site.modifiedDate = datetime.parse(ba.modifiedDate).time
         } catch (e: IllegalInstantException) {
             throw IllegalArgumentException("caught IllegalInstantException - breachdate: " + ba.breachDate + " addeddate: " + ba.addedDate, e)
         } catch (e: ParseException) {

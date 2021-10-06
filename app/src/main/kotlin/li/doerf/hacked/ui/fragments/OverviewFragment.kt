@@ -37,7 +37,7 @@ class OverviewFragment : Fragment() {
     }
 
     private fun isFirstUse(): Boolean {
-        val sharedPref = activity!!.getPreferences(Context.MODE_PRIVATE)
+        val sharedPref = requireActivity().getPreferences(Context.MODE_PRIVATE)
         val firstUseSeen = sharedPref.getBoolean(PREF_KEY_FIRST_USE_SEEN, false)
         val numAccounts = AppDatabase.get(context).accountDao.all.size
         Log.d(LOGTAG, "firstUseSeen: $firstUseSeen / numAccounts: $numAccounts")
@@ -52,7 +52,7 @@ class OverviewFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         CoroutineScope(Job()).launch {
-            RatingHelper(activity!!).showRateUsDialogDelayed()
+            RatingHelper(requireActivity()).showRateUsDialogDelayed()
         }
     }
 

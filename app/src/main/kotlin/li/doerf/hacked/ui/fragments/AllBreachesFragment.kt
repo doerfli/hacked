@@ -49,7 +49,7 @@ class AllBreachesFragment : Fragment() {
         val fragmentRootView = inflater.inflate(R.layout.fragment_all_breaches, container, false)
 
         val breachedSites: RecyclerView = fragmentRootView.findViewById(R.id.breached_sites_list)
-        breachedSites.setHasFixedSize(true)
+//        breachedSites.setHasFixedSize(true)
         layoutManager = LinearLayoutManager(context)
         breachedSites.layoutManager = layoutManager
         breachedSitesAdapter = BreachedSitesAdapter(requireActivity().applicationContext, ArrayList(), false)

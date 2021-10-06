@@ -71,7 +71,7 @@ class FirstUseFragment : Fragment() {
 
     private fun addNewAccount(accountEditText: EditText, addButton: Button) {
         val accountName = accountEditText.text
-        AccountService(activity!!.application).addAccount(accountName.toString())
+        AccountService(requireActivity().application).addAccount(accountName.toString())
         accountEditText.visibility = View.GONE
         addButton.visibility = View.GONE
         Analytics.trackCustomEvent(CustomEvent.FIRST_ACCOUNT_ADDED)
@@ -80,11 +80,11 @@ class FirstUseFragment : Fragment() {
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        navEvents = (activity!!.applicationContext as HackedApplication).navEvents
+        navEvents = (requireActivity().applicationContext as HackedApplication).navEvents
     }
 
     private fun navigateToOverview() {
-        val sharedPref = activity!!.getPreferences(Context.MODE_PRIVATE)
+        val sharedPref = requireActivity().getPreferences(Context.MODE_PRIVATE)
         with (sharedPref.edit()) {
             putBoolean(OverviewFragment.PREF_KEY_FIRST_USE_SEEN, true)
             commit()

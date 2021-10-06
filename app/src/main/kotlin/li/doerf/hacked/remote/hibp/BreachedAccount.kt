@@ -9,6 +9,7 @@ data class BreachedAccount(
         var domain: String? = null,
         var breachDate: String? = null,
         var addedDate: String? = null,
+        var modifiedDate: String? = null,
         var pwnCount: Long? = null,
         var description: String? = null,
         var dataClasses: Array<String>? = null,

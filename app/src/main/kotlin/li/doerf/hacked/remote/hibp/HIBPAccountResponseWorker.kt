@@ -95,11 +95,56 @@ class HIBPAccountResponseWorker(private val context: Context, workerParams: Work
         val existing = myBreachDao.findByAccountAndName(account.id, breachName)
         if (existing != null) {
             Log.d(TAG, "breach already existing: $breachName")
+            updateBreachedAccount(existing)
             return false
         }
+
         val ba = getBreachedAccount(breachName)
                 ?: return false // request not successful
 
+        addNewBreachedAccount(ba, account)
+        return true
+    }
+
+    private suspend fun updateBreachedAccount(existing: Breach) {
+        val lastCheckedDate = DateTime(existing.lastChecked)
+
+        if (lastCheckedDate.isAfter(DateTime.now().minusWeeks(2))) {
+            Log.d(TAG, "last check within last 14 days");
+            return
+        }
+
+        val ba = getBreachedAccount(existing.name)
+                ?: return // request not successful
+
+        if (existing.modifiedDate == DateTime.parse(ba.modifiedDate).millis) {
+            // no update to data
+            existing.lastChecked = DateTime.now().millis
+            myBreachDao.update(existing)
+            Log.i(TAG, "existing breach last checked timestamp updated in db: ${existing.name}")
+            return
+        }
+
+        existing.title = ba.title
+        existing.domain = ba.domain
+        existing.breachDate = DateTime.parse(ba.breachDate).millis
+        existing.modifiedDate = DateTime.parse(ba.modifiedDate).millis
+        existing.pwnCount = ba.pwnCount
+        existing.description = ba.description
+        existing.dataClasses = if (ba.dataClasses != null) StringHelper.join(ba.dataClasses, ", ") else ""
+        existing.verified = ba.isVerified
+        existing.fabricated = ba.isFabricated
+        existing.retired = ba.isRetired
+        existing.sensitive = ba.isSensitive
+        existing.spamList = ba.IsSpamList
+        existing.logoPath = ba.LogoPath
+        existing.acknowledged = false
+        existing.lastChecked = DateTime.now().millis
+        myBreachDao.update(existing)
+        Log.i(TAG, "existing breach updated in db: ${existing.name}")
+    }
+
+    private fun addNewBreachedAccount(ba: BreachedAccount, account: Account) {
         Log.d(TAG, "new breach: " + ba.name)
         val newBreach = Breach()
         newBreach.account = account.id
@@ -108,6 +153,7 @@ class HIBPAccountResponseWorker(private val context: Context, workerParams: Work
         newBreach.domain = ba.domain
         newBreach.breachDate = DateTime.parse(ba.breachDate).millis
         newBreach.addedDate = DateTime.parse(ba.addedDate).millis
+        newBreach.modifiedDate = DateTime.parse(ba.modifiedDate).millis
         newBreach.pwnCount = ba.pwnCount
         newBreach.description = ba.description
         newBreach.dataClasses = if (ba.dataClasses != null) StringHelper.join(ba.dataClasses, ", ") else ""
@@ -118,9 +164,9 @@ class HIBPAccountResponseWorker(private val context: Context, workerParams: Work
         newBreach.spamList = ba.IsSpamList
         newBreach.logoPath = ba.LogoPath
         newBreach.acknowledged = false
+        newBreach.lastChecked = DateTime.now().millis
         myBreachDao.insert(newBreach)
-        Log.i(TAG, "breach inserted into db")
-        return true
+        Log.i(TAG, "breach inserted into db: " + newBreach.name)
     }
 
     @Throws(IOException::class)
