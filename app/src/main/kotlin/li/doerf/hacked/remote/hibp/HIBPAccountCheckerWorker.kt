@@ -17,13 +17,11 @@ import com.github.kittinunf.fuel.coroutines.awaitByteArrayResponse
 import com.github.kittinunf.fuel.httpGet
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
-import com.google.android.gms.tasks.Task
-import com.google.android.gms.tasks.Tasks
 import com.google.firebase.crashlytics.FirebaseCrashlytics
-import com.google.firebase.messaging.FirebaseMessaging
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext
+import li.doerf.hacked.HackedApplication
 import li.doerf.hacked.R
 import li.doerf.hacked.db.AppDatabase
 import li.doerf.hacked.db.daos.AccountDao
@@ -33,7 +31,6 @@ import org.apache.commons.codec.binary.Hex
 import org.apache.commons.codec.digest.DigestUtils
 import java.io.IOException
 import java.util.*
-import java.util.concurrent.ExecutionException
 import kotlin.random.Random
 
 
@@ -68,9 +65,8 @@ class HIBPAccountCheckerWorker(private val context: Context, params: WorkerParam
         val id = inputData.getLong(KEY_ID, -1)
         updateLastCheckTimestamp = id < 0
         checkGooglePlayServicesAvailable()
-        val deviceTokenTask = FirebaseMessaging.getInstance().token
         return try {
-            check(id, getDeviceToken(deviceTokenTask))
+            check(id, (applicationContext as HackedApplication).deviceToken)
             Result.success()
         } catch (e: IOException) {
             Log.e(LOGTAG, "caught exception during check", e)
@@ -81,20 +77,6 @@ class HIBPAccountCheckerWorker(private val context: Context, params: WorkerParam
             throw e
         } finally {
             doPostCheckActions()
-        }
-    }
-
-    private fun getDeviceToken(deviceTokenTask: Task<String>): String {
-        return try {
-            Tasks.await(deviceTokenTask)
-        } catch (e: ExecutionException) {
-            Log.e(LOGTAG, "caught ExecutionException", e)
-            FirebaseCrashlytics.getInstance().recordException(e)
-            throw WorkFailedException()
-        } catch (e: InterruptedException) {
-            Log.e(LOGTAG, "caught InterruptedException", e)
-            FirebaseCrashlytics.getInstance().recordException(e)
-            throw WorkFailedException()
         }
     }
 
