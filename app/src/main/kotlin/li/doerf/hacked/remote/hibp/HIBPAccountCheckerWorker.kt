@@ -21,12 +21,12 @@ import com.google.firebase.crashlytics.FirebaseCrashlytics
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext
-import li.doerf.hacked.HackedApplication
 import li.doerf.hacked.R
 import li.doerf.hacked.db.AppDatabase
 import li.doerf.hacked.db.daos.AccountDao
 import li.doerf.hacked.db.entities.Account
 import li.doerf.hacked.ui.fragments.AccountsFragment
+import li.doerf.hacked.util.FcmTokenManager
 import org.apache.commons.codec.binary.Hex
 import org.apache.commons.codec.digest.DigestUtils
 import java.io.IOException
@@ -66,7 +66,7 @@ class HIBPAccountCheckerWorker(private val context: Context, params: WorkerParam
         updateLastCheckTimestamp = id < 0
         checkGooglePlayServicesAvailable()
         return try {
-            check(id, (applicationContext as HackedApplication).deviceToken)
+            check(id, FcmTokenManager.getDeviceToken())
             Result.success()
         } catch (e: IOException) {
             Log.e(LOGTAG, "caught exception during check", e)
