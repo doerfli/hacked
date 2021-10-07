@@ -3,6 +3,8 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="app/src/main/res/drawable/ic_add.xml" value="0.34444444444444444" />
+        <entry key="app/src/main/res/drawable/side_nav_bar.xml" value="0.34444444444444444" />
         <entry key="app/src/main/res/layout/fragment_accounts.xml" value="0.47056159420289856" />
         <entry key="app/src/main/res/layout/fragment_breaches.xml" value="0.35572916666666665" />
         <entry key="app/src/main/res/layout/hibp_info.xml" value="0.35572916666666665" />

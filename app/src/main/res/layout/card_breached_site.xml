@@ -38,7 +38,7 @@
         android:layout_height="20dp"
         app:layout_constraintBottom_toBottomOf="@id/site_name"
         app:layout_constraintEnd_toEndOf="parent"
-        android:src="@drawable/ic_drop_down"
+        android:src="@drawable/ic_arrow_drop_down"
         />
 
     <ImageView
@@ -48,7 +48,7 @@
         app:layout_constraintBottom_toBottomOf="@id/site_name"
         app:layout_constraintEnd_toEndOf="parent"
         android:visibility="gone"
-        android:src="@drawable/ic_drop_up"
+        android:src="@drawable/ic_arrow_drop_up"
         />
 
     <RelativeLayout
