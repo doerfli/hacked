@@ -22,8 +22,7 @@ import li.doerf.hacked.util.NavEvent;
 
 public class HackedApplication extends MultiDexApplication implements LifecycleObserver, DefaultLifecycleObserver {
     private static final String TAG = "HackedApplication";
-    private static String token;
-    private PublishProcessor<NavEvent> navEvents = PublishProcessor.create();
+    private final PublishProcessor<NavEvent> navEvents = PublishProcessor.create();
 
     @Override
     public void onCreate() {
