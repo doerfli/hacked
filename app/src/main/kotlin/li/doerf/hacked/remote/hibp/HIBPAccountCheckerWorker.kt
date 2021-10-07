@@ -66,7 +66,7 @@ class HIBPAccountCheckerWorker(private val context: Context, params: WorkerParam
         updateLastCheckTimestamp = id < 0
         checkGooglePlayServicesAvailable()
         return try {
-            check(id, FcmTokenManager.getDeviceToken())
+            check(id, FcmTokenManager.getDeviceToken(context))
             Result.success()
         } catch (e: IOException) {
             Log.e(LOGTAG, "caught exception during check", e)
