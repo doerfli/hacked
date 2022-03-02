@@ -39,7 +39,7 @@ class RateUsDialogFragment() : DialogFragment() {
     }
 
     private fun handleClickNeutral() {
-        val settings = PreferenceManager.getDefaultSharedPreferences(context)
+        val settings = PreferenceManager.getDefaultSharedPreferences(requireContext())
         val editor = settings.edit()
         editor.putInt(RatingHelper.PREF_KEY_RATING_COUNTER, 0)
         editor.apply()
@@ -48,7 +48,7 @@ class RateUsDialogFragment() : DialogFragment() {
     }
 
     private fun handleClickNegative() {
-        val settings = PreferenceManager.getDefaultSharedPreferences(context)
+        val settings = PreferenceManager.getDefaultSharedPreferences(requireContext())
         val editor = settings.edit()
         editor.putBoolean(RatingHelper.PREF_KEY_RATING_NEVER, true)
         editor.apply()
