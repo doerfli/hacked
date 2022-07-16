@@ -55,7 +55,7 @@ class PwnedPasswordFragment : Fragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
+                              savedInstanceState: Bundle?): View {
         // Inflate the layout for this fragment
         fragmentRootView = inflater.inflate(R.layout.fragment_pwned_password, container, false)
 
