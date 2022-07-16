@@ -65,6 +65,9 @@ class PwnedPassword(private val broadcastManager: LocalBroadcastManager) {
     private fun processResult(result: String, pwdHashHead: String, pwdHash: String): Int {
         var pwnedCount = -1
         result.split("\r\n").forEach { line ->
+            if (!line.contains(":")) {
+                return@forEach
+            }
             val (e, numPwns, _) = line.split(":")
             val hash = "$pwdHashHead$e"
             Log.d(TAG, "$hash   $numPwns")
