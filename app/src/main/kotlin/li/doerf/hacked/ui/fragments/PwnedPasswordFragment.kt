@@ -70,6 +70,8 @@ class PwnedPasswordFragment : Fragment() {
 
         passwordField.doAfterTextChanged { action ->
             pwnedButton.isEnabled = action.toString().isNotEmpty()
+            passwordOk.visibility = View.GONE
+            passwordPwned.visibility = View.GONE
         }
 
         if (isFullFragment) {
