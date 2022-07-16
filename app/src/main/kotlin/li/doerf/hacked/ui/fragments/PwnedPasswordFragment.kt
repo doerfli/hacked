@@ -7,6 +7,7 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.os.Bundle
 import android.util.Log
+import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -73,7 +74,15 @@ class PwnedPasswordFragment : Fragment() {
             passwordOk.visibility = View.GONE
             passwordPwned.visibility = View.GONE
         }
-
+        passwordField.setOnKeyListener { _, kCode, evt ->
+            when {
+                ((kCode == KeyEvent.KEYCODE_ENTER) && (evt.action == KeyEvent.ACTION_DOWN)) -> {
+                    checkPassword(passwordField.text.toString())
+                    return@setOnKeyListener true
+                }
+                else -> false
+            }
+        }
         if (isFullFragment) {
             fragmentRootView.findViewById<TextView>(R.id.title_pwned_passwords).visibility = View.GONE
         }
