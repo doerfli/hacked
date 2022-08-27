@@ -129,7 +129,7 @@ class HIBPAccountCheckerWorker(private val context: Context, params: WorkerParam
     private suspend fun sendSearch(name: String, deviceToken: String) {
         Log.d(LOGTAG, "sending search request for account: $name")
 
-        val url = "https://hibp-proxy.herokuapp.com/search"
+        val url = "https://hibp-proxy.bytes.li/search"
         val now = System.currentTimeMillis()
         val reqToken = String(Hex.encodeHex(DigestUtils.sha1("${name}-${now}-${deviceToken}}"))).toUpperCase(Locale.getDefault())
         val (_, res, _) = url
