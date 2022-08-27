@@ -48,7 +48,7 @@ android {
         main.java.srcDirs += 'src/main/kotlin'
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = compose_version
+        kotlinCompilerExtensionVersion = compose_compiler_version
     }
 }
 
@@ -74,7 +74,7 @@ dependencies {
     implementation "com.google.android.gms:play-services-base:$play_services_base_version"
 
     // jetpack compose
-    implementation("androidx.compose.compiler:compiler:$compose_version")
+    implementation("androidx.compose.compiler:compiler:$compose_compiler_version")
     implementation "androidx.activity:activity-compose:$activity_compose"
     implementation "androidx.compose.material:material:$compose_version"
     implementation "androidx.compose.animation:animation:$compose_version"
