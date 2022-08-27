@@ -74,6 +74,9 @@ class PwnedPassword(private val broadcastManager: LocalBroadcastManager) {
             if (pwdHash != hash) {
                 return@forEach
             }
+            if (numPwns.contains(',')) {
+                numPwns.replace(",", "")
+            }
             pwnedCount = Integer.parseInt(numPwns)
         }
         return pwnedCount
