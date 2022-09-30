@@ -96,7 +96,7 @@
     <string name="action_sort_dateadded">Sortieren nach Datum</string>
     <string name="action_sort_name">Sortieren nach Name</string>
     <string name="label_additional_flags">Zusätze:</string>
-    <string name="placeholder_additional_flags">Unbestaetigt, Zurueckgezogen, …</string>
+    <string name="placeholder_additional_flags">Unbestätigt, Zurückgezogen, …</string>
     <string name="fabricated">Gefälscht</string>
     <string name="retired">Zurückgezogen</string>
     <string name="sensitive">Sensibel</string>
