@@ -50,6 +50,7 @@ android {
     composeOptions {
         kotlinCompilerExtensionVersion = compose_compiler_version
     }
+    namespace 'li.doerf.hacked'
 }
 
 dependencies {
