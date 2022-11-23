@@ -12,6 +12,7 @@ import li.doerf.hacked.BuildConfig;
 import li.doerf.hacked.CustomEvent;
 import li.doerf.hacked.R;
 import li.doerf.hacked.util.Analytics;
+import li.doerf.hacked.util.FcmTokenManager;
 import li.doerf.hacked.utils.SynchronizationHelper;
 
 
@@ -33,6 +34,15 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
 
         Preference devicePreference = findPreference("device");
         devicePreference.setSummary(String.format("%s %s / API %s", Build.MANUFACTURER, Build.MODEL, Build.VERSION.SDK_INT));
+
+        Preference cleanTokenPreference = findPreference("clean_token");
+        cleanTokenPreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                FcmTokenManager.Companion.cleanToken(getContext());
+                return true;
+            }
+        });
     }
 
     @Override

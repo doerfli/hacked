@@ -31,5 +31,10 @@
             android:key="device"
             android:title="@string/device_info"
             android:summary="1.0.0 (1)"/>
+        <Preference
+            android:key="clean_token"
+            android:title="@string/clean_token"
+            android:summary="@string/clean_token_summary"
+            />
     </PreferenceCategory>
 </PreferenceScreen>

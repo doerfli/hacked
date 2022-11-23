@@ -100,4 +100,6 @@
     <string name="retired">Retraité</string>
     <string name="sensitive">Sensible</string>
     <string name="spam_list">Spamlist</string>
+    <string name="clean_token">Clean connection token</string>
+    <string name="clean_token_summary">This can help resolve connectivity issues</string>
 </resources>

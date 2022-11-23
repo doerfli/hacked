@@ -101,4 +101,6 @@
     <string name="retired">Zurückgezogen</string>
     <string name="sensitive">Sensibel</string>
     <string name="spam_list">Spamliste</string>
+    <string name="clean_token">Verbindungs Token zurücksetzen</string>
+    <string name="clean_token_summary">Dies kann helfen Verbindungsprobleme zu lösen</string>
 </resources>

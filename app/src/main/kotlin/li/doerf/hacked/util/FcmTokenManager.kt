@@ -35,8 +35,16 @@ class FcmTokenManager {
 
             val newTokenTimestamp = DateTime.now().millis
             Log.d(TAG, "updating settings with token $newToken and timestamp $newTokenTimestamp")
-            settings.edit().putString(FCM_TOKEN, newToken).putLong(FCM_TOKEN_TIMESTAMP, newTokenTimestamp).commit()
+            settings.edit().putString(FCM_TOKEN, newToken).putLong(FCM_TOKEN_TIMESTAMP, newTokenTimestamp).apply()
             return newToken
+        }
+
+        fun cleanToken(context: Context) {
+            val settings = PreferenceManager.getDefaultSharedPreferences(context)
+            val token = settings.getString(FCM_TOKEN, null)
+            if (token != null) {
+                settings.edit().remove(FCM_TOKEN).remove(FCM_TOKEN_TIMESTAMP).apply()
+            }
         }
     }
 
