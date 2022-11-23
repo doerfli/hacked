@@ -20,7 +20,7 @@ class FcmTokenManager {
             val token = settings.getString(FCM_TOKEN, null)
             val tokenTimestamp = settings.getLong(FCM_TOKEN_TIMESTAMP, 0)
 
-            if (token != null && tokenTimestamp > 0 && (DateTime.now().minusDays(28).millis < tokenTimestamp)) {
+            if (token != null && tokenTimestamp > 0 && (DateTime.now().minusDays(7).millis < tokenTimestamp)) {
                 Log.d(TAG, "already got token:  $token")
                 return token
             }
