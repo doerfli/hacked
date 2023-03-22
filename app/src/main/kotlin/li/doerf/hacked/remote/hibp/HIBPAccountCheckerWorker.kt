@@ -93,7 +93,6 @@ class HIBPAccountCheckerWorker(private val context: Context, params: WorkerParam
         }
     }
 
-    @Synchronized
     @Throws(IOException::class)
     private suspend fun check(id: Long, device_token: String) {
         Log.d(LOGTAG, "starting check for breaches")

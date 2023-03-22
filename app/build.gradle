@@ -6,7 +6,7 @@ apply plugin: "androidx.navigation.safeargs"
 
 android {
     compileSdkVersion 33
-    buildToolsVersion '33.0.0'
+    buildToolsVersion '33.0.2'
 
     defaultConfig {
         applicationId "li.doerf.hacked"
@@ -113,9 +113,9 @@ dependencies {
     implementation "com.github.kittinunf.fuel:fuel-jackson:$fuel_version"
     implementation "com.fasterxml.jackson.module:jackson-module-kotlin:$jackson_version"
 
-    androidTestImplementation 'androidx.test:runner:1.5.0'
+    androidTestImplementation 'androidx.test:runner:1.5.2'
     androidTestImplementation 'androidx.test:rules:1.5.0'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.0'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
 
     androidTestImplementation "androidx.work:work-testing:$work_version"
 }
