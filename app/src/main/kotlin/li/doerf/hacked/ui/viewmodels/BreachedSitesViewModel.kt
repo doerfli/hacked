@@ -4,7 +4,7 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Transformations
+import androidx.lifecycle.switchMap
 import li.doerf.hacked.db.AppDatabase
 import li.doerf.hacked.db.daos.BreachedSiteDao
 import li.doerf.hacked.db.entities.BreachedSite
@@ -50,8 +50,7 @@ class BreachedSitesViewModel(application: Application) : AndroidViewModel(applic
     }
 
     init {
-        myBreachedSites = Transformations.switchMap(filterLiveData
-        ) { (o: Order, filter: String) ->
+        myBreachedSites = filterLiveData.switchMap { (o: Order, filter: String) ->
             when(o) {
                 Order.NAME -> {
                     if (filter.trim { it <= ' ' } == "") {
