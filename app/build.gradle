@@ -5,8 +5,8 @@ apply plugin: 'com.google.firebase.crashlytics'
 apply plugin: "androidx.navigation.safeargs"
 
 android {
-    compileSdkVersion 33
-    buildToolsVersion '33.0.2'
+    compileSdk 34
+    buildToolsVersion = '34.0.0'
 
     defaultConfig {
         applicationId "li.doerf.hacked"
