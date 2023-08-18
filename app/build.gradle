@@ -11,7 +11,7 @@ android {
     defaultConfig {
         applicationId "li.doerf.hacked"
         minSdkVersion 21
-        targetSdkVersion 33
+        targetSdkVersion 34
         versionCode 115
         versionName "3.7.5"
         multiDexEnabled true
