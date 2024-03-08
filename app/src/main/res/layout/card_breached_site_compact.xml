@@ -15,7 +15,6 @@
         android:layout_height="wrap_content"
         android:text="@string/site_name"
         android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
-        android:textColor="@android:color/black"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         />
