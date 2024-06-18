@@ -154,7 +154,7 @@ class HIBPAccountCheckerWorker(private val context: Context, params: WorkerParam
         }
     }
 
-    private fun getVersion(context: Context): String {
+    private fun getVersion(context: Context): String? {
         try {
             val pInfo: PackageInfo = context.packageManager.getPackageInfo(context.packageName, 0)
             return pInfo.versionName
