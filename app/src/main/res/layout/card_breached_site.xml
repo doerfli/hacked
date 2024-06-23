@@ -15,7 +15,6 @@
         android:layout_height="wrap_content"
         android:text="@string/site_name"
         android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
-        android:textColor="@android:color/black"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         />
@@ -71,10 +70,9 @@
             android:id="@+id/domain"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/placeholder_domain"
             android:layout_toRightOf="@id/label_domain"
-            android:textColor="@android:color/black"
-            />
+            android:text="@string/placeholder_domain"
+            android:textColor="@color/textHighEmphasis" />
 
         <TextView
             android:id="@+id/label_breach_date"
@@ -89,11 +87,10 @@
             android:id="@+id/breach_date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/placeholder_date"
-            android:textColor="@android:color/black"
             android:layout_below="@+id/domain"
             android:layout_toRightOf="@id/label_breach_date"
-            />
+            android:text="@string/placeholder_date"
+            android:textColor="@color/textHighEmphasis" />
 
         <ImageView
             android:id="@+id/logo"
@@ -135,7 +132,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/placeholder_additional_flags"
-            android:textColor="@android:color/black"
+            android:textColor="@color/textHighEmphasis"
             android:layout_below="@+id/compromised_data"
             android:layout_toRightOf="@id/label_additional_flags"
             />
@@ -146,7 +143,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/placeholder_description"
-            android:textColor="@android:color/black"
+            android:textColor="@color/textHighEmphasis"
             android:layout_below="@+id/additional_flags"
             />
     </RelativeLayout>

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="green">#00CD00</color>
+    <color name="hibp_info_bg_light">#EE000000</color>
+    <color name="hibp_info_bg">#E8A5A5A5</color>
+    <color name="textHighEmphasis">#FFFFFF</color>
+    <color name="textMediumEmphasis">#99DDDDDD</color>
+    <color name="textDisabledEmphasis">#999F9F9F</color>
+    <color name="selectedCard">#222222</color>
+    <color name="detailsBackground">#000000</color>
+</resources>

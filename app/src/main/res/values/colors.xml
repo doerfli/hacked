@@ -16,4 +16,5 @@
     <color name="textDisabledEmphasis">#60000000</color>
     <color name="background_between_cards">#ccc</color>
     <color name="selectedCard">#dddddd</color>
+    <color name="detailsBackground">#FFFFFF</color>
 </resources>

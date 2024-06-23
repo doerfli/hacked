@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.RelativeLayout
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.Picasso
 import io.reactivex.processors.PublishProcessor
@@ -64,13 +65,13 @@ class BreachedSitesAdapter(
         val arrowDown = siteCard.findViewById<ImageView>(R.id.arrow_down)
         val arrowUp = siteCard.findViewById<ImageView>(R.id.arrow_up)
 
-        if (! site.detailsVisible) {
-            siteCard.setBackgroundColor(context.resources.getColor(android.R.color.white))
+        if (!site.detailsVisible) {
+            siteCard.setBackgroundColor(ContextCompat.getColor(context, R.color.detailsBackground))
             details.visibility = View.GONE
             arrowDown.visibility = View.VISIBLE
             arrowUp.visibility = View.GONE
         } else {
-            siteCard.setBackgroundColor(context.resources.getColor(R.color.selectedCard))
+            siteCard.setBackgroundColor(ContextCompat.getColor(context, R.color.selectedCard))
             details.visibility = View.VISIBLE
             arrowDown.visibility = View.GONE
             arrowUp.visibility = View.VISIBLE
