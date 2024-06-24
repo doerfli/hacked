@@ -12,8 +12,8 @@ android {
         applicationId "li.doerf.hacked"
         minSdkVersion 23
         targetSdkVersion 34
-        versionCode 117
-        versionName "3.7.7"
+        versionCode 118
+        versionName "3.7.8"
         multiDexEnabled true
         javaCompileOptions {
             annotationProcessorOptions {
@@ -70,8 +70,8 @@ dependencies {
     implementation "androidx.constraintlayout:constraintlayout:$constraintlayout_version"
     implementation "androidx.navigation:navigation-fragment-ktx:$nav_version"
     implementation "androidx.navigation:navigation-ui-ktx:$nav_version"
-    implementation "com.google.android.play:core:$play_core_version"
-    implementation "com.google.android.play:core-ktx:$play_core_ktx_version"
+    implementation "com.google.android.play:review:$play_review_version"
+    implementation "com.google.android.play:review-ktx:$play_review_version"
     implementation "com.google.android.gms:play-services-base:$play_services_base_version"
 
     // jetpack compose
