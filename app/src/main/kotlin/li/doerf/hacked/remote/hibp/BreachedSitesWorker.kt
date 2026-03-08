@@ -12,7 +12,7 @@ import androidx.preference.PreferenceManager
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 import com.fasterxml.jackson.databind.DeserializationFeature
-import com.fasterxml.jackson.databind.PropertyNamingStrategy
+import com.fasterxml.jackson.databind.PropertyNamingStrategies
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
 import com.github.kittinunf.fuel.core.ResponseDeserializable
@@ -152,7 +152,7 @@ object BreachedAccountListDeserializer : ResponseDeserializable<Collection<Breac
     override fun deserialize(content: String) = run {
         Log.d("BreachedAccountListDese", content)
         val mapper = jacksonObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
-        mapper.propertyNamingStrategy = PropertyNamingStrategy.UPPER_CAMEL_CASE
+        mapper.propertyNamingStrategy = PropertyNamingStrategies.UPPER_CAMEL_CASE
         mapper.readValue<Collection<BreachedAccount>>(content)
     }
 }
