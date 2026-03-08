@@ -10,6 +10,7 @@ import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
 import android.widget.Toast.makeText
+import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.navigation.NavController
@@ -31,6 +32,7 @@ class NavActivity : AppCompatActivity() {
     lateinit var navEvents: PublishProcessor<NavEvent>
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        enableEdgeToEdge()
         super.onCreate(savedInstanceState)
         navEvents = (applicationContext as HackedApplication).navEvents
         setContentView(R.layout.activity_nav)
