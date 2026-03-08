@@ -14,7 +14,7 @@ import kotlinx.coroutines.launch
 import li.doerf.hacked.util.logException
 import org.apache.commons.codec.binary.Hex
 import org.apache.commons.codec.digest.DigestUtils
-import java.util.*
+import java.util.Locale
 
 class PwnedPassword(private val broadcastManager: LocalBroadcastManager) {
 
@@ -40,7 +40,7 @@ class PwnedPassword(private val broadcastManager: LocalBroadcastManager) {
     }
 
     private suspend fun checkPassword(password: String) {
-        val pwdHash = String(Hex.encodeHex(DigestUtils.sha1(password))).toUpperCase(Locale.getDefault())
+        val pwdHash = String(Hex.encodeHex(DigestUtils.sha1(password))).uppercase(Locale.getDefault())
         val pwdHashHead = pwdHash.substring(0, 5)
 
         Log.d(TAG, "checking password: ")

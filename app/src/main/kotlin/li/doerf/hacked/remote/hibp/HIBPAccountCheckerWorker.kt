@@ -30,7 +30,7 @@ import li.doerf.hacked.util.FcmTokenManager
 import org.apache.commons.codec.binary.Hex
 import org.apache.commons.codec.digest.DigestUtils
 import java.io.IOException
-import java.util.*
+import java.util.Locale
 import kotlin.random.Random
 
 
@@ -130,7 +130,7 @@ class HIBPAccountCheckerWorker(private val context: Context, params: WorkerParam
 
         val url = "https://hibp-proxy.bytes.li/search"
         val now = System.currentTimeMillis()
-        val reqToken = String(Hex.encodeHex(DigestUtils.sha1("${name}-${now}-${deviceToken}}"))).toUpperCase(Locale.getDefault())
+        val reqToken = String(Hex.encodeHex(DigestUtils.sha1("${name}-${now}-${deviceToken}}"))).uppercase(Locale.getDefault())
         val (_, res, _) = url
                 .httpGet(listOf("account" to name, "device_token" to deviceToken))
                 .header(mapOf("x-hacked-requestToken" to reqToken, "x-hacked-now" to now, "user-agent" to "Hacked android app: ${getVersion(context)}"))

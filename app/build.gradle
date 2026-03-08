@@ -3,6 +3,7 @@ apply plugin: 'kotlin-android'
 apply plugin: 'com.google.gms.google-services'
 apply plugin: 'com.google.firebase.crashlytics'
 apply plugin: "androidx.navigation.safeargs"
+apply plugin: 'org.jetbrains.kotlin.plugin.compose'
 
 android {
     compileSdk 35
@@ -13,7 +14,7 @@ android {
         minSdkVersion 23
         targetSdkVersion 34
         versionCode 118
-        versionName "3.7.8"
+        versionName "3.8.0"
         multiDexEnabled true
         javaCompileOptions {
             annotationProcessorOptions {
@@ -30,12 +31,12 @@ android {
         }
         release {
             minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
     buildFeatures {
         viewBinding true
         compose true
+        buildConfig true
     }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
@@ -46,9 +47,6 @@ android {
     }
     sourceSets {
         main.java.srcDirs += 'src/main/kotlin'
-    }
-    composeOptions {
-        kotlinCompilerExtensionVersion = compose_compiler_version
     }
     namespace 'li.doerf.hacked'
 }
