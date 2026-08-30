@@ -6,13 +6,13 @@ apply plugin: "androidx.navigation.safeargs"
 apply plugin: 'org.jetbrains.kotlin.plugin.compose'
 
 android {
-    compileSdk 36
-    buildToolsVersion = '36.1.0'
+    compileSdk 37
+    buildToolsVersion = '37.0.0'
 
     defaultConfig {
         applicationId "li.doerf.hacked"
         minSdk 23
-        targetSdk 36
+        targetSdk 37
         versionCode 120
         versionName "3.8.1"
         multiDexEnabled true
