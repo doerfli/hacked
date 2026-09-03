@@ -1,31 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- "Receding" — solid password dots, each smaller than the last, with the
-     smallest broken away from the group and in the accent colour: the
-     password isn't damaged, it's slipping out of the field. -->
+<!-- "Receding" — password asterisks intact but each smaller than the last,
+     the smallest in accent colour: the password isn't broken, it's
+     slipping away. Bolder proportions than the first pass (arm length
+     kept well above stroke width so it reads as a star, not a flower),
+     centred with margin inside the safe zone, no underline. -->
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
     android:width="108dp"
     android:height="108dp"
     android:viewportWidth="108"
     android:viewportHeight="108">
 
-    <path
-        android:pathData="M20,62 L72,62 A2,2 0 0,1 72,66 L20,66 A2,2 0 0,1 20,62 Z"
-        android:fillColor="#EEF2F4"
-        android:fillAlpha="0.5" />
+    <group android:translateX="37" android:translateY="54">
+        <path
+            android:pathData="M0,-8 L0,8 M-7.5,-4 L7.5,4 M7.5,-4 L-7.5,4"
+            android:strokeColor="#EEF2F4"
+            android:strokeWidth="3.5"
+            android:strokeLineCap="round" />
+    </group>
 
-    <path
-        android:pathData="M18,46 a9,9 0 1,0 18,0 a9,9 0 1,0 -18,0"
-        android:fillColor="#EEF2F4" />
+    <group android:translateX="53" android:translateY="54">
+        <path
+            android:pathData="M0,-6 L0,6 M-5.63,-3 L5.63,3 M5.63,-3 L-5.63,3"
+            android:strokeColor="#EEF2F4"
+            android:strokeWidth="2.6"
+            android:strokeLineCap="round" />
+    </group>
 
-    <path
-        android:pathData="M40,46 a8,8 0 1,0 16,0 a8,8 0 1,0 -16,0"
-        android:fillColor="#EEF2F4" />
+    <group android:translateX="66" android:translateY="54">
+        <path
+            android:pathData="M0,-5 L0,5 M-4.69,-2.5 L4.69,2.5 M4.69,-2.5 L-4.69,2.5"
+            android:strokeColor="#EEF2F4"
+            android:strokeWidth="2.2"
+            android:strokeLineCap="round" />
+    </group>
 
-    <path
-        android:pathData="M60,46 a6,6 0 1,0 12,0 a6,6 0 1,0 -12,0"
-        android:fillColor="#EEF2F4" />
-
-    <path
-        android:pathData="M80,48 a4,4 0 1,0 8,0 a4,4 0 1,0 -8,0"
-        android:fillColor="#FF7A4D" />
+    <group android:translateX="76.5" android:translateY="54">
+        <path
+            android:pathData="M0,-3.5 L0,3.5 M-3.28,-1.75 L3.28,1.75 M3.28,-1.75 L-3.28,1.75"
+            android:strokeColor="#FF7A4D"
+            android:strokeWidth="1.5"
+            android:strokeLineCap="round" />
+    </group>
 </vector>
