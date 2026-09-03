@@ -34,6 +34,11 @@
     <string name="pref_key_sync_via_cellular">SYNC_VIA_CELLULAR</string>
     <string name="pref_title_sync_via_cellular">Check when not connected to Wifi</string>
     <string name="pref_summary_sync_via_cellular">App will use mobile data connection when no Wifi is available (this might incur additional costs on your phone bill)</string>
+    <string name="pref_title_appearance">Appearance</string>
+    <string name="pref_key_theme_mode">PREF_KEY_THEME_MODE</string>
+    <string name="pref_title_theme_mode">Theme</string>
+    <string name="pref_summary_theme_mode">Choose light, dark, or follow the system setting</string>
+    <string name="pref_theme_mode_default">system</string>
     <string name="title_settings">Settings</string>
     <string name="PREF_KEY_LAST_SYNC_TIMESTAMP">LAST_SYNC_TIMESTAMP</string>
     <string name="toast_error_error_during_check">The server could not be contacted - Please try again later</string>

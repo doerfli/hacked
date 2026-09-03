@@ -34,6 +34,11 @@
     <string name="pref_key_sync_via_cellular">SYNC_VIA_CELLULAR</string>
     <string name="pref_title_sync_via_cellular">Utilisé les données mobiles</string>
     <string name="pref_summary_sync_via_cellular">L\'application utilisera les réseaux de données cellulaires lorsqu\'aucun réseau Wifi n\'est disponible (cela peut entraîner des coûts supplémentaires sur votre facture téléphonique)</string>
+    <string name="pref_title_appearance">Apparence</string>
+    <string name="pref_key_theme_mode">PREF_KEY_THEME_MODE</string>
+    <string name="pref_title_theme_mode">Thème</string>
+    <string name="pref_summary_theme_mode">Clair, sombre, ou suivre le système</string>
+    <string name="pref_theme_mode_default">system</string>
     <string name="title_settings">Paramètres</string>
     <string name="PREF_KEY_LAST_SYNC_TIMESTAMP">LAST_SYNC_TIMESTAMP</string>
     <string name="toast_error_error_during_check">Le serveur n\'a pas pu être contacté - Veuillez réessayer ultérieurement</string>

@@ -37,4 +37,17 @@
             android:summary="@string/clean_token_summary"
             />
     </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="@string/pref_title_appearance"
+        android:key="pref_key_appearance">
+        <ListPreference
+            android:key="@string/pref_key_theme_mode"
+            android:title="@string/pref_title_theme_mode"
+            android:summary="@string/pref_summary_theme_mode"
+            android:dialogTitle="@string/pref_title_theme_mode"
+            android:entries="@array/pref_theme_mode_entries"
+            android:entryValues="@array/pref_theme_mode_values"
+            android:defaultValue="@string/pref_theme_mode_default" />
+    </PreferenceCategory>
 </PreferenceScreen>

@@ -15,6 +15,7 @@ import com.google.firebase.analytics.FirebaseAnalytics;
 import io.reactivex.processors.PublishProcessor;
 import li.doerf.hacked.util.Analytics;
 import li.doerf.hacked.util.NavEvent;
+import li.doerf.hacked.util.ThemeMode;
 
 /**
  * Created by moo on 25.05.17.
@@ -27,6 +28,7 @@ public class HackedApplication extends MultiDexApplication implements LifecycleO
     @Override
     public void onCreate() {
         super.onCreate();
+        ThemeMode.apply(this);
         ProcessLifecycleOwner.get().getLifecycle().addObserver(this);
     }
 

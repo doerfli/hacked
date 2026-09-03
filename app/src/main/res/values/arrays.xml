@@ -12,4 +12,14 @@
         <item>everythreedays</item>
         <item>everyweek</item>
     </string-array>
+    <string-array name="pref_theme_mode_entries">
+        <item>System default</item>
+        <item>Light</item>
+        <item>Dark</item>
+    </string-array>
+    <string-array name="pref_theme_mode_values">
+        <item>system</item>
+        <item>light</item>
+        <item>dark</item>
+    </string-array>
 </resources>
