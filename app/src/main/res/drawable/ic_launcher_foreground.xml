@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- "Receding" — password characters intact but each smaller than the last,
+     retreating past the end of the field. The smallest carries the accent
+     colour: the password isn't broken, it's disappearing. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+
+    <path
+        android:pathData="M20,66 L88,66"
+        android:strokeColor="#EEF2F4"
+        android:strokeWidth="5"
+        android:strokeLineCap="round"
+        android:strokeAlpha="0.45" />
+
+    <group android:translateX="26" android:translateY="46">
+        <path
+            android:pathData="M0,-8 L0,8 M-7.5,-4 L7.5,4 M7.5,-4 L-7.5,4"
+            android:strokeColor="#EEF2F4"
+            android:strokeWidth="5.5"
+            android:strokeLineCap="round" />
+    </group>
+
+    <group
+        android:translateX="50"
+        android:translateY="46"
+        android:scaleX="0.82"
+        android:scaleY="0.82">
+        <path
+            android:pathData="M0,-8 L0,8 M-7.5,-4 L7.5,4 M7.5,-4 L-7.5,4"
+            android:strokeColor="#EEF2F4"
+            android:strokeWidth="5.5"
+            android:strokeLineCap="round" />
+    </group>
+
+    <group
+        android:translateX="70"
+        android:translateY="46"
+        android:scaleX="0.6"
+        android:scaleY="0.6">
+        <path
+            android:pathData="M0,-8 L0,8 M-7.5,-4 L7.5,4 M7.5,-4 L-7.5,4"
+            android:strokeColor="#EEF2F4"
+            android:strokeWidth="5.5"
+            android:strokeLineCap="round" />
+    </group>
+
+    <group
+        android:translateX="84"
+        android:translateY="46"
+        android:scaleX="0.42"
+        android:scaleY="0.42">
+        <path
+            android:pathData="M0,-8 L0,8 M-7.5,-4 L7.5,4 M7.5,-4 L-7.5,4"
+            android:strokeColor="#FF7A4D"
+            android:strokeWidth="5.5"
+            android:strokeLineCap="round" />
+    </group>
+</vector>

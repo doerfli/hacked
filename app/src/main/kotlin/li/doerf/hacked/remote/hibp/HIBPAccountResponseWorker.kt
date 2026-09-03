@@ -194,7 +194,7 @@ class HIBPAccountResponseWorker(private val context: Context, workerParams: Work
         }
         val title = context.getString(R.string.notification_title_new_breaches_found)
         val mBuilder = NotificationCompat.Builder(context, OreoNotificationHelper.CHANNEL_ID)
-                .setSmallIcon(android.R.drawable.ic_dialog_info)
+                .setSmallIcon(R.drawable.ic_notification)
                 .setContentTitle(title)
                 .setContentText(context.getString(R.string.notification_text_click_to_open))
                 .setChannelId(OreoNotificationHelper.CHANNEL_ID)
