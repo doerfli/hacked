@@ -90,6 +90,12 @@
     <string name="firstuse_p3">Tous les comptes stockés dans l\'application seront vérifiés une fois par jour (cela peut être modifié dans les paramètres).</string>
     <string name="firstuse_p4">La source de données pour les brèches est le site internet bien connu <a href="https://haveibeenpwned.com">haveibeenpwned.com</a>. Si vous voulez en apprendre plus sur la provenance des données, suivez ce lien <a href="https://haveibeenpwned.com/FAQs">FAQs</a>.</string>
     <string name="all_breaches">Liste de toutes les brèches</string>
+    <string name="title_leaks">Fuites</string>
+    <string name="accounts_empty_hint">Ajoutez votre premier compte avec le bouton +.</string>
+    <string name="account_state_needs_attention">Nécessite votre attention</string>
+    <string name="account_state_not_checked">Pas encore vérifié</string>
+    <string name="account_state_clean">Aucune brèche trouvée</string>
+    <string name="account_state_acknowledged">Toutes reconnues</string>
     <string name="welcome">Bienvenue dans Hacked?</string>
     <string name="app_version">Version de l\'application</string>
     <string name="device_info">Informations sur l\'appareil</string>

@@ -32,6 +32,9 @@ public interface AccountDao {
     @Query("SELECT * FROM accounts where _id=:anId")
     List<Account> findById(Long anId);
 
+    @Query("SELECT * FROM accounts where _id=:anId")
+    LiveData<Account> findByIdLD(Long anId);
+
     @Query("SELECT * FROM accounts where name=:name")
     List<Account> findByName(String name);
 

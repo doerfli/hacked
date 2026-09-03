@@ -12,9 +12,7 @@ import androidx.multidex.MultiDexApplication;
 
 import com.google.firebase.analytics.FirebaseAnalytics;
 
-import io.reactivex.processors.PublishProcessor;
 import li.doerf.hacked.util.Analytics;
-import li.doerf.hacked.util.NavEvent;
 import li.doerf.hacked.util.ThemeMode;
 
 /**
@@ -23,7 +21,6 @@ import li.doerf.hacked.util.ThemeMode;
 
 public class HackedApplication extends MultiDexApplication implements LifecycleObserver, DefaultLifecycleObserver {
     private static final String TAG = "HackedApplication";
-    private final PublishProcessor<NavEvent> navEvents = PublishProcessor.create();
 
     @Override
     public void onCreate() {
@@ -37,10 +34,5 @@ public class HackedApplication extends MultiDexApplication implements LifecycleO
         Log.d(TAG, "application opened");
         Analytics.Companion.getInstance().logEvent(FirebaseAnalytics.Event.APP_OPEN, new Bundle());
     }
-
-    public PublishProcessor<NavEvent> getNavEvents() {
-        return navEvents;
-    }
-
 
 }

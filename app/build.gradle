@@ -2,7 +2,6 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'com.google.gms.google-services'
 apply plugin: 'com.google.firebase.crashlytics'
-apply plugin: "androidx.navigation.safeargs"
 apply plugin: 'org.jetbrains.kotlin.plugin.compose'
 
 android {
@@ -66,8 +65,6 @@ dependencies {
     implementation("androidx.work:work-runtime:$work_version")
     implementation("androidx.work:work-runtime-ktx:$work_version")
     implementation "androidx.constraintlayout:constraintlayout:$constraintlayout_version"
-    implementation "androidx.navigation:navigation-fragment-ktx:$nav_version"
-    implementation "androidx.navigation:navigation-ui-ktx:$nav_version"
     implementation "com.google.android.play:review:$play_review_version"
     implementation "com.google.android.play:review-ktx:$play_review_version"
     implementation "com.google.android.gms:play-services-base:$play_services_base_version"
@@ -84,6 +81,7 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-viewmodel-compose:$lifecycle_version"
     implementation "androidx.lifecycle:lifecycle-runtime-compose:$lifecycle_version"
     implementation "io.coil-kt:coil-compose:$coil_compose_version"
+    implementation "androidx.compose.runtime:runtime-livedata"
     debugImplementation "androidx.compose.ui:ui-tooling"
     // compose theme compatibility for legacy screens still pending migration
     implementation "com.google.accompanist:accompanist-coil:$accompanist_coil"

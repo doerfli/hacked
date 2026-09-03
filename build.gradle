@@ -13,7 +13,6 @@ buildscript {
         classpath "com.github.ben-manes:gradle-versions-plugin:0.53.0"
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         classpath "com.google.firebase:firebase-crashlytics-gradle:$firebase_crashlytics_gradle_version"
-        classpath "androidx.navigation:navigation-safe-args-gradle-plugin:$nav_version"
         classpath 'org.jetbrains.kotlin:compose-compiler-gradle-plugin:2.3.10'
 
 

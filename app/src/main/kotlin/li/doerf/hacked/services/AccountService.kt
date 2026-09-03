@@ -14,7 +14,7 @@ import li.doerf.hacked.db.AppDatabase
 import li.doerf.hacked.db.daos.AccountDao
 import li.doerf.hacked.db.entities.Account
 import li.doerf.hacked.remote.hibp.HIBPAccountCheckerWorker
-import li.doerf.hacked.ui.fragments.AccountsFragment
+import li.doerf.hacked.util.AccountConstants
 import li.doerf.hacked.util.Analytics
 import li.doerf.hacked.util.createCoroutingExceptionHandler
 
@@ -25,13 +25,13 @@ class AccountService(private val application: Application) {
     fun addAccount(aName: String) {
         if ( aName.trim { it <= ' ' } == "") {
             Toast.makeText(context, context.getString(R.string.toast_enter_valid_name), Toast.LENGTH_LONG).show()
-            Log.w(AccountsFragment.LOGTAG, "account name not valid")
+            Log.w(AccountConstants.LOGTAG, "account name not valid")
             return
         }
         val name = aName.trim { it <= ' ' }
 
         runBlocking(context = Dispatchers.IO) {
-            launch(createCoroutingExceptionHandler(AccountsFragment.LOGTAG)) {
+            launch(createCoroutingExceptionHandler(AccountConstants.LOGTAG)) {
                 addNewAccount(name)
             }
         }
