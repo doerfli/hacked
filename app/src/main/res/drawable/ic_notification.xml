@@ -8,7 +8,7 @@
     android:viewportWidth="24"
     android:viewportHeight="24">
 
-    <group android:translateX="8.22" android:translateY="12">
+    <group android:translateX="7.33" android:translateY="12">
         <path
             android:pathData="M0,-1.78 L0,1.78 M-1.67,-0.89 L1.67,0.89 M1.67,-0.89 L-1.67,0.89"
             android:strokeColor="#FFFFFF"
@@ -16,7 +16,7 @@
             android:strokeLineCap="round" />
     </group>
 
-    <group android:translateX="11.78" android:translateY="12">
+    <group android:translateX="11.33" android:translateY="12">
         <path
             android:pathData="M0,-1.33 L0,1.33 M-1.25,-0.665 L1.25,0.665 M1.25,-0.665 L-1.25,0.665"
             android:strokeColor="#FFFFFF"
@@ -24,7 +24,7 @@
             android:strokeLineCap="round" />
     </group>
 
-    <group android:translateX="14.67" android:translateY="12">
+    <group android:translateX="14.73" android:translateY="12">
         <path
             android:pathData="M0,-1.11 L0,1.11 M-1.04,-0.555 L1.04,0.555 M1.04,-0.555 L-1.04,0.555"
             android:strokeColor="#FFFFFF"
@@ -32,7 +32,7 @@
             android:strokeLineCap="round" />
     </group>
 
-    <group android:translateX="17.0" android:translateY="12">
+    <group android:translateX="17.62" android:translateY="12">
         <path
             android:pathData="M0,-0.78 L0,0.78 M-0.73,-0.39 L0.73,0.39 M0.73,-0.39 L-0.73,0.39"
             android:strokeColor="#FFFFFF"
