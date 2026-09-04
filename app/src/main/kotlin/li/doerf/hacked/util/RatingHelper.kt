@@ -2,30 +2,23 @@ package li.doerf.hacked.util
 
 import android.app.Activity
 import android.util.Log
-import androidx.fragment.app.FragmentActivity
 import androidx.preference.PreferenceManager
 import com.google.android.play.core.review.ReviewManagerFactory
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
 import li.doerf.hacked.CustomEvent
-import li.doerf.hacked.ui.RateUsDialogFragment
 
 class RatingHelper(private val activity: Activity) : AppReview {
-    private suspend fun showRateUsDialog() {
-        // since the show is delayed (and app could be closed now) this needs to be checked here
-        if (!activity.isFinishing && !activity.isDestroyed) {
-            val review = this
-            withContext(Dispatchers.Main) {
-                val dialog = RateUsDialogFragment()
-                dialog.setAppReview(review)
-                withContext(Dispatchers.Main) {
-                    val fragmentManager = (activity as FragmentActivity).supportFragmentManager
-                    if (! fragmentManager.isDestroyed && !fragmentManager.isStateSaved) {
-                        dialog.show(fragmentManager, "rateus")
-                    }
-                }
-            }
-        }
+    fun rateLater() {
+        val settings = PreferenceManager.getDefaultSharedPreferences(activity.applicationContext)
+        settings.edit().putInt(PREF_KEY_RATING_COUNTER, 0).apply()
+        Log.i(LOGTAG, "setting: reset rating counter")
+        Analytics.trackCustomEvent(CustomEvent.RATE_LATER)
+    }
+
+    fun rateNever() {
+        val settings = PreferenceManager.getDefaultSharedPreferences(activity.applicationContext)
+        settings.edit().putBoolean(PREF_KEY_RATING_NEVER, true).apply()
+        Log.i(LOGTAG, "setting: never rate")
+        Analytics.trackCustomEvent(CustomEvent.RATE_NEVER)
     }
 
     override fun showReview() {
@@ -85,8 +78,8 @@ class RatingHelper(private val activity: Activity) : AppReview {
         return System.currentTimeMillis() < lastConnectionFailure + tenDays
     }
 
-    suspend fun showRateUsDialogDelayed() {
-        if (showNoRatingDialog()) return
+    fun showRateUsDialogDelayed(): Boolean {
+        if (showNoRatingDialog()) return false
         val settings = PreferenceManager.getDefaultSharedPreferences(activity.applicationContext)
         var ratingCount = settings.getInt(PREF_KEY_RATING_COUNTER, 0)
         if (ratingCount < RATING_DIALOG_COUNTER_THRESHOLD) {
@@ -94,9 +87,10 @@ class RatingHelper(private val activity: Activity) : AppReview {
             val editor = settings.edit()
             editor.putInt(PREF_KEY_RATING_COUNTER, ++ratingCount)
             editor.apply()
-            return
+            return false
         }
-        showRateUsDialog()
+        // since the show is delayed (and app could be closed now) this needs to be checked here
+        return !activity.isFinishing && !activity.isDestroyed
     }
 
     private fun hasRated(): Boolean {

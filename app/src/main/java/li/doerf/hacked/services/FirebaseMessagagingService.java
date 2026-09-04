@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import li.doerf.hacked.R;
 import li.doerf.hacked.activities.NavActivity;
 import li.doerf.hacked.remote.hibp.HIBPAccountResponseWorker;
 import li.doerf.hacked.utils.NotificationHelper;
@@ -75,7 +76,7 @@ public class FirebaseMessagagingService extends FirebaseMessagingService {
 
         androidx.core.app.NotificationCompat.Builder mBuilder =
                 new NotificationCompat.Builder(getApplicationContext(), OreoNotificationHelper.CHANNEL_ID)
-                        .setSmallIcon(android.R.drawable.sym_def_app_icon)
+                        .setSmallIcon(R.drawable.ic_notification)
                         .setContentTitle(remoteNotification.getTitle())
                         .setContentText(remoteNotification.getBody())
                         .setChannelId(OreoNotificationHelper.CHANNEL_ID_GENERAL)

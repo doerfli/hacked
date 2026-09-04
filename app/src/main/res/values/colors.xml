@@ -1,19 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="colorPrimary">#388E3C</color>
-    <color name="colorPrimaryDark">#1B5E20</color>
-    <color name="colorAccent">#FF9100</color>
-    <color name="account_status_ok">#4CAF50</color>
-    <color name="account_status_only_acknowledged">#89AF4C</color>
-    <color name="account_status_breached">#F44336</color>
-    <color name="account_status_unknown">#9E9E9E</color>
-    <color name="green">#007900</color>
-    <color name="hibp_info_bg_light">#eeffffff</color>
-    <color name="hibp_info_bg">#E8777777</color>
-    <color name="bg_notification">#FFE8D0</color>
-    <color name="textHighEmphasis">#DD000000</color>
-    <color name="textMediumEmphasis">#99000000</color>
-    <color name="textDisabledEmphasis">#60000000</color>
-    <color name="background_between_cards">#ccc</color>
-    <color name="selectedCard">#dddddd</color>
+    <color name="windowBackground">#F9FBF4</color>
 </resources>

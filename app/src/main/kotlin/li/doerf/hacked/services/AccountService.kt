@@ -6,15 +6,14 @@ import android.util.Log
 import android.widget.Toast
 import androidx.work.*
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.withContext
 import li.doerf.hacked.CustomEvent
 import li.doerf.hacked.R
 import li.doerf.hacked.db.AppDatabase
 import li.doerf.hacked.db.daos.AccountDao
 import li.doerf.hacked.db.entities.Account
 import li.doerf.hacked.remote.hibp.HIBPAccountCheckerWorker
-import li.doerf.hacked.ui.fragments.AccountsFragment
+import li.doerf.hacked.util.AccountConstants
 import li.doerf.hacked.util.Analytics
 import li.doerf.hacked.util.createCoroutingExceptionHandler
 
@@ -22,18 +21,20 @@ class AccountService(private val application: Application) {
 
     private var context: Context = application.applicationContext
 
-    fun addAccount(aName: String) {
-        if ( aName.trim { it <= ' ' } == "") {
+    suspend fun getAccountCount(): Int = withContext(Dispatchers.IO) {
+        AppDatabase.get(context).accountDao.countAll()
+    }
+
+    suspend fun addAccount(aName: String) {
+        val name = aName.trim { it <= ' ' }
+        if (name == "") {
             Toast.makeText(context, context.getString(R.string.toast_enter_valid_name), Toast.LENGTH_LONG).show()
-            Log.w(AccountsFragment.LOGTAG, "account name not valid")
+            Log.w(AccountConstants.LOGTAG, "account name not valid")
             return
         }
-        val name = aName.trim { it <= ' ' }
 
-        runBlocking(context = Dispatchers.IO) {
-            launch(createCoroutingExceptionHandler(AccountsFragment.LOGTAG)) {
-                addNewAccount(name)
-            }
+        withContext(Dispatchers.IO + createCoroutingExceptionHandler(AccountConstants.LOGTAG)) {
+            addNewAccount(name)
         }
     }
 

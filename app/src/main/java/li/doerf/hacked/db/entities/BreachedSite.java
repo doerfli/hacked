@@ -2,7 +2,6 @@ package li.doerf.hacked.db.entities;
 
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
-import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
 @Entity(tableName = "breached_sites")
@@ -41,8 +40,6 @@ public class BreachedSite {
     private Boolean isSpamList;
     @ColumnInfo(name = "logo_path")
     private String logoPath;
-    @Ignore
-    private Boolean detailsVisible = false;
 
     public Long getId() {
         return id;
@@ -133,14 +130,6 @@ public class BreachedSite {
 
     public void setVerified(Boolean verified) {
         isVerified = verified;
-    }
-
-    public Boolean getDetailsVisible() {
-        return detailsVisible;
-    }
-
-    public void setDetailsVisible(Boolean detailsVisible) {
-        this.detailsVisible = detailsVisible;
     }
 
     public Boolean getSensitive() {

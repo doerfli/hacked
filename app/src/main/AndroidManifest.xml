@@ -23,7 +23,7 @@
         <activity
             android:name=".activities.NavActivity"
             android:label="@string/app_name"
-            android:windowSoftInputMode="stateHidden|adjustPan"
+            android:windowSoftInputMode="stateHidden|adjustResize"
             android:exported="true"
             >
             <intent-filter>
