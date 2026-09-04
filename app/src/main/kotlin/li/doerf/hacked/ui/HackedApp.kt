@@ -3,9 +3,9 @@ package li.doerf.hacked.ui
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.AccountCircle
-import androidx.compose.material.icons.filled.Password
-import androidx.compose.material.icons.filled.Warning
+import androidx.compose.material.icons.filled.Lock
+import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.filled.Shield
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
@@ -33,9 +33,9 @@ import li.doerf.hacked.ui.screens.passwords.PasswordScreen
 private data class BottomTab(val route: String, val labelRes: Int, val icon: androidx.compose.ui.graphics.vector.ImageVector)
 
 private val bottomTabs = listOf(
-    BottomTab(Routes.ACCOUNTS, R.string.title_accounts, Icons.Filled.AccountCircle),
-    BottomTab(Routes.PASSWORDS, R.string.title_pwned_passwords, Icons.Filled.Password),
-    BottomTab(Routes.LEAKS, R.string.title_leaks, Icons.Filled.Warning),
+    BottomTab(Routes.ACCOUNTS, R.string.title_accounts, Icons.Filled.Person),
+    BottomTab(Routes.PASSWORDS, R.string.title_pwned_passwords, Icons.Filled.Lock),
+    BottomTab(Routes.LEAKS, R.string.title_leaks, Icons.Filled.Shield),
 )
 
 @Composable
