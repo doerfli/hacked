@@ -1,7 +1,7 @@
 package li.doerf.hacked.ui.composable
 
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -15,7 +15,7 @@ fun LabeledValue(label: String, value: String, modifier: Modifier = Modifier) {
             label,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
             style = MaterialTheme.typography.bodyMedium,
-            modifier = Modifier.padding(end = 4.dp)
+            modifier = Modifier.width(96.dp)
         )
         Text(value, style = MaterialTheme.typography.bodyMedium)
     }

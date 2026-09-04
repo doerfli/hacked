@@ -110,6 +110,7 @@
     <string name="action_sort_dateadded">Sort by most recent</string>
     <string name="action_sort_name">Sort by name</string>
     <string name="label_additional_flags">Flags:</string>
+    <string name="label_accounts_affected">Accounts:</string>
     <string name="placeholder_additional_flags">Unverified, Retried, …</string>
     <string name="fabricated">Fabricated</string>
     <string name="retired">Retired</string>

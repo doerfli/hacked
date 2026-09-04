@@ -110,6 +110,7 @@
     <string name="action_sort_dateadded">Trier par plus récent</string>
     <string name="action_sort_name">Trier par nom</string>
     <string name="label_additional_flags">Option:</string>
+    <string name="label_accounts_affected">Comptes:</string>
     <string name="placeholder_additional_flags">Unverified, Retried, …</string>
     <string name="fabricated">Fabriqué</string>
     <string name="retired">Retraité</string>

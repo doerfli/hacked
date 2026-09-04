@@ -14,8 +14,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.ExpandLess
+import androidx.compose.material.icons.filled.ExpandMore
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -44,6 +47,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.Alignment
 import androidx.lifecycle.viewmodel.compose.viewModel
 import kotlinx.coroutines.launch
 import li.doerf.hacked.R
@@ -144,15 +148,24 @@ private fun NoBreachFoundCard(modifier: Modifier = Modifier) {
 
 @Composable
 private fun WhatNowCard(expanded: Boolean, onToggle: () -> Unit, modifier: Modifier = Modifier) {
-    Card(modifier.fillMaxWidth()) {
+    Card(
+        modifier.fillMaxWidth(),
+        shape = RoundedCornerShape(16.dp),
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.tertiaryContainer,
+            contentColor = MaterialTheme.colorScheme.onTertiaryContainer
+        )
+    ) {
         Column(Modifier.padding(16.dp)) {
-            Row(Modifier.clickable(onClick = onToggle)) {
-                Text(stringResource(R.string.breach_details_compromised_account_found), style = MaterialTheme.typography.titleMedium)
-                Spacer(Modifier.width(4.dp))
-                Text(
-                    stringResource(R.string.breach_details_what_now),
-                    style = MaterialTheme.typography.titleMedium,
-                    color = MaterialTheme.colorScheme.primary
+            Row(Modifier.fillMaxWidth().clickable(onClick = onToggle), verticalAlignment = Alignment.CenterVertically) {
+                Row(Modifier.weight(1f)) {
+                    Text(stringResource(R.string.breach_details_compromised_account_found), style = MaterialTheme.typography.titleMedium)
+                    Spacer(Modifier.width(4.dp))
+                    Text(stringResource(R.string.breach_details_what_now), style = MaterialTheme.typography.titleMedium)
+                }
+                Icon(
+                    if (expanded) Icons.Filled.ExpandLess else Icons.Filled.ExpandMore,
+                    contentDescription = null
                 )
             }
             AnimatedVisibility(expanded) {
