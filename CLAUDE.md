@@ -8,7 +8,7 @@ Android app (`li.doerf.hacked`) that checks accounts and passwords against Have 
 - Jetpack Compose + Material 3 (BOM `compose_bom_version` in `gradle.properties`) — the UI layer is being migrated to Compose on `feature/ui-redesign-v4`; see "UI redesign" below
 - Room for local storage (`db/`), RxJava2 (`room-rxjava2`) still present for some DAOs, newer code uses `LiveData`/`StateFlow`
 - WorkManager for background sync (`remote/hibp/*Worker.kt`)
-- `compileSdk`/`targetSdk` 37, `minSdk` 23, `jvmTarget`/source/target compatibility 17
+- `compileSdk`/`targetSdk` 37, `minSdk` 23, `jvmTarget`/source/target compatibility 17 (app's compiled bytecode target — separate from the Gradle daemon's own runtime, pinned to JDK 21 via `gradle/gradle-daemon-jvm.properties`, which CI's `setup-java` step matches directly)
 
 ## Build & verify
 
