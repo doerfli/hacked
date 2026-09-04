@@ -2,6 +2,7 @@ package li.doerf.hacked.ui.screens.leaks
 
 import android.app.Activity
 import android.content.Context
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -15,7 +16,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
@@ -25,6 +26,7 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilterChip
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -42,6 +44,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
@@ -161,28 +164,42 @@ fun LeaksScreen() {
                 )
             }
             Spacer(Modifier.height(4.dp))
-            LazyColumn(Modifier.weight(1f)) {
-                blocks.forEach { block ->
-                    when (block) {
-                        is LeaksBlock.Group -> {
-                            items(block.sites, key = { it.id }) { site ->
-                                SiteRow(site = site, onClick = { expandedId = site.id })
+            Box(
+                Modifier
+                    .weight(1f)
+                    .fillMaxWidth()
+                    .padding(horizontal = 12.dp, vertical = 6.dp)
+                    .clip(RoundedCornerShape(16.dp))
+                    .background(MaterialTheme.colorScheme.surfaceVariant)
+            ) {
+                LazyColumn(Modifier.fillMaxSize()) {
+                    blocks.forEach { block ->
+                        when (block) {
+                            is LeaksBlock.Group -> {
+                                itemsIndexed(block.sites, key = { _, site -> site.id }) { index, site ->
+                                    Column {
+                                        SiteRow(site = site, onClick = { expandedId = site.id })
+                                        if (index != block.sites.lastIndex) {
+                                            HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
+                                        }
+                                    }
+                                }
+                            }
+                            is LeaksBlock.Expanded -> item(key = block.site.id) {
+                                ExpandedSiteCard(
+                                    site = block.site,
+                                    onToggle = { expandedId = null }
+                                )
                             }
                         }
-                        is LeaksBlock.Expanded -> item(key = block.site.id) {
-                            ExpandedSiteCard(
-                                site = block.site,
-                                onToggle = { expandedId = null }
-                            )
-                        }
                     }
-                }
-                item {
-                    HtmlLinkText(
-                        "${stringResource(R.string.data_provided_by)} <a href=\"https://haveibeenpwned.com\">Have i been pwned?</a>",
-                        style = MaterialTheme.typography.labelSmall,
-                        modifier = Modifier.padding(12.dp)
-                    )
+                    item {
+                        HtmlLinkText(
+                            "${stringResource(R.string.data_provided_by)} <a href=\"https://haveibeenpwned.com\">Have i been pwned?</a>",
+                            style = MaterialTheme.typography.labelSmall,
+                            modifier = Modifier.padding(12.dp)
+                        )
+                    }
                 }
             }
         }
@@ -191,36 +208,28 @@ fun LeaksScreen() {
 
 @Composable
 private fun SiteRow(site: BreachedSite, onClick: () -> Unit) {
-    Card(
-        onClick = onClick,
-        modifier = Modifier
+    Row(
+        Modifier
             .fillMaxWidth()
-            .padding(horizontal = 12.dp, vertical = 6.dp),
-        shape = RoundedCornerShape(16.dp),
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant)
+            .clickable(onClick = onClick)
+            .padding(horizontal = 16.dp, vertical = 12.dp),
+        verticalAlignment = Alignment.CenterVertically
     ) {
-        Row(
-            Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 16.dp, vertical = 12.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Column(Modifier.weight(1f)) {
-                Text(site.title, maxLines = 1, overflow = TextOverflow.Ellipsis, style = MaterialTheme.typography.bodyLarge)
-                Text(
-                    "${NumberFormat.getNumberInstance().format(site.pwnCount)} accounts · ${DateTimeFormat.forPattern("yyyy/MM/dd").print(site.breachDate)}",
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis,
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
-            }
-            Icon(
-                Icons.AutoMirrored.Filled.KeyboardArrowRight,
-                contentDescription = null,
-                tint = MaterialTheme.colorScheme.onSurfaceVariant
+        Column(Modifier.weight(1f)) {
+            Text(site.title, maxLines = 1, overflow = TextOverflow.Ellipsis, style = MaterialTheme.typography.bodyLarge)
+            Text(
+                "${NumberFormat.getNumberInstance().format(site.pwnCount)} accounts · ${DateTimeFormat.forPattern("yyyy/MM/dd").print(site.breachDate)}",
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
             )
         }
+        Icon(
+            Icons.AutoMirrored.Filled.KeyboardArrowRight,
+            contentDescription = null,
+            tint = MaterialTheme.colorScheme.onSurfaceVariant
+        )
     }
 }
 
