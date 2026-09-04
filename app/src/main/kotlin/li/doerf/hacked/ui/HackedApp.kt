@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.Person
-import androidx.compose.material.icons.filled.Shield
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
@@ -15,6 +14,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavType
@@ -30,12 +30,12 @@ import li.doerf.hacked.ui.screens.firstuse.FirstUseScreen
 import li.doerf.hacked.ui.screens.leaks.LeaksScreen
 import li.doerf.hacked.ui.screens.passwords.PasswordScreen
 
-private data class BottomTab(val route: String, val labelRes: Int, val icon: androidx.compose.ui.graphics.vector.ImageVector)
+private data class BottomTab(val route: String, val labelRes: Int, val icon: @Composable () -> Unit)
 
 private val bottomTabs = listOf(
-    BottomTab(Routes.ACCOUNTS, R.string.title_accounts, Icons.Filled.Person),
-    BottomTab(Routes.PASSWORDS, R.string.title_pwned_passwords, Icons.Filled.Lock),
-    BottomTab(Routes.LEAKS, R.string.title_leaks, Icons.Filled.Shield),
+    BottomTab(Routes.ACCOUNTS, R.string.title_accounts) { Icon(Icons.Filled.Person, contentDescription = null) },
+    BottomTab(Routes.PASSWORDS, R.string.title_pwned_passwords) { Icon(Icons.Filled.Lock, contentDescription = null) },
+    BottomTab(Routes.LEAKS, R.string.title_leaks) { Icon(painterResource(R.drawable.ic_split_shield), contentDescription = null) },
 )
 
 @Composable
@@ -64,7 +64,7 @@ fun HackedApp(startWithFirstUse: Boolean) {
                                     restoreState = true
                                 }
                             },
-                            icon = { Icon(tab.icon, contentDescription = null) },
+                            icon = tab.icon,
                             label = { Text(stringResource(tab.labelRes)) }
                         )
                     }
