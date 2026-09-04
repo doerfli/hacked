@@ -6,10 +6,8 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
-import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -54,14 +52,14 @@ fun BreachCard(breach: Breach, onAcknowledge: () -> Unit) {
         shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant)
     ) {
-        Row(Modifier.fillMaxWidth().height(IntrinsicSize.Min)) {
+        Box(Modifier.fillMaxWidth()) {
             Box(
                 Modifier
+                    .matchParentSize()
                     .width(4.dp)
-                    .fillMaxHeight()
                     .background(edgeColor)
             )
-            Column(Modifier.padding(16.dp)) {
+            Column(Modifier.padding(start = 20.dp, top = 16.dp, end = 16.dp, bottom = 16.dp)) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     BreachLogo(breach)
                     Spacer(Modifier.width(12.dp))
