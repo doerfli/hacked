@@ -158,7 +158,7 @@ private fun WhatNowCard(expanded: Boolean, onToggle: () -> Unit, modifier: Modif
         Column(Modifier.padding(16.dp)) {
             Row(Modifier.fillMaxWidth().clickable(onClick = onToggle), verticalAlignment = Alignment.CenterVertically) {
                 Text(
-                    "${stringResource(R.string.breach_details_compromised_account_found)}\n${stringResource(R.string.breach_details_what_now)}",
+                    "${stringResource(R.string.breach_details_compromised_account_found)} ${stringResource(R.string.breach_details_dash)}\n${stringResource(R.string.breach_details_what_now)}",
                     style = MaterialTheme.typography.titleMedium,
                     modifier = Modifier.weight(1f)
                 )
@@ -187,8 +187,8 @@ private fun WhatNowCard(expanded: Boolean, onToggle: () -> Unit, modifier: Modif
 
 @Composable
 private fun HelpStep(number: String, htmlText: String) {
-    Row(Modifier.padding(vertical = 4.dp)) {
+    Row(Modifier.fillMaxWidth().padding(vertical = 4.dp)) {
         Text(number, modifier = Modifier.width(20.dp))
-        HtmlLinkText(htmlText, style = MaterialTheme.typography.bodyMedium)
+        HtmlLinkText(htmlText, style = MaterialTheme.typography.bodyMedium, modifier = Modifier.weight(1f))
     }
 }
