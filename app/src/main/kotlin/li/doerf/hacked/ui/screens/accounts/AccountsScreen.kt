@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
@@ -59,6 +60,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.work.OneTimeWorkRequest
@@ -177,6 +180,7 @@ fun AccountsScreen(onAccountClick: (Long) -> Unit) {
                         )
                     }
                 }
+                val listState = rememberLazyListState()
                 Box(
                     Modifier
                         .weight(1f, fill = false)
@@ -184,7 +188,7 @@ fun AccountsScreen(onAccountClick: (Long) -> Unit) {
                         .clip(RoundedCornerShape(16.dp))
                         .background(MaterialTheme.colorScheme.surfaceVariant)
                 ) {
-                    LazyColumn(Modifier.fillMaxWidth()) {
+                    LazyColumn(Modifier.fillMaxWidth(), state = listState) {
                         itemsIndexed(accounts, key = { _, account -> account.id }) { index, account ->
                             Column {
                                 AccountRow(account, onClick = {
@@ -196,6 +200,22 @@ fun AccountsScreen(onAccountClick: (Long) -> Unit) {
                                 }
                             }
                         }
+                    }
+                    if (listState.canScrollForward) {
+                        Box(
+                            Modifier
+                                .align(Alignment.BottomCenter)
+                                .fillMaxWidth()
+                                .height(32.dp)
+                                .background(
+                                    Brush.verticalGradient(
+                                        colors = listOf(
+                                            Color.Transparent,
+                                            MaterialTheme.colorScheme.scrim.copy(alpha = 0.20f)
+                                        )
+                                    )
+                                )
+                        )
                     }
                 }
             }
