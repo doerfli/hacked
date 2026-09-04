@@ -110,6 +110,8 @@ class HIBPAccountCheckerWorker(private val context: Context, params: WorkerParam
         accountsToCheck.forEachIndexed { index, account ->
             delayAfter25Requests(index)
             Log.d(LOGTAG, "Checking for account ($index): " + account.name)
+            account.checkRequestedAt = System.currentTimeMillis()
+            myAccountDao.update(account)
             sendSearch(account.name, device_token)
         }
         Log.d(LOGTAG, "finished checking for breaches")

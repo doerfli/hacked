@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
@@ -26,6 +27,7 @@ import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.Button
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.HorizontalDivider
@@ -58,6 +60,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.work.OneTimeWorkRequest
@@ -74,6 +78,7 @@ import li.doerf.hacked.ui.theme.statusColors
 import li.doerf.hacked.ui.viewmodels.AccountViewModel
 import li.doerf.hacked.util.AccountConstants.MAX_ACCOUNTS
 import li.doerf.hacked.util.RatingHelper
+import li.doerf.hacked.util.isChecking
 import li.doerf.hacked.util.findActivity
 import li.doerf.hacked.utils.NotificationHelper
 import org.joda.time.format.DateTimeFormat
@@ -151,10 +156,12 @@ fun AccountsScreen(onAccountClick: (Long) -> Unit) {
             } else {
                 val needingAttention = accounts.count { it.hacked }
                 val unresolvedCount = accounts.sumOf { (it.numBreaches ?: 0) - (it.numAcknowledgedBreaches ?: 0) }
+                val checkingCount = accounts.count { it.isChecking() }
                 AccountsSummaryBanner(
                     unresolvedCount = unresolvedCount,
                     accountsNeedingAttention = needingAttention,
-                    totalAccounts = accounts.size
+                    totalAccounts = accounts.size,
+                    checkingCount = checkingCount
                 )
                 Row(
                     Modifier.fillMaxWidth().padding(horizontal = 4.dp),
@@ -173,14 +180,15 @@ fun AccountsScreen(onAccountClick: (Long) -> Unit) {
                         )
                     }
                 }
+                val listState = rememberLazyListState()
                 Box(
                     Modifier
-                        .weight(1f)
+                        .weight(1f, fill = false)
                         .fillMaxWidth()
                         .clip(RoundedCornerShape(16.dp))
                         .background(MaterialTheme.colorScheme.surfaceVariant)
                 ) {
-                    LazyColumn(Modifier.fillMaxSize()) {
+                    LazyColumn(Modifier.fillMaxWidth(), state = listState) {
                         itemsIndexed(accounts, key = { _, account -> account.id }) { index, account ->
                             Column {
                                 AccountRow(account, onClick = {
@@ -192,6 +200,22 @@ fun AccountsScreen(onAccountClick: (Long) -> Unit) {
                                 }
                             }
                         }
+                    }
+                    if (listState.canScrollForward) {
+                        Box(
+                            Modifier
+                                .align(Alignment.BottomCenter)
+                                .fillMaxWidth()
+                                .height(32.dp)
+                                .background(
+                                    Brush.verticalGradient(
+                                        colors = listOf(
+                                            Color.Transparent,
+                                            MaterialTheme.colorScheme.scrim.copy(alpha = 0.20f)
+                                        )
+                                    )
+                                )
+                        )
                     }
                 }
             }
@@ -251,42 +275,63 @@ fun AccountsScreen(onAccountClick: (Long) -> Unit) {
 }
 
 @Composable
-private fun AccountsSummaryBanner(unresolvedCount: Int, accountsNeedingAttention: Int, totalAccounts: Int) {
+private fun AccountsSummaryBanner(unresolvedCount: Int, accountsNeedingAttention: Int, totalAccounts: Int, checkingCount: Int) {
     val clean = unresolvedCount <= 0
     val containerColor = if (clean) MaterialTheme.colorScheme.primaryContainer else MaterialTheme.colorScheme.errorContainer
     val contentColor = if (clean) MaterialTheme.colorScheme.onPrimaryContainer else MaterialTheme.colorScheme.onErrorContainer
 
-    Row(
+    Column(
         Modifier
             .fillMaxWidth()
             .background(containerColor, RoundedCornerShape(16.dp))
             .padding(16.dp),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(12.dp)
+        verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
-        Icon(
-            if (clean) Icons.Filled.CheckCircle else Icons.Filled.Warning,
-            contentDescription = null,
-            tint = contentColor
-        )
-        if (!clean) {
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(12.dp)
+        ) {
+            Icon(
+                if (clean) Icons.Filled.CheckCircle else Icons.Filled.Warning,
+                contentDescription = null,
+                tint = contentColor
+            )
+            if (!clean) {
+                Text(
+                    "$unresolvedCount",
+                    style = MaterialTheme.typography.headlineSmall,
+                    fontWeight = FontWeight.Bold,
+                    color = contentColor
+                )
+            }
             Text(
-                "$unresolvedCount",
-                style = MaterialTheme.typography.headlineSmall,
-                fontWeight = FontWeight.Bold,
-                color = contentColor
+                if (clean) {
+                    stringResource(R.string.accounts_summary_clean, totalAccounts)
+                } else {
+                    stringResource(R.string.accounts_summary_needs_attention, unresolvedCount, accountsNeedingAttention, totalAccounts)
+                },
+                style = MaterialTheme.typography.bodySmall,
+                color = contentColor,
+                modifier = Modifier.weight(1f)
             )
         }
-        Text(
-            if (clean) {
-                stringResource(R.string.accounts_summary_clean, totalAccounts)
-            } else {
-                stringResource(R.string.accounts_summary_needs_attention, unresolvedCount, accountsNeedingAttention, totalAccounts)
-            },
-            style = MaterialTheme.typography.bodySmall,
-            color = contentColor,
-            modifier = Modifier.weight(1f)
-        )
+        if (checkingCount > 0) {
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(12.dp)
+            ) {
+                CircularProgressIndicator(
+                    modifier = Modifier.size(16.dp),
+                    strokeWidth = 2.dp,
+                    color = contentColor
+                )
+                Text(
+                    stringResource(R.string.accounts_summary_checking, checkingCount),
+                    style = MaterialTheme.typography.bodySmall,
+                    color = contentColor
+                )
+            }
+        }
     }
 }
 
@@ -299,7 +344,9 @@ private fun AccountRow(account: Account, onClick: () -> Unit) {
     val numBreaches = account.numBreaches ?: 0
     val numAcknowledged = account.numAcknowledgedBreaches ?: 0
 
+    val isChecking = account.isChecking()
     val style = when {
+        isChecking -> RowStyle(status.unchecked, stringResource(R.string.account_state_checking), 0, cs.surface, cs.onSurfaceVariant)
         account.hacked -> RowStyle(status.breached, stringResource(R.string.account_state_needs_attention), numBreaches - numAcknowledged, cs.errorContainer, cs.onErrorContainer)
         account.lastChecked == null -> RowStyle(status.unchecked, stringResource(R.string.account_state_not_checked), 0, cs.surface, cs.onSurfaceVariant)
         numBreaches == 0 -> RowStyle(status.clean, stringResource(R.string.account_state_clean), 0, cs.surface, cs.onSurfaceVariant)
@@ -314,11 +361,15 @@ private fun AccountRow(account: Account, onClick: () -> Unit) {
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(12.dp)
     ) {
-        Box(
-            Modifier
-                .size(10.dp)
-                .background(style.dotColor, CircleShape)
-        )
+        if (isChecking) {
+            CircularProgressIndicator(modifier = Modifier.size(10.dp), strokeWidth = 1.5.dp, color = style.dotColor)
+        } else {
+            Box(
+                Modifier
+                    .size(10.dp)
+                    .background(style.dotColor, CircleShape)
+            )
+        }
         Column(Modifier.weight(1f)) {
             Text(account.name, maxLines = 1, overflow = TextOverflow.Ellipsis, style = MaterialTheme.typography.bodyLarge)
             Text(

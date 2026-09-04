@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
@@ -19,6 +20,7 @@ import androidx.compose.material.icons.filled.ExpandMore
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -55,6 +57,7 @@ import li.doerf.hacked.ui.viewmodels.AccountDetailViewModel
 import li.doerf.hacked.util.Analytics
 import li.doerf.hacked.util.RatingHelper
 import li.doerf.hacked.util.findActivity
+import li.doerf.hacked.util.isChecking
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -107,7 +110,12 @@ fun AccountDetailScreen(onBack: () -> Unit) {
         snackbarHost = { SnackbarHost(snackbarHostState) }
     ) { padding ->
         if (breaches.isEmpty()) {
-            NoBreachFoundCard(Modifier.padding(padding).padding(16.dp).fillMaxWidth())
+            val cardModifier = Modifier.padding(padding).padding(16.dp).fillMaxWidth()
+            when {
+                account?.isChecking() == true -> CheckingCard(cardModifier)
+                account?.lastChecked == null -> NotCheckedYetCard(cardModifier)
+                else -> NoBreachFoundCard(cardModifier)
+            }
         } else {
             Column(
                 Modifier
@@ -151,6 +159,33 @@ private fun NoBreachFoundCard(modifier: Modifier = Modifier) {
         Column(Modifier.padding(16.dp)) {
             Text(stringResource(R.string.congratulations), style = MaterialTheme.typography.titleLarge, color = status.clean)
             Text(stringResource(R.string.no_breaches_found), style = MaterialTheme.typography.bodyLarge, color = status.clean)
+        }
+    }
+}
+
+@Composable
+private fun CheckingCard(modifier: Modifier = Modifier) {
+    val status = MaterialTheme.statusColors
+    Card(modifier, colors = CardDefaults.cardColors(containerColor = status.unchecked.copy(alpha = 0.12f))) {
+        Row(Modifier.padding(16.dp), verticalAlignment = Alignment.CenterVertically) {
+            CircularProgressIndicator(modifier = Modifier.size(20.dp), strokeWidth = 2.dp, color = status.unchecked)
+            Text(
+                stringResource(R.string.account_detail_checking),
+                style = MaterialTheme.typography.bodyLarge,
+                color = status.unchecked,
+                modifier = Modifier.padding(start = 16.dp)
+            )
+        }
+    }
+}
+
+@Composable
+private fun NotCheckedYetCard(modifier: Modifier = Modifier) {
+    val status = MaterialTheme.statusColors
+    Card(modifier, colors = CardDefaults.cardColors(containerColor = status.unchecked.copy(alpha = 0.12f))) {
+        Column(Modifier.padding(16.dp)) {
+            Text(stringResource(R.string.account_state_not_checked), style = MaterialTheme.typography.titleLarge, color = status.unchecked)
+            Text(stringResource(R.string.account_detail_not_checked_body), style = MaterialTheme.typography.bodyLarge, color = status.unchecked)
         }
     }
 }

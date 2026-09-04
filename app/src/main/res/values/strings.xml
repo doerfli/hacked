@@ -98,10 +98,14 @@
     <string name="account_state_not_checked">Not checked yet</string>
     <string name="account_state_clean">No breaches found</string>
     <string name="account_state_acknowledged">All acknowledged</string>
+    <string name="account_state_checking">Checking…</string>
     <string name="accounts_section_label">Your accounts</string>
     <string name="accounts_last_checked">Checked %1$s</string>
     <string name="accounts_summary_clean">No breaches found across %1$d accounts</string>
     <string name="accounts_summary_needs_attention">%1$d breaches need your attention across %2$d of %3$d accounts</string>
+    <string name="accounts_summary_checking">Checking %1$d accounts…</string>
+    <string name="account_detail_checking">Checking for breaches…</string>
+    <string name="account_detail_not_checked_body">This account hasn\'t been checked yet. Once the check completes, results will show up here.</string>
     <string name="welcome">Welcome to Hacked?</string>
     <string name="app_version">App version</string>
     <string name="device_info">Device information</string>

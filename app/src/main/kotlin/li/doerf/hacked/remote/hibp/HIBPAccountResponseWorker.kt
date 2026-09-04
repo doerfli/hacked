@@ -81,6 +81,7 @@ class HIBPAccountResponseWorker(private val context: Context, workerParams: Work
 
     private fun updateAccount(account: Account, foundNewBreach: Boolean) {
         account.setLastChecked(DateTime.now())
+        account.checkRequestedAt = null
         if (foundNewBreach && !account.hacked) {
             account.hacked = true
         }
