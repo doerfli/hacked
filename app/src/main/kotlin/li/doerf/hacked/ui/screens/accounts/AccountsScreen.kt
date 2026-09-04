@@ -14,16 +14,21 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.Refresh
-import androidx.compose.material3.Badge
+import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.Button
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.HorizontalDivider
@@ -52,6 +57,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -108,16 +114,21 @@ fun AccountsScreen(onAccountClick: (Long) -> Unit) {
             )
         },
         floatingActionButton = {
-            FloatingActionButton(onClick = {
-                scope.launch {
-                    val count = withContext(Dispatchers.IO) { AppDatabase.get(context).accountDao.all.size }
-                    if (count > MAX_ACCOUNTS) {
-                        snackbarHostState.showSnackbar(context.getString(R.string.snackbar_max_accounts))
-                    } else {
-                        showAddSheet = true
+            FloatingActionButton(
+                onClick = {
+                    scope.launch {
+                        val count = withContext(Dispatchers.IO) { AppDatabase.get(context).accountDao.all.size }
+                        if (count > MAX_ACCOUNTS) {
+                            snackbarHostState.showSnackbar(context.getString(R.string.snackbar_max_accounts))
+                        } else {
+                            showAddSheet = true
+                        }
                     }
-                }
-            }) {
+                },
+                shape = RoundedCornerShape(16.dp),
+                containerColor = MaterialTheme.colorScheme.primaryContainer,
+                contentColor = MaterialTheme.colorScheme.onPrimaryContainer
+            ) {
                 Icon(Icons.Filled.Add, contentDescription = stringResource(R.string.action_add_account))
             }
         },
@@ -127,17 +138,12 @@ fun AccountsScreen(onAccountClick: (Long) -> Unit) {
             Modifier
                 .padding(padding)
                 .fillMaxSize()
+                .verticalScroll(rememberScrollState())
+                .padding(horizontal = 16.dp, vertical = 12.dp),
+            verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
-            lastChecked?.lastChecked?.let { millis ->
-                Text(
-                    DateTimeFormat.forPattern("yyyy/MM/dd HH:mm").print(millis),
-                    style = MaterialTheme.typography.labelMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 4.dp)
-                )
-            }
             if (accounts.isEmpty()) {
-                Box(Modifier.weight(1f).fillMaxWidth(), contentAlignment = Alignment.Center) {
+                Box(Modifier.fillMaxWidth().padding(vertical = 48.dp), contentAlignment = Alignment.Center) {
                     Text(
                         stringResource(R.string.accounts_empty_hint),
                         style = MaterialTheme.typography.bodyLarge,
@@ -145,19 +151,50 @@ fun AccountsScreen(onAccountClick: (Long) -> Unit) {
                     )
                 }
             } else {
-                LazyColumn(Modifier.weight(1f)) {
-                    items(accounts, key = { it.id }) { account ->
-                        AccountRow(account, onClick = {
-                            NotificationHelper.cancelAll(context)
-                            onAccountClick(account.id)
-                        })
-                        HorizontalDivider()
+                val needingAttention = accounts.count { it.hacked }
+                val unresolvedCount = accounts.sumOf { (it.numBreaches ?: 0) - (it.numAcknowledgedBreaches ?: 0) }
+                AccountsSummaryBanner(
+                    unresolvedCount = unresolvedCount,
+                    accountsNeedingAttention = needingAttention,
+                    totalAccounts = accounts.size
+                )
+                Row(
+                    Modifier.fillMaxWidth().padding(horizontal = 4.dp),
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+                    Text(
+                        stringResource(R.string.accounts_section_label).uppercase(),
+                        style = MaterialTheme.typography.labelMedium,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                    lastChecked?.lastChecked?.let { millis ->
+                        Text(
+                            stringResource(R.string.accounts_last_checked, DateTimeFormat.forPattern("yyyy/MM/dd HH:mm").print(millis)),
+                            style = MaterialTheme.typography.labelMedium,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                    }
+                }
+                Card(
+                    shape = RoundedCornerShape(16.dp),
+                    colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant)
+                ) {
+                    Column {
+                        accounts.forEachIndexed { index, account ->
+                            AccountRow(account, onClick = {
+                                NotificationHelper.cancelAll(context)
+                                onAccountClick(account.id)
+                            })
+                            if (index != accounts.lastIndex) {
+                                HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
+                            }
+                        }
                     }
                 }
             }
             HtmlLinkText(
                 "${stringResource(R.string.data_provided_by)} <a href=\"https://haveibeenpwned.com\">Have i been pwned?</a>",
-                modifier = Modifier.padding(12.dp)
+                modifier = Modifier.padding(horizontal = 4.dp)
             )
         }
     }
@@ -201,41 +238,98 @@ fun AccountsScreen(onAccountClick: (Long) -> Unit) {
 }
 
 @Composable
+private fun AccountsSummaryBanner(unresolvedCount: Int, accountsNeedingAttention: Int, totalAccounts: Int) {
+    val clean = unresolvedCount <= 0
+    val containerColor = if (clean) MaterialTheme.colorScheme.primaryContainer else MaterialTheme.colorScheme.errorContainer
+    val contentColor = if (clean) MaterialTheme.colorScheme.onPrimaryContainer else MaterialTheme.colorScheme.onErrorContainer
+
+    Row(
+        Modifier
+            .fillMaxWidth()
+            .background(containerColor, RoundedCornerShape(16.dp))
+            .padding(16.dp),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(12.dp)
+    ) {
+        Icon(
+            if (clean) Icons.Filled.CheckCircle else Icons.Filled.Warning,
+            contentDescription = null,
+            tint = contentColor
+        )
+        if (!clean) {
+            Text(
+                "$unresolvedCount",
+                style = MaterialTheme.typography.headlineSmall,
+                fontWeight = FontWeight.Bold,
+                color = contentColor
+            )
+        }
+        Text(
+            if (clean) {
+                stringResource(R.string.accounts_summary_clean, totalAccounts)
+            } else {
+                stringResource(R.string.accounts_summary_needs_attention, unresolvedCount, accountsNeedingAttention, totalAccounts)
+            },
+            style = MaterialTheme.typography.bodySmall,
+            color = contentColor,
+            modifier = Modifier.weight(1f)
+        )
+    }
+}
+
+@Composable
 private fun AccountRow(account: Account, onClick: () -> Unit) {
     val status = MaterialTheme.statusColors
-    val (color, stateText) = when {
-        account.hacked -> status.breached to stringResource(R.string.account_state_needs_attention)
-        account.lastChecked == null -> status.unchecked to stringResource(R.string.account_state_not_checked)
-        account.numBreaches == 0 -> status.clean to stringResource(R.string.account_state_clean)
-        else -> status.acknowledged to stringResource(R.string.account_state_acknowledged)
+    val cs = MaterialTheme.colorScheme
+    val numBreaches = account.numBreaches ?: 0
+    val numAcknowledged = account.numAcknowledgedBreaches ?: 0
+
+    data class RowStyle(val dotColor: androidx.compose.ui.graphics.Color, val stateText: String, val badgeCount: Int, val badgeContainer: androidx.compose.ui.graphics.Color, val badgeContent: androidx.compose.ui.graphics.Color)
+
+    val style = when {
+        account.hacked -> RowStyle(status.breached, stringResource(R.string.account_state_needs_attention), numBreaches - numAcknowledged, cs.errorContainer, cs.onErrorContainer)
+        account.lastChecked == null -> RowStyle(status.unchecked, stringResource(R.string.account_state_not_checked), 0, cs.surface, cs.onSurfaceVariant)
+        numBreaches == 0 -> RowStyle(status.clean, stringResource(R.string.account_state_clean), 0, cs.surface, cs.onSurfaceVariant)
+        else -> RowStyle(status.acknowledged, stringResource(R.string.account_state_acknowledged), numBreaches, cs.surface, cs.onSurfaceVariant)
     }
 
     Row(
         Modifier
             .fillMaxWidth()
             .clickable(onClick = onClick)
-            .padding(horizontal = 16.dp, vertical = 12.dp),
-        verticalAlignment = Alignment.CenterVertically
+            .padding(horizontal = 12.dp, vertical = 11.dp),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(12.dp)
     ) {
         Box(
             Modifier
                 .size(10.dp)
-                .background(color, CircleShape)
+                .background(style.dotColor, CircleShape)
         )
-        Spacer(Modifier.width(12.dp))
         Column(Modifier.weight(1f)) {
             Text(account.name, maxLines = 1, overflow = TextOverflow.Ellipsis, style = MaterialTheme.typography.bodyLarge)
             Text(
-                stateText,
+                style.stateText,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
-                style = MaterialTheme.typography.bodyMedium,
+                style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
         }
-        if (account.numBreaches > 0) {
-            Spacer(Modifier.width(8.dp))
-            Badge(containerColor = color) { Text("${account.numBreaches}") }
+        if (style.badgeCount > 0) {
+            Box(
+                Modifier
+                    .background(style.badgeContainer, RoundedCornerShape(50))
+                    .padding(horizontal = 8.dp, vertical = 2.dp)
+            ) {
+                Text("${style.badgeCount}", style = MaterialTheme.typography.labelMedium, color = style.badgeContent)
+            }
         }
+        Icon(
+            Icons.AutoMirrored.Filled.KeyboardArrowRight,
+            contentDescription = null,
+            tint = MaterialTheme.colorScheme.onSurfaceVariant,
+            modifier = Modifier.size(16.dp)
+        )
     }
 }

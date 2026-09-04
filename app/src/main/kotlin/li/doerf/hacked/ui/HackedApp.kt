@@ -1,5 +1,6 @@
 package li.doerf.hacked.ui
 
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
@@ -46,6 +47,10 @@ fun HackedApp(startWithFirstUse: Boolean) {
 
     Scaffold(
         containerColor = MaterialTheme.colorScheme.background,
+        // Each screen owns its own Scaffold + TopAppBar, which already consumes the
+        // status bar inset. Without this, that inset gets reserved twice (once here,
+        // once in the child), showing up as a big blank gap above every screen's title.
+        contentWindowInsets = WindowInsets(0, 0, 0, 0),
         bottomBar = {
             if (showBottomBar) {
                 NavigationBar {

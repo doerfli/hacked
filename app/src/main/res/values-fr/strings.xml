@@ -96,6 +96,10 @@
     <string name="account_state_not_checked">Pas encore vérifié</string>
     <string name="account_state_clean">Aucune brèche trouvée</string>
     <string name="account_state_acknowledged">Toutes reconnues</string>
+    <string name="accounts_section_label">Vos comptes</string>
+    <string name="accounts_last_checked">Vérifié %1$s</string>
+    <string name="accounts_summary_clean">Aucune fuite trouvée parmi %1$d comptes</string>
+    <string name="accounts_summary_needs_attention">%1$d fuites nécessitent votre attention, sur %2$d des %3$d comptes</string>
     <string name="welcome">Bienvenue dans Hacked?</string>
     <string name="app_version">Version de l\'application</string>
     <string name="device_info">Informations sur l\'appareil</string>

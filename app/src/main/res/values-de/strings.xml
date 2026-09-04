@@ -97,6 +97,10 @@
     <string name="account_state_not_checked">Noch nicht geprüft</string>
     <string name="account_state_clean">Keine Lecks gefunden</string>
     <string name="account_state_acknowledged">Alle zur Kenntnis genommen</string>
+    <string name="accounts_section_label">Deine Konten</string>
+    <string name="accounts_last_checked">Geprüft %1$s</string>
+    <string name="accounts_summary_clean">Keine Datenlecks bei %1$d Konten gefunden</string>
+    <string name="accounts_summary_needs_attention">%1$d Datenlecks benötigen deine Aufmerksamkeit, bei %2$d von %3$d Konten</string>
     <string name="welcome">Willkommen zu Hacked?</string>
     <string name="app_version">App Version</string>
     <string name="device_info">Informationen zum Gerät</string>
