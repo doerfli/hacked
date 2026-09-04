@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Context
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -15,30 +16,38 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.KeyboardArrowDown
-import androidx.compose.material.icons.filled.KeyboardArrowUp
+import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
+import androidx.compose.material.icons.filled.ExpandLess
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilterChip
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.core.text.HtmlCompat
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -49,12 +58,18 @@ import li.doerf.hacked.ui.composable.AppOverflowMenu
 import li.doerf.hacked.ui.composable.HtmlLinkText
 import li.doerf.hacked.ui.composable.LabeledValue
 import li.doerf.hacked.ui.composable.flagsText
+import li.doerf.hacked.ui.theme.statusColors
 import li.doerf.hacked.ui.viewmodels.BreachedSitesViewModel
 import org.joda.time.format.DateTimeFormat
 import java.text.NumberFormat
 import android.content.SharedPreferences
 
 private enum class SortOrder { NAME, COUNT, DATE }
+
+private sealed class LeaksBlock {
+    data class Group(val sites: List<BreachedSite>) : LeaksBlock()
+    data class Expanded(val site: BreachedSite) : LeaksBlock()
+}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -65,11 +80,29 @@ fun LeaksScreen() {
     val sites by (viewModel.breachesSites ?: return).observeAsState(emptyList())
     var query by rememberSaveable { mutableStateOf("") }
     var sort by rememberSaveable { mutableStateOf(SortOrder.NAME) }
-    var expandedIds by rememberSaveable { mutableStateOf(setOf<Long>()) }
+    var expandedId by rememberSaveable { mutableStateOf<Long?>(null) }
 
     LaunchedEffect(Unit) {
         val prefs: SharedPreferences = activity.getPreferences(Context.MODE_PRIVATE)
         viewModel.reloadIfStale(prefs, context)
+    }
+
+    val blocks = remember(sites, expandedId) {
+        buildList {
+            var group = mutableListOf<BreachedSite>()
+            sites.forEach { site ->
+                if (site.id == expandedId) {
+                    if (group.isNotEmpty()) {
+                        add(LeaksBlock.Group(group.toList()))
+                        group = mutableListOf()
+                    }
+                    add(LeaksBlock.Expanded(site))
+                } else {
+                    group.add(site)
+                }
+            }
+            if (group.isNotEmpty()) add(LeaksBlock.Group(group))
+        }
     }
 
     Scaffold(
@@ -85,7 +118,7 @@ fun LeaksScreen() {
                 .padding(padding)
                 .fillMaxSize()
         ) {
-            OutlinedTextField(
+            TextField(
                 value = query,
                 onValueChange = {
                     query = it
@@ -94,6 +127,14 @@ fun LeaksScreen() {
                 leadingIcon = { Icon(Icons.Filled.Search, contentDescription = null) },
                 placeholder = { Text(stringResource(R.string.enter_filter_text)) },
                 singleLine = true,
+                shape = RoundedCornerShape(50),
+                colors = TextFieldDefaults.colors(
+                    focusedIndicatorColor = androidx.compose.ui.graphics.Color.Transparent,
+                    unfocusedIndicatorColor = androidx.compose.ui.graphics.Color.Transparent,
+                    disabledIndicatorColor = androidx.compose.ui.graphics.Color.Transparent,
+                    focusedContainerColor = MaterialTheme.colorScheme.surfaceVariant,
+                    unfocusedContainerColor = MaterialTheme.colorScheme.surfaceVariant
+                ),
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 12.dp, vertical = 8.dp)
@@ -105,6 +146,11 @@ fun LeaksScreen() {
                 horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
                 FilterChip(
+                    selected = sort == SortOrder.DATE,
+                    onClick = { sort = SortOrder.DATE; viewModel.orderByDate() },
+                    label = { Text(stringResource(R.string.action_sort_dateadded)) }
+                )
+                FilterChip(
                     selected = sort == SortOrder.NAME,
                     onClick = { sort = SortOrder.NAME; viewModel.orderByName() },
                     label = { Text(stringResource(R.string.action_sort_name)) }
@@ -114,30 +160,25 @@ fun LeaksScreen() {
                     onClick = { sort = SortOrder.COUNT; viewModel.orderByCount() },
                     label = { Text(stringResource(R.string.action_sort_numpwned)) }
                 )
-                FilterChip(
-                    selected = sort == SortOrder.DATE,
-                    onClick = { sort = SortOrder.DATE; viewModel.orderByDate() },
-                    label = { Text(stringResource(R.string.action_sort_dateadded)) }
-                )
             }
             Spacer(Modifier.height(4.dp))
             LazyColumn(Modifier.weight(1f)) {
-                items(sites, key = { it.id }) { site ->
-                    BreachSiteRow(
-                        site = site,
-                        expanded = expandedIds.contains(site.id),
-                        onToggle = {
-                            expandedIds = if (expandedIds.contains(site.id)) {
-                                expandedIds - site.id
-                            } else {
-                                expandedIds + site.id
-                            }
-                        }
-                    )
+                items(blocks) { block ->
+                    when (block) {
+                        is LeaksBlock.Group -> GroupedSitesCard(
+                            sites = block.sites,
+                            onToggle = { expandedId = it }
+                        )
+                        is LeaksBlock.Expanded -> ExpandedSiteCard(
+                            site = block.site,
+                            onToggle = { expandedId = null }
+                        )
+                    }
                 }
                 item {
                     HtmlLinkText(
                         "${stringResource(R.string.data_provided_by)} <a href=\"https://haveibeenpwned.com\">Have i been pwned?</a>",
+                        style = MaterialTheme.typography.labelSmall,
                         modifier = Modifier.padding(12.dp)
                     )
                 }
@@ -147,44 +188,85 @@ fun LeaksScreen() {
 }
 
 @Composable
-private fun BreachSiteRow(site: BreachedSite, expanded: Boolean, onToggle: () -> Unit) {
-    val context = LocalContext.current
+private fun GroupedSitesCard(sites: List<BreachedSite>, onToggle: (Long) -> Unit) {
     Card(
         Modifier
             .fillMaxWidth()
-            .padding(horizontal = 12.dp, vertical = 4.dp)
-            .clickable(onClick = onToggle)
+            .padding(horizontal = 12.dp, vertical = 6.dp),
+        shape = RoundedCornerShape(16.dp),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant)
     ) {
-        Column(Modifier.padding(12.dp)) {
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Text(site.title, style = MaterialTheme.typography.titleMedium, modifier = Modifier.weight(1f))
-                Text(
-                    "(${NumberFormat.getNumberInstance().format(site.pwnCount)})",
-                    style = MaterialTheme.typography.labelMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
-                Icon(
-                    if (expanded) Icons.Filled.KeyboardArrowUp else Icons.Filled.KeyboardArrowDown,
-                    contentDescription = null
-                )
+        Column {
+            sites.forEachIndexed { index, site ->
+                Row(
+                    Modifier
+                        .fillMaxWidth()
+                        .clickable { onToggle(site.id) }
+                        .padding(horizontal = 16.dp, vertical = 12.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Column(Modifier.weight(1f)) {
+                        Text(site.title, maxLines = 1, overflow = TextOverflow.Ellipsis, style = MaterialTheme.typography.bodyLarge)
+                        Text(
+                            "${NumberFormat.getNumberInstance().format(site.pwnCount)} accounts · ${DateTimeFormat.forPattern("yyyy/MM/dd").print(site.breachDate)}",
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis,
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                    }
+                    Icon(
+                        Icons.AutoMirrored.Filled.KeyboardArrowRight,
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                }
+                if (index != sites.lastIndex) {
+                    HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
+                }
             }
-            if (expanded) {
-                Spacer(Modifier.height(8.dp))
-                Row {
+        }
+    }
+}
+
+@Composable
+private fun ExpandedSiteCard(site: BreachedSite, onToggle: () -> Unit) {
+    val context = LocalContext.current
+    val status = MaterialTheme.statusColors
+    val edgeWidthPx = with(LocalDensity.current) { 4.dp.toPx() }
+
+    Card(
+        Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 12.dp, vertical = 6.dp),
+        shape = RoundedCornerShape(16.dp),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant)
+    ) {
+        Box(
+            Modifier
+                .fillMaxWidth()
+                .drawBehind { drawRect(color = status.acknowledged, size = size.copy(width = edgeWidthPx)) }
+        ) {
+            Column(Modifier.padding(start = 20.dp, top = 16.dp, end = 16.dp, bottom = 16.dp)) {
+                Row(
+                    Modifier.fillMaxWidth().clickable(onClick = onToggle),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
                     if (!site.logoPath.isNullOrEmpty()) {
-                        AsyncImage(model = site.logoPath, contentDescription = null, modifier = Modifier.size(48.dp))
+                        AsyncImage(model = site.logoPath, contentDescription = null, modifier = Modifier.size(34.dp))
                         Spacer(Modifier.width(12.dp))
                     }
-                    Column {
-                        LabeledValue(stringResource(R.string.label_domain), site.domain)
-                        LabeledValue(
-                            stringResource(R.string.label_breach_date),
-                            DateTimeFormat.forPattern("yyyy/MM/dd").print(site.breachDate)
-                        )
-                        LabeledValue(stringResource(R.string.label_compromised_data), site.dataClasses)
-                        if (site.hasAdditionalFlags()) {
-                            LabeledValue(stringResource(R.string.label_additional_flags), flagsText(context, site))
-                        }
+                    Text(site.title, style = MaterialTheme.typography.titleMedium, modifier = Modifier.weight(1f))
+                    Icon(Icons.Filled.ExpandLess, contentDescription = null)
+                }
+                Spacer(Modifier.height(8.dp))
+                Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                    LabeledValue(stringResource(R.string.label_domain), site.domain)
+                    LabeledValue(stringResource(R.string.label_breach_date), DateTimeFormat.forPattern("yyyy/MM/dd").print(site.breachDate))
+                    LabeledValue(stringResource(R.string.label_accounts_affected), NumberFormat.getNumberInstance().format(site.pwnCount))
+                    LabeledValue(stringResource(R.string.label_compromised_data), site.dataClasses)
+                    if (site.hasAdditionalFlags()) {
+                        LabeledValue(stringResource(R.string.label_additional_flags), flagsText(context, site))
                     }
                 }
                 Spacer(Modifier.height(8.dp))

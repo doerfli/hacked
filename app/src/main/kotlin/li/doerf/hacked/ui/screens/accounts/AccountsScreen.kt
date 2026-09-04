@@ -194,6 +194,7 @@ fun AccountsScreen(onAccountClick: (Long) -> Unit) {
             }
             HtmlLinkText(
                 "${stringResource(R.string.data_provided_by)} <a href=\"https://haveibeenpwned.com\">Have i been pwned?</a>",
+                style = MaterialTheme.typography.labelSmall,
                 modifier = Modifier.padding(horizontal = 4.dp)
             )
         }
