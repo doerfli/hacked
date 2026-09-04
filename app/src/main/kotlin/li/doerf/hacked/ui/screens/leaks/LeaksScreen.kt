@@ -44,6 +44,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
@@ -219,7 +220,8 @@ private fun SiteRow(
             .fillMaxWidth()
             .padding(horizontal = 12.dp)
             .padding(top = topPadding, bottom = bottomPadding)
-            .background(MaterialTheme.colorScheme.surfaceVariant, shape)
+            .clip(shape)
+            .background(MaterialTheme.colorScheme.surfaceVariant)
     ) {
         Row(
             Modifier
