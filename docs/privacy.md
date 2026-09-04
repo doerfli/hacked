@@ -1,57 +1,50 @@
 # Privacy Policy
 
-This page described how the _Hacked? - have i been pwned?_ App handles privacy and what happens to the data you enter in the app. 
+This page describes how the _Hacked? - have i been pwned?_ app handles privacy and what happens to the data you enter in the app.
 
 ## General
 
-The _Hacked? - have i been pwned?_ app uses the service _Have i been pwned_ as it sole data source. 
-_Have i been pwned_ publishes its own privacy policy at [https://haveibeenpwned.com/Privacy](https://haveibeenpwned.com/Privacy) 
+The _Hacked? - have i been pwned?_ app uses the _Have I Been Pwned_ service as its sole data source.
+_Have I Been Pwned_ publishes its own privacy policy at [https://haveibeenpwned.com/Privacy](https://haveibeenpwned.com/Privacy).
 
-All data transmitted over the internet is sent over HTTPS connections. 
+All data transmitted over the internet is sent over HTTPS connections.
 
 ## When you save an email address in the app
 
-Any email address entered in the app is stored within a local database on the device. 
-The [Android Sandbox](https://source.android.com/security/app-sandbox) makes sure that only the app can access this database. 
-The list is not sent anywhere, except when searching for breached accounts. 
+Any email address entered in the app is stored in a local database on the device.
+The [Android sandbox](https://source.android.com/security/app-sandbox) ensures that only the app can access this database.
+The list is never sent anywhere, except when searching for breached accounts.
 
 ## When you search for a breached account
 
-When you search for an email address in the app, it sends the address to the API of _Have I Been Pwned_ via the _hibp-proxy_. 
-The _hibp-proxy_ is required to supplement the request with the access key required for accessing the _Have i been pwned_ API. 
-The _hibp-proxy_ does not explicitly store the email address in any persistent data storage, it only forwards the request to the _Have I Been Pwned API service_ and returns the response, which does not contain the email address anymore. 
-The response is returned to the device through [Firebase Cloud Messaging](https://firebase.google.com/docs/cloud-messaging), a messaging solution provided by Google. 
-
+When you search for an email address in the app, it is sent to the _Have I Been Pwned_ API via the _hibp-proxy_.
+The _hibp-proxy_ supplements the request with the access key required to use the _Have I Been Pwned_ API.
+It does not store the email address in any persistent storage — it only forwards the request to the _Have I Been Pwned_ API and returns the response, which no longer contains the email address.
+The response is delivered to the device via [Firebase Cloud Messaging](https://firebase.google.com/docs/cloud-messaging), a messaging service provided by Google.
 
 ## When you check your password
 
-The _pwned password_ function checks a user-provided password against a list of known breached passwords. 
-The plain text password is not sent to any service what so ever. 
-Instead, it is hashed on the device and only the first 5 characters of the hash are sent to the _Have I Been Pwned API_. 
-This process is called _k-Anonymity_ and more details are provided in this [article](https://blog.cloudflare.com/validating-leaked-passwords-with-k-anonymity/).
-The request is sent directly to the _Have I Been Pwned API_ and not through the _hibp-proxy_. 
+The _pwned password_ function checks a password you provide against a list of known breached passwords.
+The plain-text password is never sent to any service.
+Instead, it is hashed on the device, and only the first 5 characters of the hash are sent to the _Have I Been Pwned_ API.
+This process is called _k-Anonymity_; more details are available in [this article](https://blog.cloudflare.com/validating-leaked-passwords-with-k-anonymity/).
+This request goes directly to the _Have I Been Pwned_ API, not through the _hibp-proxy_.
 
 ## Logging
 
-The app stores limited technical logs through the Android Log service. 
-These logs are stored within the Android device and never sent to an external system.
- 
-If the app crashes, a crash report is sent to [Crashlytics](https://firebase.google.com/docs/crashlytics) for analysis. 
+The app stores limited technical logs via the Android Log service.
+These logs stay on the device and are never sent to an external system.
 
-The app uses [Firebase analytics](https://firebase.google.com/docs/analytics) to track some key events (like account added, password checked, breach acknowledged, ...). 
-In all cases no content data is sent to the analytics host, only the indication that the event happened is transmitted.
-This data is used to analyze how the app is being used. 
+If the app crashes, a crash report is sent to [Crashlytics](https://firebase.google.com/docs/crashlytics) for analysis.
 
-The _hibp-proxy_ stores only the bare minimum logs keep the service operational and combat malicious activity. 
-This includes transient web server logs. 
-These logs may include data entered by the user and in some cases, the user's IP address. 
+The app uses [Firebase Analytics](https://firebase.google.com/docs/analytics) to track a small number of key events (e.g. account added, password checked, breach acknowledged). No content data is ever sent to the analytics service — only the fact that an event occurred. This data is used to understand how the app is used.
+
+The _hibp-proxy_ keeps only the bare minimum logs needed to keep the service running and to combat malicious activity. This includes transient web server logs, which may include data entered by the user and, in some cases, the user's IP address.
 
 ## Hosting
 
-The app itself requires no hosting. The _hibp-proxy_ service is hosted in Heroku's Europe data center. 
+The app itself requires no hosting. The _hibp-proxy_ service is hosted on a server in Germany.
 
 ## Source code
 
-The source code for [Hacked? - have i been pwned](https://github.com/doerfli/hacked) and the [hibp-proxy](https://github.com/doerfli/hibp-proxy) can be found on their respective Github pages. 
-
-
+The source code for [Hacked? - have i been pwned](https://github.com/doerfli/hacked) and [hibp-proxy](https://github.com/doerfli/hibp-proxy) is available on their respective GitHub pages.
