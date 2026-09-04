@@ -12,7 +12,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
@@ -69,26 +70,7 @@ fun AccountDetailScreen(accountId: Long, onBack: () -> Unit) {
     val scope = rememberCoroutineScope()
     var helpExpanded by rememberSaveable { mutableStateOf(false) }
     var menuExpanded by rememberSaveable { mutableStateOf(false) }
-
-    // Acknowledging a breach re-sorts it to the end in the DB query. Freezing the
-    // order the list was first shown in (and only patching fields in place) keeps
-    // the on-screen position of every card fixed for the rest of this visit; the
-    // real sort order is picked up again next time the screen is opened.
-    var frozenOrder by remember(accountId) { mutableStateOf<List<Long>?>(null) }
-    LaunchedEffect(breaches) {
-        if (frozenOrder == null && breaches.isNotEmpty()) {
-            frozenOrder = breaches.map { it.id }
-        }
-    }
-    val displayedBreaches = remember(breaches, frozenOrder) {
-        val order = frozenOrder
-        if (order == null) {
-            breaches
-        } else {
-            val byId = breaches.associateBy { it.id }
-            order.mapNotNull { byId[it] } + breaches.filterNot { it.id in order }
-        }
-    }
+    val listState = rememberLazyListState()
 
     LaunchedEffect(Unit) { Analytics.trackView("Screen~AccountDetails") }
 
@@ -139,12 +121,22 @@ fun AccountDetailScreen(accountId: Long, onBack: () -> Unit) {
                     onToggle = { helpExpanded = !helpExpanded },
                     modifier = Modifier.padding(12.dp)
                 )
-                LazyColumn(Modifier.fillMaxSize()) {
-                    items(displayedBreaches, key = { it.id }) { breach ->
+                LazyColumn(Modifier.fillMaxSize(), state = listState) {
+                    itemsIndexed(breaches, key = { _, breach -> breach.id }) { index, breach ->
                         BreachCard(breach) {
-                            viewModel.acknowledge(breach) {
-                                scope.launch { snackbarHostState.showSnackbar(context.getString(R.string.breach_acknowledged)) }
-                                RatingHelper(activity).setRatingCounterBelowthreshold()
+                            scope.launch {
+                                // Acknowledging moves this card to the end of the (re-sorted)
+                                // list. If it's the anchor item Compose's scroll-position
+                                // correction would otherwise follow it there. Step the anchor
+                                // onto the next card first so the viewport just reveals what
+                                // was already below, instead of chasing the moved card down.
+                                if (index == listState.firstVisibleItemIndex && index < breaches.lastIndex) {
+                                    listState.scrollToItem(index + 1, 0)
+                                }
+                                viewModel.acknowledge(breach) {
+                                    scope.launch { snackbarHostState.showSnackbar(context.getString(R.string.breach_acknowledged)) }
+                                    RatingHelper(activity).setRatingCounterBelowthreshold()
+                                }
                             }
                         }
                     }
