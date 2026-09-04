@@ -6,8 +6,7 @@ import android.util.Log
 import android.widget.Toast
 import androidx.work.*
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.withContext
 import li.doerf.hacked.CustomEvent
 import li.doerf.hacked.R
 import li.doerf.hacked.db.AppDatabase
@@ -22,18 +21,20 @@ class AccountService(private val application: Application) {
 
     private var context: Context = application.applicationContext
 
-    fun addAccount(aName: String) {
-        if ( aName.trim { it <= ' ' } == "") {
+    suspend fun getAccountCount(): Int = withContext(Dispatchers.IO) {
+        AppDatabase.get(context).accountDao.countAll()
+    }
+
+    suspend fun addAccount(aName: String) {
+        val name = aName.trim { it <= ' ' }
+        if (name == "") {
             Toast.makeText(context, context.getString(R.string.toast_enter_valid_name), Toast.LENGTH_LONG).show()
             Log.w(AccountConstants.LOGTAG, "account name not valid")
             return
         }
-        val name = aName.trim { it <= ' ' }
 
-        runBlocking(context = Dispatchers.IO) {
-            launch(createCoroutingExceptionHandler(AccountConstants.LOGTAG)) {
-                addNewAccount(name)
-            }
+        withContext(Dispatchers.IO + createCoroutingExceptionHandler(AccountConstants.LOGTAG)) {
+            addNewAccount(name)
         }
     }
 

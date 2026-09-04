@@ -14,12 +14,12 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
 import androidx.compose.material.icons.filled.Add
@@ -27,8 +27,6 @@ import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.Button
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.HorizontalDivider
@@ -60,15 +58,13 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.work.OneTimeWorkRequest
 import androidx.work.WorkManager
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import li.doerf.hacked.R
-import li.doerf.hacked.db.AppDatabase
 import li.doerf.hacked.db.entities.Account
 import li.doerf.hacked.remote.hibp.HIBPAccountCheckerWorker
 import li.doerf.hacked.services.AccountService
@@ -120,7 +116,7 @@ fun AccountsScreen(onAccountClick: (Long) -> Unit) {
             FloatingActionButton(
                 onClick = {
                     scope.launch {
-                        val count = withContext(Dispatchers.IO) { AppDatabase.get(context).accountDao.all.size }
+                        val count = AccountService(activity.application).getAccountCount()
                         if (count > MAX_ACCOUNTS) {
                             snackbarHostState.showSnackbar(context.getString(R.string.snackbar_max_accounts))
                         } else {
@@ -141,7 +137,6 @@ fun AccountsScreen(onAccountClick: (Long) -> Unit) {
             Modifier
                 .padding(padding)
                 .fillMaxSize()
-                .verticalScroll(rememberScrollState())
                 .padding(horizontal = 16.dp, vertical = 12.dp),
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
@@ -178,18 +173,23 @@ fun AccountsScreen(onAccountClick: (Long) -> Unit) {
                         )
                     }
                 }
-                Card(
-                    shape = RoundedCornerShape(16.dp),
-                    colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant)
+                Box(
+                    Modifier
+                        .weight(1f)
+                        .fillMaxWidth()
+                        .clip(RoundedCornerShape(16.dp))
+                        .background(MaterialTheme.colorScheme.surfaceVariant)
                 ) {
-                    Column {
-                        accounts.forEachIndexed { index, account ->
-                            AccountRow(account, onClick = {
-                                NotificationHelper.cancelAll(context)
-                                onAccountClick(account.id)
-                            })
-                            if (index != accounts.lastIndex) {
-                                HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
+                    LazyColumn(Modifier.fillMaxSize()) {
+                        itemsIndexed(accounts, key = { _, account -> account.id }) { index, account ->
+                            Column {
+                                AccountRow(account, onClick = {
+                                    NotificationHelper.cancelAll(context)
+                                    onAccountClick(account.id)
+                                })
+                                if (index != accounts.lastIndex) {
+                                    HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
+                                }
                             }
                         }
                     }
@@ -218,7 +218,7 @@ fun AccountsScreen(onAccountClick: (Long) -> Unit) {
                     keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
                     keyboardActions = KeyboardActions(onDone = {
                         if (name.isNotBlank()) {
-                            AccountService(activity.application).addAccount(name)
+                            scope.launch { AccountService(activity.application).addAccount(name) }
                             showAddSheet = false
                         }
                     }),
@@ -230,7 +230,7 @@ fun AccountsScreen(onAccountClick: (Long) -> Unit) {
                     Spacer(Modifier.width(8.dp))
                     Button(
                         onClick = {
-                            AccountService(activity.application).addAccount(name)
+                            scope.launch { AccountService(activity.application).addAccount(name) }
                             showAddSheet = false
                         },
                         enabled = name.isNotBlank()

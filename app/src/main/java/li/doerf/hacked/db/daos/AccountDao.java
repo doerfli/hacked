@@ -27,6 +27,9 @@ public interface AccountDao {
     @Query("SELECT * FROM accounts ORDER BY name")
     List<Account> getAll();
 
+    @Query("SELECT COUNT(*) FROM accounts")
+    int countAll();
+
     @Query("SELECT * FROM accounts ORDER BY is_hacked DESC, name")
     LiveData<List<Account>> getAllLD();
 
