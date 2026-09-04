@@ -169,13 +169,13 @@ fun LeaksScreen() {
             val listState = rememberLazyListState()
             Box(
                 Modifier
-                    .weight(1f)
+                    .weight(1f, fill = false)
                     .fillMaxWidth()
                     .padding(horizontal = 12.dp, vertical = 6.dp)
                     .clip(RoundedCornerShape(16.dp))
                     .background(MaterialTheme.colorScheme.surfaceVariant)
             ) {
-                LazyColumn(Modifier.fillMaxSize(), state = listState) {
+                LazyColumn(Modifier.fillMaxWidth(), state = listState) {
                     blocks.forEach { block ->
                         when (block) {
                             is LeaksBlock.Group -> {
