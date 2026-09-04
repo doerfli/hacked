@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
@@ -69,8 +70,17 @@ fun AccountDetailScreen(accountId: Long, onBack: () -> Unit) {
     val scope = rememberCoroutineScope()
     var helpExpanded by rememberSaveable { mutableStateOf(false) }
     var menuExpanded by rememberSaveable { mutableStateOf(false) }
+    val listState = rememberLazyListState()
+    var scrollAnchor by remember { mutableStateOf<Pair<Int, Int>?>(null) }
 
     LaunchedEffect(Unit) { Analytics.trackView("Screen~AccountDetails") }
+
+    LaunchedEffect(breaches) {
+        scrollAnchor?.let { (index, offset) ->
+            listState.scrollToItem(index, offset)
+            scrollAnchor = null
+        }
+    }
 
     Scaffold(
         topBar = {
@@ -119,9 +129,10 @@ fun AccountDetailScreen(accountId: Long, onBack: () -> Unit) {
                     onToggle = { helpExpanded = !helpExpanded },
                     modifier = Modifier.padding(12.dp)
                 )
-                LazyColumn(Modifier.fillMaxSize()) {
+                LazyColumn(Modifier.fillMaxSize(), state = listState) {
                     items(breaches, key = { it.id }) { breach ->
                         BreachCard(breach) {
+                            scrollAnchor = listState.firstVisibleItemIndex to listState.firstVisibleItemScrollOffset
                             viewModel.acknowledge(breach) {
                                 scope.launch { snackbarHostState.showSnackbar(context.getString(R.string.breach_acknowledged)) }
                                 RatingHelper(activity).setRatingCounterBelowthreshold()
