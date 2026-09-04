@@ -4,7 +4,7 @@ Android app (`li.doerf.hacked`) that checks accounts and passwords against Have 
 
 ## Stack
 
-- Kotlin + Java (mixed; new code is Kotlin), AGP 9.3.2, Gradle 9.7.1, Kotlin 1.9.24
+- Kotlin + Java (mixed; new code is Kotlin), AGP 9.4.0, Gradle 9.7.1, Kotlin 1.9.24
 - Jetpack Compose + Material 3 (BOM `compose_bom_version` in `gradle.properties`) — the UI layer is being migrated to Compose on `feature/ui-redesign-v4`; see "UI redesign" below
 - Room for local storage (`db/`), RxJava2 (`room-rxjava2`) still present for some DAOs, newer code uses `LiveData`/`StateFlow`
 - WorkManager for background sync (`remote/hibp/*Worker.kt`)
