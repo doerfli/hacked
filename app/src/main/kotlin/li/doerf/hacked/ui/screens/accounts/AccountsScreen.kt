@@ -1,6 +1,5 @@
 package li.doerf.hacked.ui.screens.accounts
 
-import android.app.Activity
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -75,6 +74,7 @@ import li.doerf.hacked.ui.theme.statusColors
 import li.doerf.hacked.ui.viewmodels.AccountViewModel
 import li.doerf.hacked.util.AccountConstants.MAX_ACCOUNTS
 import li.doerf.hacked.util.RatingHelper
+import li.doerf.hacked.util.findActivity
 import li.doerf.hacked.utils.NotificationHelper
 import org.joda.time.format.DateTimeFormat
 
@@ -82,7 +82,7 @@ import org.joda.time.format.DateTimeFormat
 @Composable
 fun AccountsScreen(onAccountClick: (Long) -> Unit) {
     val context = LocalContext.current
-    val activity = context as Activity
+    val activity = context.findActivity() ?: return
     val viewModel: AccountViewModel = viewModel()
     val accounts by viewModel.accountList.observeAsState(emptyList())
     val lastChecked by viewModel.lastChecked.observeAsState()
@@ -290,14 +290,14 @@ private fun AccountsSummaryBanner(unresolvedCount: Int, accountsNeedingAttention
     }
 }
 
+private data class RowStyle(val dotColor: androidx.compose.ui.graphics.Color, val stateText: String, val badgeCount: Int, val badgeContainer: androidx.compose.ui.graphics.Color, val badgeContent: androidx.compose.ui.graphics.Color)
+
 @Composable
 private fun AccountRow(account: Account, onClick: () -> Unit) {
     val status = MaterialTheme.statusColors
     val cs = MaterialTheme.colorScheme
     val numBreaches = account.numBreaches ?: 0
     val numAcknowledged = account.numAcknowledgedBreaches ?: 0
-
-    data class RowStyle(val dotColor: androidx.compose.ui.graphics.Color, val stateText: String, val badgeCount: Int, val badgeContainer: androidx.compose.ui.graphics.Color, val badgeContent: androidx.compose.ui.graphics.Color)
 
     val style = when {
         account.hacked -> RowStyle(status.breached, stringResource(R.string.account_state_needs_attention), numBreaches - numAcknowledged, cs.errorContainer, cs.onErrorContainer)

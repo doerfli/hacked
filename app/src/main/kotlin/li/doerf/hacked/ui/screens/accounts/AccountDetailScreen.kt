@@ -1,6 +1,5 @@
 package li.doerf.hacked.ui.screens.accounts
 
-import android.app.Activity
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
@@ -55,12 +54,13 @@ import li.doerf.hacked.ui.theme.statusColors
 import li.doerf.hacked.ui.viewmodels.AccountDetailViewModel
 import li.doerf.hacked.util.Analytics
 import li.doerf.hacked.util.RatingHelper
+import li.doerf.hacked.util.findActivity
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AccountDetailScreen(accountId: Long, onBack: () -> Unit) {
+fun AccountDetailScreen(onBack: () -> Unit) {
     val context = LocalContext.current
-    val activity = context as Activity
+    val activity = context.findActivity() ?: return
     val viewModel: AccountDetailViewModel = viewModel()
     val account by viewModel.account.collectAsStateWithLifecycle()
     val breaches by viewModel.breaches.collectAsStateWithLifecycle()

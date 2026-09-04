@@ -90,9 +90,8 @@ fun HackedApp(startWithFirstUse: Boolean) {
             composable(
                 route = Routes.ACCOUNT_DETAIL,
                 arguments = listOf(navArgument(Routes.ACCOUNT_DETAIL_ARG) { type = NavType.LongType })
-            ) { entry ->
-                val accountId = entry.arguments!!.getLong(Routes.ACCOUNT_DETAIL_ARG)
-                AccountDetailScreen(accountId = accountId, onBack = { navController.popBackStack() })
+            ) {
+                AccountDetailScreen(onBack = { navController.popBackStack() })
             }
             composable(Routes.PASSWORDS) { PasswordScreen() }
             composable(Routes.LEAKS) { LeaksScreen() }

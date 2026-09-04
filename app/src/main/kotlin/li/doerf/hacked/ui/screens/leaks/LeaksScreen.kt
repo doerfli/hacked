@@ -1,6 +1,5 @@
 package li.doerf.hacked.ui.screens.leaks
 
-import android.app.Activity
 import android.content.Context
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -62,6 +61,7 @@ import li.doerf.hacked.ui.composable.LabeledValue
 import li.doerf.hacked.ui.composable.flagsText
 import li.doerf.hacked.ui.theme.statusColors
 import li.doerf.hacked.ui.viewmodels.BreachedSitesViewModel
+import li.doerf.hacked.util.findActivity
 import org.joda.time.format.DateTimeFormat
 import java.text.NumberFormat
 import android.content.SharedPreferences
@@ -77,7 +77,7 @@ private sealed class LeaksBlock {
 @Composable
 fun LeaksScreen() {
     val context = LocalContext.current
-    val activity = context as Activity
+    val activity = context.findActivity() ?: return
     val viewModel: BreachedSitesViewModel = viewModel()
     val sites by (viewModel.breachesSites ?: return).observeAsState(emptyList())
     var query by rememberSaveable { mutableStateOf("") }
@@ -242,7 +242,7 @@ private fun ExpandedSiteCard(site: BreachedSite, onToggle: () -> Unit) {
     Card(
         Modifier
             .fillMaxWidth()
-            .padding(horizontal = 12.dp, vertical = 6.dp),
+            .padding(vertical = 6.dp),
         shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant)
     ) {

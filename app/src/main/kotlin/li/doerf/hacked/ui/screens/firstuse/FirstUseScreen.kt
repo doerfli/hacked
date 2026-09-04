@@ -1,6 +1,5 @@
 package li.doerf.hacked.ui.screens.firstuse
 
-import android.app.Activity
 import android.content.Context
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -38,11 +37,12 @@ import li.doerf.hacked.services.AccountService
 import li.doerf.hacked.ui.composable.HtmlLinkText
 import li.doerf.hacked.util.Analytics
 import li.doerf.hacked.util.FirstUseTracker
+import li.doerf.hacked.util.findActivity
 
 @Composable
 fun FirstUseScreen(onFinished: () -> Unit) {
     val context = LocalContext.current
-    val activity = context as Activity
+    val activity = context.findActivity() ?: return
     val scope = rememberCoroutineScope()
     var accountName by rememberSaveable { mutableStateOf("") }
 

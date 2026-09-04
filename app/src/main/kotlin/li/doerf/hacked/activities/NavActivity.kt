@@ -31,7 +31,7 @@ class NavActivity : AppCompatActivity() {
 
         lifecycleScope.launch {
             val numAccounts = withContext(Dispatchers.IO) {
-                AppDatabase.get(applicationContext).accountDao.all.size
+                AppDatabase.get(applicationContext).accountDao.countAll()
             }
             val firstUseSeen = getPreferences(Context.MODE_PRIVATE)
                 .getBoolean(FirstUseTracker.PREF_KEY_FIRST_USE_SEEN, false)

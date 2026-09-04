@@ -1,16 +1,22 @@
 package li.doerf.hacked.ui.composable
 
 import android.text.style.URLSpan
-import androidx.compose.foundation.text.ClickableText
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.TextLayoutResult
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.style.TextDecoration
@@ -28,13 +34,18 @@ fun HtmlLinkText(html: String, modifier: Modifier = Modifier, style: TextStyle =
     val linkColor = MaterialTheme.colorScheme.primary
     val contentColor = LocalContentColor.current
     val annotated = remember(html, linkColor) { annotatedStringFromHtml(html, linkColor) }
-    ClickableText(
+    var layoutResult by remember { mutableStateOf<TextLayoutResult?>(null) }
+
+    Text(
         text = annotated,
-        modifier = modifier,
         style = style.copy(color = contentColor),
-        onClick = { offset ->
-            annotated.getStringAnnotations(URL_TAG, offset, offset).firstOrNull()?.let {
-                uriHandler.openUri(it.item)
+        onTextLayout = { layoutResult = it },
+        modifier = modifier.pointerInput(annotated) {
+            detectTapGestures { offset ->
+                val position = layoutResult?.getOffsetForPosition(offset) ?: return@detectTapGestures
+                annotated.getStringAnnotations(URL_TAG, position, position).firstOrNull()?.let {
+                    uriHandler.openUri(it.item)
+                }
             }
         }
     )

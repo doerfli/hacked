@@ -45,46 +45,32 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.core.content.edit
-import androidx.preference.PreferenceManager
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.viewmodel.compose.viewModel
 import kotlinx.coroutines.launch
 import li.doerf.hacked.BuildConfig
-import li.doerf.hacked.CustomEvent
 import li.doerf.hacked.R
+import li.doerf.hacked.ui.viewmodels.SettingsViewModel
 import li.doerf.hacked.util.Analytics
-import li.doerf.hacked.util.FcmTokenManager
-import li.doerf.hacked.util.ThemeMode
-import li.doerf.hacked.utils.SynchronizationHelper
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SettingsScreen(onBack: () -> Unit) {
-    val context = LocalContext.current
-    val prefs = remember { PreferenceManager.getDefaultSharedPreferences(context) }
-    val scope = rememberCoroutineScope()
+    val viewModel: SettingsViewModel = viewModel()
     val snackbarHostState = remember { SnackbarHostState() }
+    val scope = rememberCoroutineScope()
+    val cleanTokenDoneMessage = stringResource(R.string.clean_token_done)
 
-    val keySyncEnable = stringResource(R.string.pref_key_sync_enable)
-    val keySyncCellular = stringResource(R.string.pref_key_sync_via_cellular)
-    val keySyncInterval = stringResource(R.string.pref_key_sync_interval)
-    val defaultInterval = stringResource(R.string.pref_sync_interval_default)
-
-    var themeMode by remember { mutableStateOf(prefs.getString(ThemeMode.PREF_KEY, ThemeMode.SYSTEM) ?: ThemeMode.SYSTEM) }
-    var syncEnabled by remember { mutableStateOf(prefs.getBoolean(keySyncEnable, true)) }
-    var syncViaCellular by remember { mutableStateOf(prefs.getBoolean(keySyncCellular, false)) }
-    var syncInterval by remember { mutableStateOf(prefs.getString(keySyncInterval, defaultInterval) ?: defaultInterval) }
+    val themeMode by viewModel.themeMode.collectAsStateWithLifecycle()
+    val syncEnabled by viewModel.syncEnabled.collectAsStateWithLifecycle()
+    val syncViaCellular by viewModel.syncViaCellular.collectAsStateWithLifecycle()
+    val syncInterval by viewModel.syncInterval.collectAsStateWithLifecycle()
     var showIntervalDialog by rememberSaveable { mutableStateOf(false) }
 
     LaunchedEffect(Unit) { Analytics.trackView("Fragment~Settings") }
-
-    fun onSyncPrefChanged() {
-        val enabled = SynchronizationHelper.scheduleSync(context.applicationContext)
-        Analytics.trackCustomEvent(if (enabled) CustomEvent.BACKGROUND_SYNC_ENABLED else CustomEvent.BACKGROUND_SYNC_DISABLED)
-    }
 
     val themeEntries = stringArrayResource(R.array.pref_theme_mode_entries)
     val themeValues = stringArrayResource(R.array.pref_theme_mode_values)
@@ -127,11 +113,7 @@ fun SettingsScreen(onBack: () -> Unit) {
                                 shape = SegmentedButtonDefaults.itemShape(index = index, count = themeEntries.size),
                                 selected = themeValues[index] == themeMode,
                                 icon = {},
-                                onClick = {
-                                    themeMode = themeValues[index]
-                                    prefs.edit { putString(ThemeMode.PREF_KEY, themeMode) }
-                                    ThemeMode.apply(context.applicationContext)
-                                }
+                                onClick = { viewModel.setThemeMode(themeValues[index]) }
                             ) { Text(label, maxLines = 1) }
                         }
                     }
@@ -143,11 +125,7 @@ fun SettingsScreen(onBack: () -> Unit) {
                     title = stringResource(R.string.pref_title_sync_enable),
                     summary = stringResource(R.string.pref_summary_sync_enable),
                     checked = syncEnabled,
-                    onCheckedChange = {
-                        syncEnabled = it
-                        prefs.edit { putBoolean(keySyncEnable, it) }
-                        onSyncPrefChanged()
-                    }
+                    onCheckedChange = { viewModel.setSyncEnabled(it) }
                 )
                 HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
                 SettingsSwitchRow(
@@ -155,11 +133,7 @@ fun SettingsScreen(onBack: () -> Unit) {
                     summary = stringResource(R.string.pref_summary_sync_via_cellular),
                     checked = syncViaCellular,
                     enabled = syncEnabled,
-                    onCheckedChange = {
-                        syncViaCellular = it
-                        prefs.edit { putBoolean(keySyncCellular, it) }
-                        onSyncPrefChanged()
-                    }
+                    onCheckedChange = { viewModel.setSyncViaCellular(it) }
                 )
                 HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
                 SettingsClickRow(
@@ -183,8 +157,9 @@ fun SettingsScreen(onBack: () -> Unit) {
                     title = stringResource(R.string.clean_token),
                     summary = stringResource(R.string.clean_token_summary),
                     onClick = {
-                        FcmTokenManager.cleanToken(context)
-                        scope.launch { snackbarHostState.showSnackbar(context.getString(R.string.clean_token_done)) }
+                        viewModel.cleanToken {
+                            scope.launch { snackbarHostState.showSnackbar(cleanTokenDoneMessage) }
+                        }
                     }
                 )
             }
@@ -203,9 +178,7 @@ fun SettingsScreen(onBack: () -> Unit) {
                             Modifier
                                 .fillMaxWidth()
                                 .clickable {
-                                    syncInterval = intervalValues[index]
-                                    prefs.edit { putString(keySyncInterval, syncInterval) }
-                                    onSyncPrefChanged()
+                                    viewModel.setSyncInterval(intervalValues[index])
                                     showIntervalDialog = false
                                 }
                                 .padding(vertical = 8.dp),
