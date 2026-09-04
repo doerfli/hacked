@@ -25,7 +25,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -52,13 +54,12 @@ fun BreachCard(breach: Breach, onAcknowledge: () -> Unit) {
         shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant)
     ) {
-        Box(Modifier.fillMaxWidth()) {
-            Box(
-                Modifier
-                    .matchParentSize()
-                    .width(4.dp)
-                    .background(edgeColor)
-            )
+        val edgeWidthPx = with(LocalDensity.current) { 4.dp.toPx() }
+        Box(
+            Modifier
+                .fillMaxWidth()
+                .drawBehind { drawRect(color = edgeColor, size = size.copy(width = edgeWidthPx)) }
+        ) {
             Column(Modifier.padding(start = 20.dp, top = 16.dp, end = 16.dp, bottom = 16.dp)) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     BreachLogo(breach)
