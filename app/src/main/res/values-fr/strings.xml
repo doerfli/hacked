@@ -74,7 +74,7 @@
     <string name="breach_details_second_text">Activez l\'authentification à 2 facteurs lorsque cela est possible</string>
     <string name="breach_details_third_text">Lorsqu\'un compte est piraté, changez simplement son mot de passe</string>
     <string name="action_privacypolicy">Politique de confidentialité</string>
-    <string name="title_accounts">Mes comptes</string>
+    <string name="title_accounts">Comptes</string>
     <string name="title_recent_breaches">Brèches récentes sur HIBP</string>
     <string name="title_pwned_passwords">Mot de passe piraté</string>
     <string name="show_details">Afficher les détails</string>
