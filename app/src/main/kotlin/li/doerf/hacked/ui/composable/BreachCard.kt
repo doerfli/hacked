@@ -67,10 +67,12 @@ fun BreachCard(breach: Breach, onAcknowledge: () -> Unit) {
                     Text(breach.title, style = MaterialTheme.typography.titleMedium)
                 }
                 Spacer(Modifier.height(8.dp))
-                LabeledValue(stringResource(R.string.label_domain), breach.domain)
-                LabeledValue(stringResource(R.string.label_breach_date), dtfOut.print(breach.breachDate))
-                breach.pwnCount?.takeIf { it > 0 }?.let { count ->
-                    LabeledValue(stringResource(R.string.label_accounts_affected), NumberFormat.getNumberInstance().format(count))
+                Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                    LabeledValue(stringResource(R.string.label_domain), breach.domain)
+                    LabeledValue(stringResource(R.string.label_breach_date), dtfOut.print(breach.breachDate))
+                    breach.pwnCount?.takeIf { it > 0 }?.let { count ->
+                        LabeledValue(stringResource(R.string.label_accounts_affected), NumberFormat.getNumberInstance().format(count))
+                    }
                 }
                 Spacer(Modifier.height(6.dp))
                 Text(stringResource(R.string.label_compromised_data), style = MaterialTheme.typography.labelMedium)
