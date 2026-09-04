@@ -2,6 +2,7 @@ package li.doerf.hacked.ui.screens.leaks
 
 import android.app.Activity
 import android.content.Context
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -15,7 +16,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
@@ -48,6 +49,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.core.text.HtmlCompat
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -163,16 +165,26 @@ fun LeaksScreen() {
             }
             Spacer(Modifier.height(4.dp))
             LazyColumn(Modifier.weight(1f)) {
-                items(blocks) { block ->
+                blocks.forEach { block ->
                     when (block) {
-                        is LeaksBlock.Group -> GroupedSitesCard(
-                            sites = block.sites,
-                            onToggle = { expandedId = it }
-                        )
-                        is LeaksBlock.Expanded -> ExpandedSiteCard(
-                            site = block.site,
-                            onToggle = { expandedId = null }
-                        )
+                        is LeaksBlock.Group -> {
+                            itemsIndexed(block.sites, key = { _, site -> site.id }) { index, site ->
+                                SiteRow(
+                                    site = site,
+                                    shape = groupRowShape(index, block.sites.size),
+                                    showDivider = index != block.sites.lastIndex,
+                                    topPadding = if (index == 0) 6.dp else 0.dp,
+                                    bottomPadding = if (index == block.sites.lastIndex) 6.dp else 0.dp,
+                                    onClick = { expandedId = site.id }
+                                )
+                            }
+                        }
+                        is LeaksBlock.Expanded -> item(key = block.site.id) {
+                            ExpandedSiteCard(
+                                site = block.site,
+                                onToggle = { expandedId = null }
+                            )
+                        }
                     }
                 }
                 item {
@@ -187,44 +199,53 @@ fun LeaksScreen() {
     }
 }
 
+private fun groupRowShape(index: Int, count: Int): RoundedCornerShape {
+    val topRadius = if (index == 0) 16.dp else 0.dp
+    val bottomRadius = if (index == count - 1) 16.dp else 0.dp
+    return RoundedCornerShape(topStart = topRadius, topEnd = topRadius, bottomStart = bottomRadius, bottomEnd = bottomRadius)
+}
+
 @Composable
-private fun GroupedSitesCard(sites: List<BreachedSite>, onToggle: (Long) -> Unit) {
-    Card(
+private fun SiteRow(
+    site: BreachedSite,
+    shape: RoundedCornerShape,
+    showDivider: Boolean,
+    topPadding: Dp,
+    bottomPadding: Dp,
+    onClick: () -> Unit
+) {
+    Column(
         Modifier
             .fillMaxWidth()
-            .padding(horizontal = 12.dp, vertical = 6.dp),
-        shape = RoundedCornerShape(16.dp),
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant)
+            .padding(horizontal = 12.dp)
+            .padding(top = topPadding, bottom = bottomPadding)
+            .background(MaterialTheme.colorScheme.surfaceVariant, shape)
     ) {
-        Column {
-            sites.forEachIndexed { index, site ->
-                Row(
-                    Modifier
-                        .fillMaxWidth()
-                        .clickable { onToggle(site.id) }
-                        .padding(horizontal = 16.dp, vertical = 12.dp),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Column(Modifier.weight(1f)) {
-                        Text(site.title, maxLines = 1, overflow = TextOverflow.Ellipsis, style = MaterialTheme.typography.bodyLarge)
-                        Text(
-                            "${NumberFormat.getNumberInstance().format(site.pwnCount)} accounts · ${DateTimeFormat.forPattern("yyyy/MM/dd").print(site.breachDate)}",
-                            maxLines = 1,
-                            overflow = TextOverflow.Ellipsis,
-                            style = MaterialTheme.typography.bodySmall,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant
-                        )
-                    }
-                    Icon(
-                        Icons.AutoMirrored.Filled.KeyboardArrowRight,
-                        contentDescription = null,
-                        tint = MaterialTheme.colorScheme.onSurfaceVariant
-                    )
-                }
-                if (index != sites.lastIndex) {
-                    HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
-                }
+        Row(
+            Modifier
+                .fillMaxWidth()
+                .clickable(onClick = onClick)
+                .padding(horizontal = 16.dp, vertical = 12.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Column(Modifier.weight(1f)) {
+                Text(site.title, maxLines = 1, overflow = TextOverflow.Ellipsis, style = MaterialTheme.typography.bodyLarge)
+                Text(
+                    "${NumberFormat.getNumberInstance().format(site.pwnCount)} accounts · ${DateTimeFormat.forPattern("yyyy/MM/dd").print(site.breachDate)}",
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
             }
+            Icon(
+                Icons.AutoMirrored.Filled.KeyboardArrowRight,
+                contentDescription = null,
+                tint = MaterialTheme.colorScheme.onSurfaceVariant
+            )
+        }
+        if (showDivider) {
+            HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
         }
     }
 }

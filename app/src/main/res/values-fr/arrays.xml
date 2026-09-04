@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="pref_sync_interval_entries">
+        <item>Tous les jours</item>
+        <item>Tous les deux jours</item>
+        <item>Tous les trois jours</item>
+        <item>Une fois par semaine</item>
+    </string-array>
+    <string-array name="pref_sync_interval_values">
+        <item>everyday</item>
+        <item>everytwodays</item>
+        <item>everythreedays</item>
+        <item>everyweek</item>
+    </string-array>
+    <string-array name="pref_theme_mode_entries">
+        <item>Système</item>
+        <item>Clair</item>
+        <item>Sombre</item>
+    </string-array>
+    <string-array name="pref_theme_mode_values">
+        <item>system</item>
+        <item>light</item>
+        <item>dark</item>
+    </string-array>
+</resources>

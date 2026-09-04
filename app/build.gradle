@@ -69,7 +69,6 @@ dependencies {
     // jetpack compose
     implementation platform("androidx.compose:compose-bom:$compose_bom_version")
     implementation "androidx.activity:activity-compose:$activity_compose"
-    implementation "androidx.compose.material:material"
     implementation "androidx.compose.material3:material3"
     implementation "androidx.compose.material:material-icons-extended"
     implementation "androidx.compose.animation:animation"
@@ -80,8 +79,6 @@ dependencies {
     implementation "io.coil-kt:coil-compose:$coil_compose_version"
     implementation "androidx.compose.runtime:runtime-livedata"
     debugImplementation "androidx.compose.ui:ui-tooling"
-    // compose theme compatibility for legacy screens still pending migration
-    implementation "com.google.accompanist:accompanist-coil:$accompanist_coil"
 
     implementation "androidx.preference:preference-ktx:$androidx_preference_version"
     implementation "androidx.startup:startup-runtime:$startup_version"
