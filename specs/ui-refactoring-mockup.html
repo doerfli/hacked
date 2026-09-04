@@ -1,0 +1,1920 @@
+<!doctype html><html><head><!-- frame-runtime --><script>window.__FRAME_PREAMBLE={"v":1,"capabilities":{"artifact":"artifact.BYHii2AW.js","assets":"assets.8Gk803W0.js","comments":"comments.BiSa9uTt.js","db":"db.h-3sndFg.js","downloads":"downloads.th1YuAIk.js","embed":"embed.eqL6deQM.js","endpoints":"endpoints.CfzSv5nM.js","mcp":"mcp.Bvma3qD7.js","network":"network.B5UA9Su4.js","permissions":"permissions.BNySkLV5.js","room":"room.VSdFwTE9.js","sample":"sample.BW2Uysoh.js","self":"artifact.BYHii2AW.js","user":"user.BpKav-Rf.js"},"transforms":"_transforms.DSB5x63f.js","comments":"_comments.CySkkG-P.js","translate":"_translate.5HCW4BJh.js","ldx":"_ldx.DYFNSryD.js"}</script><script>(function(){"use strict";var ce=["light","dark","system"],le=/^[A-Za-z0-9_-]{1,64}$/,Z=/^[a-zA-Z_:][a-zA-Z0-9_:.-]{0,127}$/,ue=new Set(["class","hidden","value","checked","style","title","alt","placeholder","lang","dir","role","tabindex","disabled","readonly","contenteditable","open","colspan","rowspan"]);function fe(e){const t=e.toLowerCase();return t.startsWith("data-")||t.startsWith("aria-")||ue.has(t)}var He="http://www.w3.org/1999/xhtml",de="http://www.w3.org/2000/svg",pe=new Set(["script","style","iframe","noscript","noframes","noembed","xmp","plaintext","template","title","textarea","object","embed"]),me=new Set(["script","style"]);function he(e){const t=e.localName.toLowerCase();return e.namespaceURI==="http://www.w3.org/1999/xhtml"?!pe.has(t):e.namespaceURI===de?!me.has(t):!1}function D(e,t){return e===t||(e===160||e===32)&&(t===160||t===32)}function _e(e,t){const r=e.length,n=t.length;let s=0;for(;s<r&&s<n&&D(e.charCodeAt(s),t.charCodeAt(s));)s++;let o=0;for(;o<r-s&&o<n-s&&D(e.charCodeAt(r-1-o),t.charCodeAt(n-1-o));)o++;return{p:s,s:o}}function ve(e,t){const r=e.firstChild;if(e.childNodes.length!==1||r===null||r.nodeType!==Node.TEXT_NODE){e.textContent=t;return}const n=r.data,s=n.length,o=t.length,{p:i,s:c}=_e(n,t);i===s&&c===0&&s===o||r.replaceData(i,s-i-c,t.slice(i,o-c));const m=r.data,d=e.ownerDocument.getSelection?.()??null,v=d!==null&&d.rangeCount>0&&(d.anchorNode===r||d.focusNode===r)?{anchor:d.anchorNode,anchorOffset:d.anchorOffset,focus:d.focusNode,focusOffset:d.focusOffset}:null;let p=-1,y=-1;for(let h=0;h<m.length&&h<t.length;h++){const E=m.charCodeAt(h),A=t.charCodeAt(h);E!==A&&D(E,A)&&(p<0&&(p=h),y=h)}const w=p>=0;if(w&&r.replaceData(p,y-p+1,t.slice(p,y+1)),w&&v!==null&&v.anchor!==null&&v.focus!==null)try{d.setBaseAndExtent(v.anchor,v.anchorOffset,v.focus,v.focusOffset)}catch{}}var ye=new Set(["html","head","body","frameset"]);function we(e){return e.namespaceURI==="http://www.w3.org/1999/xhtml"&&ye.has(e.localName)}function ge(e){if(e===null||typeof e!="object")return!1;const t=e;if(typeof t.target!="string"||!le.test(t.target)||t.text!==void 0&&typeof t.text!="string")return!1;if(t.attrsSet!==void 0){if(t.attrsSet===null||typeof t.attrsSet!="object")return!1;for(const[r,n]of Object.entries(t.attrsSet))if(!Z.test(r)||typeof n!="string")return!1}if(t.attrsRemoved!==void 0){if(!Array.isArray(t.attrsRemoved))return!1;for(const r of t.attrsRemoved)if(typeof r!="string"||!Z.test(r))return!1}return!0}function Ee(e,t){if(e===null||typeof e!="object")return!1;const{seq:r,elements:n}=e;if(typeof r!="number"||!Number.isSafeInteger(r)||!Array.isArray(n)||n.length===0||n.length>64)return!1;for(let s=0;s<n.length;s++)if(!t(n[s]))return!1;return!0}function be(e){return e===null||typeof e!="object"?!1:Ee(e.__frame_patch,ge)}function Ae(e){if(e===null||typeof e!="object")return!1;const t=e.__frame_init;return t!==null&&typeof t=="object"}function Te(e){return e!==null&&typeof e=="object"&&e.__frame_size_poke===!0}function Re(e){if(e===null||typeof e!="object")return!1;const t=e.__frame_theme;if(t===null||typeof t!="object")return!1;const r=t.theme;return typeof r=="string"&&ce.includes(r)}var S=/^[\w.-]+\.js$/;function Se(e,t,r){return r?"inert":typeof t=="string"&&S.test(t)?e?[t]:"inert":e?"inert":"framed"}var We="frame_ldx_runtime",Ke="script#an-form";function Le(){return{post(e,t){parent.postMessage(e,t)},on(e){const t=r=>{r.source===parent&&e(r.data,r.origin,r.isTrusted)};return addEventListener("message",t),()=>removeEventListener("message",t)}}}function ke(){return{post:()=>{},on:()=>()=>{}}}var I="__frame_scroll",Pe=150,Oe=310,Ce=160,Me=3e4;function je(){let e=0,t=!1,r=!1,n=!1,s=0,o=null;const i=u=>{try{sessionStorage.setItem(I,JSON.stringify({y:u}))}catch{}},c=()=>{if(clearTimeout(e),o===null)return;const u=o;o=null,i(u)},m=()=>{if(t){t=!1;return}r=!0,o=scrollY,clearTimeout(e),e=setTimeout(c,Pe)};try{addEventListener("scroll",m,{passive:!0}),addEventListener("pagehide",c)}catch{}const d=()=>{let u;try{u=sessionStorage.getItem(I)}catch{return null}if(u===null)return null;let a;try{a=JSON.parse(u)}catch{a=null}const f=a?.y;if(!(typeof f=="number"&&Number.isFinite(f)&&f>=0)){try{sessionStorage.removeItem(I)}catch{}return null}return f};let v=!1;const p=u=>{try{const a=scrollY;scrollTo({top:u,left:0,behavior:"instant"}),s=u,n=!0,clearTimeout(e),o=null,i(u);const f=scrollY;f!==a&&(t=!0),f!==u&&!v&&(v=!0,addEventListener("load",()=>{try{if(scrollY===f){const b=d();p(b!==null?b:s)}}catch{}},{once:!0}))}catch{}},y=()=>{try{return!!location.hash}catch{return!0}};let w=!1;const h=()=>{try{if(w||innerWidth>Oe||innerHeight>Ce)return;w=!0;const u=Date.now(),a=()=>{try{removeEventListener("resize",a)}catch{}if(Date.now()-u>Me||r||y())return;const f=d();p(f!==null?f:s)};addEventListener("resize",a)}catch{}};let E=!1,A=!1;return{restore(){if(E||(E=!0,y()))return;const u=d();u!==null&&(p(u),h())},promoted(){if(A||(A=!0,y()))return;const u=d();u!==null?(p(u),h()):n&&p(s)}}}function Ne(e,t,r,n){let s=null;try{s=window.trustedTypes?.createPolicy("frame-runtime",{createScriptURL:m=>m})??null}catch{}const o=window.Worker,i=o?.prototype,c=Object.freeze({Worker:o,workerOn:i?.addEventListener,workerPost:i?.postMessage,workerTerminate:i?.terminate,fetch:window.fetch.bind(window),preventDefault:Event.prototype.preventDefault,policy:s,origins:t});r(e).then(m=>m?.bootTopLevel?m.bootTopLevel(c,n):n.settle()).catch(()=>n.settle())}var $e="modulepreload",qe=function(e){return"/"+e},Xe={},Be=function(t,r,n){let s=Promise.resolve();function o(i){const c=new Event("vite:preloadError",{cancelable:!0});if(c.payload=i,window.dispatchEvent(c),!c.defaultPrevented)throw i}return s.then(i=>{for(const c of i||[])c.status==="rejected"&&o(c.reason);return t().catch(o)})},De=window===top,J=Object.getOwnPropertyDescriptor(window,"claude"),O=Se(De,window.__FRAME_PREAMBLE?.topLevel,J?.writable===!1),U=typeof O=="object"&&O[0],_=U?ke():Le();(function(){const e=Object.defineProperty,t=globalThis,r=["RTCPeerConnection","webkitRTCPeerConnection","RTCDataChannel","RTCIceCandidate","RTCSessionDescription","RTCRtpSender","RTCRtpReceiver"];let n=0;for(let s=0;s<r.length;s++){const o=r[s];try{e(t,o,{value:void 0,writable:!1,configurable:!1})}catch{try{delete t[o]}catch{}try{e(t,o,{value:void 0,writable:!1,configurable:!0})}catch{}}typeof t[o]=="function"&&n++}if(n&&O==="framed")try{_.post({__frame_rtc_lockdown_failed:n},"*")}catch{}})();var Ie=1e4,Ue=2e3,Q=Object.freeze([...window.__FRAME_PREAMBLE?.origins??["https://claude.ai","https://preview.claude.ai"]]);function ee(e){for(const t of Q)if(t.endsWith(":*"))try{const r=new URL(e);if(`${r.protocol}//${r.hostname}:*`===t)return!0}catch{}else if(e===t)return!0;return!1}var C=Object.freeze({...window.__FRAME_PREAMBLE?.capabilities}),x=window.__FRAME_PREAMBLE?.transforms,F=window.__FRAME_PREAMBLE?.comments,z=window.__FRAME_PREAMBLE?.translate,H=window.__FRAME_PREAMBLE?.ldx;function L(e){return Be(()=>import("/_runtime/"+e),void 0)}function te(e,t){return{contract:e.contract,changes:new Set(e.changes??[]),flags:new Set(e.flags??[]),capabilities:e.capabilities??{},capBudgets:e.capBudgets??{},transforms:new Map,shellOrigin:t,mount:$,hooks:j,pipe:()=>({wrap:(r,n)=>(...s)=>{try{return n(...s)}catch(o){return Promise.reject(o)}}})}}var M=null,T=null;function re(e,t,r){try{Object.defineProperty(e,t,{value:r,writable:!1,configurable:!1,enumerable:!0})}catch{try{Object.defineProperty(e,t,{value:r,writable:!1,configurable:!0,enumerable:!0})}catch{}}}var W=!1,j={editBefore:null,edit:null};function xe(e,t,r=!1){const n=[];let s;if(r)try{j.editBefore?.(e)}catch{}for(const o of e.elements){const i=document.querySelector(`[data-id="${o.target}"]`);if(!i){s=o.target;break}if([...Object.keys(o.attrsSet??{}),...o.attrsRemoved??[]].some(c=>!fe(c))){s=o.target;break}if(o.text!==void 0&&(!he(i)||we(i))){s=o.target;break}for(const[c,m]of Object.entries(o.attrsSet??{}))if(!oe(i,c)){try{i.setAttribute(c,m)}catch{}ne(i,c,m)}for(const c of o.attrsRemoved??[])oe(i,c)||(i.removeAttribute(c),ne(i,c,null));typeof o.text=="string"&&ve(i,o.text),n.push(o.target)}if(r)try{j.edit?.(e.seq,n,s)}catch{}if(s!==void 0){_.post({__frame_patch_miss:{seq:e.seq}},t);return}try{document.dispatchEvent(new CustomEvent("claude:edit",{detail:{seq:e.seq,targets:n}}))}catch{}}function ne(e,t,r){if(!(e instanceof HTMLInputElement))return;const n=t.toLowerCase();n==="checked"?e.checked=r!==null:n==="value"&&e.type!=="file"&&(e.value=r??"")}function oe(e,t){const r=t.toLowerCase(),n=e;return r==="data-id"||(r==="value"||r==="checked")&&(n.__artifactSecret===!0||/^(password|hidden|file)$/.test(n.type??"")||/(^|\s)(cc-|one-time-code|current-password|new-password)/i.test(`${e.getAttribute("autocomplete")??""} ${n.autocomplete??""}`))}function se(e){const t=document.documentElement;e==="light"||e==="dark"?(t.dataset.theme=e,t.style.colorScheme=e,W=!0):W&&(delete t.dataset.theme,t.style.colorScheme="",W=!1)}var N=new Map;function Fe(){let e;const t={u:new Promise(r=>{e=r}),r:r=>{t.done=!0,e(r)},done:!1,nulled:!1};return t}function K(){for(const e of N.values())e.done||(e.nulled=!0,e.r(null))}var ze=Object.freeze(Object.assign(Object.create(null),{call:Function.prototype.call,apply:Function.prototype.apply,bind:Function.prototype.bind})),$=(e,t)=>{const r=N.get(e);if(!r||r.done){r?.nulled&&T&&_.post({__frame_cap_telemetry:{kind:"cap-load-error",cap:e}},T);return}const n=typeof t=="function"?Object.setPrototypeOf(t,ze):Object.assign(Object.create(null),t);typeof n.then=="function"&&delete n.then,r.r(Object.freeze(n))};function ae(){const e=J?.value??{};re(window,"claude",e);for(const t of Object.keys(C)){if(e[t]!==void 0){re(e,t,e[t]);continue}N.set(t,Fe())}if(e.use===void 0){const t=r=>{if(typeof r!="string"||!Object.hasOwn(C,r))return Promise.resolve(null);const n=N.get(r);return n?n.u:Promise.resolve(e[r]??null)};try{Object.defineProperty(e,"use",{value:t,writable:!0,configurable:!0,enumerable:!1})}catch{}}}if(O==="framed"){const e=x&&S.test(x)?L(x).catch(()=>{}):Promise.resolve(void 0),t=a=>{if(a.type==="auxclick"&&a.button!==1)return;const f=a.target,b=f&&f.closest?f.closest("a[href],area[href]"):null;if(!b)return;const P=b.getAttribute("href");if(!P)return;let R;try{R=new URL(P,document.baseURI)}catch{return}if((R.protocol==="http:"||R.protocol==="https:")&&R.origin!==location.origin){a.preventDefault();const k=(b.getAttribute("target")??"").toLowerCase(),g=a.type==="auxclick"||a.metaKey||a.ctrlKey||a.shiftKey||a.altKey||!["","_self","_top","_parent"].includes(k);_.post({__frame_nav:!0,url:R.href,newTab:g},"*")}};addEventListener("click",t,!0),addEventListener("auxclick",t,!0);const r={},n=a=>{a.isTrusted&&(r.pointer=!0)},s=a=>{a.isTrusted&&(r.click=!0)};addEventListener("pointermove",n,{capture:!0,passive:!0}),addEventListener("click",s,{capture:!0,passive:!0}),e.then(a=>{a?.wireNav&&(a.wireNav(),removeEventListener("click",t,!0),removeEventListener("auxclick",t,!0),removeEventListener("pointermove",n,!0),removeEventListener("click",s,!0),a.wireEngagement?.(r))});let o=null;try{o=je()}catch{}ae();let i=null,c=null,m=0;const d=_.on((a,f)=>{ee(f)&&Ae(a)&&(i=a.__frame_init,T=f,d(),clearTimeout(m),c?.())});_.post({__frame_connect:!0},"*");const v=setTimeout,p=clearTimeout;let y=0;const w=()=>{try{_.post({__frame_alive:!0},"*")}catch{}y=v(w,Ue)},h=()=>p(y);w(),addEventListener("load",h,{once:!0});const E=new Promise(a=>{c=a,m=setTimeout(()=>{d(),a()},Ie)}),A=document.readyState==="loading"?new Promise(a=>document.addEventListener("DOMContentLoaded",()=>a(),{once:!0})):Promise.resolve();A.then(()=>{try{o?.restore()}catch{}});const u={cb:null};_.on((a,f)=>{if(ee(f)&&Te(a)){try{o?.promoted()}catch{}u.cb?.()}}),E.then(async()=>{if(!i||!T){K();return}se(i.theme);const a=T;let f=!1,b=!1;_.on((l,X,B)=>{if(X!==a)return;Re(l)&&se(l.__frame_theme.theme),be(l)&&xe(l.__frame_patch,a,B);const Y=l?.__fc_mode;Y&&typeof Y=="object"&&!f&&F&&S.test(F)&&(f=!0,L(F).then(V=>V.install?.(a,Y.on===!0)).catch(()=>{}));const G=l?.__ft_cmd;G&&typeof G=="object"&&!b&&z&&S.test(z)&&(b=!0,L(z).then(V=>V.install?.(a,G)).catch(()=>{}))});const P=Object.keys(i.capabilities??{}).filter(l=>Object.hasOwn(C,l)).map(l=>[l,C[l]]).filter(l=>typeof l[1]=="string"&&S.test(l[1])),R=await Promise.allSettled(P.map(([,l])=>L(l))),k=await e,g=T;if(k?.buildBoot||_.post({__frame_cap_telemetry:{kind:"cap-load-error",cap:"_transforms"}},g),k?.buildBoot)try{M=k.buildBoot(i,k.TRANSFORMS??{},{shellOrigin:g,mount:$,hooks:j},l=>_.post({__frame_cap_telemetry:l},g))}catch{_.post({__frame_cap_telemetry:{kind:"cap-load-error",cap:"_transforms"}},g),M=te(i,g)}else M=te(i,g);const q=l=>_.post({__frame_cap_telemetry:{kind:"cap-load-error",cap:l}},g),ie=M;R.forEach((l,X)=>{const B=P[X][0];if(l.status!=="fulfilled"){q(B);return}try{l.value?.install?.(ie)}catch{q(B)}}),K(),await A,h(),_.post({__frame_ready:!0},T),e.then(l=>l?.installSizeReporter?.(g,u)),ie.flags.has("frame_ldx_runtime")&&H&&S.test(H)&&document.querySelector("script#an-form")&&L(H).then(l=>l?.boot?.()).catch(()=>!1).then(l=>{l!==!0&&q("_ldx")})})}else U&&(ae(),Ne(U,Q,L,{settle:K,mount:$}))})();</script><!-- /frame-runtime --><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1"><style>:root{color-scheme:light}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}</style></head><body>
+<title>Hacked? Redesign</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans+Condensed:wght@500;600&family=IBM+Plex+Sans:wght@400;500;600&family=Roboto:wght@400;500;700&display=swap">
+
+<style>
+/* ============================================================
+   PAGE CHROME TOKENS — light is the bare :root
+   ============================================================ */
+:root {
+  --ground:      #F4F6F1;
+  --panel:       #FFFFFF;
+  --panel-sunk:  #EAEEE6;
+  --ink:         #161B15;
+  --ink-muted:   #5C665A;
+  --ink-faint:   #808A7E;
+  --rule:        #D6DCD1;
+  --rule-soft:   #E4E9DF;
+  --accent:      #2E6B34;
+  --accent-soft: #DCEEDA;
+  --signal:      #A24C00;
+  --signal-soft: #FFE7D2;
+  --frame:       #C6CDC0;
+  --shadow:      0 1px 2px rgba(22,27,21,.06), 0 12px 32px -12px rgba(22,27,21,.18);
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --ground:      #0E120D;
+    --panel:       #171C16;
+    --panel-sunk:  #12160F;
+    --ink:         #E3E7DE;
+    --ink-muted:   #A6AFA2;
+    --ink-faint:   #7C857A;
+    --rule:        #2C332A;
+    --rule-soft:   #232A21;
+    --accent:      #8FD695;
+    --accent-soft: #1B3A20;
+    --signal:      #FFB86B;
+    --signal-soft: #3A2510;
+    --frame:       #333B31;
+    --shadow:      0 1px 2px rgba(0,0,0,.5), 0 12px 32px -12px rgba(0,0,0,.7);
+  }
+}
+:root[data-theme="dark"] {
+  --ground:      #0E120D;
+  --panel:       #171C16;
+  --panel-sunk:  #12160F;
+  --ink:         #E3E7DE;
+  --ink-muted:   #A6AFA2;
+  --ink-faint:   #7C857A;
+  --rule:        #2C332A;
+  --rule-soft:   #232A21;
+  --accent:      #8FD695;
+  --accent-soft: #1B3A20;
+  --signal:      #FFB86B;
+  --signal-soft: #3A2510;
+  --frame:       #333B31;
+  --shadow:      0 1px 2px rgba(0,0,0,.5), 0 12px 32px -12px rgba(0,0,0,.7);
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--ground);
+  color: var(--ink);
+  font-family: "IBM Plex Sans", system-ui, -apple-system, sans-serif;
+  font-size: 16px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+.wrap { max-width: 1180px; margin: 0 auto; padding: 0 28px 96px; }
+
+/* ---------- masthead ---------- */
+.masthead {
+  padding: 72px 0 40px;
+  border-bottom: 1px solid var(--rule);
+  display: grid;
+  gap: 20px;
+}
+.eyebrow {
+  font-family: "IBM Plex Sans Condensed", "IBM Plex Sans", sans-serif;
+  font-weight: 600;
+  font-size: 12px;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin: 0;
+}
+h1 {
+  font-family: "IBM Plex Sans Condensed", "IBM Plex Sans", sans-serif;
+  font-weight: 600;
+  font-size: clamp(38px, 6vw, 62px);
+  line-height: 1.02;
+  letter-spacing: -.02em;
+  margin: 0;
+  text-wrap: balance;
+}
+.standfirst {
+  max-width: 62ch;
+  color: var(--ink-muted);
+  font-size: 17px;
+  margin: 0;
+}
+.meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 28px;
+  font-family: "IBM Plex Mono", ui-monospace, monospace;
+  font-size: 12.5px;
+  color: var(--ink-faint);
+  padding-top: 4px;
+}
+.meta b { color: var(--ink-muted); font-weight: 500; }
+
+/* ---------- sections ---------- */
+section { padding-top: 64px; }
+h2 {
+  font-family: "IBM Plex Sans Condensed", "IBM Plex Sans", sans-serif;
+  font-weight: 600;
+  font-size: 27px;
+  letter-spacing: -.01em;
+  margin: 0 0 6px;
+}
+.section-note { color: var(--ink-muted); max-width: 68ch; margin: 0 0 32px; }
+
+/* ---------- audit list ---------- */
+.audit {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1px;
+  background: var(--rule-soft);
+  border: 1px solid var(--rule-soft);
+  border-radius: 4px;
+  overflow: hidden;
+}
+.audit > div { background: var(--panel); padding: 22px 24px; display: grid; gap: 8px; align-content: start; }
+.audit h3 {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: -.005em;
+}
+.audit p { margin: 0; font-size: 14.5px; color: var(--ink-muted); }
+.audit code {
+  font-family: "IBM Plex Mono", ui-monospace, monospace;
+  font-size: 12px;
+  color: var(--signal);
+  background: var(--signal-soft);
+  padding: 1px 5px;
+  border-radius: 3px;
+}
+
+/* ---------- screen rows ---------- */
+.screen-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 300px 300px;
+  gap: 40px;
+  align-items: start;
+  padding: 44px 0;
+  border-top: 1px solid var(--rule);
+}
+.screen-row:first-of-type { border-top: none; padding-top: 8px; }
+.screen-copy h3 {
+  font-family: "IBM Plex Sans Condensed", "IBM Plex Sans", sans-serif;
+  font-size: 21px;
+  font-weight: 600;
+  margin: 0 0 4px;
+}
+.screen-copy .from {
+  font-family: "IBM Plex Mono", ui-monospace, monospace;
+  font-size: 11.5px;
+  color: var(--ink-faint);
+  margin: 0 0 16px;
+}
+.screen-copy ul { margin: 0; padding-left: 18px; display: grid; gap: 9px; }
+.screen-copy li { font-size: 14.5px; color: var(--ink-muted); }
+.screen-copy li b { color: var(--ink); font-weight: 600; }
+.frame-label {
+  font-family: "IBM Plex Sans Condensed", "IBM Plex Sans", sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  margin: 0 0 10px;
+}
+@media (max-width: 1080px) {
+  .screen-row { grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); }
+}
+
+/* ============================================================
+   DEVICE MOCKS — self-contained palettes, never inherit page theme
+   ============================================================ */
+.device {
+  width: 300px;
+  border: 1px solid var(--frame);
+  border-radius: 30px;
+  overflow: hidden;
+  box-shadow: var(--shadow);
+  font-family: Roboto, system-ui, sans-serif;
+  font-size: 14px;
+  line-height: 1.35;
+  background: var(--sc-surface);
+  color: var(--sc-on-surface);
+  display: flex;
+  flex-direction: column;
+  height: 592px;
+}
+.device[data-ui="light"] {
+  --sc-surface:        #F9FBF4;
+  --sc-container:      #EDF1E7;
+  --sc-container-high: #E3E8DC;
+  --sc-on-surface:     #191D17;
+  --sc-on-variant:     #434840;
+  --sc-outline:        #C2C9BC;
+  --sc-primary:        #2E6B34;
+  --sc-on-primary:     #FFFFFF;
+  --sc-primary-cont:   #B3F0B3;
+  --sc-on-primary-cont:#00210B;
+  --sc-tertiary:       #8A5100;
+  --sc-tertiary-cont:  #FFDCBE;
+  --sc-on-tert-cont:   #2C1600;
+  --sc-breached:       #B3261E;
+  --sc-breached-cont:  #FFDAD5;
+  --sc-on-breach-cont: #410E0B;
+  --sc-ack:            #D69A00;
+  --sc-ok:             #2E6B34;
+  --sc-unknown:        #767D73;
+  --sc-scrim:          rgba(25,29,23,.07);
+}
+/* dark = palette D (deep teal) */
+.device[data-ui="dark"] {
+  --sc-surface:        #0E1414;
+  --sc-container:      #1A2020;
+  --sc-container-high: #242B2B;
+  --sc-on-surface:     #DDE4E3;
+  --sc-on-variant:     #BEC8C8;
+  --sc-outline:        #3F4949;
+  --sc-primary:        #4FD8DF;
+  --sc-on-primary:     #003739;
+  --sc-primary-cont:   #004F52;
+  --sc-on-primary-cont:#9DF0F5;
+  --sc-tertiary:       #FFB95C;
+  --sc-tertiary-cont:  #663D00;
+  --sc-on-tert-cont:   #FFDCBE;
+  --sc-breached:       #FFB4AB;
+  --sc-breached-cont:  #7A1710;
+  --sc-on-breach-cont: #FFDAD5;
+  --sc-ack:            #F0C048;
+  --sc-ok:             #8FD695;
+  --sc-unknown:        #8E958A;
+  --sc-scrim:          rgba(255,255,255,.06);
+}
+
+/* status bar */
+.sb {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 9px 18px 3px;
+  font-size: 11.5px;
+  font-weight: 500;
+  color: var(--sc-on-surface);
+  background: var(--sc-surface);
+}
+.sb-icons { display: flex; gap: 4px; align-items: flex-end; }
+.sb-icons i { display: block; width: 3px; background: var(--sc-on-surface); border-radius: 1px; }
+.sb-icons i:nth-child(1) { height: 5px; }
+.sb-icons i:nth-child(2) { height: 8px; }
+.sb-icons i:nth-child(3) { height: 11px; }
+.sb-icons b { display: block; width: 16px; height: 9px; border: 1.2px solid var(--sc-on-surface); border-radius: 2px; margin-left: 4px; position: relative; }
+.sb-icons b::after { content:""; position: absolute; inset: 1.5px; right: 5px; background: var(--sc-on-surface); border-radius: 1px; }
+
+/* top app bar */
+.tab {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 10px 14px 12px;
+  background: var(--sc-surface);
+}
+.tab .title { font-size: 20px; font-weight: 500; flex: 1; letter-spacing: .1px; }
+.tab .title.small { font-size: 17px; }
+.icon { width: 22px; height: 22px; fill: var(--sc-on-variant); flex: none; }
+
+/* body */
+.scr { flex: 1; overflow: hidden; padding: 0 14px; display: grid; gap: 12px; align-content: start; }
+
+.card {
+  background: var(--sc-container);
+  border-radius: 16px;
+  padding: 14px 16px;
+}
+.card.flat { background: none; padding: 0; }
+
+.sec-label {
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: .09em;
+  text-transform: uppercase;
+  color: var(--sc-on-variant);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 4px 4px 0;
+}
+
+/* summary banner */
+.summary {
+  background: var(--sc-breached-cont);
+  color: var(--sc-on-breach-cont);
+  border-radius: 16px;
+  padding: 14px 16px;
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+.summary.clean { background: var(--sc-primary-cont); color: var(--sc-on-primary-cont); }
+.summary .big { font-size: 26px; font-weight: 700; line-height: 1; font-variant-numeric: tabular-nums; }
+.summary .txt { font-size: 12.5px; line-height: 1.3; }
+.summary svg { width: 22px; height: 22px; flex: none; }
+
+/* list rows */
+.row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 11px 4px;
+  border-bottom: 1px solid var(--sc-outline);
+}
+.row:last-child { border-bottom: none; }
+.dot { width: 10px; height: 10px; border-radius: 50%; flex: none; }
+.dot.breached { background: var(--sc-breached); }
+.dot.ack      { background: var(--sc-ack); }
+.dot.ok       { background: var(--sc-ok); }
+.dot.unknown  { background: var(--sc-unknown); }
+.row .main { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
+.row .name { display: block; font-size: 14.5px; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.row .sub { display: block; font-size: 11.5px; color: var(--sc-on-variant); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.badge {
+  font-size: 11px;
+  font-weight: 500;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: var(--sc-breached-cont);
+  color: var(--sc-on-breach-cont);
+  font-variant-numeric: tabular-nums;
+  flex: none;
+}
+.badge.quiet { background: var(--sc-container-high); color: var(--sc-on-variant); }
+.chev { width: 16px; height: 16px; fill: var(--sc-on-variant); flex: none; opacity: .7; }
+
+/* text field */
+.field {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border: 1px solid var(--sc-outline);
+  border-radius: 12px;
+  padding: 11px 14px;
+  font-size: 13.5px;
+  color: var(--sc-on-variant);
+  background: var(--sc-surface);
+}
+.field.filled { background: var(--sc-container); border: none; border-radius: 999px; }
+.field.focused { border: 2px solid var(--sc-primary); padding: 10px 13px; color: var(--sc-on-surface); }
+.field svg { width: 18px; height: 18px; fill: var(--sc-on-variant); flex: none; }
+
+/* buttons */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: var(--sc-primary);
+  color: var(--sc-on-primary);
+  border-radius: 999px;
+  padding: 10px 22px;
+  font-size: 13.5px;
+  font-weight: 500;
+}
+.btn.text { background: none; color: var(--sc-primary); padding: 8px 12px; }
+.btn.tonal { background: var(--sc-primary-cont); color: var(--sc-on-primary-cont); }
+
+/* result banners */
+.result {
+  border-radius: 16px;
+  padding: 14px 16px;
+  display: grid;
+  gap: 5px;
+}
+.result.bad  { background: var(--sc-breached-cont); color: var(--sc-on-breach-cont); }
+.result.good { background: var(--sc-primary-cont);  color: var(--sc-on-primary-cont); }
+.result .h { font-size: 15px; font-weight: 500; }
+.result .b { font-size: 12.5px; line-height: 1.4; }
+
+/* breach detail card */
+.breach {
+  background: var(--sc-container);
+  border-radius: 16px;
+  padding: 14px 16px;
+  display: grid;
+  gap: 8px;
+  border-left: 4px solid var(--sc-breached);
+}
+.breach.ackd { border-left-color: var(--sc-ack); opacity: .9; }
+.breach .head { display: flex; align-items: center; gap: 10px; }
+.breach .logo {
+  width: 34px; height: 34px; border-radius: 9px; flex: none;
+  background: var(--sc-container-high);
+  display: grid; place-items: center;
+  font-size: 14px; font-weight: 700; color: var(--sc-on-variant);
+}
+.breach .t { font-size: 15.5px; font-weight: 500; flex: 1; }
+.kv { display: grid; grid-template-columns: 82px 1fr; gap: 2px 8px; font-size: 12px; }
+.kv dt { color: var(--sc-on-variant); }
+.kv dd { margin: 0; color: var(--sc-on-surface); }
+.kv dd.alert { color: var(--sc-breached); font-weight: 500; }
+.chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.chip {
+  font-size: 11px;
+  padding: 3px 9px;
+  border-radius: 999px;
+  background: var(--sc-tertiary-cont);
+  color: var(--sc-on-tert-cont);
+}
+.desc { font-size: 12px; color: var(--sc-on-variant); line-height: 1.45; }
+.breach .act { display: flex; justify-content: flex-end; }
+
+/* fab */
+.fab {
+  position: absolute;
+  right: 16px;
+  bottom: 78px;
+  width: 52px; height: 52px;
+  border-radius: 16px;
+  background: var(--sc-primary-cont);
+  color: var(--sc-on-primary-cont);
+  display: grid; place-items: center;
+  box-shadow: 0 3px 8px rgba(0,0,0,.22);
+}
+.fab svg { width: 22px; height: 22px; fill: currentColor; }
+.device-inner { position: relative; flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+
+/* bottom nav */
+.nav {
+  display: flex;
+  background: var(--sc-container);
+  padding: 8px 4px 12px;
+  margin-top: auto;
+}
+.nav a { flex: 1; display: grid; justify-items: center; gap: 3px; text-decoration: none; }
+.nav .pill {
+  padding: 3px 18px;
+  border-radius: 999px;
+  display: grid;
+  place-items: center;
+}
+.nav .active .pill { background: var(--sc-primary-cont); }
+.nav svg { width: 21px; height: 21px; fill: var(--sc-on-variant); }
+.nav .active svg { fill: var(--sc-on-primary-cont); }
+.nav span { font-size: 11px; font-weight: 500; color: var(--sc-on-variant); }
+.nav .active span { color: var(--sc-on-surface); }
+
+/* ============================================================
+   ALTERNATIVE PALETTES — override only the chrome roles.
+   The semantic status set is identical in all four.
+   ============================================================ */
+.device[data-ui="dark"][data-pal="verdant"] {
+  --sc-surface: #10140F; --sc-container: #1C201A; --sc-container-high: #262B24;
+  --sc-on-surface: #E1E4DB; --sc-on-variant: #C2C9BC; --sc-outline: #434840;
+  --sc-primary: #8FD695; --sc-on-primary: #00390F;
+  --sc-primary-cont: #14521F; --sc-on-primary-cont: #B3F0B3;
+  --sc-tertiary-cont: #663D00; --sc-on-tert-cont: #FFDCBE;
+}
+.device[data-ui="light"][data-pal="slate"] {
+  --sc-surface: #F7F9FA; --sc-container: #E8EEF1; --sc-container-high: #DDE5E9;
+  --sc-on-surface: #171C1F; --sc-on-variant: #414A4F; --sc-outline: #C0C9CE;
+  --sc-primary: #3D5A6C; --sc-on-primary: #FFFFFF;
+  --sc-primary-cont: #C9DEEB; --sc-on-primary-cont: #0B1E29;
+  --sc-tertiary-cont: #E8E2D4; --sc-on-tert-cont: #2A2415;
+}
+.device[data-ui="dark"][data-pal="slate"] {
+  --sc-surface: #0E1315; --sc-container: #1A2023; --sc-container-high: #242B2E;
+  --sc-on-surface: #DEE3E6; --sc-on-variant: #BFC8CD; --sc-outline: #414A4F;
+  --sc-primary: #A6C8DB; --sc-on-primary: #0A2432;
+  --sc-primary-cont: #26424F; --sc-on-primary-cont: #C9DEEB;
+  --sc-tertiary-cont: #4A422E; --sc-on-tert-cont: #EDE4D2;
+}
+.device[data-ui="light"][data-pal="indigo"] {
+  --sc-surface: #FBF8FF; --sc-container: #EDEAF6; --sc-container-high: #E4E1EE;
+  --sc-on-surface: #1B1B21; --sc-on-variant: #47464F; --sc-outline: #C7C5D0;
+  --sc-primary: #4A4CA0; --sc-on-primary: #FFFFFF;
+  --sc-primary-cont: #E0E0FF; --sc-on-primary-cont: #06006C;
+  --sc-tertiary-cont: #FFDCBE; --sc-on-tert-cont: #2C1600;
+}
+.device[data-ui="dark"][data-pal="indigo"] {
+  --sc-surface: #121218; --sc-container: #1E1E25; --sc-container-high: #29292F;
+  --sc-on-surface: #E4E1E9; --sc-on-variant: #C7C5D0; --sc-outline: #47464F;
+  --sc-primary: #BEC2FF; --sc-on-primary: #1B1F8F;
+  --sc-primary-cont: #333597; --sc-on-primary-cont: #E0E0FF;
+  --sc-tertiary-cont: #663D00; --sc-on-tert-cont: #FFDCBE;
+}
+.device[data-ui="light"][data-pal="teal"] {
+  --sc-surface: #F5FAFA; --sc-container: #E3EFEF; --sc-container-high: #D8E5E5;
+  --sc-on-surface: #161D1D; --sc-on-variant: #3F4949; --sc-outline: #BFC8C8;
+  --sc-primary: #00696E; --sc-on-primary: #FFFFFF;
+  --sc-primary-cont: #9DF0F5; --sc-on-primary-cont: #002022;
+  --sc-tertiary-cont: #FFDCBE; --sc-on-tert-cont: #2C1600;
+}
+.device[data-ui="dark"][data-pal="teal"] {
+  --sc-surface: #0E1414; --sc-container: #1A2020; --sc-container-high: #242B2B;
+  --sc-on-surface: #DDE4E3; --sc-on-variant: #BEC8C8; --sc-outline: #3F4949;
+  --sc-primary: #4FD8DF; --sc-on-primary: #003739;
+  --sc-primary-cont: #004F52; --sc-on-primary-cont: #9DF0F5;
+  --sc-tertiary-cont: #663D00; --sc-on-tert-cont: #FFDCBE;
+}
+.device.compact { height: 470px; }
+
+.pal-strip { display: flex; height: 24px; border: 1px solid var(--rule); border-radius: 4px; overflow: hidden; }
+.pal-strip span { flex: 1; }
+.pal-strips { display: grid; gap: 7px; margin: 14px 0 18px; }
+.pal-strips .lbl {
+  font-family: "IBM Plex Mono", ui-monospace, monospace;
+  font-size: 10.5px; color: var(--ink-faint);
+  display: flex; justify-content: space-between;
+}
+
+/* ---------- token tables ---------- */
+.tokens {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(330px, 1fr));
+  gap: 28px;
+}
+.token-table { border: 1px solid var(--rule); border-radius: 4px; overflow: hidden; background: var(--panel); }
+.token-table h3 {
+  margin: 0;
+  padding: 12px 16px;
+  font-family: "IBM Plex Sans Condensed", "IBM Plex Sans", sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--ink-muted);
+  background: var(--panel-sunk);
+  border-bottom: 1px solid var(--rule);
+}
+table { width: 100%; border-collapse: collapse; font-size: 13px; }
+th, td { text-align: left; padding: 7px 16px; border-bottom: 1px solid var(--rule-soft); }
+tr:last-child td { border-bottom: none; }
+th {
+  font-family: "IBM Plex Sans Condensed", "IBM Plex Sans", sans-serif;
+  font-size: 11px;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  font-weight: 600;
+}
+td.hex { font-family: "IBM Plex Mono", ui-monospace, monospace; font-size: 12px; color: var(--ink-muted); }
+.sw { display: inline-block; width: 15px; height: 15px; border-radius: 3px; border: 1px solid var(--rule); vertical-align: -3px; margin-right: 8px; }
+.tbl-scroll { overflow-x: auto; }
+
+/* ---------- app icons ---------- */
+.icons { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 34px 28px; }
+.icon-card { display: grid; gap: 14px; align-content: start; }
+.tiles { display: flex; align-items: center; gap: 16px; }
+.tile { border-radius: 24%; overflow: hidden; box-shadow: var(--shadow); flex: none; display: block; }
+.tile.lg { width: 100px; height: 100px; }
+.tile.sm { width: 46px; height: 46px; }
+.tile.round { border-radius: 50%; }
+.tile.mono {
+  width: 46px; height: 46px;
+  background: var(--panel-sunk);
+  border: 1px solid var(--rule);
+  border-radius: 24%;
+  color: var(--ink);
+  box-shadow: none;
+}
+.icon-card h3 { margin: 0; font-size: 16px; font-weight: 600; letter-spacing: -.005em; }
+.chip-chosen {
+  display: inline-block; margin-left: 9px; vertical-align: 2px;
+  font-family: "IBM Plex Sans Condensed", "IBM Plex Sans", sans-serif;
+  font-size: 10.5px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase;
+  color: var(--accent); background: var(--accent-soft);
+  border-radius: 3px; padding: 2px 8px;
+}
+.icon-card.picked .tile.lg { outline: 2px solid var(--accent); outline-offset: 4px; }
+.icon-card p { margin: 0; font-size: 14px; color: var(--ink-muted); }
+.tile-note {
+  font-family: "IBM Plex Mono", ui-monospace, monospace;
+  font-size: 10.5px;
+  color: var(--ink-faint);
+}
+
+/* ---------- migration steps ---------- */
+.steps { display: grid; gap: 1px; background: var(--rule-soft); border: 1px solid var(--rule-soft); border-radius: 4px; overflow: hidden; }
+.step { background: var(--panel); padding: 18px 24px; display: grid; grid-template-columns: 40px 1fr; gap: 18px; align-items: baseline; }
+.step .n {
+  font-family: "IBM Plex Mono", ui-monospace, monospace;
+  font-size: 13px;
+  color: var(--accent);
+  font-weight: 500;
+}
+.step h3 { margin: 0 0 4px; font-size: 15.5px; font-weight: 600; }
+.step p { margin: 0; font-size: 14px; color: var(--ink-muted); }
+.step code {
+  font-family: "IBM Plex Mono", ui-monospace, monospace;
+  font-size: 12px;
+  background: var(--panel-sunk);
+  padding: 1px 5px;
+  border-radius: 3px;
+  color: var(--ink-muted);
+}
+
+footer {
+  margin-top: 72px;
+  padding-top: 24px;
+  border-top: 1px solid var(--rule);
+  font-family: "IBM Plex Mono", ui-monospace, monospace;
+  font-size: 12px;
+  color: var(--ink-faint);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .device { transition: transform .25s ease; }
+  .device:hover { transform: translateY(-3px); }
+}
+</style>
+
+<div class="wrap">
+
+<header class="masthead">
+  <p class="eyebrow">UI refactoring proposal</p>
+  <h1>Hacked?</h1>
+  <p class="standfirst">A full move from AppCompat XML layouts to Jetpack Compose on Material&nbsp;3, with a dark theme that follows the system and an in-app override. The brand green and orange stay; the status colours stay semantic and fixed, because in a breach checker colour carries meaning.</p>
+  <div class="meta">
+    <span><b>Package</b> li.doerf.hacked</span>
+    <span><b>Version</b> 3.9.0 (121)</span>
+    <span><b>minSdk</b> 23 · <b>targetSdk</b> 37</span>
+    <span><b>Screens</b> 4 redesigned</span>
+  </div>
+</header>
+
+<section>
+  <h2>What the current UI does wrong</h2>
+  <p class="section-note">Findings from reading every layout, adapter and fragment in <code style="font-family:'IBM Plex Mono',monospace;font-size:13px">app/src/main/res</code> and <code style="font-family:'IBM Plex Mono',monospace;font-size:13px">ui/</code>.</p>
+  <div class="audit">
+    <div>
+      <h3>Dark mode is impossible today</h3>
+      <p>The theme is pinned to <code>Theme.AppCompat.Light.NoActionBar</code>, there is no <code>values-night</code>, and text colour is hardcoded to <code>@android:color/black</code> in five layouts plus <code>Color.Gray</code> and <code>Color.Red</code> inside the Compose breach card.</p>
+    </div>
+    <div>
+      <h3>The overview cannot scroll</h3>
+      <p><code>fragment_overview.xml</code> stacks three nested fragments in a ConstraintLayout at fixed heights — 100dp for passwords, 150dp for breaches. Small screens and large system font sizes clip the content with no way to reach it.</p>
+    </div>
+    <div>
+      <h3>Two image loaders ship at once</h3>
+      <p>Picasso loads breach logos in the RecyclerView adapter; a deprecated <code>accompanist-coil 0.15.0</code> loads the same logos in Compose. Same asset, two caches, two decoders.</p>
+    </div>
+    <div>
+      <h3>Rendering state through visibility flags</h3>
+      <p>Screens toggle <code>View.GONE</code> across six sibling views to express one state. <code>PwnedPasswordFragment</code> tracks its result through four independent visibility calls, so an error and a result can both be on screen.</p>
+    </div>
+    <div>
+      <h3>Deprecated across the board</h3>
+      <p><code>setHasOptionsMenu</code>, <code>onActivityCreated</code>, <code>PreferenceFragment</code>, <code>LocalBroadcastManager</code>, <code>getColor(int)</code>, and <code>notifyDataSetChanged</code> on every list update rather than diffing.</p>
+    </div>
+    <div>
+      <h3>Cards without hierarchy</h3>
+      <p>Every surface is a white CardView on a white background, separated only by a 0.5dp grey <code>section_header</code> shape. Nothing distinguishes a compromised account from a clean one except an 8dp colour bar at the far-left edge.</p>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2>The redesigned screens</h2>
+  <p class="section-note">Each screen shown in both themes, as it would render in Compose with Material&nbsp;3. The three overview panels become three destinations in a navigation bar — Accounts, Passwords, Leaks — which removes the fixed-height nesting entirely and gives each one a full scrolling surface.</p>
+
+  <!-- ============ SCREEN 1 : ACCOUNTS ============ -->
+  <div class="screen-row">
+    <div class="screen-copy">
+      <h3>Accounts</h3>
+      <p class="from">replaces OverviewFragment + AccountsFragment + fragment_overview.xml</p>
+      <ul>
+        <li>A <b>status banner</b> leads with the one number that matters — unresolved breaches — so the answer is readable before any scrolling.</li>
+        <li>The left colour bar becomes a <b>status dot plus a count badge</b>: breached, acknowledged-only, clean, never checked. The badge carries the count in a scannable right-hand column; the supporting line names the state in words, so the row never relies on colour alone and never states the number twice.</li>
+        <li>Adding an account moves from an inline <code style="font-family:'IBM Plex Mono',monospace;font-size:12px">Group</code> visibility toggle to a <b>FAB opening a bottom sheet</b>.</li>
+        <li>Last-checked time sits under the section label instead of baseline-aligned against the title.</li>
+      </ul>
+    </div>
+
+    <div>
+      <p class="frame-label">Light</p>
+      <div class="device" data-ui="light">
+        <div class="sb"><span>14:32</span><span class="sb-icons"><i></i><i></i><i></i><b></b></span></div>
+        <div class="device-inner">
+          <div class="tab">
+            <span class="title">Accounts</span>
+            <svg class="icon" viewBox="0 0 24 24"><path d="M17.6 16.2 21 19.6 19.6 21l-3.4-3.4a7 7 0 1 1 1.4-1.4ZM11 16a5 5 0 1 0 0-10 5 5 0 0 0 0 10Z"/></svg>
+            <svg class="icon" viewBox="0 0 24 24"><path d="M12 8a2 2 0 1 0 0-4 2 2 0 0 0 0 4Zm0 6a2 2 0 1 0 0-4 2 2 0 0 0 0 4Zm0 6a2 2 0 1 0 0-4 2 2 0 0 0 0 4Z"/></svg>
+          </div>
+          <div class="scr">
+            <div class="summary">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2 4 5.3v6c0 5 3.4 9.7 8 10.9 4.6-1.2 8-5.9 8-10.9v-6L12 2Zm1 14h-2v-2h2v2Zm0-4h-2V7h2v5Z"/></svg>
+              <span class="big">3</span>
+              <span class="txt">breaches need your attention<br>across 2 of 4 accounts</span>
+            </div>
+            <div class="sec-label"><span>Your accounts</span><span style="text-transform:none;letter-spacing:0">Checked 14:02</span></div>
+            <div class="card">
+              <div class="row">
+                <span class="dot breached"></span>
+                <span class="main"><span class="name">jane@example.com</span><span class="sub">Needs attention</span></span>
+                <span class="badge">2</span>
+                <svg class="chev" viewBox="0 0 24 24"><path d="M10 6 8.6 7.4 13.2 12l-4.6 4.6L10 18l6-6z"/></svg>
+              </div>
+              <div class="row">
+                <span class="dot breached"></span>
+                <span class="main"><span class="name">j.doe@work.example</span><span class="sub">Needs attention</span></span>
+                <span class="badge">1</span>
+                <svg class="chev" viewBox="0 0 24 24"><path d="M10 6 8.6 7.4 13.2 12l-4.6 4.6L10 18l6-6z"/></svg>
+              </div>
+              <div class="row">
+                <span class="dot ack"></span>
+                <span class="main"><span class="name">oldmail@example.org</span><span class="sub">All acknowledged</span></span>
+                <span class="badge quiet">4</span>
+                <svg class="chev" viewBox="0 0 24 24"><path d="M10 6 8.6 7.4 13.2 12l-4.6 4.6L10 18l6-6z"/></svg>
+              </div>
+              <div class="row">
+                <span class="dot ok"></span>
+                <span class="main"><span class="name">private@example.net</span><span class="sub">No breaches found</span></span>
+                <svg class="chev" viewBox="0 0 24 24"><path d="M10 6 8.6 7.4 13.2 12l-4.6 4.6L10 18l6-6z"/></svg>
+              </div>
+            </div>
+            <p style="font-size:11.5px;color:var(--sc-on-variant);margin:2px 4px 0">Data provided by <span style="color:var(--sc-primary);text-decoration:underline">Have I Been Pwned</span></p>
+          </div>
+          <div class="fab"><svg viewBox="0 0 24 24"><path d="M11 5h2v6h6v2h-6v6h-2v-6H5v-2h6V5Z"/></svg></div>
+          <nav class="nav">
+            <a class="active"><span class="pill"><svg viewBox="0 0 24 24"><path d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8Zm0 2c-4.4 0-8 2.2-8 5v1h16v-1c0-2.8-3.6-5-8-5Z"/></svg></span><span>Accounts</span></a>
+            <a><span class="pill"><svg viewBox="0 0 24 24"><path d="M7 10V8a5 5 0 0 1 10 0v2h1a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1v-9a1 1 0 0 1 1-1h1Zm2 0h6V8a3 3 0 0 0-6 0v2Z"/></svg></span><span>Passwords</span></a>
+            <a><span class="pill"><svg viewBox="0 0 24 24"><path d="M12 2 4 5.3v6c0 5 3.4 9.7 8 10.9 4.6-1.2 8-5.9 8-10.9v-6L12 2Zm0 2.2 6 2.5v4.6c0 4-2.5 7.7-6 8.8V4.2Z"/></svg></span><span>Leaks</span></a>
+          </nav>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <p class="frame-label">Dark</p>
+      <div class="device" data-ui="dark">
+        <div class="sb"><span>14:32</span><span class="sb-icons"><i></i><i></i><i></i><b></b></span></div>
+        <div class="device-inner">
+          <div class="tab">
+            <span class="title">Accounts</span>
+            <svg class="icon" viewBox="0 0 24 24"><path d="M17.6 16.2 21 19.6 19.6 21l-3.4-3.4a7 7 0 1 1 1.4-1.4ZM11 16a5 5 0 1 0 0-10 5 5 0 0 0 0 10Z"/></svg>
+            <svg class="icon" viewBox="0 0 24 24"><path d="M12 8a2 2 0 1 0 0-4 2 2 0 0 0 0 4Zm0 6a2 2 0 1 0 0-4 2 2 0 0 0 0 4Zm0 6a2 2 0 1 0 0-4 2 2 0 0 0 0 4Z"/></svg>
+          </div>
+          <div class="scr">
+            <div class="summary">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2 4 5.3v6c0 5 3.4 9.7 8 10.9 4.6-1.2 8-5.9 8-10.9v-6L12 2Zm1 14h-2v-2h2v2Zm0-4h-2V7h2v5Z"/></svg>
+              <span class="big">3</span>
+              <span class="txt">breaches need your attention<br>across 2 of 4 accounts</span>
+            </div>
+            <div class="sec-label"><span>Your accounts</span><span style="text-transform:none;letter-spacing:0">Checked 14:02</span></div>
+            <div class="card">
+              <div class="row">
+                <span class="dot breached"></span>
+                <span class="main"><span class="name">jane@example.com</span><span class="sub">Needs attention</span></span>
+                <span class="badge">2</span>
+                <svg class="chev" viewBox="0 0 24 24"><path d="M10 6 8.6 7.4 13.2 12l-4.6 4.6L10 18l6-6z"/></svg>
+              </div>
+              <div class="row">
+                <span class="dot breached"></span>
+                <span class="main"><span class="name">j.doe@work.example</span><span class="sub">Needs attention</span></span>
+                <span class="badge">1</span>
+                <svg class="chev" viewBox="0 0 24 24"><path d="M10 6 8.6 7.4 13.2 12l-4.6 4.6L10 18l6-6z"/></svg>
+              </div>
+              <div class="row">
+                <span class="dot ack"></span>
+                <span class="main"><span class="name">oldmail@example.org</span><span class="sub">All acknowledged</span></span>
+                <span class="badge quiet">4</span>
+                <svg class="chev" viewBox="0 0 24 24"><path d="M10 6 8.6 7.4 13.2 12l-4.6 4.6L10 18l6-6z"/></svg>
+              </div>
+              <div class="row">
+                <span class="dot ok"></span>
+                <span class="main"><span class="name">private@example.net</span><span class="sub">No breaches found</span></span>
+                <svg class="chev" viewBox="0 0 24 24"><path d="M10 6 8.6 7.4 13.2 12l-4.6 4.6L10 18l6-6z"/></svg>
+              </div>
+            </div>
+            <p style="font-size:11.5px;color:var(--sc-on-variant);margin:2px 4px 0">Data provided by <span style="color:var(--sc-primary);text-decoration:underline">Have I Been Pwned</span></p>
+          </div>
+          <div class="fab"><svg viewBox="0 0 24 24"><path d="M11 5h2v6h6v2h-6v6h-2v-6H5v-2h6V5Z"/></svg></div>
+          <nav class="nav">
+            <a class="active"><span class="pill"><svg viewBox="0 0 24 24"><path d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8Zm0 2c-4.4 0-8 2.2-8 5v1h16v-1c0-2.8-3.6-5-8-5Z"/></svg></span><span>Accounts</span></a>
+            <a><span class="pill"><svg viewBox="0 0 24 24"><path d="M7 10V8a5 5 0 0 1 10 0v2h1a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1v-9a1 1 0 0 1 1-1h1Zm2 0h6V8a3 3 0 0 0-6 0v2Z"/></svg></span><span>Passwords</span></a>
+            <a><span class="pill"><svg viewBox="0 0 24 24"><path d="M12 2 4 5.3v6c0 5 3.4 9.7 8 10.9 4.6-1.2 8-5.9 8-10.9v-6L12 2Zm0 2.2 6 2.5v4.6c0 4-2.5 7.7-6 8.8V4.2Z"/></svg></span><span>Leaks</span></a>
+          </nav>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ SCREEN 2 : ACCOUNT DETAILS ============ -->
+  <div class="screen-row">
+    <div class="screen-copy">
+      <h3>Account detail</h3>
+      <p class="from">replaces AccountDetailsFragment + fragment_account_details.xml + BreachUi</p>
+      <ul>
+        <li>The 10dp spacer painted with <code style="font-family:'IBM Plex Mono',monospace;font-size:12px">Color(statusColor)</code> becomes a <b>4dp leading edge on the card itself</b> — red while unacknowledged, amber once acknowledged.</li>
+        <li>Breach facts move from a hand-built <code style="font-family:'IBM Plex Mono',monospace;font-size:12px">RelativeLayout</code> of label/value pairs into an aligned key–value grid, and compromised data classes become <b>chips</b> instead of a comma-joined string.</li>
+        <li>The "what now?" advice, currently nine views toggled by a ConstraintLayout <code style="font-family:'IBM Plex Mono',monospace;font-size:12px">Group</code>, becomes one expandable card at the top.</li>
+        <li>Logos load through <b>Coil</b> only; Picasso and accompanist-coil both go.</li>
+      </ul>
+    </div>
+
+    <div>
+      <p class="frame-label">Light</p>
+      <div class="device" data-ui="light">
+        <div class="sb"><span>14:32</span><span class="sb-icons"><i></i><i></i><i></i><b></b></span></div>
+        <div class="device-inner">
+          <div class="tab">
+            <svg class="icon" viewBox="0 0 24 24"><path d="M20 11H7.8l5.6-5.6L12 4l-8 8 8 8 1.4-1.4L7.8 13H20v-2Z"/></svg>
+            <span class="title small">jane@example.com</span>
+            <svg class="icon" viewBox="0 0 24 24"><path d="M12 8a2 2 0 1 0 0-4 2 2 0 0 0 0 4Zm0 6a2 2 0 1 0 0-4 2 2 0 0 0 0 4Zm0 6a2 2 0 1 0 0-4 2 2 0 0 0 0 4Z"/></svg>
+          </div>
+          <div class="scr">
+            <div style="background:var(--sc-tertiary-cont);color:var(--sc-on-tert-cont);border-radius:16px;padding:13px 16px;display:flex;gap:10px;align-items:center">
+              <span style="font-size:13px;font-weight:500;flex:1">This account appears in 2 breaches — what now?</span>
+              <svg style="width:18px;height:18px;fill:currentColor;flex:none" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5H7Z"/></svg>
+            </div>
+            <div class="breach">
+              <div class="head">
+                <span class="logo">A</span>
+                <span class="t">Adobe</span>
+              </div>
+              <dl class="kv">
+                <dt>Domain</dt><dd>adobe.com</dd>
+                <dt>Breached</dt><dd>2013/10/04</dd>
+                <dt>Accounts</dt><dd>152,445,165</dd>
+              </dl>
+              <div class="chips">
+                <span class="chip">Email addresses</span>
+                <span class="chip">Passwords</span>
+                <span class="chip">Password hints</span>
+              </div>
+              <p class="desc">In October 2013, 153 million Adobe accounts were breached, each containing an internal ID, username, email and encrypted password.</p>
+              <div class="act"><span class="btn text">Acknowledge</span></div>
+            </div>
+            <div class="breach">
+              <div class="head">
+                <span class="logo">D</span>
+                <span class="t">Dropbox</span>
+              </div>
+              <dl class="kv">
+                <dt>Domain</dt><dd>dropbox.com</dd>
+                <dt>Breached</dt><dd>2012/07/01</dd>
+              </dl>
+            </div>
+          </div>
+          <nav class="nav">
+            <a class="active"><span class="pill"><svg viewBox="0 0 24 24"><path d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8Zm0 2c-4.4 0-8 2.2-8 5v1h16v-1c0-2.8-3.6-5-8-5Z"/></svg></span><span>Accounts</span></a>
+            <a><span class="pill"><svg viewBox="0 0 24 24"><path d="M7 10V8a5 5 0 0 1 10 0v2h1a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1v-9a1 1 0 0 1 1-1h1Zm2 0h6V8a3 3 0 0 0-6 0v2Z"/></svg></span><span>Passwords</span></a>
+            <a><span class="pill"><svg viewBox="0 0 24 24"><path d="M12 2 4 5.3v6c0 5 3.4 9.7 8 10.9 4.6-1.2 8-5.9 8-10.9v-6L12 2Zm0 2.2 6 2.5v4.6c0 4-2.5 7.7-6 8.8V4.2Z"/></svg></span><span>Leaks</span></a>
+          </nav>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <p class="frame-label">Dark</p>
+      <div class="device" data-ui="dark">
+        <div class="sb"><span>14:32</span><span class="sb-icons"><i></i><i></i><i></i><b></b></span></div>
+        <div class="device-inner">
+          <div class="tab">
+            <svg class="icon" viewBox="0 0 24 24"><path d="M20 11H7.8l5.6-5.6L12 4l-8 8 8 8 1.4-1.4L7.8 13H20v-2Z"/></svg>
+            <span class="title small">jane@example.com</span>
+            <svg class="icon" viewBox="0 0 24 24"><path d="M12 8a2 2 0 1 0 0-4 2 2 0 0 0 0 4Zm0 6a2 2 0 1 0 0-4 2 2 0 0 0 0 4Zm0 6a2 2 0 1 0 0-4 2 2 0 0 0 0 4Z"/></svg>
+          </div>
+          <div class="scr">
+            <div style="background:var(--sc-tertiary-cont);color:var(--sc-on-tert-cont);border-radius:16px;padding:13px 16px;display:flex;gap:10px;align-items:center">
+              <span style="font-size:13px;font-weight:500;flex:1">This account appears in 2 breaches — what now?</span>
+              <svg style="width:18px;height:18px;fill:currentColor;flex:none" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5H7Z"/></svg>
+            </div>
+            <div class="breach">
+              <div class="head">
+                <span class="logo">A</span>
+                <span class="t">Adobe</span>
+              </div>
+              <dl class="kv">
+                <dt>Domain</dt><dd>adobe.com</dd>
+                <dt>Breached</dt><dd>2013/10/04</dd>
+                <dt>Accounts</dt><dd>152,445,165</dd>
+              </dl>
+              <div class="chips">
+                <span class="chip">Email addresses</span>
+                <span class="chip">Passwords</span>
+                <span class="chip">Password hints</span>
+              </div>
+              <p class="desc">In October 2013, 153 million Adobe accounts were breached, each containing an internal ID, username, email and encrypted password.</p>
+              <div class="act"><span class="btn text">Acknowledge</span></div>
+            </div>
+            <div class="breach ackd">
+              <div class="head">
+                <span class="logo">D</span>
+                <span class="t">Dropbox</span>
+              </div>
+              <dl class="kv">
+                <dt>Domain</dt><dd>dropbox.com</dd>
+                <dt>Breached</dt><dd>2012/07/01</dd>
+              </dl>
+            </div>
+          </div>
+          <nav class="nav">
+            <a class="active"><span class="pill"><svg viewBox="0 0 24 24"><path d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8Zm0 2c-4.4 0-8 2.2-8 5v1h16v-1c0-2.8-3.6-5-8-5Z"/></svg></span><span>Accounts</span></a>
+            <a><span class="pill"><svg viewBox="0 0 24 24"><path d="M7 10V8a5 5 0 0 1 10 0v2h1a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1v-9a1 1 0 0 1 1-1h1Zm2 0h6V8a3 3 0 0 0-6 0v2Z"/></svg></span><span>Passwords</span></a>
+            <a><span class="pill"><svg viewBox="0 0 24 24"><path d="M12 2 4 5.3v6c0 5 3.4 9.7 8 10.9 4.6-1.2 8-5.9 8-10.9v-6L12 2Zm0 2.2 6 2.5v4.6c0 4-2.5 7.7-6 8.8V4.2Z"/></svg></span><span>Leaks</span></a>
+          </nav>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ SCREEN 3 : PWNED PASSWORD ============ -->
+  <div class="screen-row">
+    <div class="screen-copy">
+      <h3>Password check</h3>
+      <p class="from">replaces PwnedPasswordFragment + fragment_pwned_password.xml</p>
+      <ul>
+        <li>Four independently toggled views collapse into <b>one sealed result state</b> — Idle, Checking, Safe, Pwned, Error — so contradictory states become unrepresentable.</li>
+        <li>The result stops being a full-bleed red or green strip behind body text and becomes a <b>container-coloured card</b> that keeps text contrast in both themes.</li>
+        <li>The <code style="font-family:'IBM Plex Mono',monospace;font-size:12px">LocalBroadcastManager</code> round-trip goes away; the check returns through a suspending call into the ViewModel's state flow.</li>
+        <li>No longer a 100dp squeezed panel on the overview — it is a full destination with room for the explanation.</li>
+      </ul>
+    </div>
+
+    <div>
+      <p class="frame-label">Light</p>
+      <div class="device" data-ui="light">
+        <div class="sb"><span>14:32</span><span class="sb-icons"><i></i><i></i><i></i><b></b></span></div>
+        <div class="device-inner">
+          <div class="tab"><span class="title">Passwords</span></div>
+          <div class="scr">
+            <p style="font-size:13px;color:var(--sc-on-variant);margin:0 4px 2px;line-height:1.45">Check whether a password has appeared in a known breach. It never leaves your phone — only the first five characters of its hash are sent.</p>
+            <div class="field focused"><span style="flex:1;letter-spacing:2px">••••••••••••</span>
+              <svg viewBox="0 0 24 24"><path d="M12 6c-4.5 0-8 4-9 6 1 2 4.5 6 9 6s8-4 9-6c-1-2-4.5-6-9-6Zm0 10a4 4 0 1 1 0-8 4 4 0 0 1 0 8Zm0-2a2 2 0 1 0 0-4 2 2 0 0 0 0 4Z"/></svg>
+            </div>
+            <div style="display:flex;justify-content:flex-end"><span class="btn">Check password</span></div>
+            <div class="result bad">
+              <span class="h">Found in 24,230 breaches</span>
+              <span class="b">This password should never be used. If you have used it anywhere, change it now.</span>
+            </div>
+            <p style="font-size:11.5px;color:var(--sc-on-variant);margin:2px 4px 0">Data provided by <span style="color:var(--sc-primary);text-decoration:underline">Have I Been Pwned</span></p>
+          </div>
+          <nav class="nav">
+            <a><span class="pill"><svg viewBox="0 0 24 24"><path d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8Zm0 2c-4.4 0-8 2.2-8 5v1h16v-1c0-2.8-3.6-5-8-5Z"/></svg></span><span>Accounts</span></a>
+            <a class="active"><span class="pill"><svg viewBox="0 0 24 24"><path d="M7 10V8a5 5 0 0 1 10 0v2h1a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1v-9a1 1 0 0 1 1-1h1Zm2 0h6V8a3 3 0 0 0-6 0v2Z"/></svg></span><span>Passwords</span></a>
+            <a><span class="pill"><svg viewBox="0 0 24 24"><path d="M12 2 4 5.3v6c0 5 3.4 9.7 8 10.9 4.6-1.2 8-5.9 8-10.9v-6L12 2Zm0 2.2 6 2.5v4.6c0 4-2.5 7.7-6 8.8V4.2Z"/></svg></span><span>Leaks</span></a>
+          </nav>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <p class="frame-label">Dark</p>
+      <div class="device" data-ui="dark">
+        <div class="sb"><span>14:32</span><span class="sb-icons"><i></i><i></i><i></i><b></b></span></div>
+        <div class="device-inner">
+          <div class="tab"><span class="title">Passwords</span></div>
+          <div class="scr">
+            <p style="font-size:13px;color:var(--sc-on-variant);margin:0 4px 2px;line-height:1.45">Check whether a password has appeared in a known breach. It never leaves your phone — only the first five characters of its hash are sent.</p>
+            <div class="field focused"><span style="flex:1;letter-spacing:2px">••••••••••••••</span>
+              <svg viewBox="0 0 24 24"><path d="M12 6c-4.5 0-8 4-9 6 1 2 4.5 6 9 6s8-4 9-6c-1-2-4.5-6-9-6Zm0 10a4 4 0 1 1 0-8 4 4 0 0 1 0 8Zm0-2a2 2 0 1 0 0-4 2 2 0 0 0 0 4Z"/></svg>
+            </div>
+            <div style="display:flex;justify-content:flex-end"><span class="btn">Check password</span></div>
+            <div class="result good">
+              <span class="h">Not found in any breach</span>
+              <span class="b">This password has not appeared in the Have I Been Pwned data set. That is not a guarantee it is strong.</span>
+            </div>
+            <p style="font-size:11.5px;color:var(--sc-on-variant);margin:2px 4px 0">Data provided by <span style="color:var(--sc-primary);text-decoration:underline">Have I Been Pwned</span></p>
+          </div>
+          <nav class="nav">
+            <a><span class="pill"><svg viewBox="0 0 24 24"><path d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8Zm0 2c-4.4 0-8 2.2-8 5v1h16v-1c0-2.8-3.6-5-8-5Z"/></svg></span><span>Accounts</span></a>
+            <a class="active"><span class="pill"><svg viewBox="0 0 24 24"><path d="M7 10V8a5 5 0 0 1 10 0v2h1a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1v-9a1 1 0 0 1 1-1h1Zm2 0h6V8a3 3 0 0 0-6 0v2Z"/></svg></span><span>Passwords</span></a>
+            <a><span class="pill"><svg viewBox="0 0 24 24"><path d="M12 2 4 5.3v6c0 5 3.4 9.7 8 10.9 4.6-1.2 8-5.9 8-10.9v-6L12 2Zm0 2.2 6 2.5v4.6c0 4-2.5 7.7-6 8.8V4.2Z"/></svg></span><span>Leaks</span></a>
+          </nav>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ SCREEN 4 : ALL BREACHES ============ -->
+  <div class="screen-row">
+    <div class="screen-copy">
+      <h3>Leaks</h3>
+      <p class="from">replaces AllBreachesFragment + BreachesFragment + two card layouts</p>
+      <ul>
+        <li>Named <b>Leaks</b>, not Breaches — this is HIBP's catalogue of breached sites, reference data rather than your own exposure, which the Accounts tab already reports.</li>
+        <li>Two adapters and two card layouts driven by a <code style="font-family:'IBM Plex Mono',monospace;font-size:12px">compactView</code> boolean collapse into <b>one composable with an expanded flag</b>.</li>
+        <li>Expansion state moves off the <code style="font-family:'IBM Plex Mono',monospace;font-size:12px">BreachedSite</code> entity — currently a mutable field on a database row, refreshed by <code style="font-family:'IBM Plex Mono',monospace;font-size:12px">notifyDataSetChanged()</code> — into screen state.</li>
+        <li>The bare <code style="font-family:'IBM Plex Mono',monospace;font-size:12px">EditText</code> filter becomes a proper search field, and sorting moves from an overflow menu to <b>visible filter chips</b>.</li>
+        <li>Account counts get <code style="font-family:'IBM Plex Mono',monospace;font-size:12px">tabular-nums</code> and locale grouping so the column reads as a column.</li>
+      </ul>
+    </div>
+
+    <div>
+      <p class="frame-label">Light</p>
+      <div class="device" data-ui="light">
+        <div class="sb"><span>14:32</span><span class="sb-icons"><i></i><i></i><i></i><b></b></span></div>
+        <div class="device-inner">
+          <div class="tab"><span class="title">Leaks</span></div>
+          <div class="scr">
+            <div class="field filled">
+              <svg viewBox="0 0 24 24"><path d="M17.6 16.2 21 19.6 19.6 21l-3.4-3.4a7 7 0 1 1 1.4-1.4ZM11 16a5 5 0 1 0 0-10 5 5 0 0 0 0 10Z"/></svg>
+              <span>Search breaches …</span>
+            </div>
+            <div class="chips" style="padding:0 2px">
+              <span class="chip" style="background:var(--sc-primary-cont);color:var(--sc-on-primary-cont)">Most recent</span>
+              <span class="chip" style="background:none;border:1px solid var(--sc-outline);color:var(--sc-on-variant)">Name</span>
+              <span class="chip" style="background:none;border:1px solid var(--sc-outline);color:var(--sc-on-variant)">Size</span>
+            </div>
+            <div class="card">
+              <div class="row">
+                <span class="main"><span class="name">Canva</span><span class="sub">137,272,116 accounts · 2019/05/24</span></span>
+                <svg class="chev" viewBox="0 0 24 24"><path d="M10 6 8.6 7.4 13.2 12l-4.6 4.6L10 18l6-6z"/></svg>
+              </div>
+              <div class="row">
+                <span class="main"><span class="name">MyFitnessPal</span><span class="sub">143,606,147 accounts · 2018/02/01</span></span>
+                <svg class="chev" viewBox="0 0 24 24"><path d="M10 6 8.6 7.4 13.2 12l-4.6 4.6L10 18l6-6z"/></svg>
+              </div>
+              <div class="row">
+                <span class="main"><span class="name">LinkedIn</span><span class="sub">164,611,595 accounts · 2012/05/05</span></span>
+                <svg class="chev" viewBox="0 0 24 24"><path d="M10 6 8.6 7.4 13.2 12l-4.6 4.6L10 18l6-6z"/></svg>
+              </div>
+              <div class="row">
+                <span class="main"><span class="name">Zynga</span><span class="sub">172,869,660 accounts · 2019/09/01</span></span>
+                <svg class="chev" viewBox="0 0 24 24"><path d="M10 6 8.6 7.4 13.2 12l-4.6 4.6L10 18l6-6z"/></svg>
+              </div>
+            </div>
+          </div>
+          <nav class="nav">
+            <a><span class="pill"><svg viewBox="0 0 24 24"><path d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8Zm0 2c-4.4 0-8 2.2-8 5v1h16v-1c0-2.8-3.6-5-8-5Z"/></svg></span><span>Accounts</span></a>
+            <a><span class="pill"><svg viewBox="0 0 24 24"><path d="M7 10V8a5 5 0 0 1 10 0v2h1a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1v-9a1 1 0 0 1 1-1h1Zm2 0h6V8a3 3 0 0 0-6 0v2Z"/></svg></span><span>Passwords</span></a>
+            <a class="active"><span class="pill"><svg viewBox="0 0 24 24"><path d="M12 2 4 5.3v6c0 5 3.4 9.7 8 10.9 4.6-1.2 8-5.9 8-10.9v-6L12 2Zm0 2.2 6 2.5v4.6c0 4-2.5 7.7-6 8.8V4.2Z"/></svg></span><span>Leaks</span></a>
+          </nav>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <p class="frame-label">Dark</p>
+      <div class="device" data-ui="dark">
+        <div class="sb"><span>14:32</span><span class="sb-icons"><i></i><i></i><i></i><b></b></span></div>
+        <div class="device-inner">
+          <div class="tab"><span class="title">Leaks</span></div>
+          <div class="scr">
+            <div class="field filled">
+              <svg viewBox="0 0 24 24"><path d="M17.6 16.2 21 19.6 19.6 21l-3.4-3.4a7 7 0 1 1 1.4-1.4ZM11 16a5 5 0 1 0 0-10 5 5 0 0 0 0 10Z"/></svg>
+              <span>can</span>
+            </div>
+            <div class="chips" style="padding:0 2px">
+              <span class="chip" style="background:var(--sc-primary-cont);color:var(--sc-on-primary-cont)">Most recent</span>
+              <span class="chip" style="background:none;border:1px solid var(--sc-outline);color:var(--sc-on-variant)">Name</span>
+              <span class="chip" style="background:none;border:1px solid var(--sc-outline);color:var(--sc-on-variant)">Size</span>
+            </div>
+            <div class="breach" style="border-left-color:var(--sc-tertiary)">
+              <div class="head">
+                <span class="logo">C</span>
+                <span class="t">Canva</span>
+                <svg style="width:18px;height:18px;fill:var(--sc-on-variant)" viewBox="0 0 24 24"><path d="M7 14l5-5 5 5H7Z"/></svg>
+              </div>
+              <dl class="kv">
+                <dt>Domain</dt><dd>canva.com</dd>
+                <dt>Breached</dt><dd>2019/05/24</dd>
+                <dt>Accounts</dt><dd>137,272,116</dd>
+                <dt>Exposed</dt><dd class="alert">Email, names, passwords</dd>
+              </dl>
+              <p class="desc">In May 2019 the design site Canva suffered a breach that exposed 137 million user records including email addresses and bcrypt password hashes.</p>
+            </div>
+            <div class="card">
+              <div class="row">
+                <span class="main"><span class="name">Canva Design School</span><span class="sub">1,842,362 accounts · 2020/01/11</span></span>
+                <svg class="chev" viewBox="0 0 24 24"><path d="M10 6 8.6 7.4 13.2 12l-4.6 4.6L10 18l6-6z"/></svg>
+              </div>
+            </div>
+          </div>
+          <nav class="nav">
+            <a><span class="pill"><svg viewBox="0 0 24 24"><path d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8Zm0 2c-4.4 0-8 2.2-8 5v1h16v-1c0-2.8-3.6-5-8-5Z"/></svg></span><span>Accounts</span></a>
+            <a><span class="pill"><svg viewBox="0 0 24 24"><path d="M7 10V8a5 5 0 0 1 10 0v2h1a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1v-9a1 1 0 0 1 1-1h1Zm2 0h6V8a3 3 0 0 0-6 0v2Z"/></svg></span><span>Passwords</span></a>
+            <a class="active"><span class="pill"><svg viewBox="0 0 24 24"><path d="M12 2 4 5.3v6c0 5 3.4 9.7 8 10.9 4.6-1.2 8-5.9 8-10.9v-6L12 2Zm0 2.2 6 2.5v4.6c0 4-2.5 7.7-6 8.8V4.2Z"/></svg></span><span>Leaks</span></a>
+          </nav>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2>Four palettes to choose between</h2>
+  <p class="section-note"><b>Chosen: A in light, D in dark.</b> The screens further up are drawn that way — verdant green by day, deep teal at night. It is an unusual split but a coherent one: green carries the brand where the ground is bright, and teal holds up better than green against a near-black surface, where the "clean" status green would otherwise sit uncomfortably close to the primary. The section below is the comparison the choice came from.</p>
+  <p class="section-note">The same Accounts screen with the same content, so only colour varies. In all four, the <b>semantic status set is identical and untouched</b> — breached red, acknowledged amber, clean green, unchecked grey. Those are the app's load-bearing colours; what changes below is only the chrome around them, which is why a quieter chrome can make the statuses read louder.</p>
+
+  <!-- ---------- A · VERDANT ---------- -->
+  <div class="screen-row">
+    <div class="screen-copy">
+      <h3>A · Verdant</h3>
+      <p class="from">the current proposal — brand-continuous</p>
+      <div class="pal-strips">
+        <div class="lbl"><span>light</span><span>primary → surface</span></div>
+        <div class="pal-strip"><span style="background:#2E6B34"></span><span style="background:#B3F0B3"></span><span style="background:#E3E8DC"></span><span style="background:#EDF1E7"></span><span style="background:#F9FBF4"></span></div>
+        <div class="lbl"><span>dark</span></div>
+        <div class="pal-strip"><span style="background:#8FD695"></span><span style="background:#14521F"></span><span style="background:#262B24"></span><span style="background:#1C201A"></span><span style="background:#10140F"></span></div>
+      </div>
+      <ul>
+        <li>Keeps the identity users already have — the existing <code style="font-family:'IBM Plex Mono',monospace;font-size:12px">#388E3C</code> green, modernised into a full M3 tonal set.</li>
+        <li>The one real cost: green is also the "clean" status, so primary and a status colour share a hue family. The FAB and the clean dot sit in the same neighbourhood.</li>
+      </ul>
+    </div>
+    <div>
+      <p class="frame-label">Light</p>
+      <div class="device compact" data-ui="light">
+        <div class="sb"><span>14:32</span><span class="sb-icons"><i></i><i></i><i></i><b></b></span></div>
+        <div class="device-inner">
+          <div class="tab"><span class="title">Accounts</span><svg class="icon" viewBox="0 0 24 24"><path d="M17.6 16.2 21 19.6 19.6 21l-3.4-3.4a7 7 0 1 1 1.4-1.4ZM11 16a5 5 0 1 0 0-10 5 5 0 0 0 0 10Z"/></svg></div>
+          <div class="scr">
+            <div class="summary"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2 4 5.3v6c0 5 3.4 9.7 8 10.9 4.6-1.2 8-5.9 8-10.9v-6L12 2Zm1 14h-2v-2h2v2Zm0-4h-2V7h2v5Z"/></svg><span class="big">3</span><span class="txt">breaches need your attention<br>across 2 of 4 accounts</span></div>
+            <div class="sec-label"><span>Your accounts</span><span style="text-transform:none;letter-spacing:0">Checked 14:02</span></div>
+            <div class="card">
+              <div class="row"><span class="dot breached"></span><span class="main"><span class="name">jane@example.com</span><span class="sub">Needs attention</span></span><span class="badge">2</span><svg class="chev" viewBox="0 0 24 24"><path d="M10 6 8.6 7.4 13.2 12l-4.6 4.6L10 18l6-6z"/></svg></div>
+              <div class="row"><span class="dot ack"></span><span class="main"><span class="name">oldmail@example.org</span><span class="sub">All acknowledged</span></span><span class="badge quiet">4</span><svg class="chev" viewBox="0 0 24 24"><path d="M10 6 8.6 7.4 13.2 12l-4.6 4.6L10 18l6-6z"/></svg></div>
+              <div class="row"><span class="dot ok"></span><span class="main"><span class="name">private@example.net</span><span class="sub">No breaches found</span></span><svg class="chev" viewBox="0 0 24 24"><path d="M10 6 8.6 7.4 13.2 12l-4.6 4.6L10 18l6-6z"/></svg></div>
+            </div>
+          </div>
+          <div class="fab" style="bottom:74px"><svg viewBox="0 0 24 24"><path d="M11 5h2v6h6v2h-6v6h-2v-6H5v-2h6V5Z"/></svg></div>
+          <nav class="nav">
+            <a class="active"><span class="pill"><svg viewBox="0 0 24 24"><path d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8Zm0 2c-4.4 0-8 2.2-8 5v1h16v-1c0-2.8-3.6-5-8-5Z"/></svg></span><span>Accounts</span></a>
+            <a><span class="pill"><svg viewBox="0 0 24 24"><path d="M7 10V8a5 5 0 0 1 10 0v2h1a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1v-9a1 1 0 0 1 1-1h1Zm2 0h6V8a3 3 0 0 0-6 0v2Z"/></svg></span><span>Passwords</span></a>
+            <a><span class="pill"><svg viewBox="0 0 24 24"><path d="M12 2 4 5.3v6c0 5 3.4 9.7 8 10.9 4.6-1.2 8-5.9 8-10.9v-6L12 2Zm0 2.2 6 2.5v4.6c0 4-2.5 7.7-6 8.8V4.2Z"/></svg></span><span>Leaks</span></a>
+          </nav>
+        </div>
+      </div>
+    </div>
+    <div>
+      <p class="frame-label">Dark</p>
+      <div class="device compact" data-ui="dark" data-pal="verdant">
+        <div class="sb"><span>14:32</span><span class="sb-icons"><i></i><i></i><i></i><b></b></span></div>
+        <div class="device-inner">
+          <div class="tab"><span class="title">Accounts</span><svg class="icon" viewBox="0 0 24 24"><path d="M17.6 16.2 21 19.6 19.6 21l-3.4-3.4a7 7 0 1 1 1.4-1.4ZM11 16a5 5 0 1 0 0-10 5 5 0 0 0 0 10Z"/></svg></div>
+          <div class="scr">
+            <div class="summary"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2 4 5.3v6c0 5 3.4 9.7 8 10.9 4.6-1.2 8-5.9 8-10.9v-6L12 2Zm1 14h-2v-2h2v2Zm0-4h-2V7h2v5Z"/></svg><span class="big">3</span><span class="txt">breaches need your attention<br>across 2 of 4 accounts</span></div>
+            <div class="sec-label"><span>Your accounts</span><span style="text-transform:none;letter-spacing:0">Checked 14:02</span></div>
+            <div class="card">
+              <div class="row"><span class="dot breached"></span><span class="main"><span class="name">jane@example.com</span><span class="sub">Needs attention</span></span><span class="badge">2</span><svg class="chev" viewBox="0 0 24 24"><path d="M10 6 8.6 7.4 13.2 12l-4.6 4.6L10 18l6-6z"/></svg></div>
+              <div class="row"><span class="dot ack"></span><span class="main"><span class="name">oldmail@example.org</span><span class="sub">All acknowledged</span></span><span class="badge quiet">4</span><svg class="chev" viewBox="0 0 24 24"><path d="M10 6 8.6 7.4 13.2 12l-4.6 4.6L10 18l6-6z"/></svg></div>
+              <div class="row"><span class="dot ok"></span><span class="main"><span class="name">private@example.net</span><span class="sub">No breaches found</span></span><svg class="chev" viewBox="0 0 24 24"><path d="M10 6 8.6 7.4 13.2 12l-4.6 4.6L10 18l6-6z"/></svg></div>
+            </div>
+          </div>
+          <div class="fab" style="bottom:74px"><svg viewBox="0 0 24 24"><path d="M11 5h2v6h6v2h-6v6h-2v-6H5v-2h6V5Z"/></svg></div>
+          <nav class="nav">
+            <a class="active"><span class="pill"><svg viewBox="0 0 24 24"><path d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8Zm0 2c-4.4 0-8 2.2-8 5v1h16v-1c0-2.8-3.6-5-8-5Z"/></svg></span><span>Accounts</span></a>
+            <a><span class="pill"><svg viewBox="0 0 24 24"><path d="M7 10V8a5 5 0 0 1 10 0v2h1a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1v-9a1 1 0 0 1 1-1h1Zm2 0h6V8a3 3 0 0 0-6 0v2Z"/></svg></span><span>Passwords</span></a>
+            <a><span class="pill"><svg viewBox="0 0 24 24"><path d="M12 2 4 5.3v6c0 5 3.4 9.7 8 10.9 4.6-1.2 8-5.9 8-10.9v-6L12 2Zm0 2.2 6 2.5v4.6c0 4-2.5 7.7-6 8.8V4.2Z"/></svg></span><span>Leaks</span></a>
+          </nav>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ---------- B · SLATE ---------- -->
+  <div class="screen-row">
+    <div class="screen-copy">
+      <h3>B · Slate</h3>
+      <p class="from">desaturated chrome, status carries all the colour</p>
+      <div class="pal-strips">
+        <div class="lbl"><span>light</span><span>primary → surface</span></div>
+        <div class="pal-strip"><span style="background:#3D5A6C"></span><span style="background:#C9DEEB"></span><span style="background:#DDE5E9"></span><span style="background:#E8EEF1"></span><span style="background:#F7F9FA"></span></div>
+        <div class="lbl"><span>dark</span></div>
+        <div class="pal-strip"><span style="background:#A6C8DB"></span><span style="background:#26424F"></span><span style="background:#242B2E"></span><span style="background:#1A2023"></span><span style="background:#0E1315"></span></div>
+      </div>
+      <ul>
+        <li>Steel blue-grey chrome with almost no saturation, so the red, amber and green statuses are the only strong colour on screen. For an app whose whole job is signalling risk, this is the most defensible choice.</li>
+        <li>Reads as an instrument rather than a consumer app. Loses the green brand recognition entirely.</li>
+      </ul>
+    </div>
+    <div>
+      <p class="frame-label">Light</p>
+      <div class="device compact" data-ui="light" data-pal="slate">
+        <div class="sb"><span>14:32</span><span class="sb-icons"><i></i><i></i><i></i><b></b></span></div>
+        <div class="device-inner">
+          <div class="tab"><span class="title">Accounts</span><svg class="icon" viewBox="0 0 24 24"><path d="M17.6 16.2 21 19.6 19.6 21l-3.4-3.4a7 7 0 1 1 1.4-1.4ZM11 16a5 5 0 1 0 0-10 5 5 0 0 0 0 10Z"/></svg></div>
+          <div class="scr">
+            <div class="summary"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2 4 5.3v6c0 5 3.4 9.7 8 10.9 4.6-1.2 8-5.9 8-10.9v-6L12 2Zm1 14h-2v-2h2v2Zm0-4h-2V7h2v5Z"/></svg><span class="big">3</span><span class="txt">breaches need your attention<br>across 2 of 4 accounts</span></div>
+            <div class="sec-label"><span>Your accounts</span><span style="text-transform:none;letter-spacing:0">Checked 14:02</span></div>
+            <div class="card">
+              <div class="row"><span class="dot breached"></span><span class="main"><span class="name">jane@example.com</span><span class="sub">Needs attention</span></span><span class="badge">2</span><svg class="chev" viewBox="0 0 24 24"><path d="M10 6 8.6 7.4 13.2 12l-4.6 4.6L10 18l6-6z"/></svg></div>
+              <div class="row"><span class="dot ack"></span><span class="main"><span class="name">oldmail@example.org</span><span class="sub">All acknowledged</span></span><span class="badge quiet">4</span><svg class="chev" viewBox="0 0 24 24"><path d="M10 6 8.6 7.4 13.2 12l-4.6 4.6L10 18l6-6z"/></svg></div>
+              <div class="row"><span class="dot ok"></span><span class="main"><span class="name">private@example.net</span><span class="sub">No breaches found</span></span><svg class="chev" viewBox="0 0 24 24"><path d="M10 6 8.6 7.4 13.2 12l-4.6 4.6L10 18l6-6z"/></svg></div>
+            </div>
+          </div>
+          <div class="fab" style="bottom:74px"><svg viewBox="0 0 24 24"><path d="M11 5h2v6h6v2h-6v6h-2v-6H5v-2h6V5Z"/></svg></div>
+          <nav class="nav">
+            <a class="active"><span class="pill"><svg viewBox="0 0 24 24"><path d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8Zm0 2c-4.4 0-8 2.2-8 5v1h16v-1c0-2.8-3.6-5-8-5Z"/></svg></span><span>Accounts</span></a>
+            <a><span class="pill"><svg viewBox="0 0 24 24"><path d="M7 10V8a5 5 0 0 1 10 0v2h1a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1v-9a1 1 0 0 1 1-1h1Zm2 0h6V8a3 3 0 0 0-6 0v2Z"/></svg></span><span>Passwords</span></a>
+            <a><span class="pill"><svg viewBox="0 0 24 24"><path d="M12 2 4 5.3v6c0 5 3.4 9.7 8 10.9 4.6-1.2 8-5.9 8-10.9v-6L12 2Zm0 2.2 6 2.5v4.6c0 4-2.5 7.7-6 8.8V4.2Z"/></svg></span><span>Leaks</span></a>
+          </nav>
+        </div>
+      </div>
+    </div>
+    <div>
+      <p class="frame-label">Dark</p>
+      <div class="device compact" data-ui="dark" data-pal="slate">
+        <div class="sb"><span>14:32</span><span class="sb-icons"><i></i><i></i><i></i><b></b></span></div>
+        <div class="device-inner">
+          <div class="tab"><span class="title">Accounts</span><svg class="icon" viewBox="0 0 24 24"><path d="M17.6 16.2 21 19.6 19.6 21l-3.4-3.4a7 7 0 1 1 1.4-1.4ZM11 16a5 5 0 1 0 0-10 5 5 0 0 0 0 10Z"/></svg></div>
+          <div class="scr">
+            <div class="summary"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2 4 5.3v6c0 5 3.4 9.7 8 10.9 4.6-1.2 8-5.9 8-10.9v-6L12 2Zm1 14h-2v-2h2v2Zm0-4h-2V7h2v5Z"/></svg><span class="big">3</span><span class="txt">breaches need your attention<br>across 2 of 4 accounts</span></div>
+            <div class="sec-label"><span>Your accounts</span><span style="text-transform:none;letter-spacing:0">Checked 14:02</span></div>
+            <div class="card">
+              <div class="row"><span class="dot breached"></span><span class="main"><span class="name">jane@example.com</span><span class="sub">Needs attention</span></span><span class="badge">2</span><svg class="chev" viewBox="0 0 24 24"><path d="M10 6 8.6 7.4 13.2 12l-4.6 4.6L10 18l6-6z"/></svg></div>
+              <div class="row"><span class="dot ack"></span><span class="main"><span class="name">oldmail@example.org</span><span class="sub">All acknowledged</span></span><span class="badge quiet">4</span><svg class="chev" viewBox="0 0 24 24"><path d="M10 6 8.6 7.4 13.2 12l-4.6 4.6L10 18l6-6z"/></svg></div>
+              <div class="row"><span class="dot ok"></span><span class="main"><span class="name">private@example.net</span><span class="sub">No breaches found</span></span><svg class="chev" viewBox="0 0 24 24"><path d="M10 6 8.6 7.4 13.2 12l-4.6 4.6L10 18l6-6z"/></svg></div>
+            </div>
+          </div>
+          <div class="fab" style="bottom:74px"><svg viewBox="0 0 24 24"><path d="M11 5h2v6h6v2h-6v6h-2v-6H5v-2h6V5Z"/></svg></div>
+          <nav class="nav">
+            <a class="active"><span class="pill"><svg viewBox="0 0 24 24"><path d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8Zm0 2c-4.4 0-8 2.2-8 5v1h16v-1c0-2.8-3.6-5-8-5Z"/></svg></span><span>Accounts</span></a>
+            <a><span class="pill"><svg viewBox="0 0 24 24"><path d="M7 10V8a5 5 0 0 1 10 0v2h1a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1v-9a1 1 0 0 1 1-1h1Zm2 0h6V8a3 3 0 0 0-6 0v2Z"/></svg></span><span>Passwords</span></a>
+            <a><span class="pill"><svg viewBox="0 0 24 24"><path d="M12 2 4 5.3v6c0 5 3.4 9.7 8 10.9 4.6-1.2 8-5.9 8-10.9v-6L12 2Zm0 2.2 6 2.5v4.6c0 4-2.5 7.7-6 8.8V4.2Z"/></svg></span><span>Leaks</span></a>
+          </nav>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ---------- C · INDIGO ---------- -->
+  <div class="screen-row">
+    <div class="screen-copy">
+      <h3>C · Indigo</h3>
+      <p class="from">cool primary, maximum separation from status</p>
+      <div class="pal-strips">
+        <div class="lbl"><span>light</span><span>primary → surface</span></div>
+        <div class="pal-strip"><span style="background:#4A4CA0"></span><span style="background:#E0E0FF"></span><span style="background:#E4E1EE"></span><span style="background:#EDEAF6"></span><span style="background:#FBF8FF"></span></div>
+        <div class="lbl"><span>dark</span></div>
+        <div class="pal-strip"><span style="background:#BEC2FF"></span><span style="background:#333597"></span><span style="background:#29292F"></span><span style="background:#1E1E25"></span><span style="background:#121218"></span></div>
+      </div>
+      <ul>
+        <li>Blue-violet sits far from red, amber and green in hue, so nothing on screen can be mistaken for a status. The cleanest separation of the four.</li>
+        <li>Also the most generic — indigo-on-white is the default look of a great many Android apps, and it says nothing about this one in particular.</li>
+      </ul>
+    </div>
+    <div>
+      <p class="frame-label">Light</p>
+      <div class="device compact" data-ui="light" data-pal="indigo">
+        <div class="sb"><span>14:32</span><span class="sb-icons"><i></i><i></i><i></i><b></b></span></div>
+        <div class="device-inner">
+          <div class="tab"><span class="title">Accounts</span><svg class="icon" viewBox="0 0 24 24"><path d="M17.6 16.2 21 19.6 19.6 21l-3.4-3.4a7 7 0 1 1 1.4-1.4ZM11 16a5 5 0 1 0 0-10 5 5 0 0 0 0 10Z"/></svg></div>
+          <div class="scr">
+            <div class="summary"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2 4 5.3v6c0 5 3.4 9.7 8 10.9 4.6-1.2 8-5.9 8-10.9v-6L12 2Zm1 14h-2v-2h2v2Zm0-4h-2V7h2v5Z"/></svg><span class="big">3</span><span class="txt">breaches need your attention<br>across 2 of 4 accounts</span></div>
+            <div class="sec-label"><span>Your accounts</span><span style="text-transform:none;letter-spacing:0">Checked 14:02</span></div>
+            <div class="card">
+              <div class="row"><span class="dot breached"></span><span class="main"><span class="name">jane@example.com</span><span class="sub">Needs attention</span></span><span class="badge">2</span><svg class="chev" viewBox="0 0 24 24"><path d="M10 6 8.6 7.4 13.2 12l-4.6 4.6L10 18l6-6z"/></svg></div>
+              <div class="row"><span class="dot ack"></span><span class="main"><span class="name">oldmail@example.org</span><span class="sub">All acknowledged</span></span><span class="badge quiet">4</span><svg class="chev" viewBox="0 0 24 24"><path d="M10 6 8.6 7.4 13.2 12l-4.6 4.6L10 18l6-6z"/></svg></div>
+              <div class="row"><span class="dot ok"></span><span class="main"><span class="name">private@example.net</span><span class="sub">No breaches found</span></span><svg class="chev" viewBox="0 0 24 24"><path d="M10 6 8.6 7.4 13.2 12l-4.6 4.6L10 18l6-6z"/></svg></div>
+            </div>
+          </div>
+          <div class="fab" style="bottom:74px"><svg viewBox="0 0 24 24"><path d="M11 5h2v6h6v2h-6v6h-2v-6H5v-2h6V5Z"/></svg></div>
+          <nav class="nav">
+            <a class="active"><span class="pill"><svg viewBox="0 0 24 24"><path d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8Zm0 2c-4.4 0-8 2.2-8 5v1h16v-1c0-2.8-3.6-5-8-5Z"/></svg></span><span>Accounts</span></a>
+            <a><span class="pill"><svg viewBox="0 0 24 24"><path d="M7 10V8a5 5 0 0 1 10 0v2h1a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1v-9a1 1 0 0 1 1-1h1Zm2 0h6V8a3 3 0 0 0-6 0v2Z"/></svg></span><span>Passwords</span></a>
+            <a><span class="pill"><svg viewBox="0 0 24 24"><path d="M12 2 4 5.3v6c0 5 3.4 9.7 8 10.9 4.6-1.2 8-5.9 8-10.9v-6L12 2Zm0 2.2 6 2.5v4.6c0 4-2.5 7.7-6 8.8V4.2Z"/></svg></span><span>Leaks</span></a>
+          </nav>
+        </div>
+      </div>
+    </div>
+    <div>
+      <p class="frame-label">Dark</p>
+      <div class="device compact" data-ui="dark" data-pal="indigo">
+        <div class="sb"><span>14:32</span><span class="sb-icons"><i></i><i></i><i></i><b></b></span></div>
+        <div class="device-inner">
+          <div class="tab"><span class="title">Accounts</span><svg class="icon" viewBox="0 0 24 24"><path d="M17.6 16.2 21 19.6 19.6 21l-3.4-3.4a7 7 0 1 1 1.4-1.4ZM11 16a5 5 0 1 0 0-10 5 5 0 0 0 0 10Z"/></svg></div>
+          <div class="scr">
+            <div class="summary"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2 4 5.3v6c0 5 3.4 9.7 8 10.9 4.6-1.2 8-5.9 8-10.9v-6L12 2Zm1 14h-2v-2h2v2Zm0-4h-2V7h2v5Z"/></svg><span class="big">3</span><span class="txt">breaches need your attention<br>across 2 of 4 accounts</span></div>
+            <div class="sec-label"><span>Your accounts</span><span style="text-transform:none;letter-spacing:0">Checked 14:02</span></div>
+            <div class="card">
+              <div class="row"><span class="dot breached"></span><span class="main"><span class="name">jane@example.com</span><span class="sub">Needs attention</span></span><span class="badge">2</span><svg class="chev" viewBox="0 0 24 24"><path d="M10 6 8.6 7.4 13.2 12l-4.6 4.6L10 18l6-6z"/></svg></div>
+              <div class="row"><span class="dot ack"></span><span class="main"><span class="name">oldmail@example.org</span><span class="sub">All acknowledged</span></span><span class="badge quiet">4</span><svg class="chev" viewBox="0 0 24 24"><path d="M10 6 8.6 7.4 13.2 12l-4.6 4.6L10 18l6-6z"/></svg></div>
+              <div class="row"><span class="dot ok"></span><span class="main"><span class="name">private@example.net</span><span class="sub">No breaches found</span></span><svg class="chev" viewBox="0 0 24 24"><path d="M10 6 8.6 7.4 13.2 12l-4.6 4.6L10 18l6-6z"/></svg></div>
+            </div>
+          </div>
+          <div class="fab" style="bottom:74px"><svg viewBox="0 0 24 24"><path d="M11 5h2v6h6v2h-6v6h-2v-6H5v-2h6V5Z"/></svg></div>
+          <nav class="nav">
+            <a class="active"><span class="pill"><svg viewBox="0 0 24 24"><path d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8Zm0 2c-4.4 0-8 2.2-8 5v1h16v-1c0-2.8-3.6-5-8-5Z"/></svg></span><span>Accounts</span></a>
+            <a><span class="pill"><svg viewBox="0 0 24 24"><path d="M7 10V8a5 5 0 0 1 10 0v2h1a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1v-9a1 1 0 0 1 1-1h1Zm2 0h6V8a3 3 0 0 0-6 0v2Z"/></svg></span><span>Passwords</span></a>
+            <a><span class="pill"><svg viewBox="0 0 24 24"><path d="M12 2 4 5.3v6c0 5 3.4 9.7 8 10.9 4.6-1.2 8-5.9 8-10.9v-6L12 2Zm0 2.2 6 2.5v4.6c0 4-2.5 7.7-6 8.8V4.2Z"/></svg></span><span>Leaks</span></a>
+          </nav>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ---------- D · DEEP TEAL ---------- -->
+  <div class="screen-row">
+    <div class="screen-copy">
+      <h3>D · Deep teal</h3>
+      <p class="from">keeps the lineage, drops the collision</p>
+      <div class="pal-strips">
+        <div class="lbl"><span>light</span><span>primary → surface</span></div>
+        <div class="pal-strip"><span style="background:#00696E"></span><span style="background:#9DF0F5"></span><span style="background:#D8E5E5"></span><span style="background:#E3EFEF"></span><span style="background:#F5FAFA"></span></div>
+        <div class="lbl"><span>dark</span></div>
+        <div class="pal-strip"><span style="background:#4FD8DF"></span><span style="background:#004F52"></span><span style="background:#242B2B"></span><span style="background:#1A2020"></span><span style="background:#0E1414"></span></div>
+      </div>
+      <ul>
+        <li>Blue-leaning teal keeps a family resemblance to the current green without being it, so the clean-status green stays distinct while the app still feels like the same product.</li>
+        <li>The compromise choice: less separation than indigo, less brand continuity than verdant. Cyan primary in dark mode is bright — worth checking on a real screen at night.</li>
+      </ul>
+    </div>
+    <div>
+      <p class="frame-label">Light</p>
+      <div class="device compact" data-ui="light" data-pal="teal">
+        <div class="sb"><span>14:32</span><span class="sb-icons"><i></i><i></i><i></i><b></b></span></div>
+        <div class="device-inner">
+          <div class="tab"><span class="title">Accounts</span><svg class="icon" viewBox="0 0 24 24"><path d="M17.6 16.2 21 19.6 19.6 21l-3.4-3.4a7 7 0 1 1 1.4-1.4ZM11 16a5 5 0 1 0 0-10 5 5 0 0 0 0 10Z"/></svg></div>
+          <div class="scr">
+            <div class="summary"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2 4 5.3v6c0 5 3.4 9.7 8 10.9 4.6-1.2 8-5.9 8-10.9v-6L12 2Zm1 14h-2v-2h2v2Zm0-4h-2V7h2v5Z"/></svg><span class="big">3</span><span class="txt">breaches need your attention<br>across 2 of 4 accounts</span></div>
+            <div class="sec-label"><span>Your accounts</span><span style="text-transform:none;letter-spacing:0">Checked 14:02</span></div>
+            <div class="card">
+              <div class="row"><span class="dot breached"></span><span class="main"><span class="name">jane@example.com</span><span class="sub">Needs attention</span></span><span class="badge">2</span><svg class="chev" viewBox="0 0 24 24"><path d="M10 6 8.6 7.4 13.2 12l-4.6 4.6L10 18l6-6z"/></svg></div>
+              <div class="row"><span class="dot ack"></span><span class="main"><span class="name">oldmail@example.org</span><span class="sub">All acknowledged</span></span><span class="badge quiet">4</span><svg class="chev" viewBox="0 0 24 24"><path d="M10 6 8.6 7.4 13.2 12l-4.6 4.6L10 18l6-6z"/></svg></div>
+              <div class="row"><span class="dot ok"></span><span class="main"><span class="name">private@example.net</span><span class="sub">No breaches found</span></span><svg class="chev" viewBox="0 0 24 24"><path d="M10 6 8.6 7.4 13.2 12l-4.6 4.6L10 18l6-6z"/></svg></div>
+            </div>
+          </div>
+          <div class="fab" style="bottom:74px"><svg viewBox="0 0 24 24"><path d="M11 5h2v6h6v2h-6v6h-2v-6H5v-2h6V5Z"/></svg></div>
+          <nav class="nav">
+            <a class="active"><span class="pill"><svg viewBox="0 0 24 24"><path d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8Zm0 2c-4.4 0-8 2.2-8 5v1h16v-1c0-2.8-3.6-5-8-5Z"/></svg></span><span>Accounts</span></a>
+            <a><span class="pill"><svg viewBox="0 0 24 24"><path d="M7 10V8a5 5 0 0 1 10 0v2h1a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1v-9a1 1 0 0 1 1-1h1Zm2 0h6V8a3 3 0 0 0-6 0v2Z"/></svg></span><span>Passwords</span></a>
+            <a><span class="pill"><svg viewBox="0 0 24 24"><path d="M12 2 4 5.3v6c0 5 3.4 9.7 8 10.9 4.6-1.2 8-5.9 8-10.9v-6L12 2Zm0 2.2 6 2.5v4.6c0 4-2.5 7.7-6 8.8V4.2Z"/></svg></span><span>Leaks</span></a>
+          </nav>
+        </div>
+      </div>
+    </div>
+    <div>
+      <p class="frame-label">Dark</p>
+      <div class="device compact" data-ui="dark" data-pal="teal">
+        <div class="sb"><span>14:32</span><span class="sb-icons"><i></i><i></i><i></i><b></b></span></div>
+        <div class="device-inner">
+          <div class="tab"><span class="title">Accounts</span><svg class="icon" viewBox="0 0 24 24"><path d="M17.6 16.2 21 19.6 19.6 21l-3.4-3.4a7 7 0 1 1 1.4-1.4ZM11 16a5 5 0 1 0 0-10 5 5 0 0 0 0 10Z"/></svg></div>
+          <div class="scr">
+            <div class="summary"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2 4 5.3v6c0 5 3.4 9.7 8 10.9 4.6-1.2 8-5.9 8-10.9v-6L12 2Zm1 14h-2v-2h2v2Zm0-4h-2V7h2v5Z"/></svg><span class="big">3</span><span class="txt">breaches need your attention<br>across 2 of 4 accounts</span></div>
+            <div class="sec-label"><span>Your accounts</span><span style="text-transform:none;letter-spacing:0">Checked 14:02</span></div>
+            <div class="card">
+              <div class="row"><span class="dot breached"></span><span class="main"><span class="name">jane@example.com</span><span class="sub">Needs attention</span></span><span class="badge">2</span><svg class="chev" viewBox="0 0 24 24"><path d="M10 6 8.6 7.4 13.2 12l-4.6 4.6L10 18l6-6z"/></svg></div>
+              <div class="row"><span class="dot ack"></span><span class="main"><span class="name">oldmail@example.org</span><span class="sub">All acknowledged</span></span><span class="badge quiet">4</span><svg class="chev" viewBox="0 0 24 24"><path d="M10 6 8.6 7.4 13.2 12l-4.6 4.6L10 18l6-6z"/></svg></div>
+              <div class="row"><span class="dot ok"></span><span class="main"><span class="name">private@example.net</span><span class="sub">No breaches found</span></span><svg class="chev" viewBox="0 0 24 24"><path d="M10 6 8.6 7.4 13.2 12l-4.6 4.6L10 18l6-6z"/></svg></div>
+            </div>
+          </div>
+          <div class="fab" style="bottom:74px"><svg viewBox="0 0 24 24"><path d="M11 5h2v6h6v2h-6v6h-2v-6H5v-2h6V5Z"/></svg></div>
+          <nav class="nav">
+            <a class="active"><span class="pill"><svg viewBox="0 0 24 24"><path d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8Zm0 2c-4.4 0-8 2.2-8 5v1h16v-1c0-2.8-3.6-5-8-5Z"/></svg></span><span>Accounts</span></a>
+            <a><span class="pill"><svg viewBox="0 0 24 24"><path d="M7 10V8a5 5 0 0 1 10 0v2h1a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1v-9a1 1 0 0 1 1-1h1Zm2 0h6V8a3 3 0 0 0-6 0v2Z"/></svg></span><span>Passwords</span></a>
+            <a><span class="pill"><svg viewBox="0 0 24 24"><path d="M12 2 4 5.3v6c0 5 3.4 9.7 8 10.9 4.6-1.2 8-5.9 8-10.9v-6L12 2Zm0 2.2 6 2.5v4.6c0 4-2.5 7.7-6 8.8V4.2Z"/></svg></span><span>Leaks</span></a>
+          </nav>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2>Colour tokens</h2>
+  <p class="section-note">Light column from palette <b>A · Verdant</b>, dark column from palette <b>D · Deep teal</b>. A fixed brand palette seeded from the existing <code style="font-family:'IBM Plex Mono',monospace;font-size:13px">#388E3C</code> green and <code style="font-family:'IBM Plex Mono',monospace;font-size:13px">#FF9100</code> accent — no dynamic colour, so the identity holds on every device. Status colours are a separate semantic set: they are the app's only load-bearing colours, and they are tuned per theme rather than reused across both.</p>
+  <div class="tokens">
+    <div class="token-table">
+      <h3>Material 3 roles</h3>
+      <div class="tbl-scroll"><table>
+        <thead><tr><th>Role</th><th>Light</th><th>Dark</th></tr></thead>
+        <tbody>
+          <tr><td>primary</td><td class="hex"><span class="sw" style="background:#2E6B34"></span>#2E6B34</td><td class="hex"><span class="sw" style="background:#8FD695"></span>#4FD8DF</td></tr>
+          <tr><td>onPrimary</td><td class="hex"><span class="sw" style="background:#FFFFFF"></span>#FFFFFF</td><td class="hex"><span class="sw" style="background:#003739"></span>#003739</td></tr>
+          <tr><td>primaryContainer</td><td class="hex"><span class="sw" style="background:#B3F0B3"></span>#B3F0B3</td><td class="hex"><span class="sw" style="background:#004F52"></span>#004F52</td></tr>
+          <tr><td>tertiary</td><td class="hex"><span class="sw" style="background:#8A5100"></span>#8A5100</td><td class="hex"><span class="sw" style="background:#FFB95C"></span>#FFB95C</td></tr>
+          <tr><td>tertiaryContainer</td><td class="hex"><span class="sw" style="background:#FFDCBE"></span>#FFDCBE</td><td class="hex"><span class="sw" style="background:#663D00"></span>#663D00</td></tr>
+          <tr><td>surface</td><td class="hex"><span class="sw" style="background:#F9FBF4"></span>#F9FBF4</td><td class="hex"><span class="sw" style="background:#0E1414"></span>#0E1414</td></tr>
+          <tr><td>surfaceContainer</td><td class="hex"><span class="sw" style="background:#EDF1E7"></span>#EDF1E7</td><td class="hex"><span class="sw" style="background:#1A2020"></span>#1A2020</td></tr>
+          <tr><td>onSurface</td><td class="hex"><span class="sw" style="background:#191D17"></span>#191D17</td><td class="hex"><span class="sw" style="background:#DDE4E3"></span>#DDE4E3</td></tr>
+          <tr><td>onSurfaceVariant</td><td class="hex"><span class="sw" style="background:#434840"></span>#434840</td><td class="hex"><span class="sw" style="background:#BEC8C8"></span>#BEC8C8</td></tr>
+          <tr><td>outline</td><td class="hex"><span class="sw" style="background:#C2C9BC"></span>#C2C9BC</td><td class="hex"><span class="sw" style="background:#3F4949"></span>#3F4949</td></tr>
+          <tr><td>error</td><td class="hex"><span class="sw" style="background:#B3261E"></span>#B3261E</td><td class="hex"><span class="sw" style="background:#FFB4AB"></span>#FFB4AB</td></tr>
+          <tr><td>errorContainer</td><td class="hex"><span class="sw" style="background:#FFDAD5"></span>#FFDAD5</td><td class="hex"><span class="sw" style="background:#7A1710"></span>#7A1710</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+    <div class="token-table">
+      <h3>Semantic status — extended colour set</h3>
+      <div class="tbl-scroll"><table>
+        <thead><tr><th>Status</th><th>Light</th><th>Dark</th></tr></thead>
+        <tbody>
+          <tr><td>breached</td><td class="hex"><span class="sw" style="background:#B3261E"></span>#B3261E</td><td class="hex"><span class="sw" style="background:#FFB4AB"></span>#FFB4AB</td></tr>
+          <tr><td>acknowledged</td><td class="hex"><span class="sw" style="background:#D69A00"></span>#D69A00</td><td class="hex"><span class="sw" style="background:#F0C048"></span>#F0C048</td></tr>
+          <tr><td>clean</td><td class="hex"><span class="sw" style="background:#2E6B34"></span>#2E6B34</td><td class="hex"><span class="sw" style="background:#8FD695"></span>#8FD695</td></tr>
+          <tr><td>unchecked</td><td class="hex"><span class="sw" style="background:#767D73"></span>#767D73</td><td class="hex"><span class="sw" style="background:#8E958A"></span>#8E958A</td></tr>
+        </tbody>
+      </table></div>
+      <div style="padding:16px 16px 18px;border-top:1px solid var(--rule-soft)">
+        <p style="margin:0;font-size:13.5px;color:var(--ink-muted)">Carried in a <code style="font-family:'IBM Plex Mono',monospace;font-size:12px">CompositionLocal</code> beside <code style="font-family:'IBM Plex Mono',monospace;font-size:12px">MaterialTheme</code>, so status colour resolves from the theme rather than from <code style="font-family:'IBM Plex Mono',monospace;font-size:12px">resources.getColor()</code> at the call site. Every status is also carried by text or shape, never by hue alone.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <defs>
+    <linearGradient id="g3" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#242B30"/><stop offset="1" stop-color="#0E1214"/></linearGradient>
+    <g id="ast" fill="none" stroke="currentColor" stroke-width="5.5" stroke-linecap="round">
+      <path d="M0 -8V8M-7.5 -4 7.5 4M7.5 -4-7.5 4"/>
+    </g>
+    <g id="bigast" fill="none" stroke="currentColor" stroke-width="9" stroke-linecap="round">
+      <path d="M54 30v40M36.7 40 71.3 60M71.3 40 36.7 60"/>
+    </g>
+    <clipPath id="half1"><rect x="-20" y="0" width="150" height="50"/></clipPath>
+    <clipPath id="half2"><rect x="-20" y="50" width="150" height="60"/></clipPath>
+  </defs>
+</svg>
+
+<section>
+  <h2>App icon — the leaking password</h2>
+  <p class="section-note"><b>Chosen: 3c · Receding</b>, in the erosion set below — characters intact but each smaller than the last, retreating out of the field. Nothing is damaged; the password is simply going away. The sections here are the exploration the choice came from.</p>
+  <p class="section-note">One idea, six drawings: a password field that is no longer holding what it was given. Asterisks are the only glyph that says "password" without a word, and nothing here is a loose dot — the secret comes apart by tipping, breaking, eroding or slipping through a gap instead.</p>
+  <p class="section-note">Every icon is shown as a launcher tile, at the small size where most icons fall apart, and as an Android&nbsp;13 themed (monochrome) variant — the silhouette test, since a themed icon loses every colour cue. All artwork sits inside the 72dp safe zone of a 108dp adaptive icon, so nothing is clipped by a round, squircle or squared mask. The background is held constant so you are comparing drawings, not colours.</p>
+
+  <div class="icons">
+
+    <!-- 1 · COME LOOSE (kept) -->
+    <div class="icon-card">
+      <div class="tiles">
+        <svg class="tile lg" viewBox="0 0 108 108" role="img" aria-label="Password character come loose icon">
+          <rect width="108" height="108" fill="url(#g3)"/>
+          <g style="color:#EEF2F4"><use href="#ast" transform="translate(28,42)"/><use href="#ast" transform="translate(52,42)"/></g>
+          <g style="color:#FF7A4D"><use href="#ast" transform="translate(80,66) rotate(34)"/></g>
+          <path d="M20 62h40" stroke="#EEF2F4" stroke-width="5" stroke-linecap="round" opacity=".45"/>
+        </svg>
+        <svg class="tile sm round" viewBox="0 0 108 108" aria-hidden="true">
+          <rect width="108" height="108" fill="url(#g3)"/>
+          <g style="color:#EEF2F4"><use href="#ast" transform="translate(28,42)"/><use href="#ast" transform="translate(52,42)"/></g>
+          <g style="color:#FF7A4D"><use href="#ast" transform="translate(80,66) rotate(34)"/></g>
+          <path d="M20 62h40" stroke="#EEF2F4" stroke-width="5" stroke-linecap="round" opacity=".45"/>
+        </svg>
+        <svg class="tile mono" viewBox="0 0 108 108" aria-hidden="true">
+          <use href="#ast" transform="translate(28,42)"/><use href="#ast" transform="translate(52,42)"/>
+          <use href="#ast" transform="translate(80,66) rotate(34)"/>
+          <path d="M20 62h40" stroke="currentColor" stroke-width="5" stroke-linecap="round" opacity=".45"/>
+        </svg>
+      </div>
+      <h3>1 · Come loose</h3>
+      <p>Two characters still on the field, one tumbled off the end. The clearest reading of the six — something that was held is now out — and the diagonal of the fallen glyph gives the tile a direction to follow.</p>
+      <p class="tile-note">the one you already picked · three glyphs is a lot of detail at 48px</p>
+    </div>
+
+    <!-- 2 · UNMASKED -->
+    <div class="icon-card">
+      <div class="tiles">
+        <svg class="tile lg" viewBox="0 0 108 108" role="img" aria-label="Password character unmasked icon">
+          <rect width="108" height="108" fill="url(#g3)"/>
+          <g style="color:#EEF2F4"><use href="#ast" transform="translate(28,46)"/><use href="#ast" transform="translate(52,46)"/></g>
+          <path d="M68 58 76 34l8 24M71.5 50h9" fill="none" stroke="#FF7A4D" stroke-width="5.5" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M20 68h64" stroke="#EEF2F4" stroke-width="5" stroke-linecap="round" opacity=".45"/>
+        </svg>
+        <svg class="tile sm round" viewBox="0 0 108 108" aria-hidden="true">
+          <rect width="108" height="108" fill="url(#g3)"/>
+          <g style="color:#EEF2F4"><use href="#ast" transform="translate(28,46)"/><use href="#ast" transform="translate(52,46)"/></g>
+          <path d="M68 58 76 34l8 24M71.5 50h9" fill="none" stroke="#FF7A4D" stroke-width="5.5" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M20 68h64" stroke="#EEF2F4" stroke-width="5" stroke-linecap="round" opacity=".45"/>
+        </svg>
+        <svg class="tile mono" viewBox="0 0 108 108" aria-hidden="true">
+          <use href="#ast" transform="translate(28,46)"/><use href="#ast" transform="translate(52,46)"/>
+          <path d="M68 58 76 34l8 24M71.5 50h9" fill="none" stroke="currentColor" stroke-width="5.5" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M20 68h64" stroke="currentColor" stroke-width="5" stroke-linecap="round" opacity=".45"/>
+        </svg>
+      </div>
+      <h3>2 · Unmasked</h3>
+      <p>The mask holds for two characters and then simply fails — the third is a plain readable letter. Nothing moves, nothing breaks; the secret is just no longer a secret, which is exactly what a pwned password is.</p>
+      <p class="tile-note">most conceptually exact · the letter needs colour to register as the odd one out</p>
+    </div>
+
+    <!-- 3 · ERODED -->
+    <div class="icon-card">
+      <div class="tiles">
+        <svg class="tile lg" viewBox="0 0 108 108" role="img" aria-label="Eroding password icon">
+          <rect width="108" height="108" fill="url(#g3)"/>
+          <g fill="none" stroke="#EEF2F4" stroke-width="5.5" stroke-linecap="round">
+            <path d="M26 38v16M18.5 42 33.5 50M33.5 42 18.5 50"/>
+            <path d="M48 38v16M40.5 42 55.5 50"/>
+          </g>
+          <g fill="none" stroke="#FF7A4D" stroke-width="5.5" stroke-linecap="round">
+            <path d="M62.5 42 77.5 50"/>
+            <path d="M88 44v7" opacity=".8"/>
+          </g>
+          <path d="M20 66h72" stroke="#EEF2F4" stroke-width="5" stroke-linecap="round" opacity=".45"/>
+        </svg>
+        <svg class="tile sm round" viewBox="0 0 108 108" aria-hidden="true">
+          <rect width="108" height="108" fill="url(#g3)"/>
+          <g fill="none" stroke="#EEF2F4" stroke-width="5.5" stroke-linecap="round">
+            <path d="M26 38v16M18.5 42 33.5 50M33.5 42 18.5 50"/>
+            <path d="M48 38v16M40.5 42 55.5 50"/>
+          </g>
+          <g fill="none" stroke="#FF7A4D" stroke-width="5.5" stroke-linecap="round">
+            <path d="M62.5 42 77.5 50"/>
+            <path d="M88 44v7" opacity=".8"/>
+          </g>
+          <path d="M20 66h72" stroke="#EEF2F4" stroke-width="5" stroke-linecap="round" opacity=".45"/>
+        </svg>
+        <svg class="tile mono" viewBox="0 0 108 108" aria-hidden="true">
+          <g fill="none" stroke="currentColor" stroke-width="5.5" stroke-linecap="round">
+            <path d="M26 38v16M18.5 42 33.5 50M33.5 42 18.5 50"/>
+            <path d="M48 38v16M40.5 42 55.5 50"/>
+            <path d="M62.5 42 77.5 50"/><path d="M88 44v7"/>
+          </g>
+          <path d="M20 66h72" stroke="currentColor" stroke-width="5" stroke-linecap="round" opacity=".45"/>
+        </svg>
+      </div>
+      <h3>3 · Eroded</h3>
+      <p>Four characters losing an arm each as the eye moves right, until nothing is left but a stub. Reads as decay over time rather than a single event — apt for a password that has been sitting in a dump for years.</p>
+      <p class="tile-note">the only one with a left-to-right narrative · subtle, and easy to misread as an incomplete drawing</p>
+    </div>
+
+    <!-- 4 · TIPPED -->
+    <div class="icon-card">
+      <div class="tiles">
+        <svg class="tile lg" viewBox="0 0 108 108" role="img" aria-label="Tipped password field icon">
+          <rect width="108" height="108" fill="url(#g3)"/>
+          <g transform="rotate(-13 54 56)">
+            <g style="color:#EEF2F4"><use href="#ast" transform="translate(32,48)"/><use href="#ast" transform="translate(54,48)"/></g>
+            <path d="M18 64h60" stroke="#EEF2F4" stroke-width="5" stroke-linecap="round" opacity=".55"/>
+          </g>
+          <g style="color:#FF7A4D"><use href="#ast" transform="translate(80,78) rotate(24)"/></g>
+        </svg>
+        <svg class="tile sm round" viewBox="0 0 108 108" aria-hidden="true">
+          <rect width="108" height="108" fill="url(#g3)"/>
+          <g transform="rotate(-13 54 56)">
+            <g style="color:#EEF2F4"><use href="#ast" transform="translate(32,48)"/><use href="#ast" transform="translate(54,48)"/></g>
+            <path d="M18 64h60" stroke="#EEF2F4" stroke-width="5" stroke-linecap="round" opacity=".55"/>
+          </g>
+          <g style="color:#FF7A4D"><use href="#ast" transform="translate(80,78) rotate(24)"/></g>
+        </svg>
+        <svg class="tile mono" viewBox="0 0 108 108" aria-hidden="true">
+          <g transform="rotate(-13 54 56)">
+            <use href="#ast" transform="translate(32,48)"/><use href="#ast" transform="translate(54,48)"/>
+            <path d="M18 64h60" stroke="currentColor" stroke-width="5" stroke-linecap="round" opacity=".55"/>
+          </g>
+          <use href="#ast" transform="translate(80,78) rotate(24)"/>
+        </svg>
+      </div>
+      <h3>4 · Tipped</h3>
+      <p>The whole field tilted, so the characters are sliding off the low end under their own weight. Gives the tile a diagonal composition, which stands out sharply in a home screen grid of upright icons.</p>
+      <p class="tile-note">most dynamic composition · the tilt can read as a rendering error</p>
+    </div>
+
+    <!-- 5 · SPLIT -->
+    <div class="icon-card">
+      <div class="tiles">
+        <svg class="tile lg" viewBox="0 0 108 108" role="img" aria-label="Split password character icon">
+          <rect width="108" height="108" fill="url(#g3)"/>
+          <g fill="none" stroke="#EEF2F4" stroke-width="9" stroke-linecap="round">
+            <path d="M52 28v42"/>
+            <path d="M33 39 71 61"/>
+            <path d="M33 61 49 52"/>
+          </g>
+          <path d="M62 41 78 32" fill="none" stroke="#FF7A4D" stroke-width="9" stroke-linecap="round"/>
+        </svg>
+        <svg class="tile sm round" viewBox="0 0 108 108" aria-hidden="true">
+          <rect width="108" height="108" fill="url(#g3)"/>
+          <g fill="none" stroke="#EEF2F4" stroke-width="9" stroke-linecap="round">
+            <path d="M52 28v42"/>
+            <path d="M33 39 71 61"/>
+            <path d="M33 61 49 52"/>
+          </g>
+          <path d="M62 41 78 32" fill="none" stroke="#FF7A4D" stroke-width="9" stroke-linecap="round"/>
+        </svg>
+        <svg class="tile mono" viewBox="0 0 108 108" aria-hidden="true">
+          <g fill="none" stroke="currentColor" stroke-width="9" stroke-linecap="round">
+            <path d="M52 28v42"/><path d="M33 39 71 61"/><path d="M33 61 49 52"/>
+            <path d="M62 41 78 32"/>
+          </g>
+        </svg>
+      </div>
+      <h3>5 · Split</h3>
+      <p>A single character filling the tile, with one arm snapped off and thrown clear. The boldest and simplest shape of the six — one glyph, no field, no supporting cast — which is what makes it survive being 40px on a crowded home screen.</p>
+      <p class="tile-note">best at the smallest sizes · loses the "field" context that makes it a password</p>
+    </div>
+
+    <!-- 6 · SLIPPING THROUGH -->
+    <div class="icon-card">
+      <div class="tiles">
+        <svg class="tile lg" viewBox="0 0 108 108" role="img" aria-label="Password slipping through a gap icon">
+          <rect width="108" height="108" fill="url(#g3)"/>
+          <g style="color:#EEF2F4"><use href="#ast" transform="translate(30,40)"/><use href="#ast" transform="translate(52,40)"/></g>
+          <path d="M18 60h38M78 60h12" stroke="#EEF2F4" stroke-width="5.5" stroke-linecap="round" opacity=".65"/>
+          <g style="color:#FF7A4D"><use href="#ast" transform="translate(67,74)"/></g>
+        </svg>
+        <svg class="tile sm round" viewBox="0 0 108 108" aria-hidden="true">
+          <rect width="108" height="108" fill="url(#g3)"/>
+          <g style="color:#EEF2F4"><use href="#ast" transform="translate(30,40)"/><use href="#ast" transform="translate(52,40)"/></g>
+          <path d="M18 60h38M78 60h12" stroke="#EEF2F4" stroke-width="5.5" stroke-linecap="round" opacity=".65"/>
+          <g style="color:#FF7A4D"><use href="#ast" transform="translate(67,74)"/></g>
+        </svg>
+        <svg class="tile mono" viewBox="0 0 108 108" aria-hidden="true">
+          <use href="#ast" transform="translate(30,40)"/><use href="#ast" transform="translate(52,40)"/>
+          <path d="M18 60h38M78 60h12" stroke="currentColor" stroke-width="5.5" stroke-linecap="round" opacity=".65"/>
+          <use href="#ast" transform="translate(67,74)"/>
+        </svg>
+      </div>
+      <h3>6 · Slipping through</h3>
+      <p>A gap has opened in the field and one character has already gone through it. The only variant that shows the breach as well as the loss — there is a hole, and here is what went out of it.</p>
+      <p class="tile-note">tells the whole story in one tile · the gap must stay wide or it disappears when scaled</p>
+    </div>
+
+  </div>
+</section>
+
+<section>
+  <h2>Icon 3 — erosion, four ways</h2>
+  <p class="section-note"><b>3c is the chosen drawing.</b> Same idea each time: the characters weaken as the eye travels right, so the row itself is the story. What differs is <i>how</i> a character weakens — by losing arms, losing weight, losing size, or losing its grip on its own centre.</p>
+  <div class="icons">
+
+    <div class="icon-card">
+      <div class="tiles">
+        <svg class="tile lg" viewBox="0 0 108 108" role="img" aria-label="Password losing arms icon">
+          <rect width="108" height="108" fill="url(#g3)"/>
+          <g fill="none" stroke="#EEF2F4" stroke-width="5.5" stroke-linecap="round">
+            <path d="M26 38v16M18.5 42 33.5 50M33.5 42 18.5 50"/>
+            <path d="M48 38v16M40.5 42 55.5 50"/>
+          </g>
+          <g fill="none" stroke="#FF7A4D" stroke-width="5.5" stroke-linecap="round">
+            <path d="M62.5 42 77.5 50"/><path d="M88 44v7" opacity=".8"/>
+          </g>
+          <path d="M20 66h68" stroke="#EEF2F4" stroke-width="5" stroke-linecap="round" opacity=".45"/>
+        </svg>
+        <svg class="tile sm round" viewBox="0 0 108 108" aria-hidden="true">
+          <rect width="108" height="108" fill="url(#g3)"/>
+          <g fill="none" stroke="#EEF2F4" stroke-width="5.5" stroke-linecap="round">
+            <path d="M26 38v16M18.5 42 33.5 50M33.5 42 18.5 50"/>
+            <path d="M48 38v16M40.5 42 55.5 50"/>
+          </g>
+          <g fill="none" stroke="#FF7A4D" stroke-width="5.5" stroke-linecap="round">
+            <path d="M62.5 42 77.5 50"/><path d="M88 44v7" opacity=".8"/>
+          </g>
+          <path d="M20 66h68" stroke="#EEF2F4" stroke-width="5" stroke-linecap="round" opacity=".45"/>
+        </svg>
+        <svg class="tile mono" viewBox="0 0 108 108" aria-hidden="true">
+          <g fill="none" stroke="currentColor" stroke-width="5.5" stroke-linecap="round">
+            <path d="M26 38v16M18.5 42 33.5 50M33.5 42 18.5 50"/>
+            <path d="M48 38v16M40.5 42 55.5 50"/>
+            <path d="M62.5 42 77.5 50"/><path d="M88 44v7"/>
+          </g>
+          <path d="M20 66h68" stroke="currentColor" stroke-width="5" stroke-linecap="round" opacity=".45"/>
+        </svg>
+      </div>
+      <h3>3a · Losing arms</h3>
+      <p>Three strokes, then two, then one, then a stub. The original. Each glyph is still full-size and full-weight, so the loss is purely structural — pieces are missing, not faded.</p>
+      <p class="tile-note">most literal erosion · can look like an unfinished drawing</p>
+    </div>
+
+    <div class="icon-card">
+      <div class="tiles">
+        <svg class="tile lg" viewBox="0 0 108 108" role="img" aria-label="Password thinning icon">
+          <rect width="108" height="108" fill="url(#g3)"/>
+          <g fill="none" stroke="#EEF2F4" stroke-linecap="round">
+            <path d="M24 38v16M16.5 42 31.5 50M31.5 42 16.5 50" stroke-width="7"/>
+            <path d="M46 38v16M38.5 42 53.5 50M53.5 42 38.5 50" stroke-width="5"/>
+            <path d="M66 38v16M58.5 42 73.5 50M73.5 42 58.5 50" stroke-width="3.2"/>
+          </g>
+          <path d="M84 40v12M78 43 90 49M90 43 78 49" fill="none" stroke="#FF7A4D" stroke-width="1.7" stroke-linecap="round"/>
+          <path d="M20 66h68" stroke="#EEF2F4" stroke-width="5" stroke-linecap="round" opacity=".45"/>
+        </svg>
+        <svg class="tile sm round" viewBox="0 0 108 108" aria-hidden="true">
+          <rect width="108" height="108" fill="url(#g3)"/>
+          <g fill="none" stroke="#EEF2F4" stroke-linecap="round">
+            <path d="M24 38v16M16.5 42 31.5 50M31.5 42 16.5 50" stroke-width="7"/>
+            <path d="M46 38v16M38.5 42 53.5 50M53.5 42 38.5 50" stroke-width="5"/>
+            <path d="M66 38v16M58.5 42 73.5 50M73.5 42 58.5 50" stroke-width="3.2"/>
+          </g>
+          <path d="M84 40v12M78 43 90 49M90 43 78 49" fill="none" stroke="#FF7A4D" stroke-width="1.7" stroke-linecap="round"/>
+          <path d="M20 66h68" stroke="#EEF2F4" stroke-width="5" stroke-linecap="round" opacity=".45"/>
+        </svg>
+        <svg class="tile mono" viewBox="0 0 108 108" aria-hidden="true">
+          <g fill="none" stroke="currentColor" stroke-linecap="round">
+            <path d="M24 38v16M16.5 42 31.5 50M31.5 42 16.5 50" stroke-width="7"/>
+            <path d="M46 38v16M38.5 42 53.5 50M53.5 42 38.5 50" stroke-width="5"/>
+            <path d="M66 38v16M58.5 42 73.5 50M73.5 42 58.5 50" stroke-width="3.2"/>
+            <path d="M84 40v12M78 43 90 49M90 43 78 49" stroke-width="1.7"/>
+          </g>
+          <path d="M20 66h68" stroke="currentColor" stroke-width="5" stroke-linecap="round" opacity=".45"/>
+        </svg>
+      </div>
+      <h3>3b · Thinning</h3>
+      <p>Every character keeps all three arms; what drains away is weight. The row fades to a hairline rather than breaking, which reads as something wearing out over years — closer to what an old leaked password actually is.</p>
+      <p class="tile-note">most graceful of the four · the hairline vanishes at 48px and in monochrome</p>
+    </div>
+
+    <div class="icon-card picked">
+      <div class="tiles">
+        <svg class="tile lg" viewBox="0 0 108 108" role="img" aria-label="Password shrinking icon">
+          <rect width="108" height="108" fill="url(#g3)"/>
+          <g style="color:#EEF2F4">
+            <use href="#ast" transform="translate(26,46)"/>
+            <use href="#ast" transform="translate(50,46) scale(.82)"/>
+            <use href="#ast" transform="translate(70,46) scale(.6)"/>
+          </g>
+          <g style="color:#FF7A4D"><use href="#ast" transform="translate(84,46) scale(.42)"/></g>
+          <path d="M20 66h68" stroke="#EEF2F4" stroke-width="5" stroke-linecap="round" opacity=".45"/>
+        </svg>
+        <svg class="tile sm round" viewBox="0 0 108 108" aria-hidden="true">
+          <rect width="108" height="108" fill="url(#g3)"/>
+          <g style="color:#EEF2F4">
+            <use href="#ast" transform="translate(26,46)"/>
+            <use href="#ast" transform="translate(50,46) scale(.82)"/>
+            <use href="#ast" transform="translate(70,46) scale(.6)"/>
+          </g>
+          <g style="color:#FF7A4D"><use href="#ast" transform="translate(84,46) scale(.42)"/></g>
+          <path d="M20 66h68" stroke="#EEF2F4" stroke-width="5" stroke-linecap="round" opacity=".45"/>
+        </svg>
+        <svg class="tile mono" viewBox="0 0 108 108" aria-hidden="true">
+          <use href="#ast" transform="translate(26,46)"/>
+          <use href="#ast" transform="translate(50,46) scale(.82)"/>
+          <use href="#ast" transform="translate(70,46) scale(.6)"/>
+          <use href="#ast" transform="translate(84,46) scale(.42)"/>
+          <path d="M20 66h68" stroke="currentColor" stroke-width="5" stroke-linecap="round" opacity=".45"/>
+        </svg>
+      </div>
+      <h3>3c · Receding<span class="chip-chosen">chosen</span></h3>
+      <p>Each character intact but smaller than the last, as though retreating into the distance. The strongest sense of depth of the four, and the only one where no glyph is ever damaged — the password is not broken, it is disappearing.</p>
+      <p class="tile-note">cleanest drawing · a diminishing row can read as a loading animation</p>
+    </div>
+
+    <div class="icon-card">
+      <div class="tiles">
+        <svg class="tile lg" viewBox="0 0 108 108" role="img" aria-label="Password coming apart icon">
+          <rect width="108" height="108" fill="url(#g3)"/>
+          <g fill="none" stroke="#EEF2F4" stroke-width="5.5" stroke-linecap="round">
+            <path d="M24 38v16M16.5 42 31.5 50M31.5 42 16.5 50"/>
+            <path d="M44 36v16M37.5 43.5 52.5 51.5M52.5 43.5 37.5 51.5"/>
+            <path d="M63 33v16M56.5 45 71.5 53M71.5 45 56.5 53"/>
+          </g>
+          <g fill="none" stroke="#FF7A4D" stroke-width="5.5" stroke-linecap="round">
+            <path d="M82 30v16M75.5 47 90.5 55M90.5 47 75.5 55"/>
+          </g>
+          <path d="M20 68h68" stroke="#EEF2F4" stroke-width="5" stroke-linecap="round" opacity=".45"/>
+        </svg>
+        <svg class="tile sm round" viewBox="0 0 108 108" aria-hidden="true">
+          <rect width="108" height="108" fill="url(#g3)"/>
+          <g fill="none" stroke="#EEF2F4" stroke-width="5.5" stroke-linecap="round">
+            <path d="M24 38v16M16.5 42 31.5 50M31.5 42 16.5 50"/>
+            <path d="M44 36v16M37.5 43.5 52.5 51.5M52.5 43.5 37.5 51.5"/>
+            <path d="M63 33v16M56.5 45 71.5 53M71.5 45 56.5 53"/>
+          </g>
+          <g fill="none" stroke="#FF7A4D" stroke-width="5.5" stroke-linecap="round">
+            <path d="M82 30v16M75.5 47 90.5 55M90.5 47 75.5 55"/>
+          </g>
+          <path d="M20 68h68" stroke="#EEF2F4" stroke-width="5" stroke-linecap="round" opacity=".45"/>
+        </svg>
+        <svg class="tile mono" viewBox="0 0 108 108" aria-hidden="true">
+          <g fill="none" stroke="currentColor" stroke-width="5.5" stroke-linecap="round">
+            <path d="M24 38v16M16.5 42 31.5 50M31.5 42 16.5 50"/>
+            <path d="M44 36v16M37.5 43.5 52.5 51.5M52.5 43.5 37.5 51.5"/>
+            <path d="M63 33v16M56.5 45 71.5 53M71.5 45 56.5 53"/>
+            <path d="M82 30v16M75.5 47 90.5 55M90.5 47 75.5 55"/>
+          </g>
+          <path d="M20 68h68" stroke="currentColor" stroke-width="5" stroke-linecap="round" opacity=".45"/>
+        </svg>
+      </div>
+      <h3>3d · Coming apart</h3>
+      <p>Nothing is lost, thinned or shrunk — the arms simply drift out of register with each other until the last character is barely holding together. Every stroke is still present, which keeps the monochrome variant as strong as the colour one.</p>
+      <p class="tile-note">best monochrome of the four · the drift is subtle at small sizes</p>
+    </div>
+
+  </div>
+</section>
+
+<section>
+  <h2>Icon 5 — one character, four breaks</h2>
+  <p class="section-note">A single glyph filling the tile, with no field beneath it. That is what makes this direction the most legible at small sizes and the least specific about passwords — so the burden falls entirely on how convincingly it breaks.</p>
+  <div class="icons">
+
+    <div class="icon-card">
+      <div class="tiles">
+        <svg class="tile lg" viewBox="0 0 108 108" role="img" aria-label="Character with one arm thrown clear">
+          <rect width="108" height="108" fill="url(#g3)"/>
+          <g fill="none" stroke="#EEF2F4" stroke-width="9" stroke-linecap="round">
+            <path d="M52 28v42"/><path d="M33 39 71 61"/><path d="M33 61 49 52"/>
+          </g>
+          <path d="M62 41 78 32" fill="none" stroke="#FF7A4D" stroke-width="9" stroke-linecap="round"/>
+        </svg>
+        <svg class="tile sm round" viewBox="0 0 108 108" aria-hidden="true">
+          <rect width="108" height="108" fill="url(#g3)"/>
+          <g fill="none" stroke="#EEF2F4" stroke-width="9" stroke-linecap="round">
+            <path d="M52 28v42"/><path d="M33 39 71 61"/><path d="M33 61 49 52"/>
+          </g>
+          <path d="M62 41 78 32" fill="none" stroke="#FF7A4D" stroke-width="9" stroke-linecap="round"/>
+        </svg>
+        <svg class="tile mono" viewBox="0 0 108 108" aria-hidden="true">
+          <g fill="none" stroke="currentColor" stroke-width="9" stroke-linecap="round">
+            <path d="M52 28v42"/><path d="M33 39 71 61"/><path d="M33 61 49 52"/><path d="M62 41 78 32"/>
+          </g>
+        </svg>
+      </div>
+      <h3>5a · Thrown clear</h3>
+      <p>One arm snapped at the centre and flung away at a new angle. The original. The most violent of the four, and the only one where a piece has genuinely left.</p>
+      <p class="tile-note">most obvious break · off-balance, the tile leans right</p>
+    </div>
+
+    <div class="icon-card">
+      <div class="tiles">
+        <svg class="tile lg" viewBox="0 0 108 108" role="img" aria-label="Character sheared along a fault">
+          <rect width="108" height="108" fill="url(#g3)"/>
+          <g clip-path="url(#half1)" style="color:#EEF2F4"><use href="#bigast" transform="translate(-7,-2)"/></g>
+          <g clip-path="url(#half2)" style="color:#EEF2F4"><use href="#bigast" transform="translate(7,2)"/></g>
+          <path d="M30 50h48" fill="none" stroke="#FF7A4D" stroke-width="3.5" stroke-linecap="round"/>
+        </svg>
+        <svg class="tile sm round" viewBox="0 0 108 108" aria-hidden="true">
+          <rect width="108" height="108" fill="url(#g3)"/>
+          <g clip-path="url(#half1)" style="color:#EEF2F4"><use href="#bigast" transform="translate(-7,-2)"/></g>
+          <g clip-path="url(#half2)" style="color:#EEF2F4"><use href="#bigast" transform="translate(7,2)"/></g>
+          <path d="M30 50h48" fill="none" stroke="#FF7A4D" stroke-width="3.5" stroke-linecap="round"/>
+        </svg>
+        <svg class="tile mono" viewBox="0 0 108 108" aria-hidden="true">
+          <g clip-path="url(#half1)"><use href="#bigast" transform="translate(-7,-2)"/></g>
+          <g clip-path="url(#half2)"><use href="#bigast" transform="translate(7,2)"/></g>
+        </svg>
+      </div>
+      <h3>5b · Sheared</h3>
+      <p>The glyph cut straight across and the halves slid past each other along the fault, with the cut line lit. Geologic rather than violent — something shifted underneath and the character no longer lines up with itself.</p>
+      <p class="tile-note">most striking at a glance · the offset halves can read as a print misalignment</p>
+    </div>
+
+    <div class="icon-card">
+      <div class="tiles">
+        <svg class="tile lg" viewBox="0 0 108 108" role="img" aria-label="Character with a hollow centre">
+          <rect width="108" height="108" fill="url(#g3)"/>
+          <g fill="none" stroke="#EEF2F4" stroke-width="9" stroke-linecap="round">
+            <path d="M54 26v14M54 62v14"/>
+            <path d="M33 36 45 43M63 55 75 62"/>
+            <path d="M33 64 45 57"/>
+          </g>
+          <path d="M63 45 75 38" fill="none" stroke="#FF7A4D" stroke-width="9" stroke-linecap="round"/>
+        </svg>
+        <svg class="tile sm round" viewBox="0 0 108 108" aria-hidden="true">
+          <rect width="108" height="108" fill="url(#g3)"/>
+          <g fill="none" stroke="#EEF2F4" stroke-width="9" stroke-linecap="round">
+            <path d="M54 26v14M54 62v14"/>
+            <path d="M33 36 45 43M63 55 75 62"/>
+            <path d="M33 64 45 57"/>
+          </g>
+          <path d="M63 45 75 38" fill="none" stroke="#FF7A4D" stroke-width="9" stroke-linecap="round"/>
+        </svg>
+        <svg class="tile mono" viewBox="0 0 108 108" aria-hidden="true">
+          <g fill="none" stroke="currentColor" stroke-width="9" stroke-linecap="round">
+            <path d="M54 26v14M54 62v14"/><path d="M33 36 45 43M63 55 75 62"/>
+            <path d="M33 64 45 57"/><path d="M63 45 75 38"/>
+          </g>
+        </svg>
+      </div>
+      <h3>5c · Hollowed</h3>
+      <p>Every arm still there, but pulled back from a void where they used to meet. Nothing was taken from the outside — it failed at the join, which is the more accurate story for a password that was never attacked directly, only found in someone else's dump.</p>
+      <p class="tile-note">most balanced composition · needs the gap kept generous or it closes up</p>
+    </div>
+
+    <div class="icon-card">
+      <div class="tiles">
+        <svg class="tile lg" viewBox="0 0 108 108" role="img" aria-label="Character unravelling into a dashed arm">
+          <rect width="108" height="108" fill="url(#g3)"/>
+          <g fill="none" stroke="#EEF2F4" stroke-width="9" stroke-linecap="round">
+            <path d="M54 30v40"/><path d="M36.7 40 54 50"/><path d="M36.7 60 54 50"/>
+          </g>
+          <g fill="none" stroke="#FF7A4D" stroke-width="9" stroke-linecap="round">
+            <path d="M56 51 71.3 60" stroke-dasharray="1 15"/>
+            <path d="M56 49 71.3 40" stroke-dasharray="1 15"/>
+          </g>
+        </svg>
+        <svg class="tile sm round" viewBox="0 0 108 108" aria-hidden="true">
+          <rect width="108" height="108" fill="url(#g3)"/>
+          <g fill="none" stroke="#EEF2F4" stroke-width="9" stroke-linecap="round">
+            <path d="M54 30v40"/><path d="M36.7 40 54 50"/><path d="M36.7 60 54 50"/>
+          </g>
+          <g fill="none" stroke="#FF7A4D" stroke-width="9" stroke-linecap="round">
+            <path d="M56 51 71.3 60" stroke-dasharray="1 15"/>
+            <path d="M56 49 71.3 40" stroke-dasharray="1 15"/>
+          </g>
+        </svg>
+        <svg class="tile mono" viewBox="0 0 108 108" aria-hidden="true">
+          <g fill="none" stroke="currentColor" stroke-width="9" stroke-linecap="round">
+            <path d="M54 30v40"/><path d="M36.7 40 54 50"/><path d="M36.7 60 54 50"/>
+            <path d="M56 51 71.3 60" stroke-dasharray="1 15"/>
+            <path d="M56 49 71.3 40" stroke-dasharray="1 15"/>
+          </g>
+        </svg>
+      </div>
+      <h3>5d · Half solid</h3>
+      <p>The left of the glyph is solid, the right side breaks into spaced marks — the same left-to-right decay as the icon&nbsp;3 family, compressed into a single character. It is the one drawing that could serve as both a standalone icon and the seed of a set.</p>
+      <p class="tile-note">reads as one system with icon 3 · fewest strokes carrying the meaning</p>
+    </div>
+
+  </div>
+</section>
+
+<section>
+  <h2>Migration order</h2>
+  <p class="section-note">Sequenced so the app builds and runs after every step. The theme lands first because it is what makes each ported screen verifiable in dark mode as it arrives.</p>
+  <div class="steps">
+    <div class="step"><span class="n">01</span><div><h3>Dependencies and theme</h3><p>Add <code>compose-material3</code>, <code>compose-bom</code>, <code>coil-compose</code>, <code>navigation-compose</code>. Drop accompanist and Picasso. Write <code>ui/theme/</code> — Color, Type, Theme, StatusColors.</p></div></div>
+    <div class="step"><span class="n">02</span><div><h3>Theme preference</h3><p>Migrate <code>SettingsFragment</code> to AndroidX <code>PreferenceFragmentCompat</code>, add a Light / Dark / System list preference, apply through <code>AppCompatDelegate.setDefaultNightMode</code>.</p></div></div>
+    <div class="step"><span class="n">03</span><div><h3>Single Compose activity</h3><p><code>NavActivity</code> becomes <code>setContent { HackedTheme { HackedApp() } }</code> with a <code>NavHost</code> and a <code>NavigationBar</code>. The RxJava <code>PublishProcessor</code> nav bus is replaced by direct <code>NavController</code> calls.</p></div></div>
+    <div class="step"><span class="n">04</span><div><h3>Screens, one at a time</h3><p>Accounts, then Account detail, then Passwords, then Leaks. Each ported screen deletes its fragment, its layout XML and its adapter in the same commit.</p></div></div>
+    <div class="step"><span class="n">05</span><div><h3>Sweep</h3><p>Remove <code>viewBinding</code>, the CardView and RecyclerView dependencies, the navigation XML graph, and every remaining hardcoded colour.</p></div></div>
+  </div>
+</section>
+
+<footer>Proposal only — no code changed. Mockups are HTML approximations of Compose output, not screenshots.</footer>
+
+</div>
+
+</body></html>
