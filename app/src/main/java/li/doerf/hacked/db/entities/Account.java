@@ -22,6 +22,8 @@ public class Account {
     private Integer numBreaches;
     @ColumnInfo(name="num_acknowledged_breaches")
     private Integer numAcknowledgedBreaches;
+    @ColumnInfo(name="check_requested_at")
+    private Long checkRequestedAt;
 
 
     public Long getId() {
@@ -73,5 +75,13 @@ public class Account {
 
     public void setNumAcknowledgedBreaches(Integer numAcknowledgedBreaches) {
         this.numAcknowledgedBreaches = numAcknowledgedBreaches;
+    }
+
+    public Long getCheckRequestedAt() {
+        return checkRequestedAt;
+    }
+
+    public void setCheckRequestedAt(Long checkRequestedAt) {
+        this.checkRequestedAt = checkRequestedAt;
     }
 }
