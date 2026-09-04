@@ -1,16 +1,11 @@
 <resources>
 
     <!-- Base application theme. Compose (HackedTheme) owns all in-app colour;
-         this only sets the window before Compose draws and hosts the
-         androidx.preference screens, which need a Material(Components) parent. -->
+         this only sets the window before Compose draws. -->
     <style name="AppTheme" parent="Theme.Material3.DayNight.NoActionBar">
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="android:windowBackground">@color/windowBackground</item>
         <item name="windowActionBar">false</item>
     </style>
-
-    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
-
-    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
 </resources>

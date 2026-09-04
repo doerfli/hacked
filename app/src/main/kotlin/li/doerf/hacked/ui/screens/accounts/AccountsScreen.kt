@@ -74,6 +74,7 @@ import li.doerf.hacked.remote.hibp.HIBPAccountCheckerWorker
 import li.doerf.hacked.services.AccountService
 import li.doerf.hacked.ui.composable.AppOverflowMenu
 import li.doerf.hacked.ui.composable.HtmlLinkText
+import li.doerf.hacked.ui.composable.RateUsDialog
 import li.doerf.hacked.ui.theme.statusColors
 import li.doerf.hacked.ui.viewmodels.AccountViewModel
 import li.doerf.hacked.util.AccountConstants.MAX_ACCOUNTS
@@ -92,9 +93,11 @@ fun AccountsScreen(onAccountClick: (Long) -> Unit) {
     val snackbarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
     var showAddSheet by rememberSaveable { mutableStateOf(false) }
+    var showRateUsDialog by rememberSaveable { mutableStateOf(false) }
+    val ratingHelper = remember { RatingHelper(activity) }
 
     LaunchedEffect(Unit) {
-        RatingHelper(activity).showRateUsDialogDelayed()
+        showRateUsDialog = ratingHelper.showRateUsDialogDelayed()
     }
 
     Scaffold(
@@ -235,6 +238,15 @@ fun AccountsScreen(onAccountClick: (Long) -> Unit) {
                 }
             }
         }
+    }
+
+    if (showRateUsDialog) {
+        RateUsDialog(
+            onDismissRequest = { showRateUsDialog = false },
+            onPositive = { showRateUsDialog = false; ratingHelper.showReview() },
+            onNeutral = { showRateUsDialog = false; ratingHelper.rateLater() },
+            onNegative = { showRateUsDialog = false; ratingHelper.rateNever() }
+        )
     }
 }
 
