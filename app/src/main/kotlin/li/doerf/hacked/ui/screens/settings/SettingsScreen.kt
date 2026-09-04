@@ -126,12 +126,13 @@ fun SettingsScreen(onBack: () -> Unit) {
                             SegmentedButton(
                                 shape = SegmentedButtonDefaults.itemShape(index = index, count = themeEntries.size),
                                 selected = themeValues[index] == themeMode,
+                                icon = {},
                                 onClick = {
                                     themeMode = themeValues[index]
                                     prefs.edit { putString(ThemeMode.PREF_KEY, themeMode) }
                                     ThemeMode.apply(context.applicationContext)
                                 }
-                            ) { Text(label) }
+                            ) { Text(label, maxLines = 1) }
                         }
                     }
                 }

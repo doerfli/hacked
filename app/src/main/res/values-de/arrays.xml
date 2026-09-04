@@ -13,7 +13,7 @@
         <item>everyweek</item>
     </string-array>
     <string-array name="pref_theme_mode_entries">
-        <item>Systemeinstellung</item>
+        <item>System</item>
         <item>Hell</item>
         <item>Dunkel</item>
     </string-array>

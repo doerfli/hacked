@@ -13,7 +13,7 @@
         <item>everyweek</item>
     </string-array>
     <string-array name="pref_theme_mode_entries">
-        <item>System default</item>
+        <item>System</item>
         <item>Light</item>
         <item>Dark</item>
     </string-array>
