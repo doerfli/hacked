@@ -67,7 +67,7 @@ fun BreachCard(breach: Breach, onAcknowledge: () -> Unit) {
                     Text(breach.title, style = MaterialTheme.typography.titleMedium)
                 }
                 Spacer(Modifier.height(8.dp))
-                Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                     LabeledValue(stringResource(R.string.label_domain), breach.domain)
                     LabeledValue(stringResource(R.string.label_breach_date), dtfOut.print(breach.breachDate))
                     breach.pwnCount?.takeIf { it > 0 }?.let { count ->
