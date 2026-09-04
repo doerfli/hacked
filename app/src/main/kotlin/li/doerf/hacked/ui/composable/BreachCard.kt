@@ -77,7 +77,7 @@ fun BreachCard(breach: Breach, onAcknowledge: () -> Unit) {
                 Spacer(Modifier.height(6.dp))
                 Text(stringResource(R.string.label_compromised_data), style = MaterialTheme.typography.labelMedium)
                 Spacer(Modifier.height(4.dp))
-                FlowRow(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
+                FlowRow(horizontalArrangement = Arrangement.spacedBy(6.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
                     breach.dataClasses.orEmpty().split(",").map { it.trim() }.filter { it.isNotEmpty() }.forEach { dataClass ->
                         DataClassChip(dataClass)
                     }
