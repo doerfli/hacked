@@ -6,7 +6,6 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -158,11 +157,11 @@ private fun WhatNowCard(expanded: Boolean, onToggle: () -> Unit, modifier: Modif
     ) {
         Column(Modifier.padding(16.dp)) {
             Row(Modifier.fillMaxWidth().clickable(onClick = onToggle), verticalAlignment = Alignment.CenterVertically) {
-                Row(Modifier.weight(1f)) {
-                    Text(stringResource(R.string.breach_details_compromised_account_found), style = MaterialTheme.typography.titleMedium)
-                    Spacer(Modifier.width(4.dp))
-                    Text(stringResource(R.string.breach_details_what_now), style = MaterialTheme.typography.titleMedium)
-                }
+                Text(
+                    "${stringResource(R.string.breach_details_compromised_account_found)}\n${stringResource(R.string.breach_details_what_now)}",
+                    style = MaterialTheme.typography.titleMedium,
+                    modifier = Modifier.weight(1f)
+                )
                 Icon(
                     if (expanded) Icons.Filled.ExpandLess else Icons.Filled.ExpandMore,
                     contentDescription = null
@@ -172,9 +171,10 @@ private fun WhatNowCard(expanded: Boolean, onToggle: () -> Unit, modifier: Modif
                 Column(Modifier.padding(top = 8.dp)) {
                     val firstText = stringResource(
                         R.string.breach_details_first_text,
-                        "<a href=\"https://lastpass.com\">LastPass</a>",
+                        "<a href=\"https://bitwarden.com\">Bitwarden</a>",
                         "<a href=\"https://1password.com\">1Password</a>",
-                        "<a href=\"https://dashlane.com\">Dashlane</a>"
+                        "<a href=\"https://nordpass.com\">NordPass</a>",
+                        "<a href=\"https://proton.me/pass\">Proton Pass</a>"
                     )
                     HelpStep(stringResource(R.string.breach_details_first), firstText)
                     HelpStep(stringResource(R.string.breach_details_second), stringResource(R.string.breach_details_second_text))
@@ -188,7 +188,7 @@ private fun WhatNowCard(expanded: Boolean, onToggle: () -> Unit, modifier: Modif
 @Composable
 private fun HelpStep(number: String, htmlText: String) {
     Row(Modifier.padding(vertical = 4.dp)) {
-        Text(number, modifier = Modifier.padding(end = 4.dp))
+        Text(number, modifier = Modifier.width(20.dp))
         HtmlLinkText(htmlText, style = MaterialTheme.typography.bodyMedium)
     }
 }

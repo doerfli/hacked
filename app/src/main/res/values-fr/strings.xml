@@ -70,7 +70,7 @@
     <string name="breach_details_first">1.</string>
     <string name="breach_details_second">2.</string>
     <string name="breach_details_third">3.</string>
-    <string name="breach_details_first_text">Utilisez un gestionnaire de mots de passe (%1$s, %2$s, %3$s, …) pour générer un mot de passe aléatoire unique pour chaque compte</string>
+    <string name="breach_details_first_text">Utilisez un gestionnaire de mots de passe (%1$s, %2$s, %3$s, %4$s, …) pour générer un mot de passe aléatoire unique pour chaque compte</string>
     <string name="breach_details_second_text">Activez l\'authentification à 2 facteurs lorsque cela est possible</string>
     <string name="breach_details_third_text">Lorsqu\'un compte est piraté, changez simplement son mot de passe</string>
     <string name="action_privacypolicy">Politique de confidentialité</string>

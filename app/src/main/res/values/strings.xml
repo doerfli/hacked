@@ -70,7 +70,7 @@
     <string name="breach_details_first">1.</string>
     <string name="breach_details_second">2.</string>
     <string name="breach_details_third">3.</string>
-    <string name="breach_details_first_text">Use a password manager (%1$s, %2$s, %3$s, …) to generate a unique random password for every account</string>
+    <string name="breach_details_first_text">Use a password manager (%1$s, %2$s, %3$s, %4$s, …) to generate a unique random password for every account</string>
     <string name="breach_details_second_text">Enable 2-factor authentication when possible</string>
     <string name="breach_details_third_text">When an account is breached, just change that password</string>
     <string name="action_privacypolicy">Privacy policy</string>
