@@ -2,7 +2,6 @@ package li.doerf.hacked.ui.screens.leaks
 
 import android.app.Activity
 import android.content.Context
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -16,7 +15,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
@@ -26,7 +25,6 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilterChip
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -44,13 +42,11 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.core.text.HtmlCompat
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -169,15 +165,8 @@ fun LeaksScreen() {
                 blocks.forEach { block ->
                     when (block) {
                         is LeaksBlock.Group -> {
-                            itemsIndexed(block.sites, key = { _, site -> site.id }) { index, site ->
-                                SiteRow(
-                                    site = site,
-                                    shape = groupRowShape(index, block.sites.size),
-                                    showDivider = index != block.sites.lastIndex,
-                                    topPadding = if (index == 0) 6.dp else 0.dp,
-                                    bottomPadding = if (index == block.sites.lastIndex) 6.dp else 0.dp,
-                                    onClick = { expandedId = site.id }
-                                )
+                            items(block.sites, key = { it.id }) { site ->
+                                SiteRow(site = site, onClick = { expandedId = site.id })
                             }
                         }
                         is LeaksBlock.Expanded -> item(key = block.site.id) {
@@ -200,33 +189,19 @@ fun LeaksScreen() {
     }
 }
 
-private fun groupRowShape(index: Int, count: Int): RoundedCornerShape {
-    val topRadius = if (index == 0) 16.dp else 0.dp
-    val bottomRadius = if (index == count - 1) 16.dp else 0.dp
-    return RoundedCornerShape(topStart = topRadius, topEnd = topRadius, bottomStart = bottomRadius, bottomEnd = bottomRadius)
-}
-
 @Composable
-private fun SiteRow(
-    site: BreachedSite,
-    shape: RoundedCornerShape,
-    showDivider: Boolean,
-    topPadding: Dp,
-    bottomPadding: Dp,
-    onClick: () -> Unit
-) {
-    Column(
-        Modifier
+private fun SiteRow(site: BreachedSite, onClick: () -> Unit) {
+    Card(
+        onClick = onClick,
+        modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 12.dp)
-            .padding(top = topPadding, bottom = bottomPadding)
-            .clip(shape)
-            .background(MaterialTheme.colorScheme.surfaceVariant)
+            .padding(horizontal = 12.dp, vertical = 6.dp),
+        shape = RoundedCornerShape(16.dp),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant)
     ) {
         Row(
             Modifier
                 .fillMaxWidth()
-                .clickable(onClick = onClick)
                 .padding(horizontal = 16.dp, vertical = 12.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
@@ -245,9 +220,6 @@ private fun SiteRow(
                 contentDescription = null,
                 tint = MaterialTheme.colorScheme.onSurfaceVariant
             )
-        }
-        if (showDivider) {
-            HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
         }
     }
 }
