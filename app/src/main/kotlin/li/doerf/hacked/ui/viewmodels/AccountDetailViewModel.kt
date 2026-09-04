@@ -2,25 +2,35 @@ package li.doerf.hacked.ui.viewmodels
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.LiveData
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import li.doerf.hacked.CustomEvent
 import li.doerf.hacked.db.AppDatabase
 import li.doerf.hacked.db.entities.Account
 import li.doerf.hacked.db.entities.Breach
+import li.doerf.hacked.ui.Routes
 import li.doerf.hacked.util.Analytics
 import li.doerf.hacked.utils.AccountHelper
 
-class AccountDetailViewModel(application: Application) : AndroidViewModel(application) {
+class AccountDetailViewModel(
+    application: Application,
+    savedStateHandle: SavedStateHandle
+) : AndroidViewModel(application) {
     private val accountDao = AppDatabase.get(application).accountDao
     private val breachDao = AppDatabase.get(application).breachDao
+    private val accountId: Long = checkNotNull(savedStateHandle[Routes.ACCOUNT_DETAIL_ARG])
 
-    fun account(accountId: Long): LiveData<Account> = accountDao.findByIdLD(accountId)
+    val account: StateFlow<Account?> = accountDao.findByIdFlow(accountId)
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), null)
 
-    fun breaches(accountId: Long): LiveData<List<Breach>> = breachDao.findByAccountLD(accountId)
+    val breaches: StateFlow<List<Breach>> = breachDao.findByAccountFlow(accountId)
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
 
     fun acknowledge(breach: Breach, onDone: () -> Unit) {
         viewModelScope.launch(Dispatchers.IO) {
@@ -43,7 +53,7 @@ class AccountDetailViewModel(application: Application) : AndroidViewModel(applic
         }
     }
 
-    fun resetAcknowledged(accountId: Long) {
+    fun resetAcknowledged() {
         viewModelScope.launch(Dispatchers.IO) {
             for (breach in breachDao.findByAccount(accountId)) {
                 breach.acknowledged = false
@@ -52,7 +62,7 @@ class AccountDetailViewModel(application: Application) : AndroidViewModel(applic
         }
     }
 
-    fun deleteAccount(accountId: Long, onDone: () -> Unit) {
+    fun deleteAccount(onDone: () -> Unit) {
         viewModelScope.launch(Dispatchers.IO) {
             val account = accountDao.findById(accountId).firstOrNull()
             val breaches = breachDao.findByAccount(accountId)

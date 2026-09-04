@@ -9,6 +9,7 @@ import androidx.room.Update;
 
 import java.util.List;
 
+import kotlinx.coroutines.flow.Flow;
 import li.doerf.hacked.db.entities.Account;
 
 @Dao
@@ -33,7 +34,7 @@ public interface AccountDao {
     List<Account> findById(Long anId);
 
     @Query("SELECT * FROM accounts where _id=:anId")
-    LiveData<Account> findByIdLD(Long anId);
+    Flow<Account> findByIdFlow(Long anId);
 
     @Query("SELECT * FROM accounts where name=:name")
     List<Account> findByName(String name);
