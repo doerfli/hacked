@@ -23,6 +23,9 @@ android {
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
+    testOptions {
+        unitTests.returnDefaultValues = true
+    }
     buildTypes {
         debug {
             applicationIdSuffix '.debug'
@@ -30,6 +33,11 @@ android {
         }
         release {
             minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.debug
+            optimization {
+                enable = true // Enables code and resource optimizations.
+            }
         }
     }
     buildFeatures {
@@ -110,6 +118,7 @@ dependencies {
     implementation "com.github.kittinunf.fuel:fuel-jackson:$fuel_version"
     implementation "com.fasterxml.jackson.module:jackson-module-kotlin:$jackson_version"
 
+    testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test:runner:1.5.2'
     androidTestImplementation 'androidx.test:rules:1.5.0'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'

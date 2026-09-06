@@ -7,6 +7,7 @@ import android.os.Handler
 import android.os.Looper
 import android.util.Log
 import android.widget.Toast
+import androidx.annotation.Keep
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.preference.PreferenceManager
 import androidx.work.CoroutineWorker
@@ -14,7 +15,6 @@ import androidx.work.WorkerParameters
 import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.databind.PropertyNamingStrategies
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
-import com.fasterxml.jackson.module.kotlin.readValue
 import com.github.kittinunf.fuel.core.ResponseDeserializable
 import com.github.kittinunf.fuel.core.isSuccessful
 import com.github.kittinunf.fuel.coroutines.awaitObjectResponseResult
@@ -31,6 +31,7 @@ import org.joda.time.IllegalInstantException
 import java.text.ParseException
 import java.text.SimpleDateFormat
 
+@Keep
 class BreachedSitesWorker(private val context: Context, params: WorkerParameters) : CoroutineWorker(context, params) {
 
     companion object {
@@ -149,10 +150,11 @@ class BreachedSitesWorker(private val context: Context, params: WorkerParameters
 }
 
 object BreachedAccountListDeserializer : ResponseDeserializable<Collection<BreachedAccount>> {
-    override fun deserialize(content: String) = run {
+    override fun deserialize(content: String): Collection<BreachedAccount> = run {
         Log.d("BreachedAccountListDese", content)
         val mapper = jacksonObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
         mapper.propertyNamingStrategy = PropertyNamingStrategies.UPPER_CAMEL_CASE
-        mapper.readValue<Collection<BreachedAccount>>(content)
+        val collectionType = mapper.typeFactory.constructCollectionType(List::class.java, BreachedAccount::class.java)
+        mapper.readValue(content, collectionType)
     }
 }

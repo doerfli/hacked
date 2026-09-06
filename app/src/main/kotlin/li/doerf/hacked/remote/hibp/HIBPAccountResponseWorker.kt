@@ -8,13 +8,13 @@ import android.os.Handler
 import android.os.Looper
 import android.util.Log
 import android.widget.Toast
+import androidx.annotation.Keep
 import androidx.core.app.NotificationCompat
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 import com.fasterxml.jackson.databind.DeserializationFeature
-import com.fasterxml.jackson.databind.PropertyNamingStrategy
+import com.fasterxml.jackson.databind.PropertyNamingStrategies
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
-import com.fasterxml.jackson.module.kotlin.readValue
 import com.github.kittinunf.fuel.core.ResponseDeserializable
 import com.github.kittinunf.fuel.core.isSuccessful
 import com.github.kittinunf.fuel.coroutines.awaitObjectResponseResult
@@ -34,6 +34,7 @@ import li.doerf.hacked.utils.StringHelper
 import org.joda.time.DateTime
 import java.io.IOException
 
+@Keep
 class HIBPAccountResponseWorker(private val context: Context, workerParams: WorkerParameters) : CoroutineWorker(context, workerParams) {
 
     companion object {
@@ -49,11 +50,22 @@ class HIBPAccountResponseWorker(private val context: Context, workerParams: Work
     override suspend fun doWork(): Result {
         val breaches = inputData.getStringArray(KEY_BREACHES)
         val accountName = inputData.getString(KEY_ACCOUNT)
-        val account = myAccountDao.findByName(accountName)[0]
+        Log.d(TAG, "HIBPAccountResponseWorker.doWork starting for account: $accountName, breaches: ${breaches?.contentToString()}")
+        if (accountName.isNullOrEmpty()) {
+            Log.e(TAG, "accountName is null or empty in inputData")
+            return Result.failure()
+        }
+        val accounts = myAccountDao.findByName(accountName)
+        if (accounts.isEmpty()) {
+            Log.w(TAG, "Account not found in database: $accountName")
+            return Result.failure()
+        }
+        val account = accounts[0]
+        val safeBreaches = breaches ?: emptyArray()
         return try {
             var foundNewBreach = false
-            for (breachName in breaches!!) {
-                Log.d(TAG, breachName)
+            for (breachName in safeBreaches) {
+                Log.d(TAG, "processing breach: $breachName for account: $accountName")
                 foundNewBreach = foundNewBreach or handleBreach(account, breachName)
             }
             if (foundNewBreach) {
@@ -74,8 +86,9 @@ class HIBPAccountResponseWorker(private val context: Context, workerParams: Work
                 Result.failure()
             }
         } catch (e: Exception) {
+            Log.e(TAG, "caught exception in HIBPAccountResponseWorker", e)
             FirebaseCrashlytics.getInstance().recordException(e)
-            throw e
+            Result.failure()
         }
     }
 
@@ -219,10 +232,10 @@ class HIBPAccountResponseWorker(private val context: Context, workerParams: Work
 }
 
 object BreachedAccountDeserializer : ResponseDeserializable<BreachedAccount> {
-    override fun deserialize(content: String) = run {
+    override fun deserialize(content: String): BreachedAccount = run {
         Log.d("BreachedAccountDeserial", content)
         val mapper = jacksonObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
-        mapper.propertyNamingStrategy = PropertyNamingStrategy.UPPER_CAMEL_CASE
-        mapper.readValue<BreachedAccount>(content)
+        mapper.propertyNamingStrategy = PropertyNamingStrategies.UPPER_CAMEL_CASE
+        mapper.readValue(content, BreachedAccount::class.java)
     }
 }
