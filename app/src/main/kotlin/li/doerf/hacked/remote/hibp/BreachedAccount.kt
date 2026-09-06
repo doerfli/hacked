@@ -1,8 +1,12 @@
 package li.doerf.hacked.remote.hibp
 
+import androidx.annotation.Keep
+import com.fasterxml.jackson.annotation.JsonProperty
+
 /**
  * Created by moo on 05/09/16.
  */
+@Keep
 data class BreachedAccount(
         var name: String? = null,
         var title: String? = null,
@@ -17,6 +21,8 @@ data class BreachedAccount(
         var isSensitive: Boolean? = null,
         var isRetired: Boolean? = null,
         var isFabricated: Boolean? = null,
+        @field:JsonProperty("IsSpamList")
         var IsSpamList: Boolean? = null,
+        @field:JsonProperty("LogoPath")
         var LogoPath: String? = null
 )

@@ -46,14 +46,25 @@ public class FirebaseMessagagingService extends FirebaseMessagingService {
     }
 
     private void processHibpResponse(String account, String responseStr) {
-        List<Map<String, Object>> response = new Gson().fromJson(responseStr, List.class);
+        Log.d(TAG, "processHibpResponse for account: " + account);
         List<String> breaches = new ArrayList<>();
-        for(Map<String, Object> e : response) {
-            breaches.add((String) e.get("Name"));
+        if (responseStr != null && !responseStr.isEmpty()) {
+            try {
+                List<Map<String, Object>> response = new Gson().fromJson(responseStr, List.class);
+                if (response != null) {
+                    for (Map<String, Object> e : response) {
+                        if (e != null && e.containsKey("Name")) {
+                            breaches.add((String) e.get("Name"));
+                        }
+                    }
+                }
+            } catch (Exception e) {
+                Log.e(TAG, "error parsing responseStr: " + responseStr, e);
+            }
         }
 
         Data inputData = new Data.Builder()
-                .putStringArray(HIBPAccountResponseWorker.KEY_BREACHES, breaches.toArray(new String[]{}))
+                .putStringArray(HIBPAccountResponseWorker.KEY_BREACHES, breaches.toArray(new String[0]))
                 .putString(HIBPAccountResponseWorker.KEY_ACCOUNT, account)
                 .build();
 
@@ -65,7 +76,8 @@ public class FirebaseMessagagingService extends FirebaseMessagingService {
                 .setInputData(inputData)
                 .setConstraints(constraints)
                 .build();
-        WorkManager.getInstance(getApplicationContext()).enqueueUniqueWork("hibp-response", ExistingWorkPolicy.APPEND, workerRequest);
+        WorkManager.getInstance(getApplicationContext()).enqueueUniqueWork("hibp-response", ExistingWorkPolicy.APPEND_OR_REPLACE, workerRequest);
+        Log.d(TAG, "enqueued hibp-response worker for account: " + account);
     }
 
     private void showNotification(RemoteMessage.Notification remoteNotification) {
