@@ -2,10 +2,12 @@ package li.doerf.hacked.initializer
 
 import android.content.Context
 import android.util.Log
+import androidx.annotation.Keep
 import androidx.startup.Initializer
 import androidx.work.WorkManagerInitializer
 import li.doerf.hacked.utils.SynchronizationHelper
 
+@Keep
 class BackgroundSyncInitializer : Initializer<String> {
 
     override fun create(context: Context): String {

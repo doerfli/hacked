@@ -7,6 +7,12 @@ import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 
+import androidx.compose.runtime.ProvidedValue
+import androidx.compose.ui.platform.LocalContext
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.compose.LocalLifecycleOwner
+import li.doerf.hacked.util.findActivity
+
 private val LightColors = lightColorScheme(
     primary = LightPrimary,
     onPrimary = LightOnPrimary,
@@ -58,8 +64,17 @@ fun HackedTheme(
 ) {
     val colorScheme = if (darkTheme) DarkColors else LightColors
     val statusColors = if (darkTheme) DarkStatusColors else LightStatusColors
+    val context = LocalContext.current
+    val lifecycleOwner = context.findActivity() as? LifecycleOwner
 
-    CompositionLocalProvider(LocalStatusColors provides statusColors) {
+    val providers = mutableListOf<ProvidedValue<*>>(
+        LocalStatusColors provides statusColors
+    )
+    if (lifecycleOwner != null) {
+        providers.add(LocalLifecycleOwner provides lifecycleOwner)
+    }
+
+    CompositionLocalProvider(*providers.toTypedArray()) {
         MaterialTheme(
             colorScheme = colorScheme,
             typography = HackedTypography,

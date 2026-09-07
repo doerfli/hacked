@@ -3,9 +3,11 @@ package li.doerf.hacked.initializer
 import android.content.Context
 import android.provider.Settings
 import android.util.Log
+import androidx.annotation.Keep
 import androidx.startup.Initializer
 import li.doerf.hacked.util.Analytics
 
+@Keep
 class FirebaseAnalyticsInitializer : Initializer<String> {
 
     override fun create(context: Context): String {

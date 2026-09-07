@@ -8,6 +8,7 @@ import android.os.Handler
 import android.os.Looper
 import android.util.Log
 import android.widget.Toast
+import androidx.annotation.Keep
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.preference.PreferenceManager
 import androidx.work.CoroutineWorker
@@ -37,6 +38,7 @@ import kotlin.random.Random
 /**
  * Created by moo on 26.03.17.
  */
+@Keep
 class HIBPAccountCheckerWorker(private val context: Context, params: WorkerParameters) : CoroutineWorker(context, params) {
 
     companion object {
