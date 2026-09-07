@@ -12,8 +12,8 @@ android {
         applicationId "li.doerf.hacked"
         minSdk 23
         targetSdk 37
-        versionCode 123
-        versionName "4.0.1"
+        versionCode 124
+        versionName "4.0.2"
         multiDexEnabled true
         javaCompileOptions {
             annotationProcessorOptions {
@@ -32,7 +32,8 @@ android {
             versionNameSuffix '-dbg'
         }
         release {
-            minifyEnabled false
+            minifyEnabled true
+            shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.debug
             optimization {
