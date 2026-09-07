@@ -117,7 +117,7 @@ class RatingHelper(private val activity: Activity) : AppReview {
         const val PREF_KEY_RATING_COUNTER = "PREF_KEY_RATING_COUNTER"
         const val PREF_KEY_RATING_NEVER = "PREF_KEY_RATING_NEVER"
         const val PREF_KEY_LAST_ACCESS_DENIED_FAILURE = "PREF_KEY_LAST_CONNECTION_FAILURE"
-        const val RATING_DIALOG_COUNTER_THRESHOLD = 7
+        const val RATING_DIALOG_COUNTER_THRESHOLD = 10
     }
 
 }
