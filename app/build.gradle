@@ -10,18 +10,15 @@ android {
 
     defaultConfig {
         applicationId "li.doerf.hacked"
-        minSdk 23
+        minSdk 26
         targetSdk 37
         versionCode 125
         versionName "4.0.3"
-        multiDexEnabled true
         javaCompileOptions {
             annotationProcessorOptions {
                 arguments = ["room.schemaLocation": "$projectDir/schemas".toString()]
             }
         }
-
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     testOptions {
         unitTests.returnDefaultValues = true
@@ -64,8 +61,7 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$kotlinx_coroutines_version"
 
-    implementation 'androidx.multidex:multidex:2.0.1'
-    implementation 'androidx.appcompat:appcompat:1.7.0'
+    implementation 'androidx.appcompat:appcompat:1.8.0'
     implementation "androidx.localbroadcastmanager:localbroadcastmanager:$localbroadcastmanager_version"
     implementation "com.google.android.material:material:$material_version"
     implementation("androidx.work:work-runtime:$work_version")
@@ -111,7 +107,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-analytics'
 
     implementation "joda-time:joda-time:$jodatime_version"
-    implementation 'commons-codec:commons-codec:1.17.0'
+    implementation 'commons-codec:commons-codec:1.22.1'
     implementation "com.google.code.gson:gson:$gson_version"
 
     implementation "com.github.kittinunf.fuel:fuel:$fuel_version"
@@ -120,11 +116,6 @@ dependencies {
     implementation "com.fasterxml.jackson.module:jackson-module-kotlin:$jackson_version"
 
     testImplementation 'junit:junit:4.13.2'
-    androidTestImplementation 'androidx.test:runner:1.5.2'
-    androidTestImplementation 'androidx.test:rules:1.5.0'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
-
-    androidTestImplementation "androidx.work:work-testing:$work_version"
 }
 
 repositories {

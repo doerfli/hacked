@@ -12,3 +12,5 @@
 .settings/
 google-services.json
 /.idea/appInsightsSettings.xml
+.kotlin/
+app/release/

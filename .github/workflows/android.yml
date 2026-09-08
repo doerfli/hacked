@@ -3,14 +3,14 @@ name: Build
 on: [push]
 
 jobs:
-  build:
+  build-debug:
 
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v7
     - name: set up JDK 21
-      uses: actions/setup-java@v4
+      uses: actions/setup-java@v6
       with:
         distribution: temurin
         java-version: 21
@@ -20,4 +20,23 @@ jobs:
         FIREBASE_CONFIG: ${{ secrets.FIREBASE_CONFIG }}
       run: mkdir -p app/src/debug && echo $FIREBASE_CONFIG > app/src/debug/google-services.json
     - name: Build with Gradle
-      run: ./gradlew dependencies assembleDebug
+      run: ./gradlew assembleDebug
+
+  build-release:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v7
+    - name: set up JDK 21
+      uses: actions/setup-java@v6
+      with:
+        distribution: temurin
+        java-version: 21
+        cache: gradle
+    - name: Decode google-services.json
+      env:
+        FIREBASE_CONFIG: ${{ secrets.FIREBASE_CONFIG }}
+      run: mkdir -p app/src/release && echo $FIREBASE_CONFIG > app/src/release/google-services.json
+    - name: Build with Gradle
+      run: ./gradlew assembleRelease
