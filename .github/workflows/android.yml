@@ -20,7 +20,7 @@ jobs:
         FIREBASE_CONFIG: ${{ secrets.FIREBASE_CONFIG }}
       run: mkdir -p app/src/debug && echo $FIREBASE_CONFIG > app/src/debug/google-services.json
     - name: Build with Gradle
-      run: ./gradlew dependencies assembleDebug
+      run: ./gradlew assembleDebug
 
   build-release:
 
@@ -39,4 +39,4 @@ jobs:
         FIREBASE_CONFIG: ${{ secrets.FIREBASE_CONFIG }}
       run: mkdir -p app/src/release && echo $FIREBASE_CONFIG > app/src/release/google-services.json
     - name: Build with Gradle
-      run: ./gradlew dependencies assembleRelease
+      run: ./gradlew assembleRelease
