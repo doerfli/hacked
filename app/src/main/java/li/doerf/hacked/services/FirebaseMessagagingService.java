@@ -14,6 +14,7 @@ import androidx.work.NetworkType;
 import androidx.work.OneTimeWorkRequest;
 import androidx.work.WorkManager;
 
+import com.google.firebase.crashlytics.FirebaseCrashlytics;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 import com.google.gson.Gson;
@@ -60,6 +61,10 @@ public class FirebaseMessagagingService extends FirebaseMessagingService {
                 }
             } catch (Exception e) {
                 Log.e(TAG, "error parsing responseStr: " + responseStr, e);
+                FirebaseCrashlytics.getInstance().recordException(e);
+                // don't enqueue with an empty breach list - that would mark the account as
+                // checked-and-clean even though the server actually reported data we failed to parse
+                return;
             }
         }
 

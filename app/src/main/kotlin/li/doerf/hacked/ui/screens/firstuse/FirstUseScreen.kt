@@ -38,6 +38,7 @@ import li.doerf.hacked.ui.composable.HtmlLinkText
 import li.doerf.hacked.util.Analytics
 import li.doerf.hacked.util.FirstUseTracker
 import li.doerf.hacked.util.findActivity
+import li.doerf.hacked.util.rememberNotificationPermissionRequester
 
 @Composable
 fun FirstUseScreen(onFinished: () -> Unit) {
@@ -45,6 +46,7 @@ fun FirstUseScreen(onFinished: () -> Unit) {
     val activity = context.findActivity() ?: return
     val scope = rememberCoroutineScope()
     var accountName by rememberSaveable { mutableStateOf("") }
+    val requestNotificationPermission = rememberNotificationPermissionRequester()
 
     fun finish() {
         activity.getPreferences(Context.MODE_PRIVATE).edit {
@@ -57,6 +59,7 @@ fun FirstUseScreen(onFinished: () -> Unit) {
         scope.launch {
             AccountService(activity.application).addAccount(accountName)
             Analytics.trackCustomEvent(CustomEvent.FIRST_ACCOUNT_ADDED)
+            requestNotificationPermission()
             finish()
         }
     }
