@@ -17,7 +17,7 @@ fun RateUsDialog(
 ) {
     AlertDialog(
         onDismissRequest = onDismissRequest,
-        title = { Text(stringResource(R.string.rating_dialog_title)) },
+        title = { HtmlLinkText(stringResource(R.string.rating_dialog_title)) },
         text = { Text(stringResource(R.string.rating_dialog_message)) },
         confirmButton = {
             TextButton(onClick = onPositive) { Text(stringResource(R.string.rating_dialog_positive)) }

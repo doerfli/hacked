@@ -6,21 +6,13 @@
     <string name="add">Hinzufügen</string>
     <string name="cancel">Abbrechen</string>
     <string name="action_add_account">Konto hinzufügen</string>
-    <string name="action_rateus">Jetzt bewerten</string>
     <string name="snackbar_checking_account">Konten werden überprüft - die Liste wird demnächst aktualisiert</string>
     <string name="snackbar_max_accounts">Sie können kein weiteres Konto hinzufügen. Es sind maximal 50 Konten erlaubt.</string>
-    <string name="last_checked">Letzte Prüfung:</string>
-    <string name="placeholder_date">dd/mm/yyyy hh:mm</string>
     <string name="notification_title_new_breaches_found">Neue Datenlecks gefunden</string>
     <string name="notification_text_click_to_open">Drücken Sie hier um Details anzuzeigen</string>
-    <string name="title_breach_details">Beschreibung</string>
     <string name="label_domain">Adresse:</string>
-    <string name="placeholder_domain">http://www.something.com</string>
     <string name="label_breach_date">Datum des Lecks:</string>
     <string name="label_compromised_data">Kompromittierte Felder:</string>
-    <string name="placeholder_description">Beschreibungstext des Lecks</string>
-    <string name="placeholder_compromised_data">passwort, benutzername, geburtsdatum</string>
-    <string name="dismiss">Verwerfen</string>
     <string name="acknowledge">Zur Kenntnis nehmen</string>
     <string name="breach_acknowledged">Leck bestätigt</string>
     <string name="pref_title_synchronization">Synchronisieren</string>
@@ -36,18 +28,14 @@
     <string name="pref_title_sync_via_cellular">Mobile Netzwerke zum Synchronisieren nutzen</string>
     <string name="pref_summary_sync_via_cellular">Synchronisieren wenn kein Wifi verfügbar ist (Mobile Daten können Kosten verursachen)</string>
     <string name="pref_title_appearance">Darstellung</string>
-    <string name="pref_key_theme_mode">PREF_KEY_THEME_MODE</string>
     <string name="pref_title_theme_mode">Design</string>
     <string name="pref_summary_theme_mode">Hell, dunkel oder System-Einstellung folgen</string>
-    <string name="pref_theme_mode_default">system</string>
     <string name="title_settings">Einstellungen</string>
     <string name="PREF_KEY_LAST_SYNC_TIMESTAMP">LAST_SYNC_TIMESTAMP</string>
     <string name="toast_error_error_during_check">Die Verbindung zum Server war nicht erfolgreich. Bitte versuchen Sie es später nochmals.</string>
     <string name="congratulations">Glückwunsch!</string>
     <string name="no_breaches_found">Für dieses Benutzerkonto wurden keine Lecks gefunden.</string>
     <string name="toast_enter_valid_name">Bitte ein gültiges Benutzerkonto angeben.</string>
-    <string name="site_name">Name der Seite</string>
-    <string name="sample_pwn_count">1000 Konten</string>
     <string name="PREF_KEY_LAST_SYNC_HIBP_TOP20">LAST_SYNC_HIBP_TOP20</string>
     <string name="error_download_data">Fehler beim Herunterladen der Daten - Bitte versuchen Sie es später noch einmal</string>
     <string name="data_provided_by">Daten bereitgestellt von</string>
@@ -78,10 +66,7 @@
     <string name="breach_details_third_text">Nachdem ein Datenleck entdeckt wurde muessen Sie nur mehr dieses Passwort ändern</string>
     <string name="action_privacypolicy">Datenschutzerklärung</string>
     <string name="title_accounts">Konten</string>
-    <string name="title_recent_breaches">Neueste Lecks auf HIBP</string>
     <string name="title_pwned_passwords">Passwörter</string>
-    <string name="show_details">Details anzeigen</string>
-    <string name="placeholder_count">0</string>
     <string name="action_delete_account">Konto löschen</string>
     <string name="action_refresh">Aktualisieren</string>
     <string name="action_visit_hibp">haveibeenpwned.com öffnen</string>
@@ -92,7 +77,6 @@
     <string name="firstuse_p2">Da die App zum Ersten Mal gestartet wurde, kann nun gleich ein Konto hinzugefügt werden</string>
     <string name="firstuse_p3">Alle Konten werden einmal am Tag überprüft (dies kann in den Einstellungen angepasst werden).</string>
     <string name="firstuse_p4">Die Informationen zu Datenlecks werden von der bekannten Webseite <a href="https://haveibeenpwned.com">haveibeenpwned.com</a> bezogen. Wenn Sie weitere Informationen zur Herkunft der Daten wuenschen, dann lesen Sie bitte in den HIBP <a href="https://haveibeenpwned.com/FAQs">FAQs</a>s.</string>
-    <string name="all_breaches">Alle Datenlecks</string>
     <string name="title_leaks">Lecks</string>
     <string name="accounts_empty_hint">Füge dein erstes Konto über die Plus-Schaltfläche hinzu.</string>
     <string name="account_state_needs_attention">Erfordert Aufmerksamkeit</string>
@@ -103,7 +87,6 @@
     <string name="accounts_last_checked">Geprüft %1$s</string>
     <string name="accounts_summary_clean">Keine Datenlecks bei %1$d Konten gefunden</string>
     <string name="accounts_summary_needs_attention">%1$d Datenlecks benötigen deine Aufmerksamkeit, bei %2$d von %3$d Konten</string>
-    <string name="welcome">Willkommen zu Hacked?</string>
     <string name="app_version">App Version</string>
     <string name="device_info">Informationen zum Gerät</string>
     <string name="action_reset_acknowledgements">Konto zurücksetzen</string>
@@ -114,7 +97,6 @@
     <string name="action_sort_name">Name</string>
     <string name="label_additional_flags">Zusätze:</string>
     <string name="label_accounts_affected">Konten:</string>
-    <string name="placeholder_additional_flags">Unbestätigt, Zurückgezogen, …</string>
     <string name="fabricated">Gefälscht</string>
     <string name="retired">Zurückgezogen</string>
     <string name="sensitive">Sensibel</string>
