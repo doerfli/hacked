@@ -4,14 +4,11 @@ import android.content.Context
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
@@ -69,14 +66,14 @@ fun FirstUseScreen(onFinished: () -> Unit) {
             Modifier
                 .padding(padding)
                 .padding(16.dp)
-                .verticalScroll(rememberScrollState())
+                .fillMaxSize(),
+            verticalArrangement = Arrangement.SpaceEvenly
         ) {
             Text(stringResource(R.string.firstuse_title), style = MaterialTheme.typography.titleLarge)
-            Spacer(Modifier.height(16.dp))
-            Text(stringResource(R.string.firstuse_p1), style = MaterialTheme.typography.bodyLarge)
-            Spacer(Modifier.height(8.dp))
-            Text(stringResource(R.string.firstuse_p2), style = MaterialTheme.typography.bodyLarge)
-            Spacer(Modifier.height(16.dp))
+            Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                Text(stringResource(R.string.firstuse_p1), style = MaterialTheme.typography.bodyLarge)
+                Text(stringResource(R.string.firstuse_p2), style = MaterialTheme.typography.bodyLarge)
+            }
             OutlinedTextField(
                 value = accountName,
                 onValueChange = { accountName = it },
@@ -86,11 +83,10 @@ fun FirstUseScreen(onFinished: () -> Unit) {
                 keyboardActions = KeyboardActions(onDone = { if (accountName.isNotBlank()) addAccountAndFinish() }),
                 modifier = Modifier.fillMaxWidth()
             )
-            Spacer(Modifier.height(16.dp))
-            Text(stringResource(R.string.firstuse_p3), style = MaterialTheme.typography.bodyLarge)
-            Spacer(Modifier.height(8.dp))
-            HtmlLinkText(stringResource(R.string.firstuse_p4), style = MaterialTheme.typography.bodyLarge)
-            Spacer(Modifier.height(24.dp))
+            Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                Text(stringResource(R.string.firstuse_p3), style = MaterialTheme.typography.bodyLarge)
+                HtmlLinkText(stringResource(R.string.firstuse_p4), style = MaterialTheme.typography.bodyLarge)
+            }
             Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
                 TextButton(onClick = { finish() }) {
                     Text(stringResource(R.string.skip))
