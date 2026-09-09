@@ -25,7 +25,9 @@ public class NotificationHelper {
         notify(aContext, aNotification, notificationId);
     }
 
-    private static void notify(Context aContext, Notification aNotification, int aNotificationId) {
+    // Fixed-ID variant so repeat calls (e.g. a group-summary notification) update the same
+    // notification instead of stacking a new one on every call.
+    public static void notify(Context aContext, Notification aNotification, int aNotificationId) {
         // Gets an instance of the NotificationManager service
 //        NotificationManager notificationManager =
 //                (NotificationManager) aContext.getSystemService(Context.NOTIFICATION_SERVICE);

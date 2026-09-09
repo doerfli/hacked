@@ -40,6 +40,7 @@ class HIBPAccountResponseWorker(private val context: Context, workerParams: Work
     companion object {
         private const val TAG = "HIBPAccountResponseWork"
         private const val NOTIFICATION_GROUP_KEY_BREACHES = "group_key_breachs"
+        private const val NOTIFICATION_ID_GROUP_SUMMARY = 1
         const val KEY_ACCOUNT = "Account"
         const val KEY_BREACHES = "Breaches"
     }
@@ -114,8 +115,6 @@ class HIBPAccountResponseWorker(private val context: Context, workerParams: Work
         }
 
         val ba = getBreachedAccount(breachName)
-                ?: return false // request not successful
-
         addNewBreachedAccount(ba, account)
         return true
     }
@@ -129,7 +128,6 @@ class HIBPAccountResponseWorker(private val context: Context, workerParams: Work
         }
 
         val ba = getBreachedAccount(existing.name)
-                ?: return // request not successful
 
         if (existing.modifiedDate == DateTime.parse(ba.modifiedDate).millis) {
             // no update to data
@@ -183,8 +181,8 @@ class HIBPAccountResponseWorker(private val context: Context, workerParams: Work
         Log.i(TAG, "breach inserted into db: " + newBreach.name)
     }
 
-    @Throws(IOException::class)
-    private suspend fun getBreachedAccount(breachName: String): BreachedAccount? {
+    @Throws(IOException::class, WorkFailedException::class)
+    private suspend fun getBreachedAccount(breachName: String): BreachedAccount {
         Log.d(TAG, "retrieving breaches for $breachName")
         val url = "https://haveibeenpwned.com/api/v3/breach/${breachName}"
 
@@ -195,7 +193,7 @@ class HIBPAccountResponseWorker(private val context: Context, workerParams: Work
 
         if (!res.isSuccessful) {
             Log.w(TAG, "request was not successful")
-            return null
+            throw WorkFailedException(true)
         }
 
         return result.get()
@@ -227,6 +225,19 @@ class HIBPAccountResponseWorker(private val context: Context, workerParams: Work
         mBuilder.setContentIntent(resultPendingIntent)
         val notification = mBuilder.build()
         NotificationHelper.notify(context, notification)
+
+        // Group summary, posted under a fixed ID so repeat calls update it instead of stacking
+        // a new summary notification every time.
+        val summaryBuilder = NotificationCompat.Builder(context, OreoNotificationHelper.CHANNEL_ID)
+                .setSmallIcon(R.drawable.ic_notification)
+                .setContentTitle(title)
+                .setContentText(context.getString(R.string.notification_text_click_to_open))
+                .setChannelId(OreoNotificationHelper.CHANNEL_ID)
+                .setGroup(NOTIFICATION_GROUP_KEY_BREACHES)
+                .setGroupSummary(true)
+                .setAutoCancel(true)
+                .setContentIntent(resultPendingIntent)
+        NotificationHelper.notify(context, summaryBuilder.build(), NOTIFICATION_ID_GROUP_SUMMARY)
     }
 
 }

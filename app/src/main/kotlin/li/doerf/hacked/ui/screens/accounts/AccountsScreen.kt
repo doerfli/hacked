@@ -80,6 +80,7 @@ import li.doerf.hacked.util.AccountConstants.MAX_ACCOUNTS
 import li.doerf.hacked.util.RatingHelper
 import li.doerf.hacked.util.isChecking
 import li.doerf.hacked.util.findActivity
+import li.doerf.hacked.util.rememberNotificationPermissionRequester
 import li.doerf.hacked.utils.NotificationHelper
 import org.joda.time.format.DateTimeFormat
 
@@ -96,6 +97,7 @@ fun AccountsScreen(onAccountClick: (Long) -> Unit) {
     var showAddSheet by rememberSaveable { mutableStateOf(false) }
     var showRateUsDialog by rememberSaveable { mutableStateOf(false) }
     val ratingHelper = remember { RatingHelper(activity) }
+    val requestNotificationPermission = rememberNotificationPermissionRequester()
 
     LaunchedEffect(Unit) {
         showRateUsDialog = ratingHelper.showRateUsDialogDelayed()
@@ -242,7 +244,10 @@ fun AccountsScreen(onAccountClick: (Long) -> Unit) {
                     keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
                     keyboardActions = KeyboardActions(onDone = {
                         if (name.isNotBlank()) {
-                            scope.launch { AccountService(activity.application).addAccount(name) }
+                            scope.launch {
+                                AccountService(activity.application).addAccount(name)
+                                requestNotificationPermission()
+                            }
                             showAddSheet = false
                         }
                     }),
@@ -254,7 +259,10 @@ fun AccountsScreen(onAccountClick: (Long) -> Unit) {
                     Spacer(Modifier.width(8.dp))
                     Button(
                         onClick = {
-                            scope.launch { AccountService(activity.application).addAccount(name) }
+                            scope.launch {
+                                AccountService(activity.application).addAccount(name)
+                                requestNotificationPermission()
+                            }
                             showAddSheet = false
                         },
                         enabled = name.isNotBlank()
