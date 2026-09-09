@@ -71,7 +71,7 @@ fun FirstUseScreen(onFinished: () -> Unit) {
         ) {
             Text(stringResource(R.string.firstuse_title), style = MaterialTheme.typography.titleLarge)
             Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                Text(stringResource(R.string.firstuse_p1), style = MaterialTheme.typography.bodyLarge)
+                HtmlLinkText(stringResource(R.string.firstuse_p1), style = MaterialTheme.typography.bodyLarge)
                 Text(stringResource(R.string.firstuse_p2), style = MaterialTheme.typography.bodyLarge)
             }
             OutlinedTextField(
@@ -84,7 +84,7 @@ fun FirstUseScreen(onFinished: () -> Unit) {
                 modifier = Modifier.fillMaxWidth()
             )
             Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                Text(stringResource(R.string.firstuse_p3), style = MaterialTheme.typography.bodyLarge)
+                HtmlLinkText(stringResource(R.string.firstuse_p3), style = MaterialTheme.typography.bodyLarge)
                 HtmlLinkText(stringResource(R.string.firstuse_p4), style = MaterialTheme.typography.bodyLarge)
             }
             Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {

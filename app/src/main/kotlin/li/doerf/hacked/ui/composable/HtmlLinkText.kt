@@ -1,5 +1,7 @@
 package li.doerf.hacked.ui.composable
 
+import android.graphics.Typeface
+import android.text.style.StyleSpan
 import android.text.style.URLSpan
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.material3.LocalContentColor
@@ -19,6 +21,8 @@ import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextLayoutResult
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.core.text.HtmlCompat
 
@@ -60,6 +64,19 @@ private fun annotatedStringFromHtml(html: String, linkColor: androidx.compose.ui
             val end = spanned.getSpanEnd(span)
             addStyle(SpanStyle(color = linkColor, textDecoration = TextDecoration.Underline), start, end)
             addStringAnnotation(URL_TAG, span.url, start, end)
+        }
+        spanned.getSpans(0, spanned.length, StyleSpan::class.java).forEach { span ->
+            val start = spanned.getSpanStart(span)
+            val end = spanned.getSpanEnd(span)
+            val fontStyle = when (span.style) {
+                Typeface.BOLD, Typeface.BOLD_ITALIC -> FontWeight.Bold
+                else -> null
+            }
+            val italic = when (span.style) {
+                Typeface.ITALIC, Typeface.BOLD_ITALIC -> FontStyle.Italic
+                else -> null
+            }
+            addStyle(SpanStyle(fontWeight = fontStyle, fontStyle = italic), start, end)
         }
     }
 }
