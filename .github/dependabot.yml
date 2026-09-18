@@ -12,6 +12,18 @@ updates:
           - "minor"
           - "patch"
 
+  - package-ecosystem: "gradle"
+    directory: "/app"
+    schedule:
+      interval: "monthly"
+    cooldown:
+      default-days: 5
+    groups:
+      minor-and-patch:
+        update-types:
+          - "minor"
+          - "patch"
+
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
