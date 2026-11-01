@@ -107,7 +107,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-analytics'
 
     implementation "joda-time:joda-time:$jodatime_version"
-    implementation 'commons-codec:commons-codec:1.22.1'
+    implementation 'commons-codec:commons-codec:1.23.0'
     implementation "com.google.code.gson:gson:$gson_version"
 
     implementation "com.github.kittinunf.fuel:fuel:$fuel_version"
